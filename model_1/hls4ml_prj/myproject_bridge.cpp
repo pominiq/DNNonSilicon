@@ -49,32 +49,32 @@ void collect_trace_output(struct trace_data *c_trace_outputs) {
 
 // Wrapper of top level function for Python bridge
 void myproject_float(
-    float input_layer[N_INPUT_1_1*N_INPUT_2_1*N_INPUT_3_1],
-    float layer7_out[N_LAYER_6]
+    float conv2d_input[N_INPUT_1_1*N_INPUT_2_1*N_INPUT_3_1],
+    float layer9_out[N_LAYER_9]
 ) {
 
-    hls::stream<input_t> input_layer_ap("input_layer");
-    nnet::convert_data<float, input_t, N_INPUT_1_1*N_INPUT_2_1*N_INPUT_3_1>(input_layer, input_layer_ap);
+    hls::stream<input_t> conv2d_input_ap("conv2d_input");
+    nnet::convert_data<float, input_t, N_INPUT_1_1*N_INPUT_2_1*N_INPUT_3_1>(conv2d_input, conv2d_input_ap);
 
-    hls::stream<result_t> layer7_out_ap("layer7_out");
+    hls::stream<result_t> layer9_out_ap("layer9_out");
 
-    myproject(input_layer_ap,layer7_out_ap);
+    myproject(conv2d_input_ap,layer9_out_ap);
 
-    nnet::convert_data<result_t, float, N_LAYER_6>(layer7_out_ap, layer7_out);
+    nnet::convert_data<result_t, float, N_LAYER_9>(layer9_out_ap, layer9_out);
 }
 
 void myproject_double(
-    double input_layer[N_INPUT_1_1*N_INPUT_2_1*N_INPUT_3_1],
-    double layer7_out[N_LAYER_6]
+    double conv2d_input[N_INPUT_1_1*N_INPUT_2_1*N_INPUT_3_1],
+    double layer9_out[N_LAYER_9]
 ) {
-    hls::stream<input_t> input_layer_ap("input_layer");
-    nnet::convert_data<double, input_t, N_INPUT_1_1*N_INPUT_2_1*N_INPUT_3_1>(input_layer, input_layer_ap);
+    hls::stream<input_t> conv2d_input_ap("conv2d_input");
+    nnet::convert_data<double, input_t, N_INPUT_1_1*N_INPUT_2_1*N_INPUT_3_1>(conv2d_input, conv2d_input_ap);
 
-    hls::stream<result_t> layer7_out_ap("layer7_out");
+    hls::stream<result_t> layer9_out_ap("layer9_out");
 
-    myproject(input_layer_ap,layer7_out_ap);
+    myproject(conv2d_input_ap,layer9_out_ap);
 
-    nnet::convert_data<result_t, double, N_LAYER_6>(layer7_out_ap, layer7_out);
+    nnet::convert_data<result_t, double, N_LAYER_9>(layer9_out_ap, layer9_out);
 }
 }
 

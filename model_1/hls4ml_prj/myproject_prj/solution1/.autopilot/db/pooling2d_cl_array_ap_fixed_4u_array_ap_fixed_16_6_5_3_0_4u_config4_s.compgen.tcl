@@ -1,6 +1,6 @@
 # This script segment is generated automatically by AutoPilot
 
-set id 16
+set id 23
 set name myproject_mux_164_16_1_1
 set corename simcore_mux
 set op mux
@@ -157,7 +157,7 @@ puts "@W \[IMPL-101\] Cannot find ::AESL_LIB_VIRTEX::xil_gen_pipemux, check your
 }
 
 
-set id 20
+set id 26
 set name myproject_mux_164_16_1_1
 set corename simcore_mux
 set op mux
@@ -315,13 +315,13 @@ puts "@W \[IMPL-101\] Cannot find ::AESL_LIB_VIRTEX::xil_gen_pipemux, check your
 
 
 # Memory (RAM/ROM)  definition:
-set ID 46
+set ID 53
 set hasByteEnable 0
-set MemName pooling2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_config4_s_line_bueOg
+set MemName pooling2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_config4_s_line_budEe
 set CoreName ShiftReg
 set PortList { 2 }
 set DataWd 16
-set AddrRange 25
+set AddrRange 26
 set AddrWd 5
 set Style srl
 set TrueReset 0
@@ -331,7 +331,7 @@ set HasInitializer 1
 set Initializer $ROMData
 set NumOfStage 1
 set MaxLatency -1
-set DelayBudget 0.611
+set DelayBudget 1.628
 set ClkPeriod 10
 set RegisteredInput 0
 if {${::AESL::PGuard_simmodel_gen}} {
@@ -410,7 +410,7 @@ if {${::AESL::PGuard_autoexp_gen}} {
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 47 \
+    id 54 \
     name data_V_data_0_V \
     type fifo \
     dir I \
@@ -425,7 +425,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 48 \
+    id 55 \
     name data_V_data_1_V \
     type fifo \
     dir I \
@@ -440,7 +440,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 49 \
+    id 56 \
     name data_V_data_2_V \
     type fifo \
     dir I \
@@ -455,7 +455,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 50 \
+    id 57 \
     name data_V_data_3_V \
     type fifo \
     dir I \
@@ -470,7 +470,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 51 \
+    id 58 \
     name res_V_data_0_V \
     type fifo \
     dir O \
@@ -485,7 +485,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 52 \
+    id 59 \
     name res_V_data_1_V \
     type fifo \
     dir O \
@@ -500,7 +500,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 53 \
+    id 60 \
     name res_V_data_2_V \
     type fifo \
     dir O \
@@ -515,7 +515,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 54 \
+    id 61 \
     name res_V_data_3_V \
     type fifo \
     dir O \

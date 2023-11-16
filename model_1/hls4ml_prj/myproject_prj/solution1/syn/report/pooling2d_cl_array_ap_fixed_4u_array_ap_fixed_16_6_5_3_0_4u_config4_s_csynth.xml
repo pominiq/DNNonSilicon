@@ -6,8 +6,8 @@
 
 <UserAssignments>
 <unit>ns</unit>
-<ProductFamily>virtexuplus</ProductFamily>
-<Part>xcu280-fsvh2892-2L-e</Part>
+<ProductFamily>zynq</ProductFamily>
+<Part>xc7z020-clg400-1</Part>
 <TopModelName>pooling2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_config4_s</TopModelName>
 <TargetClockPeriod>10.00</TargetClockPeriod>
 <ClockUncertainty>1.25</ClockUncertainty>
@@ -17,25 +17,25 @@
 <PipelineType>none</PipelineType>
 <SummaryOfTimingAnalysis>
 <unit>ns</unit>
-<EstimatedClockPeriod>8.381</EstimatedClockPeriod>
+<EstimatedClockPeriod>8.518</EstimatedClockPeriod>
 </SummaryOfTimingAnalysis>
 <SummaryOfOverallLatency>
 <unit>clock cycles</unit>
-<Best-caseLatency>628</Best-caseLatency>
-<Average-caseLatency>628</Average-caseLatency>
-<Worst-caseLatency>628</Worst-caseLatency>
-<Best-caseRealTimeLatency>6.280 us</Best-caseRealTimeLatency>
-<Average-caseRealTimeLatency>6.280 us</Average-caseRealTimeLatency>
-<Worst-caseRealTimeLatency>6.280 us</Worst-caseRealTimeLatency>
-<Interval-min>628</Interval-min>
-<Interval-max>628</Interval-max>
+<Best-caseLatency>681</Best-caseLatency>
+<Average-caseLatency>681</Average-caseLatency>
+<Worst-caseLatency>681</Worst-caseLatency>
+<Best-caseRealTimeLatency>6.810 us</Best-caseRealTimeLatency>
+<Average-caseRealTimeLatency>6.810 us</Average-caseRealTimeLatency>
+<Worst-caseRealTimeLatency>6.810 us</Worst-caseRealTimeLatency>
+<Interval-min>681</Interval-min>
+<Interval-max>681</Interval-max>
 </SummaryOfOverallLatency>
 <SummaryOfLoopLatency>
 <ReadInputHeight_ReadInputWidth>
-<TripCount>625</TripCount>
-<Latency>626</Latency>
+<TripCount>676</TripCount>
+<Latency>679</Latency>
 <PipelineII>1</PipelineII>
-<PipelineDepth>3</PipelineDepth>
+<PipelineDepth>5</PipelineDepth>
 </ReadInputHeight_ReadInputWidth>
 </SummaryOfLoopLatency>
 </PerformanceEstimates>
@@ -43,17 +43,17 @@
 <AreaEstimates>
 <Resources>
 <BRAM_18K>0</BRAM_18K>
-<FF>1783</FF>
-<LUT>4283</LUT>
+<FF>4979</FF>
+<LUT>7084</LUT>
 <DSP48E>0</DSP48E>
 <URAM>0</URAM>
 </Resources>
 <AvailableResources>
-<BRAM_18K>4032</BRAM_18K>
-<DSP48E>9024</DSP48E>
-<FF>2607360</FF>
-<LUT>1303680</LUT>
-<URAM>960</URAM>
+<BRAM_18K>280</BRAM_18K>
+<DSP48E>220</DSP48E>
+<FF>106400</FF>
+<LUT>53200</LUT>
+<URAM>0</URAM>
 </AvailableResources>
 </AreaEstimates>
 

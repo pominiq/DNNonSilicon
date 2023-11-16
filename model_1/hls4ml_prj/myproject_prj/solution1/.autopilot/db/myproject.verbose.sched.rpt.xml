@@ -1,13 +1,13 @@
 <profile>
 
 <section name = "Vivado HLS Report for 'myproject'" level="0">
-<item name = "Date">Thu Nov  9 20:59:27 2023
+<item name = "Date">Thu Nov 16 17:46:27 2023
 </item>
 <item name = "Version">2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)</item>
 <item name = "Project">myproject_prj</item>
 <item name = "Solution">solution1</item>
-<item name = "Product family">virtexuplus</item>
-<item name = "Target device">xcu280-fsvh2892-2L-e</item>
+<item name = "Product family">zynq</item>
+<item name = "Target device">xc7z020-clg400-1</item>
 </section>
 
 <section name = "Performance Estimates" level="0">
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">10.00 ns, 8.381 ns, 1.25 ns</column>
+<column name="ap_clk">10.00 ns, 8.518 ns, 1.25 ns</column>
 </table>
 </item>
 </section>
@@ -24,7 +24,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="8">, min, max, min, max, min, max, Type</keys>
-<column name="">2362, 2363, 23.620 us, 23.630 us, 2355, 2355, dataflow</column>
+<column name="">14121, 14182, 0.141 ms, 0.142 ms, 4705, 14113, dataflow</column>
 </table>
 </item>
 <item name = "Detail">

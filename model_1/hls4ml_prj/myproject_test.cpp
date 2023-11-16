@@ -58,28 +58,28 @@ int main(int argc, char **argv) {
             }
 
             // hls-fpga-machine-learning insert data
-      hls::stream<input_t> input_layer("input_layer");
-      nnet::copy_data<float, input_t, 0, N_INPUT_1_1*N_INPUT_2_1*N_INPUT_3_1>(in, input_layer);
-      hls::stream<result_t> layer7_out("layer7_out");
+      hls::stream<input_t> conv2d_input("conv2d_input");
+      nnet::copy_data<float, input_t, 0, N_INPUT_1_1*N_INPUT_2_1*N_INPUT_3_1>(in, conv2d_input);
+      hls::stream<result_t> layer9_out("layer9_out");
 
             // hls-fpga-machine-learning insert top-level-function
-            myproject(input_layer,layer7_out);
+            myproject(conv2d_input,layer9_out);
 
             if (e % CHECKPOINT == 0) {
                 std::cout << "Predictions" << std::endl;
                 // hls-fpga-machine-learning insert predictions
-                for(int i = 0; i < N_LAYER_6; i++) {
+                for(int i = 0; i < N_LAYER_9; i++) {
                   std::cout << pr[i] << " ";
                 }
                 std::cout << std::endl;
                 std::cout << "Quantized predictions" << std::endl;
                 // hls-fpga-machine-learning insert quantized
-                nnet::print_result<result_t, N_LAYER_6>(layer7_out, std::cout, true);
+                nnet::print_result<result_t, N_LAYER_9>(layer9_out, std::cout, true);
             }
             e++;
 
             // hls-fpga-machine-learning insert tb-output
-            nnet::print_result<result_t, N_LAYER_6>(layer7_out, fout);
+            nnet::print_result<result_t, N_LAYER_9>(layer9_out, fout);
         }
         fin.close();
         fpr.close();
@@ -87,18 +87,18 @@ int main(int argc, char **argv) {
         std::cout << "INFO: Unable to open input/predictions file, using default input." << std::endl;
 
         // hls-fpga-machine-learning insert zero
-    hls::stream<input_t> input_layer("input_layer");
-    nnet::fill_zero<input_t, N_INPUT_1_1*N_INPUT_2_1*N_INPUT_3_1>(input_layer);
-    hls::stream<result_t> layer7_out("layer7_out");
+    hls::stream<input_t> conv2d_input("conv2d_input");
+    nnet::fill_zero<input_t, N_INPUT_1_1*N_INPUT_2_1*N_INPUT_3_1>(conv2d_input);
+    hls::stream<result_t> layer9_out("layer9_out");
 
         // hls-fpga-machine-learning insert top-level-function
-        myproject(input_layer,layer7_out);
+        myproject(conv2d_input,layer9_out);
 
         // hls-fpga-machine-learning insert output
-        nnet::print_result<result_t, N_LAYER_6>(layer7_out, std::cout, true);
+        nnet::print_result<result_t, N_LAYER_9>(layer9_out, std::cout, true);
 
         // hls-fpga-machine-learning insert tb-output
-        nnet::print_result<result_t, N_LAYER_6>(layer7_out, fout);
+        nnet::print_result<result_t, N_LAYER_9>(layer9_out, fout);
     }
 
     fout.close();
