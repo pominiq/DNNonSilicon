@@ -1,1 +1,0 @@
-set ::AESL_AUTOSIM::gTopFileName /home/pominiq/ProjectFolder/model_1/hls4ml_prj/myproject_prj/solution1/./sim/autowrap/testbench/myproject.cpp_pre.cpp.tb.cpp
