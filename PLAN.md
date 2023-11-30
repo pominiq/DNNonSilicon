@@ -11,6 +11,11 @@ Notes for presentation:
     - Get the story straight, and have this reflected really well.
 
 
+NesterovSolve: Part of RePlAce Advancing Solution Quality and Routability Validation in Global Placement
+https://ieeexplore.ieee.org/document/8418790
+https://github.com/The-OpenROAD-Project/OpenROAD/blob/master/src/gpl/README.md
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
