@@ -1,4 +1,26 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# Agenda dec 2 23
+
+
+Install dependencies for Panda/Bambuu: https://askubuntu.com/questions/1247962/how-to-install-gfortran-4-6-or-gcc-4-6-on-ubuntu-20-04
+
+	I was able to meet my needs by simply adding the following lines to my /etc/apt
+	sources.list file (based on the answer by N0rbert):
+
+	deb http://archive.ubuntu.com/ubuntu trusty main restricted universe multiverse
+	deb http://security.ubuntu.com/ubuntu trusty-security main restricted universe multiverse
+
+	Then I could update and install gfortran-4.6 with:
+
+	sudo apt-get update
+	sudo apt-get install gfortran-4.6
+
+	I now have both the most recent gfortran that is default for Ubuntu 20.04 alongside
+	gfortran-4.6 and have not found any conflicts so far.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # Agenda dec 1 23
 
 Research areas to look into

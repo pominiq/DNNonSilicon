@@ -1,0 +1,174 @@
+
+
+================================================================
+== Vivado HLS Report for 'relu_array_ap_fixed_4u_array_ap_fixed_32_16_5_3_0_4u_relu_config3_s'
+================================================================
+* Date:           Tue Nov 28 14:13:36 2023
+
+* Version:        2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)
+* Project:        myproject_prj
+* Solution:       solution1
+* Product family: virtexuplus
+* Target device:  xcu280-fsvh2892-2L-e
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  | 10.00 ns | 4.002 ns |   1.25 ns  |
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+---------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval | Pipeline|
+    |   min   |   max   |    min   |    max   | min | max |   Type  |
+    +---------+---------+----------+----------+-----+-----+---------+
+    |      678|      678| 6.780 us | 6.780 us |  678|  678|   none  |
+    +---------+---------+----------+----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +---------------+---------+---------+----------+-----------+-----------+------+----------+
+        |               |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        |   Loop Name   |   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +---------------+---------+---------+----------+-----------+-----------+------+----------+
+        |- ReLUActLoop  |      676|      676|         2|          1|          1|   676|    yes   |
+        +---------------+---------+---------+----------+-----------+-----------+------+----------+
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 0
+ResetActiveHigh: 1
+IsCombinational: 2
+IsDatapathOnly: 0
+HasWiredReturn: 1
+HasMFsm: 0
+HasVarLatency: 1
+IsPipeline: 0
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
++ Individual pipeline summary: 
+  * Pipeline-0: initiation interval (II) = 1, depth = 2
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states : 4
+* Pipeline : 1
+  Pipeline-0 : II = 1, D = 2, States = { 2 3 }
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 2 
+2 --> 4 3 
+3 --> 2 
+4 --> 
+
+* FSM state operations: 
+
+State 1 <SV = 0> <Delay = 0.60>
+ST_1 : Operation 5 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecInterface(i32* %res_V_data_3_V, [8 x i8]* @ap_fifo_str, i32 0, i32 0, [1 x i8]* @p_str225, i32 0, i32 0, [1 x i8]* @p_str226, [1 x i8]* @p_str227, [1 x i8]* @p_str228, i32 2, i32 2, i32 16, i32 16, [1 x i8]* @p_str229, [1 x i8]* @p_str230)"   --->   Operation 5 'specinterface' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 6 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecInterface(i32* %res_V_data_2_V, [8 x i8]* @ap_fifo_str, i32 0, i32 0, [1 x i8]* @p_str218, i32 0, i32 0, [1 x i8]* @p_str219, [1 x i8]* @p_str220, [1 x i8]* @p_str221, i32 2, i32 2, i32 16, i32 16, [1 x i8]* @p_str222, [1 x i8]* @p_str223)"   --->   Operation 6 'specinterface' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 7 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecInterface(i32* %res_V_data_1_V, [8 x i8]* @ap_fifo_str, i32 0, i32 0, [1 x i8]* @p_str211, i32 0, i32 0, [1 x i8]* @p_str212, [1 x i8]* @p_str213, [1 x i8]* @p_str214, i32 2, i32 2, i32 16, i32 16, [1 x i8]* @p_str215, [1 x i8]* @p_str216)"   --->   Operation 7 'specinterface' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 8 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecInterface(i32* %res_V_data_0_V, [8 x i8]* @ap_fifo_str, i32 0, i32 0, [1 x i8]* @p_str204, i32 0, i32 0, [1 x i8]* @p_str205, [1 x i8]* @p_str206, [1 x i8]* @p_str207, i32 2, i32 2, i32 16, i32 16, [1 x i8]* @p_str208, [1 x i8]* @p_str209)"   --->   Operation 8 'specinterface' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 9 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecInterface(i32* %data_V_data_3_V, [8 x i8]* @ap_fifo_str, i32 0, i32 0, [1 x i8]* @p_str197, i32 0, i32 0, [1 x i8]* @p_str198, [1 x i8]* @p_str199, [1 x i8]* @p_str200, i32 2, i32 2, i32 16, i32 16, [1 x i8]* @p_str201, [1 x i8]* @p_str202)"   --->   Operation 9 'specinterface' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 10 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecInterface(i32* %data_V_data_2_V, [8 x i8]* @ap_fifo_str, i32 0, i32 0, [1 x i8]* @p_str190, i32 0, i32 0, [1 x i8]* @p_str191, [1 x i8]* @p_str192, [1 x i8]* @p_str193, i32 2, i32 2, i32 16, i32 16, [1 x i8]* @p_str194, [1 x i8]* @p_str195)"   --->   Operation 10 'specinterface' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 11 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecInterface(i32* %data_V_data_1_V, [8 x i8]* @ap_fifo_str, i32 0, i32 0, [1 x i8]* @p_str183, i32 0, i32 0, [1 x i8]* @p_str184, [1 x i8]* @p_str185, [1 x i8]* @p_str186, i32 2, i32 2, i32 16, i32 16, [1 x i8]* @p_str187, [1 x i8]* @p_str188)"   --->   Operation 11 'specinterface' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 12 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecInterface(i32* %data_V_data_0_V, [8 x i8]* @ap_fifo_str, i32 0, i32 0, [1 x i8]* @p_str176, i32 0, i32 0, [1 x i8]* @p_str177, [1 x i8]* @p_str178, [1 x i8]* @p_str179, i32 2, i32 2, i32 16, i32 16, [1 x i8]* @p_str180, [1 x i8]* @p_str181)"   --->   Operation 12 'specinterface' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 13 [1/1] (0.60ns)   --->   "br label %1" [firmware/nnet_utils/nnet_activation_stream.h:41]   --->   Operation 13 'br' <Predicate = true> <Delay = 0.60>
+
+State 2 <SV = 1> <Delay = 0.72>
+ST_2 : Operation 14 [1/1] (0.00ns)   --->   "%i_0 = phi i10 [ 0, %0 ], [ %i, %ReLUActLoop ]"   --->   Operation 14 'phi' 'i_0' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 15 [1/1] (0.60ns)   --->   "%icmp_ln41 = icmp eq i10 %i_0, -348" [firmware/nnet_utils/nnet_activation_stream.h:41]   --->   Operation 15 'icmp' 'icmp_ln41' <Predicate = true> <Delay = 0.60> <Core = "Cmp">   --->   Core 25 'Cmp' <Latency = 0> <II = 1> <Delay = 0.85> <FuncUnit> <Opcode : 'icmp'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 16 [1/1] (0.00ns)   --->   "%empty = call i32 (...)* @_ssdm_op_SpecLoopTripCount(i64 676, i64 676, i64 676)"   --->   Operation 16 'speclooptripcount' 'empty' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 17 [1/1] (0.72ns)   --->   "%i = add i10 %i_0, 1" [firmware/nnet_utils/nnet_activation_stream.h:41]   --->   Operation 17 'add' 'i' <Predicate = true> <Delay = 0.72> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 0.72> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 18 [1/1] (0.00ns)   --->   "br i1 %icmp_ln41, label %2, label %ReLUActLoop" [firmware/nnet_utils/nnet_activation_stream.h:41]   --->   Operation 18 'br' <Predicate = true> <Delay = 0.00>
+
+State 3 <SV = 2> <Delay = 4.00>
+ST_3 : Operation 19 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecLoopName([12 x i8]* @p_str18) nounwind" [firmware/nnet_utils/nnet_activation_stream.h:41]   --->   Operation 19 'specloopname' <Predicate = (!icmp_ln41)> <Delay = 0.00>
+ST_3 : Operation 20 [1/1] (0.00ns)   --->   "%tmp = call i32 (...)* @_ssdm_op_SpecRegionBegin([12 x i8]* @p_str18)" [firmware/nnet_utils/nnet_activation_stream.h:41]   --->   Operation 20 'specregionbegin' 'tmp' <Predicate = (!icmp_ln41)> <Delay = 0.00>
+ST_3 : Operation 21 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecPipeline(i32 -1, i32 1, i32 1, i32 0, [1 x i8]* @p_str10) nounwind" [firmware/nnet_utils/nnet_activation_stream.h:42]   --->   Operation 21 'specpipeline' <Predicate = (!icmp_ln41)> <Delay = 0.00>
+ST_3 : Operation 22 [1/1] (1.45ns)   --->   "%empty_18 = call { i32, i32, i32, i32 } @_ssdm_op_Read.ap_fifo.volatile.i32P.i32P.i32P.i32P(i32* %data_V_data_0_V, i32* %data_V_data_1_V, i32* %data_V_data_2_V, i32* %data_V_data_3_V)" [firmware/nnet_utils/nnet_activation_stream.h:44]   --->   Operation 22 'read' 'empty_18' <Predicate = (!icmp_ln41)> <Delay = 1.45> <Core = "FIFO">   --->   Core 32 'FIFO' <Latency = 0> <II = 1> <Delay = 1.45> <Storage> <Opcode : 'read' 'write' 'nbread' 'nbwrite'> <Ports = 0> <Width = 32> <Depth = 1> <FIFO>
+ST_3 : Operation 23 [1/1] (0.00ns)   --->   "%tmp_data_0_V = extractvalue { i32, i32, i32, i32 } %empty_18, 0" [firmware/nnet_utils/nnet_activation_stream.h:44]   --->   Operation 23 'extractvalue' 'tmp_data_0_V' <Predicate = (!icmp_ln41)> <Delay = 0.00>
+ST_3 : Operation 24 [1/1] (0.00ns)   --->   "%tmp_data_1_V = extractvalue { i32, i32, i32, i32 } %empty_18, 1" [firmware/nnet_utils/nnet_activation_stream.h:44]   --->   Operation 24 'extractvalue' 'tmp_data_1_V' <Predicate = (!icmp_ln41)> <Delay = 0.00>
+ST_3 : Operation 25 [1/1] (0.00ns)   --->   "%tmp_data_2_V = extractvalue { i32, i32, i32, i32 } %empty_18, 2" [firmware/nnet_utils/nnet_activation_stream.h:44]   --->   Operation 25 'extractvalue' 'tmp_data_2_V' <Predicate = (!icmp_ln41)> <Delay = 0.00>
+ST_3 : Operation 26 [1/1] (0.00ns)   --->   "%tmp_data_3_V = extractvalue { i32, i32, i32, i32 } %empty_18, 3" [firmware/nnet_utils/nnet_activation_stream.h:44]   --->   Operation 26 'extractvalue' 'tmp_data_3_V' <Predicate = (!icmp_ln41)> <Delay = 0.00>
+ST_3 : Operation 27 [1/1] (0.85ns)   --->   "%icmp_ln1494 = icmp sgt i32 %tmp_data_0_V, 0" [firmware/nnet_utils/nnet_activation_stream.h:51]   --->   Operation 27 'icmp' 'icmp_ln1494' <Predicate = (!icmp_ln41)> <Delay = 0.85> <Core = "Cmp">   --->   Core 25 'Cmp' <Latency = 0> <II = 1> <Delay = 0.85> <FuncUnit> <Opcode : 'icmp'> <InPorts = 2> <OutPorts = 1>
+ST_3 : Operation 28 [1/1] (0.22ns)   --->   "%tmp_data_0_V_1 = select i1 %icmp_ln1494, i32 %tmp_data_0_V, i32 0" [firmware/nnet_utils/nnet_activation_stream.h:51]   --->   Operation 28 'select' 'tmp_data_0_V_1' <Predicate = (!icmp_ln41)> <Delay = 0.22> <Core = "Sel">   --->   Core 26 'Sel' <Latency = 0> <II = 1> <Delay = 0.22> <FuncUnit> <Opcode : 'select'> <InPorts = 3> <OutPorts = 1>
+ST_3 : Operation 29 [1/1] (0.85ns)   --->   "%icmp_ln1494_1 = icmp sgt i32 %tmp_data_1_V, 0" [firmware/nnet_utils/nnet_activation_stream.h:51]   --->   Operation 29 'icmp' 'icmp_ln1494_1' <Predicate = (!icmp_ln41)> <Delay = 0.85> <Core = "Cmp">   --->   Core 25 'Cmp' <Latency = 0> <II = 1> <Delay = 0.85> <FuncUnit> <Opcode : 'icmp'> <InPorts = 2> <OutPorts = 1>
+ST_3 : Operation 30 [1/1] (0.22ns)   --->   "%tmp_data_1_V_1 = select i1 %icmp_ln1494_1, i32 %tmp_data_1_V, i32 0" [firmware/nnet_utils/nnet_activation_stream.h:51]   --->   Operation 30 'select' 'tmp_data_1_V_1' <Predicate = (!icmp_ln41)> <Delay = 0.22> <Core = "Sel">   --->   Core 26 'Sel' <Latency = 0> <II = 1> <Delay = 0.22> <FuncUnit> <Opcode : 'select'> <InPorts = 3> <OutPorts = 1>
+ST_3 : Operation 31 [1/1] (0.85ns)   --->   "%icmp_ln1494_2 = icmp sgt i32 %tmp_data_2_V, 0" [firmware/nnet_utils/nnet_activation_stream.h:51]   --->   Operation 31 'icmp' 'icmp_ln1494_2' <Predicate = (!icmp_ln41)> <Delay = 0.85> <Core = "Cmp">   --->   Core 25 'Cmp' <Latency = 0> <II = 1> <Delay = 0.85> <FuncUnit> <Opcode : 'icmp'> <InPorts = 2> <OutPorts = 1>
+ST_3 : Operation 32 [1/1] (0.22ns)   --->   "%tmp_data_2_V_1 = select i1 %icmp_ln1494_2, i32 %tmp_data_2_V, i32 0" [firmware/nnet_utils/nnet_activation_stream.h:51]   --->   Operation 32 'select' 'tmp_data_2_V_1' <Predicate = (!icmp_ln41)> <Delay = 0.22> <Core = "Sel">   --->   Core 26 'Sel' <Latency = 0> <II = 1> <Delay = 0.22> <FuncUnit> <Opcode : 'select'> <InPorts = 3> <OutPorts = 1>
+ST_3 : Operation 33 [1/1] (0.85ns)   --->   "%icmp_ln1494_3 = icmp sgt i32 %tmp_data_3_V, 0" [firmware/nnet_utils/nnet_activation_stream.h:51]   --->   Operation 33 'icmp' 'icmp_ln1494_3' <Predicate = (!icmp_ln41)> <Delay = 0.85> <Core = "Cmp">   --->   Core 25 'Cmp' <Latency = 0> <II = 1> <Delay = 0.85> <FuncUnit> <Opcode : 'icmp'> <InPorts = 2> <OutPorts = 1>
+ST_3 : Operation 34 [1/1] (0.22ns)   --->   "%tmp_data_3_V_1 = select i1 %icmp_ln1494_3, i32 %tmp_data_3_V, i32 0" [firmware/nnet_utils/nnet_activation_stream.h:51]   --->   Operation 34 'select' 'tmp_data_3_V_1' <Predicate = (!icmp_ln41)> <Delay = 0.22> <Core = "Sel">   --->   Core 26 'Sel' <Latency = 0> <II = 1> <Delay = 0.22> <FuncUnit> <Opcode : 'select'> <InPorts = 3> <OutPorts = 1>
+ST_3 : Operation 35 [1/1] (1.45ns)   --->   "call void @_ssdm_op_Write.ap_fifo.volatile.i32P.i32P.i32P.i32P(i32* %res_V_data_0_V, i32* %res_V_data_1_V, i32* %res_V_data_2_V, i32* %res_V_data_3_V, i32 %tmp_data_0_V_1, i32 %tmp_data_1_V_1, i32 %tmp_data_2_V_1, i32 %tmp_data_3_V_1)" [firmware/nnet_utils/nnet_activation_stream.h:57]   --->   Operation 35 'write' <Predicate = (!icmp_ln41)> <Delay = 1.45> <Core = "FIFO">   --->   Core 32 'FIFO' <Latency = 0> <II = 1> <Delay = 1.45> <Storage> <Opcode : 'read' 'write' 'nbread' 'nbwrite'> <Ports = 0> <Width = 32> <Depth = 1> <FIFO>
+ST_3 : Operation 36 [1/1] (0.00ns)   --->   "%empty_19 = call i32 (...)* @_ssdm_op_SpecRegionEnd([12 x i8]* @p_str18, i32 %tmp)" [firmware/nnet_utils/nnet_activation_stream.h:58]   --->   Operation 36 'specregionend' 'empty_19' <Predicate = (!icmp_ln41)> <Delay = 0.00>
+ST_3 : Operation 37 [1/1] (0.00ns)   --->   "br label %1" [firmware/nnet_utils/nnet_activation_stream.h:41]   --->   Operation 37 'br' <Predicate = (!icmp_ln41)> <Delay = 0.00>
+
+State 4 <SV = 2> <Delay = 0.00>
+ST_4 : Operation 38 [1/1] (0.00ns)   --->   "ret void" [firmware/nnet_utils/nnet_activation_stream.h:59]   --->   Operation 38 'ret' <Predicate = true> <Delay = 0.00>
+
+
+============================================================
++ Verbose Summary: Timing violations
+============================================================
+Target clock period: 10ns, clock uncertainty: 1.25ns.
+
+ <State 1>: 0.603ns
+The critical path consists of the following:
+	multiplexor before 'phi' operation ('i') with incoming values : ('i', firmware/nnet_utils/nnet_activation_stream.h:41) [19]  (0.603 ns)
+
+ <State 2>: 0.725ns
+The critical path consists of the following:
+	'phi' operation ('i') with incoming values : ('i', firmware/nnet_utils/nnet_activation_stream.h:41) [19]  (0 ns)
+	'add' operation ('i', firmware/nnet_utils/nnet_activation_stream.h:41) [22]  (0.725 ns)
+
+ <State 3>: 4ns
+The critical path consists of the following:
+	fifo read on port 'data_V_data_0_V' (firmware/nnet_utils/nnet_activation_stream.h:44) [28]  (1.46 ns)
+	'icmp' operation ('icmp_ln1494_1', firmware/nnet_utils/nnet_activation_stream.h:51) [35]  (0.859 ns)
+	'select' operation ('tmp.data[1].V', firmware/nnet_utils/nnet_activation_stream.h:51) [36]  (0.227 ns)
+	fifo write on port 'res_V_data_0_V' (firmware/nnet_utils/nnet_activation_stream.h:57) [41]  (1.46 ns)
+
+ <State 4>: 0ns
+The critical path consists of the following:
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+N/A
+* FSMD analyzer results:
+  - Output states:
+ - Input state : 
+  - Chain level:
+	State 1
+	State 2
+	State 3
+	State 4
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+N/A
