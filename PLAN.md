@@ -1,4 +1,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# Agenda dec 1 23
+
+Research areas to look into
+
+	- SODA syntheziser
+	- PandA and Bambu (open-source HLS) Link: https://github.com/ferrandi/PandA-bambu
+	- Survey of DNN acellaeratos from 29 nov https://arxiv.org/pdf/2311.17815.pdf
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # Agenda nov 29 23
 
 Notes for presentation:
