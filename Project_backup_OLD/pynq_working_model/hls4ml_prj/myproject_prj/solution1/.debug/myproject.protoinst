@@ -1,0 +1,114 @@
+{
+	"version": "1.0",
+	"modules": {
+		"myproject": {
+			"proto_instances": {
+				"/AESL_inst_myproject_activity": {
+					"interface": "xilinx.com:interface:internal_hls_dataflow:1.0",
+					"ports": {
+						"AP_CLK": { "actual": "ap_clk"},
+						"AP_DONE": { "actual": "ap_done"},
+						"AP_READY": { "actual": "ap_ready"},
+						"AP_RESET": { "actual": "ap_rst_n"},
+						"AP_START": { "actual": "ap_start"}
+					}
+				},
+				"conv_2d_cl_array_ap_fixed_1u_array_ap_fixed_16_8_5_3_0_4u_config2_U0/conv_2d_cl_array_ap_fixed_1u_array_ap_fixed_16_8_5_3_0_4u_config2_U0_activity": {
+					"interface": "xilinx.com:interface:internal_hls_dataflow:1.0",
+					"ports": {
+						"AP_CLK": { "actual": "ap_clk"},
+						"AP_CONTINUE": { "actual": "ap_continue"},
+						"AP_DONE": { "actual": "ap_done"},
+						"AP_READY": { "actual": "ap_ready"},
+						"AP_RESET": { "actual": "ap_rst"},
+						"AP_START": { "actual": "ap_start"}
+					}
+				},
+				"dense_array_ap_fixed_4u_array_ap_fixed_16_8_5_3_0_12u_config6_U0/dense_array_ap_fixed_4u_array_ap_fixed_16_8_5_3_0_12u_config6_U0_activity": {
+					"interface": "xilinx.com:interface:internal_hls_dataflow:1.0",
+					"ports": {
+						"AP_CLK": { "actual": "ap_clk"},
+						"AP_CONTINUE": { "actual": "ap_continue"},
+						"AP_DONE": { "actual": "ap_done"},
+						"AP_READY": { "actual": "ap_ready"},
+						"AP_RESET": { "actual": "ap_rst"},
+						"AP_START": { "actual": "ap_start"}
+					}
+				},
+				"dense_array_ap_fixed_4u_array_ap_fixed_16_8_5_3_0_12u_config6_U0/grp_dense_wrapper_ap_fixed_16_8_5_3_0_ap_fixed_16_8_5_3_0_config6_s_fu_2922/grp_dense_wrapper_ap_fixed_16_8_5_3_0_ap_fixed_16_8_5_3_0_config6_s_fu_2922_activity": {
+					"interface": "xilinx.com:interface:internal_hls_dataflow:1.0",
+					"ports": {
+						"AP_CLK": { "actual": "ap_clk"},
+						"AP_DONE": { "actual": "ap_done"},
+						"AP_READY": { "actual": "ap_ready"},
+						"AP_RESET": { "actual": "ap_rst"},
+						"AP_START": { "actual": "ap_start"}
+					}
+				},
+				"pooling2d_cl_array_ap_fixed_4u_array_ap_fixed_16_8_5_3_0_4u_config4_U0/pooling2d_cl_array_ap_fixed_4u_array_ap_fixed_16_8_5_3_0_4u_config4_U0_activity": {
+					"interface": "xilinx.com:interface:internal_hls_dataflow:1.0",
+					"ports": {
+						"AP_CLK": { "actual": "ap_clk"},
+						"AP_CONTINUE": { "actual": "ap_continue"},
+						"AP_DONE": { "actual": "ap_done"},
+						"AP_READY": { "actual": "ap_ready"},
+						"AP_RESET": { "actual": "ap_rst"},
+						"AP_START": { "actual": "ap_start"}
+					}
+				},
+				"relu_array_ap_fixed_4u_array_ap_fixed_16_8_5_3_0_4u_relu_config3_U0/relu_array_ap_fixed_4u_array_ap_fixed_16_8_5_3_0_4u_relu_config3_U0_activity": {
+					"interface": "xilinx.com:interface:internal_hls_dataflow:1.0",
+					"ports": {
+						"AP_CLK": { "actual": "ap_clk"},
+						"AP_CONTINUE": { "actual": "ap_continue"},
+						"AP_DONE": { "actual": "ap_done"},
+						"AP_READY": { "actual": "ap_ready"},
+						"AP_RESET": { "actual": "ap_rst"},
+						"AP_START": { "actual": "ap_start"}
+					}
+				},
+				"softmax_array_array_ap_fixed_16_8_5_3_0_12u_softmax_config7_U0/grp_softmax_stable_array_array_ap_fixed_16_8_5_3_0_12u_softmax_config7_s_fu_216/grp_reduce_ap_fixed_18_8_0_0_0_12_Op_add_ap_fixed_18_8_0_0_0_s_fu_540/grp_reduce_ap_fixed_18_8_0_0_0_12_Op_add_ap_fixed_18_8_0_0_0_s_fu_540_activity": {
+					"interface": "xilinx.com:interface:internal_hls_dataflow:1.0",
+					"ports": {
+						"AP_CLK": { "actual": "ap_clk"},
+						"AP_DONE": { "actual": "ap_done"},
+						"AP_READY": { "actual": "ap_ready"},
+						"AP_RESET": { "actual": "ap_rst"},
+						"AP_START": { "actual": "ap_start"}
+					}
+				},
+				"softmax_array_array_ap_fixed_16_8_5_3_0_12u_softmax_config7_U0/grp_softmax_stable_array_array_ap_fixed_16_8_5_3_0_12u_softmax_config7_s_fu_216/grp_reduce_ap_fixed_18_8_0_0_0_12_Op_add_ap_fixed_18_8_0_0_0_s_fu_540/grp_reduce_ap_fixed_18_8_0_0_0_4_Op_add_ap_fixed_18_8_0_0_0_s_fu_70/grp_reduce_ap_fixed_18_8_0_0_0_4_Op_add_ap_fixed_18_8_0_0_0_s_fu_70_activity": {
+					"interface": "xilinx.com:interface:internal_hls_dataflow:1.0",
+					"ports": {
+						"AP_CLK": { "actual": "ap_clk"},
+						"AP_DONE": { "actual": "ap_done"},
+						"AP_READY": { "actual": "ap_ready"},
+						"AP_RESET": { "actual": "ap_rst"},
+						"AP_START": { "actual": "ap_start"}
+					}
+				},
+				"softmax_array_array_ap_fixed_16_8_5_3_0_12u_softmax_config7_U0/grp_softmax_stable_array_array_ap_fixed_16_8_5_3_0_12u_softmax_config7_s_fu_216/grp_softmax_stable_array_array_ap_fixed_16_8_5_3_0_12u_softmax_config7_s_fu_216_activity": {
+					"interface": "xilinx.com:interface:internal_hls_dataflow:1.0",
+					"ports": {
+						"AP_CLK": { "actual": "ap_clk"},
+						"AP_DONE": { "actual": "ap_done"},
+						"AP_READY": { "actual": "ap_ready"},
+						"AP_RESET": { "actual": "ap_rst"},
+						"AP_START": { "actual": "ap_start"}
+					}
+				},
+				"softmax_array_array_ap_fixed_16_8_5_3_0_12u_softmax_config7_U0/softmax_array_array_ap_fixed_16_8_5_3_0_12u_softmax_config7_U0_activity": {
+					"interface": "xilinx.com:interface:internal_hls_dataflow:1.0",
+					"ports": {
+						"AP_CLK": { "actual": "ap_clk"},
+						"AP_CONTINUE": { "actual": "ap_continue"},
+						"AP_DONE": { "actual": "ap_done"},
+						"AP_READY": { "actual": "ap_ready"},
+						"AP_RESET": { "actual": "ap_rst"},
+						"AP_START": { "actual": "ap_start"}
+					}
+				}
+			}
+		}
+	}
+}
