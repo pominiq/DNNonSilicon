@@ -35,8 +35,8 @@ from keras.datasets import mnist
 
 timestr = time.strftime("%Y%m%d-%H%M%S") #used for timestamping iterations
 
-## Set path for Vivado HLSs
-os.environ['PATH'] += os.pathsep + '/home/pominiq/Vivado/2020.1/bin'
+## Set path for Vivado HLS
+os.environ['PATH'] += os.pathsep + '/tools/Xilinx/Vivado/2020.1/bin'
 
 #Global variables
 build = True
@@ -50,12 +50,12 @@ global test_labels
 def load_keras_model_from_json_file():
     
     # load json and create model
-    json_file = open('Keras_models/model_16bit.json', 'r')
+    json_file = open('Folder_1_TensorFlow_model/TensorFlow_CNN_model/model_16bit.json', 'r')
     loaded_model_json = json_file.read()
     json_file.close()
     loaded_model = tf.keras.models.model_from_json(loaded_model_json)
     # load weights into new model
-    loaded_model.load_weights("Keras_models/model_16bit.weights.h5")
+    loaded_model.load_weights("Folder_1_TensorFlow_model/TensorFlow_CNN_model/model_16bit.weights.h5")
     print("Loaded model from disk")
 
     # evaluate loaded model on test data
@@ -83,7 +83,7 @@ def config_and_compile_hls4ml_model_from_keras_model(loaded_model):
                                                            hls_config=config,
                                                            io_type='io_stream', # Set to io_stream for CNN
                                                            clock_period=10,
-                                                           output_dir='model_4/hls4ml_prj',
+                                                           output_dir='Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj_{}'.format(timestr),
                                                            part='xc7z020clg400-1',
                                                            backend='Vivado'
                                                            )
@@ -123,8 +123,8 @@ def hls_vs_tf_model_comparison(loaded_model, hls_model, test_images, test_labels
 
 def main():
     # test set n=10.000, 28x28 px images from MNIST
-    test_images = np.load('Keras_models/test_images.npy')
-    test_labels = np.load('Keras_models/test_labels.npy')
+    test_images = np.load('Folder_1_TensorFlow_model/TensorFlow_CNN_model/test_images.npy')
+    test_labels = np.load('Folder_1_TensorFlow_model/TensorFlow_CNN_model/test_labels.npy')
     # Set dtype of test_images, for interactions with numpy and scikitlearn functions
     test_images = np.ascontiguousarray(test_images, dtype='float32')
 
@@ -141,11 +141,10 @@ def main():
                         synth=True,
                         vsynth=True,
                         export=True,
-                        bitfile=True,
                         )
         print("##############################\n\t DONE \t\n##############################")
         # Check reports
-        hls4ml.report.read_vivado_report('model_4/hls4ml_prj/')
+        hls4ml.report.read_vivado_report('Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj_{}'.format(timestr))
     else:
         print("##################################\n\t Model not build \t\n#################################")
 
