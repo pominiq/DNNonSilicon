@@ -224,18 +224,7 @@ def main():
     print("___________6___________")
     Pruned_score = model_for_pruning.evaluate(test_images, test_labels, verbose=0)
     print("Pruned Model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(Pruned_score[0],Pruned_score[1]*100))
-
-    # checks if this model can be implemented completely unrolled (=parallel)
-    # for Vivado-enforced unroll limit of 4096.
-    print("\nCompletely Unrolled size must adhere to <4096 for Vivado compiler")
-    for layer in model_for_pruning.layers:
-        if layer.__class__.__name__ in ['Conv2D', 'Dense']:
-            w = layer.get_weights()[0]
-            layersize = np.prod(w.shape)
-            print("{}: {}".format(layer.name, layersize))  # 0 = weights, 1 = biases
-            if layersize > 4096:  # assuming that shape[0] is batch, i.e., 'None'
-                print("Layer {} is too large ({}), are you sure you want to train?".format(layer.name, layersize))
     """
-
+    
 if __name__ == "__main__":
     main()
