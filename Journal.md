@@ -1,4 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# Agenda dec 10 23
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # Agenda dec 5 23
 
 How to use Bambuu appimage
@@ -9,6 +14,11 @@ How to use Bambuu appimage
     - Use the ./bambu.appimage exeution as a replacement for the system-wide 'bambu' command
     
 
+Got Keras2C to work, and have used it on my neural network
+
+Need to make it run through Bambuu (or Vivado for that matter).
+
+And it should be pretty cool.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

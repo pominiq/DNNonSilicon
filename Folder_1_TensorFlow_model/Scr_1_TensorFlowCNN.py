@@ -28,6 +28,10 @@ from keras import layers, models
 
 import tempfile
 import tensorflow_model_optimization as tfmot
+import os
+
+path = "/home/pominiq/projectfolder/Folder_1_TensorFlow_model"
+os.chdir(path)
 
 import time
 timestr = time.strftime("%Y%m%d-%H%M%S") #used for timestamping iterations
@@ -119,7 +123,7 @@ def main():
         model = models.Sequential()
         model.add(layers.Conv2D(4, (3, 3), activation='relu', input_shape=(28, 28, 1)))
         model.add(layers.MaxPooling2D((4, 4)))
-        model.add(layers.Conv2D(8, (3, 3), activation='relu'))
+        model.add(layers.Conv2D(8, (3, 3), activation='softmax'))
         model.add(layers.MaxPooling2D((2, 2)))
         model.add(layers.Flatten())
         model.add(layers.Dense(10, dtype='float32', activation='tanh'))  # Ensure that the final layer has float32 dtype
