@@ -17,6 +17,9 @@ and Netgen for generating netlists. Additionally Klayout can be used to view the
 #os.environ['PATH'] += os.pathsep + '/home/pominiq/ProjectFolder/model_1/hls4ml_prj/myproject_prj/solution1/impl/verilog'
 
 import os
+path = "/home/pominiq/projectfolder/"
+os.chdir(path)
+
 from openlane.flows import SequentialFlow, Flow
 from openlane.steps import Yosys, Misc, OpenROAD, Magic, Netgen, Checker
 from openlane.steps.openroad import OpenGUI
@@ -69,7 +72,7 @@ def main():
         {
             "PDK": "sky130A",
             "DESIGN_NAME": "myproject",
-            "VERILOG_FILES": "refg::$DESIGN_DIR/../Folder_2_HLS4ML_Vivado_HLS/hls4ml_prj/myproject_prj/solution1/impl/verilog/*.v",
+            "VERILOG_FILES": "refg::$DESIGN_DIR/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/impl/verilog/*.v",
             "CLOCK_PORT": 'ap_clk',
             "CLOCK_PERIOD": 10,
             #### Sequential flow specific parameters ###
