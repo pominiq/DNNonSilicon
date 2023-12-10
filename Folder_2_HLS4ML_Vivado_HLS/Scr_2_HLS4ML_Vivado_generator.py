@@ -83,7 +83,7 @@ def config_and_compile_hls4ml_model_from_keras_model(loaded_model):
                                                            hls_config=config,
                                                            io_type='io_stream', # Set to io_stream for CNN
                                                            clock_period=10,
-                                                           output_dir='Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj_{}'.format(timestr),
+                                                           output_dir='Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj',
                                                            part='xc7z020clg400-1',
                                                            backend='Vivado'
                                                            )
@@ -144,7 +144,7 @@ def main():
                         )
         print("##############################\n\t DONE \t\n##############################")
         # Check reports
-        hls4ml.report.read_vivado_report('Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj_{}'.format(timestr))
+        hls4ml.report.read_vivado_report('Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj')
     else:
         print("##################################\n\t Model not build \t\n#################################")
 

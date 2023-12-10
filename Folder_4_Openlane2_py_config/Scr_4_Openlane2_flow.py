@@ -69,7 +69,7 @@ def main():
         {
             "PDK": "sky130A",
             "DESIGN_NAME": "myproject",
-            "VERILOG_FILES": "refg::$DESIGN_DIR/model_4/hls4ml_prj/myproject_prj/solution1/impl/verilog/*.v",
+            "VERILOG_FILES": "refg::$DESIGN_DIR/../Folder_2_HLS4ML_Vivado_HLS/hls4ml_prj/myproject_prj/solution1/impl/verilog/*.v",
             "CLOCK_PORT": 'ap_clk',
             "CLOCK_PERIOD": 10,
             #### Sequential flow specific parameters ###
