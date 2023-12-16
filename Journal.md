@@ -1,6 +1,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-# Agenda dec 10 23
+# Agenda dec 16 23
 
+Had a 5-6 day break. I feel quite down as of late. Had a bit of migraine, and jumping back into working out after a short break has left me super sore all over. Maybe those physical effects has lead to my tiredness, and the sense of demotivation, but at the same time, I feel like it might just be slight distractions from the fact that I am again... overworking myself, in the sense that I am "borrowing tomorrow's energy". I need a break lol. Though I do have a set of nice objectives and when written out actually seem quite manageable. I will post this at the top / banner of this journal, and maybe just log progress each day on them.
+
+List of To-Do (dec. 17 to dec. 30):
+    1. Write Openlane2 how-to for Ali's students (should be easy, and is probably first priority)
+    2. One more model example. (Should I try Qkeras? for both MNIST CNN and another as proof of concept?)
+    3. Compile all into a single script / GUI. (Should do some proper research on engines to do this. YouTube tutorials etc. Do not wanna fuck it up by  modifying code I do not need to. This should be a work smarter not harder situation.)
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# Agenda dec 10 23
+Meeting with Ali. Not a lot to say. I will flesh it out in the next entry's to-do list.s
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
