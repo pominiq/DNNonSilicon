@@ -32,7 +32,6 @@ import os
 
 path = "/home/pominiq/projectfolder/Folder_1_TensorFlow_model"
 os.chdir(path)
-
 import time
 timestr = time.strftime("%Y%m%d-%H%M%S") #used for timestamping iterations
 
@@ -80,7 +79,6 @@ def save_model_and_dataset(model, train_images,train_labels,test_images,test_lab
     np.save('TensorFlow_CNN_model/test_images.npy', test_images)
     np.save('TensorFlow_CNN_model/test_labels.npy', test_labels)
     print("- Succesfully saved IO training and test sets as .npy-files")
-
 
 # Manually quantize weights to 16-bit
 def quantize_weights_to_16bit(model):

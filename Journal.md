@@ -1,14 +1,26 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # Agenda dec 16 23
 
-Had a 5-6 day break. I feel quite down as of late. Had a bit of migraine, and jumping back into working out after a short break has left me super sore all over. Maybe those physical effects has lead to my tiredness, and the sense of demotivation, but at the same time, I feel like it might just be slight distractions from the fact that I am again... overworking myself, in the sense that I am "borrowing tomorrow's energy". I need a break lol. Though I do have a set of nice objectives and when written out actually seem quite manageable. I will post this at the top / banner of this journal, and maybe just log progress each day on them.
+Had a 5-6 day break. I feel quite down as of late. Had a bit of migraine, and jumping back into working out after a short break has left me super sore all over. Maybe those physical effects has lead to my tiredness, and the sense of demotivation, but at the same time, I feel like it might just be distractions from the fact that I am again... overworking myself, in the sense that I am "borrowing tomorrow's energy". I need a break lol. Though I do have a set of nice objectives and when written out actually seem quite manageable. I will post this at the top / banner of this journal, and maybe just log progress each day on them.
 
 List of To-Do (dec. 17 to dec. 30):
-    1. Write Openlane2 how-to for Ali's students (should be easy, and is probably first priority)
-    2. One more model example. (Should I try Qkeras? for both MNIST CNN and another as proof of concept?)
-    3. Compile all into a single script / GUI. (Should do some proper research on engines to do this. YouTube tutorials etc. Do not wanna fuck it up by  modifying code I do not need to. This should be a work smarter not harder situation.)
+    
+    1. Write Openlane2 how-to for Ali's students 
+    Desc: (should be easy, and is probably first priority)
+    
+    2. One more model example
+    Desc: (Should I try Qkeras? for both MNIST CNN and another as proof of concept?)
+    
+    3. Compile all into a single script / GUI. 
+    Desc: (Should do some proper research on engines to do this. YouTube tutorials etc. Do not wanna fuck it up by  modifying code I do not need to. This should be a work smarter not harder situation.)
 
+    4. Write Jørgen about production of GDS.
+    Desc: (Self-explanatory. Should probably set up a meeting, get his feedback. Use LinkedIn.)
 
+    5. Generate a test-bench / timing diagram for the model
+    Desc: (How the hell do I make Vivado do this? Can I activate something in HLS4ML settings to accomplish this maybe?)
+
+When this is done, I do not think I can do a lot more. There should probably be some "create latex template" somewhere here, but I think it is fine to keep it to the last 2 months of the project period. What about timing or using Vivado to see clock and timing? That is definitely a thing, but I might just need to put that under one of the to-do items.
 
 
 
