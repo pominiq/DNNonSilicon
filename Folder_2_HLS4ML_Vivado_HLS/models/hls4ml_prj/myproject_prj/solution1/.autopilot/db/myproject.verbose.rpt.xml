@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vivado HLS Report for 'myproject'" level="0">
-<item name = "Date">Sun Dec 10 18:03:50 2023
+<item name = "Date">Sun Dec 17 18:36:40 2023
 </item>
 <item name = "Version">2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)</item>
 <item name = "Project">myproject_prj</item>
@@ -24,18 +24,18 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="8">, min, max, min, max, min, max, Type</keys>
-<column name="">27501, 27501, 0.275 ms, 0.275 ms, 27443, 27443, dataflow</column>
+<column name="">29853, 29853, 0.299 ms, 0.299 ms, 29795, 29795, dataflow</column>
 </table>
 </item>
 <item name = "Detail">
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="0">
 <keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
-<column name="conv_2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_8u_config5_U0">conv_2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_8u_config5_s, 1946, 1946, 19.460 us, 19.460 us, 1946, 1946, none</column>
 <column name="dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_U0">dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s, 67, 67, 0.670 us, 0.670 us, 67, 67, none</column>
+<column name="conv_2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_8u_config5_U0">conv_2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_8u_config5_s, 1946, 1946, 19.460 us, 19.460 us, 1946, 1946, none</column>
 <column name="pooling2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_config4_U0">pooling2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_config4_s, 681, 681, 6.810 us, 6.810 us, 681, 681, none</column>
-<column name="conv_2d_cl_array_ap_fixed_1u_array_ap_fixed_16_6_5_3_0_4u_config2_U0">conv_2d_cl_array_ap_fixed_1u_array_ap_fixed_16_6_5_3_0_4u_config2_s, 27442, 27442, 0.274 ms, 0.274 ms, 27442, 27442, none</column>
 <column name="softmax_array_array_ap_fixed_16_6_5_3_0_8u_softmax_config6_U0">softmax_array_array_ap_fixed_16_6_5_3_0_8u_softmax_config6_s, 149, 149, 1.490 us, 1.490 us, 149, 149, none</column>
+<column name="conv_2d_cl_array_ap_fixed_1u_array_ap_fixed_16_6_5_3_0_4u_config2_U0">conv_2d_cl_array_ap_fixed_1u_array_ap_fixed_16_6_5_3_0_4u_config2_s, 29794, 29794, 0.298 ms, 0.298 ms, 29794, 29794, none</column>
 <column name="tanh_array_ap_fixed_10u_array_ap_fixed_16_6_5_3_0_10u_tanh_config10_U0">tanh_array_ap_fixed_10u_array_ap_fixed_16_6_5_3_0_10u_tanh_config10_s, 3, 3, 30.000 ns, 30.000 ns, 1, 1, function</column>
 <column name="pooling2d_cl_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_8u_config7_U0">pooling2d_cl_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_8u_config7_s, 20, 20, 0.200 us, 0.200 us, 20, 20, none</column>
 <column name="relu_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_relu_config3_U0">relu_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_relu_config3_s, 679, 679, 6.790 us, 6.790 us, 679, 679, none</column>
@@ -57,21 +57,21 @@
 <column name="DSP">-, -, -, -, -</column>
 <column name="Expression">-, -, 0, 2, -</column>
 <column name="FIFO">12, -, 726, 1784, -</column>
-<column name="Instance">7, 12, 23023, 30129, -</column>
+<column name="Instance">7, 12, 23105, 30146, -</column>
 <column name="Memory">-, -, -, -, -</column>
 <column name="Multiplexer">-, -, -, -, -</column>
 <column name="Register">-, -, -, -, -</column>
 <specialColumn name="Available">280, 220, 106400, 53200, 0</specialColumn>
-<specialColumn name="Utilization (%)">6, 5, 22, 59, 0</specialColumn>
+<specialColumn name="Utilization (%)">6, 5, 22, 60, 0</specialColumn>
 </table>
 </item>
 <item name = "Detail">
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="1">
 <keys size="7">Instance, Module, BRAM_18K, DSP48E, FF, LUT, URAM</keys>
-<column name="conv_2d_cl_array_ap_fixed_1u_array_ap_fixed_16_6_5_3_0_4u_config2_U0">conv_2d_cl_array_ap_fixed_1u_array_ap_fixed_16_6_5_3_0_4u_config2_s, 0, 1, 1648, 2091, 0</column>
-<column name="conv_2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_8u_config5_U0">conv_2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_8u_config5_s, 0, 5, 7732, 10097, 0</column>
-<column name="dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_U0">dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s, 0, 5, 5851, 8899, 0</column>
+<column name="conv_2d_cl_array_ap_fixed_1u_array_ap_fixed_16_6_5_3_0_4u_config2_U0">conv_2d_cl_array_ap_fixed_1u_array_ap_fixed_16_6_5_3_0_4u_config2_s, 0, 1, 1675, 2024, 0</column>
+<column name="conv_2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_8u_config5_U0">conv_2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_8u_config5_s, 0, 5, 7606, 9890, 0</column>
+<column name="dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_U0">dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s, 0, 5, 6032, 9190, 0</column>
 <column name="pooling2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_config4_U0">pooling2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_config4_s, 0, 0, 4979, 3612, 0</column>
 <column name="pooling2d_cl_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_8u_config7_U0">pooling2d_cl_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_8u_config7_s, 0, 0, 1457, 1707, 0</column>
 <column name="relu_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_relu_config3_U0">relu_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_relu_config3_s, 0, 0, 84, 297, 0</column>

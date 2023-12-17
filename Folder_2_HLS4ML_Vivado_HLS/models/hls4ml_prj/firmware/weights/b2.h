@@ -1,6 +1,6 @@
 //Numpy array shape [4]
-//Min -0.617675781250
-//Max 0.002828598022
+//Min -0.583984375000
+//Max 0.620605468750
 //Number of zeros 0
 
 #ifndef B2_H_
@@ -9,7 +9,7 @@
 #ifndef __SYNTHESIS__
 model_default_t b2[4];
 #else
-model_default_t b2[4] = {-0.6176757812, -0.3759765625, -0.0002515316, 0.0028285980};
+model_default_t b2[4] = {-0.5839843750, 0.6206054688, -0.0029010773, -0.0614013672};
 #endif
 
 #endif

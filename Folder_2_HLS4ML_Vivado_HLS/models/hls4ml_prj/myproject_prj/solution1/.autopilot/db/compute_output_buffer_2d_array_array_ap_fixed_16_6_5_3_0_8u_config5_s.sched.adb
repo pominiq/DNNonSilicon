@@ -5049,7 +5049,7 @@
 					<Obj>
 						<type>0</type>
 						<id>157</id>
-						<name>tmp_55</name>
+						<name>tmp_50</name>
 						<fileName>firmware/nnet_utils/nnet_conv_stream.h</fileName>
 						<fileDirectory>/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj</fileDirectory>
 						<lineNumber>289</lineNumber>
@@ -5421,7 +5421,7 @@
 				<m_isOnCriticalPath>0</m_isOnCriticalPath>
 				<m_isLCDNode>0</m_isLCDNode>
 				<m_isStartOfPath>0</m_isStartOfPath>
-				<m_delay>8.09</m_delay>
+				<m_delay>7.74</m_delay>
 				<m_topoIndex>104</m_topoIndex>
 				<m_clusterGroupNumber>-1</m_clusterGroupNumber>
 			</item>

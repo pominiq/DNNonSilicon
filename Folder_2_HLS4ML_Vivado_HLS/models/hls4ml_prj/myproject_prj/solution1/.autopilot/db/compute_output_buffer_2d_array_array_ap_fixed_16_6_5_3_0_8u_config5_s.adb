@@ -5049,7 +5049,7 @@
             <Obj>
               <type>0</type>
               <id>157</id>
-              <name>tmp_55</name>
+              <name>tmp_50</name>
               <fileName>firmware/nnet_utils/nnet_conv_stream.h</fileName>
               <fileDirectory>..</fileDirectory>
               <lineNumber>289</lineNumber>
@@ -5073,7 +5073,7 @@
                 </item>
               </inlineStackInfo>
               <originalName/>
-              <rtlName>tmp_55_fu_826_p4</rtlName>
+              <rtlName>tmp_50_fu_826_p4</rtlName>
               <coreName/>
             </Obj>
             <bitwidth>31</bitwidth>
@@ -5421,7 +5421,7 @@
           <m_isOnCriticalPath>0</m_isOnCriticalPath>
           <m_isLCDNode>0</m_isLCDNode>
           <m_isStartOfPath>0</m_isStartOfPath>
-          <m_delay>8.09</m_delay>
+          <m_delay>7.74</m_delay>
           <m_topoIndex>104</m_topoIndex>
           <m_clusterGroupNumber>-1</m_clusterGroupNumber>
         </item>
@@ -12046,11 +12046,11 @@
             </item>
             <item>
               <first>FF</first>
-              <second>5747</second>
+              <second>5621</second>
             </item>
             <item>
               <first>LUT</first>
-              <second>8668</second>
+              <second>8461</second>
             </item>
           </second>
         </item>
@@ -17085,7 +17085,7 @@
         </second>
       </item>
       <item>
-        <first>tmp_55_fu_826</first>
+        <first>tmp_50_fu_826</first>
         <second>
           <count>1</count>
           <item_version>0</item_version>

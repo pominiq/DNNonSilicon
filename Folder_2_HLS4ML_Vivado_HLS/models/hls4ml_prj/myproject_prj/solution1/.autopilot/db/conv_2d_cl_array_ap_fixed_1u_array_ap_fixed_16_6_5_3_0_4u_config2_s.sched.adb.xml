@@ -3,225 +3,243 @@
 
 <trans_list>
 
-<trans id="91" from="1" to="2">
+<trans id="97" from="1" to="2">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="163" from="2" to="37">
+<trans id="175" from="2" to="40">
 <condition id="-1">
 <or_exp><and_exp><literal name="icmp_ln79" val="1"/>
 </and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="164" from="2" to="3">
+<trans id="176" from="2" to="3">
 <condition id="-1">
 <or_exp><and_exp><literal name="icmp_ln79" val="0"/>
 </and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="129" from="3" to="4">
+<trans id="138" from="3" to="4">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="130" from="4" to="5">
+<trans id="139" from="4" to="5">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="131" from="5" to="6">
+<trans id="140" from="5" to="6">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="132" from="6" to="7">
+<trans id="141" from="6" to="7">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="133" from="7" to="8">
+<trans id="142" from="7" to="8">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="134" from="8" to="9">
+<trans id="143" from="8" to="9">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="135" from="9" to="10">
+<trans id="144" from="9" to="10">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="136" from="10" to="11">
+<trans id="145" from="10" to="11">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="137" from="11" to="12">
+<trans id="146" from="11" to="12">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="138" from="12" to="13">
+<trans id="147" from="12" to="13">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="139" from="13" to="14">
+<trans id="148" from="13" to="14">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="140" from="14" to="15">
+<trans id="149" from="14" to="15">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="141" from="15" to="16">
+<trans id="150" from="15" to="16">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="142" from="16" to="17">
+<trans id="151" from="16" to="17">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="143" from="17" to="18">
+<trans id="152" from="17" to="18">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="144" from="18" to="19">
+<trans id="153" from="18" to="19">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="145" from="19" to="20">
+<trans id="154" from="19" to="20">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="146" from="20" to="21">
+<trans id="155" from="20" to="21">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="147" from="21" to="22">
+<trans id="156" from="21" to="22">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="148" from="22" to="23">
+<trans id="157" from="22" to="23">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="149" from="23" to="24">
+<trans id="158" from="23" to="24">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="150" from="24" to="25">
+<trans id="159" from="24" to="25">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="151" from="25" to="26">
+<trans id="160" from="25" to="26">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="152" from="26" to="27">
+<trans id="161" from="26" to="27">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="153" from="27" to="28">
+<trans id="162" from="27" to="28">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="154" from="28" to="29">
+<trans id="163" from="28" to="29">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="155" from="29" to="30">
+<trans id="164" from="29" to="30">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="156" from="30" to="31">
+<trans id="165" from="30" to="31">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="157" from="31" to="32">
+<trans id="166" from="31" to="32">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="158" from="32" to="33">
+<trans id="167" from="32" to="33">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="159" from="33" to="34">
+<trans id="168" from="33" to="34">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="160" from="34" to="35">
+<trans id="169" from="34" to="35">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="161" from="35" to="36">
+<trans id="170" from="35" to="36">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 </trans>
 
-<trans id="162" from="36" to="2">
+<trans id="171" from="36" to="37">
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+</trans>
+
+<trans id="172" from="37" to="38">
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+</trans>
+
+<trans id="173" from="38" to="39">
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+</trans>
+
+<trans id="174" from="39" to="2">
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
@@ -234,7 +252,7 @@
 
 <state id="1" st_id="1">
 
-<operation id="38" st_id="1" stage="1" lat="1">
+<operation id="41" st_id="1" stage="1" lat="1">
 <core>NULL</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -249,7 +267,7 @@ codeRepl:0  call void (...)* @_ssdm_op_SpecInterface(i16* %res_V_data_3_V, [8 x 
 <StgValue><ssdm name="specinterface_ln0"/></StgValue>
 </operation>
 
-<operation id="39" st_id="1" stage="1" lat="1">
+<operation id="42" st_id="1" stage="1" lat="1">
 <core>NULL</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -264,7 +282,7 @@ codeRepl:1  call void (...)* @_ssdm_op_SpecInterface(i16* %res_V_data_2_V, [8 x 
 <StgValue><ssdm name="specinterface_ln0"/></StgValue>
 </operation>
 
-<operation id="40" st_id="1" stage="1" lat="1">
+<operation id="43" st_id="1" stage="1" lat="1">
 <core>NULL</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -279,7 +297,7 @@ codeRepl:2  call void (...)* @_ssdm_op_SpecInterface(i16* %res_V_data_1_V, [8 x 
 <StgValue><ssdm name="specinterface_ln0"/></StgValue>
 </operation>
 
-<operation id="41" st_id="1" stage="1" lat="1">
+<operation id="44" st_id="1" stage="1" lat="1">
 <core>NULL</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -294,7 +312,7 @@ codeRepl:3  call void (...)* @_ssdm_op_SpecInterface(i16* %res_V_data_0_V, [8 x 
 <StgValue><ssdm name="specinterface_ln0"/></StgValue>
 </operation>
 
-<operation id="42" st_id="1" stage="1" lat="1">
+<operation id="45" st_id="1" stage="1" lat="1">
 <core>NULL</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -309,7 +327,7 @@ codeRepl:4  call void (...)* @_ssdm_op_SpecInterface(i16* %data_V_data_V, [5 x i
 <StgValue><ssdm name="specinterface_ln0"/></StgValue>
 </operation>
 
-<operation id="43" st_id="1" stage="1" lat="1">
+<operation id="46" st_id="1" stage="1" lat="1">
 <core>NULL</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -327,7 +345,7 @@ codeRepl:5  br label %0
 
 <state id="2" st_id="2">
 
-<operation id="44" st_id="2" stage="1" lat="1">
+<operation id="47" st_id="2" stage="1" lat="1">
 <core>NULL</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -342,7 +360,7 @@ codeRepl:5  br label %0
 <StgValue><ssdm name="indvar_flatten"/></StgValue>
 </operation>
 
-<operation id="45" st_id="2" stage="1" lat="1">
+<operation id="48" st_id="2" stage="1" lat="1">
 <core>Cmp</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -357,7 +375,7 @@ codeRepl:5  br label %0
 <StgValue><ssdm name="icmp_ln79"/></StgValue>
 </operation>
 
-<operation id="46" st_id="2" stage="1" lat="1">
+<operation id="49" st_id="2" stage="1" lat="1">
 <core>AddSub</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -372,7 +390,7 @@ codeRepl:5  br label %0
 <StgValue><ssdm name="add_ln79"/></StgValue>
 </operation>
 
-<operation id="47" st_id="2" stage="1" lat="1">
+<operation id="50" st_id="2" stage="1" lat="1">
 <core>NULL</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -390,7 +408,7 @@ codeRepl:5  br label %0
 
 <state id="3" st_id="3">
 
-<operation id="48" st_id="3" stage="1" lat="1">
+<operation id="51" st_id="3" stage="1" lat="1">
 <core>AXI4Stream</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -405,7 +423,7 @@ hls_label_0:6  %tmp_data_0_V = call i16 @_ssdm_op_Read.axis.volatile.i16P(i16* %
 <StgValue><ssdm name="tmp_data_0_V"/></StgValue>
 </operation>
 
-<operation id="49" st_id="3" stage="34" lat="34">
+<operation id="52" st_id="3" stage="37" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -423,7 +441,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="4" st_id="4">
 
-<operation id="50" st_id="4" stage="33" lat="34">
+<operation id="53" st_id="4" stage="36" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -441,7 +459,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="5" st_id="5">
 
-<operation id="51" st_id="5" stage="32" lat="34">
+<operation id="54" st_id="5" stage="35" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -459,7 +477,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="6" st_id="6">
 
-<operation id="52" st_id="6" stage="31" lat="34">
+<operation id="55" st_id="6" stage="34" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -477,7 +495,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="7" st_id="7">
 
-<operation id="53" st_id="7" stage="30" lat="34">
+<operation id="56" st_id="7" stage="33" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -495,7 +513,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="8" st_id="8">
 
-<operation id="54" st_id="8" stage="29" lat="34">
+<operation id="57" st_id="8" stage="32" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -513,7 +531,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="9" st_id="9">
 
-<operation id="55" st_id="9" stage="28" lat="34">
+<operation id="58" st_id="9" stage="31" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -531,7 +549,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="10" st_id="10">
 
-<operation id="56" st_id="10" stage="27" lat="34">
+<operation id="59" st_id="10" stage="30" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -549,7 +567,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="11" st_id="11">
 
-<operation id="57" st_id="11" stage="26" lat="34">
+<operation id="60" st_id="11" stage="29" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -567,7 +585,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="12" st_id="12">
 
-<operation id="58" st_id="12" stage="25" lat="34">
+<operation id="61" st_id="12" stage="28" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -585,7 +603,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="13" st_id="13">
 
-<operation id="59" st_id="13" stage="24" lat="34">
+<operation id="62" st_id="13" stage="27" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -603,7 +621,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="14" st_id="14">
 
-<operation id="60" st_id="14" stage="23" lat="34">
+<operation id="63" st_id="14" stage="26" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -621,7 +639,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="15" st_id="15">
 
-<operation id="61" st_id="15" stage="22" lat="34">
+<operation id="64" st_id="15" stage="25" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -639,7 +657,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="16" st_id="16">
 
-<operation id="62" st_id="16" stage="21" lat="34">
+<operation id="65" st_id="16" stage="24" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -657,7 +675,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="17" st_id="17">
 
-<operation id="63" st_id="17" stage="20" lat="34">
+<operation id="66" st_id="17" stage="23" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -675,7 +693,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="18" st_id="18">
 
-<operation id="64" st_id="18" stage="19" lat="34">
+<operation id="67" st_id="18" stage="22" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -693,7 +711,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="19" st_id="19">
 
-<operation id="65" st_id="19" stage="18" lat="34">
+<operation id="68" st_id="19" stage="21" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -711,7 +729,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="20" st_id="20">
 
-<operation id="66" st_id="20" stage="17" lat="34">
+<operation id="69" st_id="20" stage="20" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -729,7 +747,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="21" st_id="21">
 
-<operation id="67" st_id="21" stage="16" lat="34">
+<operation id="70" st_id="21" stage="19" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -747,7 +765,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="22" st_id="22">
 
-<operation id="68" st_id="22" stage="15" lat="34">
+<operation id="71" st_id="22" stage="18" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -765,7 +783,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="23" st_id="23">
 
-<operation id="69" st_id="23" stage="14" lat="34">
+<operation id="72" st_id="23" stage="17" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -783,7 +801,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="24" st_id="24">
 
-<operation id="70" st_id="24" stage="13" lat="34">
+<operation id="73" st_id="24" stage="16" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -801,7 +819,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="25" st_id="25">
 
-<operation id="71" st_id="25" stage="12" lat="34">
+<operation id="74" st_id="25" stage="15" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -819,7 +837,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="26" st_id="26">
 
-<operation id="72" st_id="26" stage="11" lat="34">
+<operation id="75" st_id="26" stage="14" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -837,7 +855,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="27" st_id="27">
 
-<operation id="73" st_id="27" stage="10" lat="34">
+<operation id="76" st_id="27" stage="13" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -855,7 +873,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="28" st_id="28">
 
-<operation id="74" st_id="28" stage="9" lat="34">
+<operation id="77" st_id="28" stage="12" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -873,7 +891,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="29" st_id="29">
 
-<operation id="75" st_id="29" stage="8" lat="34">
+<operation id="78" st_id="29" stage="11" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -891,7 +909,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="30" st_id="30">
 
-<operation id="76" st_id="30" stage="7" lat="34">
+<operation id="79" st_id="30" stage="10" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -909,7 +927,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="31" st_id="31">
 
-<operation id="77" st_id="31" stage="6" lat="34">
+<operation id="80" st_id="31" stage="9" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -927,7 +945,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="32" st_id="32">
 
-<operation id="78" st_id="32" stage="5" lat="34">
+<operation id="81" st_id="32" stage="8" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -945,7 +963,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="33" st_id="33">
 
-<operation id="79" st_id="33" stage="4" lat="34">
+<operation id="82" st_id="33" stage="7" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -963,7 +981,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="34" st_id="34">
 
-<operation id="80" st_id="34" stage="3" lat="34">
+<operation id="83" st_id="34" stage="6" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -981,7 +999,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="35" st_id="35">
 
-<operation id="81" st_id="35" stage="2" lat="34">
+<operation id="84" st_id="35" stage="5" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -999,7 +1017,61 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 
 <state id="36" st_id="36">
 
-<operation id="82" st_id="36" stage="1" lat="1">
+<operation id="85" st_id="36" stage="4" lat="37">
+<core></core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="40" bw="0" op_0_bw="0" op_1_bw="16" op_2_bw="16" op_3_bw="16" op_4_bw="16" op_5_bw="16" op_6_bw="16" op_7_bw="16" op_8_bw="16" op_9_bw="16" op_10_bw="16" op_11_bw="16" op_12_bw="16" op_13_bw="16" op_14_bw="32" op_15_bw="32" op_16_bw="32" op_17_bw="32">
+<![CDATA[
+hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<16,6,5,3,0>,4u>,config2>"(i16 %tmp_data_0_V, i16* %res_V_data_0_V, i16* %res_V_data_1_V, i16* %res_V_data_2_V, i16* %res_V_data_3_V)
+
+]]></Node>
+<StgValue><ssdm name="call_ln87"/></StgValue>
+</operation>
+</state>
+
+<state id="37" st_id="37">
+
+<operation id="86" st_id="37" stage="3" lat="37">
+<core></core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="40" bw="0" op_0_bw="0" op_1_bw="16" op_2_bw="16" op_3_bw="16" op_4_bw="16" op_5_bw="16" op_6_bw="16" op_7_bw="16" op_8_bw="16" op_9_bw="16" op_10_bw="16" op_11_bw="16" op_12_bw="16" op_13_bw="16" op_14_bw="32" op_15_bw="32" op_16_bw="32" op_17_bw="32">
+<![CDATA[
+hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<16,6,5,3,0>,4u>,config2>"(i16 %tmp_data_0_V, i16* %res_V_data_0_V, i16* %res_V_data_1_V, i16* %res_V_data_2_V, i16* %res_V_data_3_V)
+
+]]></Node>
+<StgValue><ssdm name="call_ln87"/></StgValue>
+</operation>
+</state>
+
+<state id="38" st_id="38">
+
+<operation id="87" st_id="38" stage="2" lat="37">
+<core></core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="40" bw="0" op_0_bw="0" op_1_bw="16" op_2_bw="16" op_3_bw="16" op_4_bw="16" op_5_bw="16" op_6_bw="16" op_7_bw="16" op_8_bw="16" op_9_bw="16" op_10_bw="16" op_11_bw="16" op_12_bw="16" op_13_bw="16" op_14_bw="32" op_15_bw="32" op_16_bw="32" op_17_bw="32">
+<![CDATA[
+hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<16,6,5,3,0>,4u>,config2>"(i16 %tmp_data_0_V, i16* %res_V_data_0_V, i16* %res_V_data_1_V, i16* %res_V_data_2_V, i16* %res_V_data_3_V)
+
+]]></Node>
+<StgValue><ssdm name="call_ln87"/></StgValue>
+</operation>
+</state>
+
+<state id="39" st_id="39">
+
+<operation id="88" st_id="39" stage="1" lat="1">
 <core>NULL</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -1014,7 +1086,7 @@ hls_label_0:0  call void (...)* @_ssdm_op_SpecLoopName([31 x i8]* @ReadInputHeig
 <StgValue><ssdm name="specloopname_ln0"/></StgValue>
 </operation>
 
-<operation id="83" st_id="36" stage="1" lat="1">
+<operation id="89" st_id="39" stage="1" lat="1">
 <core>NULL</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -1029,7 +1101,7 @@ hls_label_0:1  %empty = call i32 (...)* @_ssdm_op_SpecLoopTripCount(i64 784, i64
 <StgValue><ssdm name="empty"/></StgValue>
 </operation>
 
-<operation id="84" st_id="36" stage="1" lat="1">
+<operation id="90" st_id="39" stage="1" lat="1">
 <core>NULL</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -1044,7 +1116,7 @@ hls_label_0:2  call void (...)* @_ssdm_op_SpecLoopName([15 x i8]* @p_str35) noun
 <StgValue><ssdm name="specloopname_ln81"/></StgValue>
 </operation>
 
-<operation id="85" st_id="36" stage="1" lat="1">
+<operation id="91" st_id="39" stage="1" lat="1">
 <core>NULL</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -1059,7 +1131,7 @@ hls_label_0:3  %tmp_s = call i32 (...)* @_ssdm_op_SpecRegionBegin([12 x i8]* @p_
 <StgValue><ssdm name="tmp_s"/></StgValue>
 </operation>
 
-<operation id="86" st_id="36" stage="1" lat="1">
+<operation id="92" st_id="39" stage="1" lat="1">
 <core>NULL</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -1074,7 +1146,7 @@ hls_label_0:4  call void (...)* @_ssdm_op_SpecPipeline(i32 64, i32 1, i32 1, i32
 <StgValue><ssdm name="specpipeline_ln84"/></StgValue>
 </operation>
 
-<operation id="87" st_id="36" stage="1" lat="1">
+<operation id="93" st_id="39" stage="1" lat="1">
 <core>NULL</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -1089,7 +1161,7 @@ hls_label_0:5  %empty_96 = call i32 (...)* @_ssdm_op_SpecRegionEnd([12 x i8]* @p
 <StgValue><ssdm name="empty_96"/></StgValue>
 </operation>
 
-<operation id="88" st_id="36" stage="1" lat="34">
+<operation id="94" st_id="39" stage="1" lat="37">
 <core></core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -1104,7 +1176,7 @@ hls_label_0:7  call fastcc void @"compute_output_buffer_2d<array,array<ap_fixed<
 <StgValue><ssdm name="call_ln87"/></StgValue>
 </operation>
 
-<operation id="89" st_id="36" stage="1" lat="1">
+<operation id="95" st_id="39" stage="1" lat="1">
 <core>NULL</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
@@ -1120,9 +1192,9 @@ hls_label_0:8  br label %0
 </operation>
 </state>
 
-<state id="37" st_id="37">
+<state id="40" st_id="40">
 
-<operation id="90" st_id="37" stage="1" lat="1">
+<operation id="96" st_id="40" stage="1" lat="1">
 <core>NULL</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">

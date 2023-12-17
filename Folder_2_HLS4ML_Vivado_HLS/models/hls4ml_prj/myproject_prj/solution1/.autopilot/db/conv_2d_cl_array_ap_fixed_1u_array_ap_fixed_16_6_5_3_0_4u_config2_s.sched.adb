@@ -1122,8 +1122,8 @@
 			<mDepth>-1</mDepth>
 			<mMinTripCount>-1</mMinTripCount>
 			<mMaxTripCount>-1</mMaxTripCount>
-			<mMinLatency>27442</mMinLatency>
-			<mMaxLatency>27442</mMaxLatency>
+			<mMinLatency>29794</mMinLatency>
+			<mMaxLatency>29794</mMaxLatency>
 			<mIsDfPipe>0</mIsDfPipe>
 			<mDfPipe class_id="-1"></mDfPipe>
 		</item>
@@ -1163,12 +1163,12 @@
 				<item>32</item>
 				<item>42</item>
 			</basic_blocks>
-			<mII>35</mII>
-			<mDepth>35</mDepth>
+			<mII>38</mII>
+			<mDepth>38</mDepth>
 			<mMinTripCount>784</mMinTripCount>
 			<mMaxTripCount>784</mMaxTripCount>
-			<mMinLatency>27440</mMinLatency>
-			<mMaxLatency>27440</mMaxLatency>
+			<mMinLatency>29792</mMinLatency>
+			<mMaxLatency>29792</mMaxLatency>
 			<mIsDfPipe>0</mIsDfPipe>
 			<mDfPipe class_id="-1"></mDfPipe>
 		</item>
@@ -1246,20 +1246,20 @@
 			<first>40</first>
 			<second>
 				<first>2</first>
-				<second>33</second>
+				<second>36</second>
 			</second>
 		</item>
 		<item>
 			<first>41</first>
 			<second>
-				<first>35</first>
+				<first>38</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>43</first>
 			<second>
-				<first>36</first>
+				<first>39</first>
 				<second>0</second>
 			</second>
 		</item>
@@ -1285,7 +1285,7 @@
 			<first>42</first>
 			<second>
 				<first>2</first>
-				<second>35</second>
+				<second>38</second>
 			</second>
 		</item>
 		<item>
@@ -1313,8 +1313,8 @@
 			</nodes>
 			<anchor_node>-1</anchor_node>
 			<region_type>8</region_type>
-			<interval>35</interval>
-			<pipe_depth>35</pipe_depth>
+			<interval>38</interval>
+			<pipe_depth>38</pipe_depth>
 		</item>
 	</regions>
 	<dp_fu_nodes class_id="34" tracking_level="0" version="0">

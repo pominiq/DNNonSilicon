@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vivado HLS Report for 'compute_output_buffer_2d_array_array_ap_fixed_16_6_5_3_0_8u_config5_s'" level="0">
-<item name = "Date">Sun Dec 10 18:02:56 2023
+<item name = "Date">Sun Dec 17 18:35:43 2023
 </item>
 <item name = "Version">2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)</item>
 <item name = "Project">myproject_prj</item>
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">10.00 ns, 8.324 ns, 1.25 ns</column>
+<column name="ap_clk">10.00 ns, 7.806 ns, 1.25 ns</column>
 </table>
 </item>
 </section>

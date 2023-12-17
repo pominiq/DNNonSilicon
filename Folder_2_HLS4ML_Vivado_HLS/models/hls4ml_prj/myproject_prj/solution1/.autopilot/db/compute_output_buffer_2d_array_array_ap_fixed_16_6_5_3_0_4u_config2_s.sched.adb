@@ -1661,7 +1661,7 @@
 					<Obj>
 						<type>0</type>
 						<id>56</id>
-						<name>tmp_56</name>
+						<name>tmp_51</name>
 						<fileName>firmware/nnet_utils/nnet_conv_stream.h</fileName>
 						<fileDirectory>/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj</fileDirectory>
 						<lineNumber>289</lineNumber>
@@ -2006,7 +2006,7 @@
 				<m_isOnCriticalPath>0</m_isOnCriticalPath>
 				<m_isLCDNode>0</m_isLCDNode>
 				<m_isStartOfPath>0</m_isStartOfPath>
-				<m_delay>8.32</m_delay>
+				<m_delay>7.65</m_delay>
 				<m_topoIndex>38</m_topoIndex>
 				<m_clusterGroupNumber>-1</m_clusterGroupNumber>
 			</item>
@@ -5005,12 +5005,12 @@
 				<item>98</item>
 				<item>100</item>
 			</basic_blocks>
-			<mII>34</mII>
-			<mDepth>34</mDepth>
+			<mII>37</mII>
+			<mDepth>37</mDepth>
 			<mMinTripCount>-1</mMinTripCount>
 			<mMaxTripCount>-1</mMaxTripCount>
-			<mMinLatency>33</mMinLatency>
-			<mMaxLatency>33</mMaxLatency>
+			<mMinLatency>36</mMinLatency>
+			<mMaxLatency>36</mMaxLatency>
 			<mIsDfPipe>0</mIsDfPipe>
 			<mDfPipe class_id="-1"></mDfPipe>
 		</item>
@@ -5283,209 +5283,209 @@
 			<first>63</first>
 			<second>
 				<first>1</first>
-				<second>32</second>
+				<second>35</second>
 			</second>
 		</item>
 		<item>
 			<first>64</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>65</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>66</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>67</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>68</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>69</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>71</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>72</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>74</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>75</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>76</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>77</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>78</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>79</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>81</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>82</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>83</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>84</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>86</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>87</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>88</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>89</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>90</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>92</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>93</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>95</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>96</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>97</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>99</first>
 			<second>
-				<first>33</first>
+				<first>36</first>
 				<second>0</second>
 			</second>
 		</item>
@@ -5504,56 +5504,56 @@
 			<first>70</first>
 			<second>
 				<first>1</first>
-				<second>33</second>
+				<second>36</second>
 			</second>
 		</item>
 		<item>
 			<first>73</first>
 			<second>
-				<first>33</first>
-				<second>33</second>
+				<first>36</first>
+				<second>36</second>
 			</second>
 		</item>
 		<item>
 			<first>80</first>
 			<second>
-				<first>33</first>
-				<second>33</second>
+				<first>36</first>
+				<second>36</second>
 			</second>
 		</item>
 		<item>
 			<first>85</first>
 			<second>
-				<first>33</first>
-				<second>33</second>
+				<first>36</first>
+				<second>36</second>
 			</second>
 		</item>
 		<item>
 			<first>91</first>
 			<second>
-				<first>33</first>
-				<second>33</second>
+				<first>36</first>
+				<second>36</second>
 			</second>
 		</item>
 		<item>
 			<first>94</first>
 			<second>
-				<first>33</first>
-				<second>33</second>
+				<first>36</first>
+				<second>36</second>
 			</second>
 		</item>
 		<item>
 			<first>98</first>
 			<second>
-				<first>33</first>
-				<second>33</second>
+				<first>36</first>
+				<second>36</second>
 			</second>
 		</item>
 		<item>
 			<first>100</first>
 			<second>
-				<first>33</first>
-				<second>33</second>
+				<first>36</first>
+				<second>36</second>
 			</second>
 		</item>
 	</bblk_ent_exit>
@@ -5581,8 +5581,8 @@
 			</nodes>
 			<anchor_node>-1</anchor_node>
 			<region_type>8</region_type>
-			<interval>34</interval>
-			<pipe_depth>34</pipe_depth>
+			<interval>37</interval>
+			<pipe_depth>37</pipe_depth>
 		</item>
 	</regions>
 	<dp_fu_nodes class_id="34" tracking_level="0" version="0">

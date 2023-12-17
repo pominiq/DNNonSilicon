@@ -5761,8 +5761,8 @@
         <mDepth>-1</mDepth>
         <mMinTripCount>-1</mMinTripCount>
         <mMaxTripCount>-1</mMaxTripCount>
-        <mMinLatency>27501</mMinLatency>
-        <mMaxLatency>27501</mMaxLatency>
+        <mMinLatency>29853</mMinLatency>
+        <mMaxLatency>29853</mMaxLatency>
         <mIsDfPipe>1</mIsDfPipe>
         <mDfPipe class_id="23" tracking_level="1" version="0" object_id="_395">
           <port_list class_id="24" tracking_level="0" version="0">
@@ -10319,11 +10319,11 @@
             </item>
             <item>
               <first>FF</first>
-              <second>1648</second>
+              <second>1675</second>
             </item>
             <item>
               <first>LUT</first>
-              <second>2091</second>
+              <second>2024</second>
             </item>
           </second>
         </item>
@@ -10342,11 +10342,11 @@
             </item>
             <item>
               <first>FF</first>
-              <second>7732</second>
+              <second>7606</second>
             </item>
             <item>
               <first>LUT</first>
-              <second>10097</second>
+              <second>9890</second>
             </item>
           </second>
         </item>
@@ -10361,11 +10361,11 @@
             </item>
             <item>
               <first>FF</first>
-              <second>5851</second>
+              <second>6032</second>
             </item>
             <item>
               <first>LUT</first>
-              <second>8899</second>
+              <second>9190</second>
             </item>
           </second>
         </item>
@@ -13508,17 +13508,17 @@
         <second>
           <count>2</count>
           <item_version>0</item_version>
-          <item>329</item>
-          <item>329</item>
+          <item>332</item>
+          <item>332</item>
         </second>
       </item>
       <item>
-        <first>1370</first>
+        <first>1304</first>
         <second>
           <count>2</count>
           <item_version>0</item_version>
-          <item>332</item>
-          <item>332</item>
+          <item>329</item>
+          <item>329</item>
         </second>
       </item>
       <item>
@@ -13535,17 +13535,17 @@
         <second>
           <count>2</count>
           <item_version>0</item_version>
-          <item>326</item>
-          <item>326</item>
+          <item>330</item>
+          <item>330</item>
         </second>
       </item>
       <item>
-        <first>1566</first>
+        <first>1556</first>
         <second>
           <count>2</count>
           <item_version>0</item_version>
-          <item>330</item>
-          <item>330</item>
+          <item>326</item>
+          <item>326</item>
         </second>
       </item>
       <item>
@@ -13954,7 +13954,7 @@
       <count>8</count>
       <item_version>0</item_version>
       <item>
-        <first>grp_conv_2d_cl_array_ap_fixed_1u_array_ap_fixed_16_6_5_3_0_4u_config2_s_fu_1532</first>
+        <first>grp_conv_2d_cl_array_ap_fixed_1u_array_ap_fixed_16_6_5_3_0_4u_config2_s_fu_1556</first>
         <second>
           <count>2</count>
           <item_version>0</item_version>
@@ -13963,7 +13963,7 @@
         </second>
       </item>
       <item>
-        <first>grp_conv_2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_8u_config5_s_fu_1282</first>
+        <first>grp_conv_2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_8u_config5_s_fu_1304</first>
         <second>
           <count>2</count>
           <item_version>0</item_version>
@@ -13972,7 +13972,7 @@
         </second>
       </item>
       <item>
-        <first>grp_dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s_fu_1370</first>
+        <first>grp_dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s_fu_1282</first>
         <second>
           <count>2</count>
           <item_version>0</item_version>
@@ -14008,7 +14008,7 @@
         </second>
       </item>
       <item>
-        <first>grp_softmax_array_array_ap_fixed_16_6_5_3_0_8u_softmax_config6_s_fu_1566</first>
+        <first>grp_softmax_array_array_ap_fixed_16_6_5_3_0_8u_softmax_config6_s_fu_1532</first>
         <second>
           <count>2</count>
           <item_version>0</item_version>

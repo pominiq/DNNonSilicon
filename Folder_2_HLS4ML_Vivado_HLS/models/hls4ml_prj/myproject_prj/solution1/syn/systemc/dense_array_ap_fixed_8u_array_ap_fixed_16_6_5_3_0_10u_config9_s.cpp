@@ -346,7 +346,7 @@ dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::dense_array_ap_
 
     SC_METHOD(thread_res_stream_V_data_0_V_din);
     sensitive << ( ap_CS_fsm_state65 );
-    sensitive << ( tmp_data_0_V_reg_1249 );
+    sensitive << ( tmp_data_0_V_reg_1254 );
     sensitive << ( io_acc_block_signal_op313 );
 
     SC_METHOD(thread_res_stream_V_data_0_V_write);
@@ -359,7 +359,7 @@ dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::dense_array_ap_
 
     SC_METHOD(thread_res_stream_V_data_1_V_din);
     sensitive << ( ap_CS_fsm_state65 );
-    sensitive << ( tmp_data_1_V_reg_1254 );
+    sensitive << ( tmp_data_1_V_reg_1259 );
     sensitive << ( io_acc_block_signal_op313 );
 
     SC_METHOD(thread_res_stream_V_data_1_V_write);
@@ -372,7 +372,7 @@ dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::dense_array_ap_
 
     SC_METHOD(thread_res_stream_V_data_2_V_din);
     sensitive << ( ap_CS_fsm_state65 );
-    sensitive << ( tmp_data_2_V_reg_1259 );
+    sensitive << ( tmp_data_2_V_reg_1264 );
     sensitive << ( io_acc_block_signal_op313 );
 
     SC_METHOD(thread_res_stream_V_data_2_V_write);
@@ -385,7 +385,7 @@ dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::dense_array_ap_
 
     SC_METHOD(thread_res_stream_V_data_3_V_din);
     sensitive << ( ap_CS_fsm_state65 );
-    sensitive << ( tmp_data_3_V_reg_1264 );
+    sensitive << ( tmp_data_3_V_reg_1269 );
     sensitive << ( io_acc_block_signal_op313 );
 
     SC_METHOD(thread_res_stream_V_data_3_V_write);
@@ -398,7 +398,7 @@ dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::dense_array_ap_
 
     SC_METHOD(thread_res_stream_V_data_4_V_din);
     sensitive << ( ap_CS_fsm_state65 );
-    sensitive << ( tmp_data_4_V_reg_1269 );
+    sensitive << ( tmp_data_4_V_reg_1274 );
     sensitive << ( io_acc_block_signal_op313 );
 
     SC_METHOD(thread_res_stream_V_data_4_V_write);
@@ -411,7 +411,7 @@ dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::dense_array_ap_
 
     SC_METHOD(thread_res_stream_V_data_5_V_din);
     sensitive << ( ap_CS_fsm_state65 );
-    sensitive << ( tmp_data_5_V_reg_1274 );
+    sensitive << ( tmp_data_5_V_reg_1279 );
     sensitive << ( io_acc_block_signal_op313 );
 
     SC_METHOD(thread_res_stream_V_data_5_V_write);
@@ -424,7 +424,7 @@ dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::dense_array_ap_
 
     SC_METHOD(thread_res_stream_V_data_6_V_din);
     sensitive << ( ap_CS_fsm_state65 );
-    sensitive << ( tmp_data_6_V_reg_1279 );
+    sensitive << ( tmp_data_6_V_reg_1284 );
     sensitive << ( io_acc_block_signal_op313 );
 
     SC_METHOD(thread_res_stream_V_data_6_V_write);
@@ -437,7 +437,7 @@ dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::dense_array_ap_
 
     SC_METHOD(thread_res_stream_V_data_7_V_din);
     sensitive << ( ap_CS_fsm_state65 );
-    sensitive << ( tmp_data_7_V_reg_1284 );
+    sensitive << ( tmp_data_7_V_reg_1289 );
     sensitive << ( io_acc_block_signal_op313 );
 
     SC_METHOD(thread_res_stream_V_data_7_V_write);
@@ -450,7 +450,7 @@ dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::dense_array_ap_
 
     SC_METHOD(thread_res_stream_V_data_8_V_din);
     sensitive << ( ap_CS_fsm_state65 );
-    sensitive << ( tmp_data_8_V_reg_1289 );
+    sensitive << ( tmp_data_8_V_reg_1294 );
     sensitive << ( io_acc_block_signal_op313 );
 
     SC_METHOD(thread_res_stream_V_data_8_V_write);
@@ -463,7 +463,7 @@ dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::dense_array_ap_
 
     SC_METHOD(thread_res_stream_V_data_9_V_din);
     sensitive << ( ap_CS_fsm_state65 );
-    sensitive << ( tmp_data_9_V_reg_1294 );
+    sensitive << ( tmp_data_9_V_reg_1299 );
     sensitive << ( io_acc_block_signal_op313 );
 
     SC_METHOD(thread_res_stream_V_data_9_V_write);
@@ -610,17 +610,17 @@ dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::dense_array_ap_
     sc_trace(mVcdFile, trunc_ln203_fu_545_p1, "trunc_ln203_fu_545_p1");
     sc_trace(mVcdFile, trunc_ln203_reg_1110, "trunc_ln203_reg_1110");
     sc_trace(mVcdFile, ap_CS_fsm_state4, "ap_CS_fsm_state4");
-    sc_trace(mVcdFile, tmp_data_0_V_reg_1249, "tmp_data_0_V_reg_1249");
+    sc_trace(mVcdFile, tmp_data_0_V_reg_1254, "tmp_data_0_V_reg_1254");
     sc_trace(mVcdFile, ap_CS_fsm_state64, "ap_CS_fsm_state64");
-    sc_trace(mVcdFile, tmp_data_1_V_reg_1254, "tmp_data_1_V_reg_1254");
-    sc_trace(mVcdFile, tmp_data_2_V_reg_1259, "tmp_data_2_V_reg_1259");
-    sc_trace(mVcdFile, tmp_data_3_V_reg_1264, "tmp_data_3_V_reg_1264");
-    sc_trace(mVcdFile, tmp_data_4_V_reg_1269, "tmp_data_4_V_reg_1269");
-    sc_trace(mVcdFile, tmp_data_5_V_reg_1274, "tmp_data_5_V_reg_1274");
-    sc_trace(mVcdFile, tmp_data_6_V_reg_1279, "tmp_data_6_V_reg_1279");
-    sc_trace(mVcdFile, tmp_data_7_V_reg_1284, "tmp_data_7_V_reg_1284");
-    sc_trace(mVcdFile, tmp_data_8_V_reg_1289, "tmp_data_8_V_reg_1289");
-    sc_trace(mVcdFile, tmp_data_9_V_reg_1294, "tmp_data_9_V_reg_1294");
+    sc_trace(mVcdFile, tmp_data_1_V_reg_1259, "tmp_data_1_V_reg_1259");
+    sc_trace(mVcdFile, tmp_data_2_V_reg_1264, "tmp_data_2_V_reg_1264");
+    sc_trace(mVcdFile, tmp_data_3_V_reg_1269, "tmp_data_3_V_reg_1269");
+    sc_trace(mVcdFile, tmp_data_4_V_reg_1274, "tmp_data_4_V_reg_1274");
+    sc_trace(mVcdFile, tmp_data_5_V_reg_1279, "tmp_data_5_V_reg_1279");
+    sc_trace(mVcdFile, tmp_data_6_V_reg_1284, "tmp_data_6_V_reg_1284");
+    sc_trace(mVcdFile, tmp_data_7_V_reg_1289, "tmp_data_7_V_reg_1289");
+    sc_trace(mVcdFile, tmp_data_8_V_reg_1294, "tmp_data_8_V_reg_1294");
+    sc_trace(mVcdFile, tmp_data_9_V_reg_1299, "tmp_data_9_V_reg_1299");
     sc_trace(mVcdFile, ap_block_state1, "ap_block_state1");
     sc_trace(mVcdFile, ap_block_pp0_stage0_subdone, "ap_block_pp0_stage0_subdone");
     sc_trace(mVcdFile, ap_condition_pp0_exit_iter0_state2, "ap_condition_pp0_exit_iter0_state2");
@@ -801,16 +801,16 @@ void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_ap_
         data_31_V_fu_332 = data_stream_V_data_7_V_dout.read();
     }
     if (esl_seteq<1,1,1>(ap_const_logic_1, ap_CS_fsm_state64.read())) {
-        tmp_data_0_V_reg_1249 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_0.read();
-        tmp_data_1_V_reg_1254 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_1.read();
-        tmp_data_2_V_reg_1259 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_2.read();
-        tmp_data_3_V_reg_1264 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_3.read();
-        tmp_data_4_V_reg_1269 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_4.read();
-        tmp_data_5_V_reg_1274 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_5.read();
-        tmp_data_6_V_reg_1279 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_6.read();
-        tmp_data_7_V_reg_1284 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_7.read();
-        tmp_data_8_V_reg_1289 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_8.read();
-        tmp_data_9_V_reg_1294 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_9.read();
+        tmp_data_0_V_reg_1254 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_0.read();
+        tmp_data_1_V_reg_1259 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_1.read();
+        tmp_data_2_V_reg_1264 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_2.read();
+        tmp_data_3_V_reg_1269 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_3.read();
+        tmp_data_4_V_reg_1274 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_4.read();
+        tmp_data_5_V_reg_1279 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_5.read();
+        tmp_data_6_V_reg_1284 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_6.read();
+        tmp_data_7_V_reg_1289 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_7.read();
+        tmp_data_8_V_reg_1294 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_8.read();
+        tmp_data_9_V_reg_1299 = grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497_ap_return_9.read();
     }
     if ((esl_seteq<1,1,1>(ap_const_logic_1, ap_CS_fsm_pp0_stage0.read()) && esl_seteq<1,1,1>(ap_block_pp0_stage0_11001.read(), ap_const_boolean_0) && esl_seteq<1,1,1>(icmp_ln36_fu_533_p2.read(), ap_const_lv1_0))) {
         trunc_ln203_reg_1110 = trunc_ln203_fu_545_p1.read();
@@ -1115,7 +1115,7 @@ void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_0_V_din() {
-    res_stream_V_data_0_V_din = tmp_data_0_V_reg_1249.read();
+    res_stream_V_data_0_V_din = tmp_data_0_V_reg_1254.read();
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_0_V_write() {
@@ -1136,7 +1136,7 @@ void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_1_V_din() {
-    res_stream_V_data_1_V_din = tmp_data_1_V_reg_1254.read();
+    res_stream_V_data_1_V_din = tmp_data_1_V_reg_1259.read();
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_1_V_write() {
@@ -1157,7 +1157,7 @@ void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_2_V_din() {
-    res_stream_V_data_2_V_din = tmp_data_2_V_reg_1259.read();
+    res_stream_V_data_2_V_din = tmp_data_2_V_reg_1264.read();
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_2_V_write() {
@@ -1178,7 +1178,7 @@ void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_3_V_din() {
-    res_stream_V_data_3_V_din = tmp_data_3_V_reg_1264.read();
+    res_stream_V_data_3_V_din = tmp_data_3_V_reg_1269.read();
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_3_V_write() {
@@ -1199,7 +1199,7 @@ void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_4_V_din() {
-    res_stream_V_data_4_V_din = tmp_data_4_V_reg_1269.read();
+    res_stream_V_data_4_V_din = tmp_data_4_V_reg_1274.read();
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_4_V_write() {
@@ -1220,7 +1220,7 @@ void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_5_V_din() {
-    res_stream_V_data_5_V_din = tmp_data_5_V_reg_1274.read();
+    res_stream_V_data_5_V_din = tmp_data_5_V_reg_1279.read();
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_5_V_write() {
@@ -1241,7 +1241,7 @@ void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_6_V_din() {
-    res_stream_V_data_6_V_din = tmp_data_6_V_reg_1279.read();
+    res_stream_V_data_6_V_din = tmp_data_6_V_reg_1284.read();
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_6_V_write() {
@@ -1262,7 +1262,7 @@ void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_7_V_din() {
-    res_stream_V_data_7_V_din = tmp_data_7_V_reg_1284.read();
+    res_stream_V_data_7_V_din = tmp_data_7_V_reg_1289.read();
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_7_V_write() {
@@ -1283,7 +1283,7 @@ void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_8_V_din() {
-    res_stream_V_data_8_V_din = tmp_data_8_V_reg_1289.read();
+    res_stream_V_data_8_V_din = tmp_data_8_V_reg_1294.read();
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_8_V_write() {
@@ -1304,7 +1304,7 @@ void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_9_V_din() {
-    res_stream_V_data_9_V_din = tmp_data_9_V_reg_1294.read();
+    res_stream_V_data_9_V_din = tmp_data_9_V_reg_1299.read();
 }
 
 void dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s::thread_res_stream_V_data_9_V_write() {

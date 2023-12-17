@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vivado HLS Report for 'dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config2_mult_0_0_0_0_0'" level="0">
-<item name = "Date">Sun Dec 10 18:02:46 2023
+<item name = "Date">Sun Dec 17 18:35:30 2023
 </item>
 <item name = "Version">2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)</item>
 <item name = "Project">myproject_prj</item>
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">10.00 ns, 8.324 ns, 1.25 ns</column>
+<column name="ap_clk">10.00 ns, 7.806 ns, 1.25 ns</column>
 </table>
 </item>
 </section>
@@ -24,7 +24,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="8">, min, max, min, max, min, max, Type</keys>
-<column name="">32, 32, 0.320 us, 0.320 us, 33, 33, function</column>
+<column name="">35, 35, 0.350 us, 0.350 us, 36, 36, function</column>
 </table>
 </item>
 <item name = "Detail">

@@ -43,7 +43,6 @@ class MyFlow1(SequentialFlow):
         OpenROAD.RepairDesignPostGRT,
         OpenROAD.GeneratePDN,
         OpenROAD.RepairAntennas,
-        OpenROAD.ResizerTimingPostGRT,
         OpenROAD.DetailedRouting,
         OpenROAD.CheckAntennas,
         OpenROAD.FillInsertion,
@@ -74,7 +73,7 @@ def main():
             "DESIGN_NAME": "myproject",
             "VERILOG_FILES": "refg::$DESIGN_DIR/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/impl/verilog/*.v",
             "CLOCK_PORT": 'ap_clk',
-            "CLOCK_PERIOD": 10,
+            "CLOCK_PERIOD": 25,
             #### Sequential flow specific parameters ###
             #"RUN_ANTENNA_REPAIR": False,
             "RUN_DRT": True,
@@ -93,8 +92,8 @@ def main():
             #### Floorplan specific parameters ###
             "FP_SIZING": "relative",
             #"DIE_AREA": [0, 0, 10000, 10000],
-            "PL_TARGET_DENSITY_PCT": 30,
-            "FP_CORE_UTIL": 10,
+            "PL_TARGET_DENSITY_PCT": 50,
+            "FP_CORE_UTIL": 30,
             "GPL_CELL_PADDING": 2,
             "PL_ROUTABILITY_DRIVEN": True,
             #"PL_BASIC_PLACEMENT": False,

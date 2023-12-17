@@ -1786,10 +1786,10 @@ codeRepl:104  %pX_2_load = load i32* @pX_2, align 4
 
 <Node id="157" bw="31" op_0_bw="31" op_1_bw="32" op_2_bw="32" op_3_bw="32">
 <![CDATA[
-codeRepl:105  %tmp_55 = call i31 @_ssdm_op_PartSelect.i31.i32.i32.i32(i32 %pX_2_load, i32 1, i32 31)
+codeRepl:105  %tmp_50 = call i31 @_ssdm_op_PartSelect.i31.i32.i32.i32(i32 %pX_2_load, i32 1, i32 31)
 
 ]]></Node>
-<StgValue><ssdm name="tmp_55"/></StgValue>
+<StgValue><ssdm name="tmp_50"/></StgValue>
 </operation>
 
 <operation id="152" st_id="1" stage="1" lat="1">
@@ -1801,7 +1801,7 @@ codeRepl:105  %tmp_55 = call i31 @_ssdm_op_PartSelect.i31.i32.i32.i32(i32 %pX_2_
 
 <Node id="158" bw="1" op_0_bw="31" op_1_bw="31">
 <![CDATA[
-codeRepl:106  %icmp_ln289_3 = icmp sgt i31 %tmp_55, 0
+codeRepl:106  %icmp_ln289_3 = icmp sgt i31 %tmp_50, 0
 
 ]]></Node>
 <StgValue><ssdm name="icmp_ln289_3"/></StgValue>

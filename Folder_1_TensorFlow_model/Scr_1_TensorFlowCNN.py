@@ -35,7 +35,7 @@ os.chdir(path)
 import time
 timestr = time.strftime("%Y%m%d-%H%M%S") #used for timestamping iterations
 
-train = True
+train = False
 
 
 def load_keras_model_from_json_file():

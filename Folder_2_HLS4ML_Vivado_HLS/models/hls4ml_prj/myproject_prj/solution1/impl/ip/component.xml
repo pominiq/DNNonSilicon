@@ -614,7 +614,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>6f6bc388</spirit:value>
+            <spirit:value>ebcd3a83</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -630,7 +630,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>55c48968</spirit:value>
+            <spirit:value>cbfecd41</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -646,7 +646,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>f61a7ac3</spirit:value>
+            <spirit:value>d935536a</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -662,7 +662,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>80e67678</spirit:value>
+            <spirit:value>353e3e01</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1860,7 +1860,7 @@
       <spirit:file>
         <spirit:name>hdl/vhdl/myproject.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_5bf3c9e7</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_2e6ce2e6</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
@@ -2130,7 +2130,7 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>latency</spirit:name>
-      <spirit:value spirit:id="PARAM_VALUE.latency" spirit:order="5">27501</spirit:value>
+      <spirit:value spirit:id="PARAM_VALUE.latency" spirit:order="5">29853</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>II</spirit:name>
@@ -2148,14 +2148,14 @@
       <xilinx:displayName>Myproject</xilinx:displayName>
       <xilinx:definitionSource>HLS</xilinx:definitionSource>
       <xilinx:coreRevision>0</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2023-12-10T17:04:22Z</xilinx:coreCreationDateTime>
+      <xilinx:coreCreationDateTime>2023-12-17T17:37:13Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2020.1</xilinx:xilinxVersion>
       <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="d32298b1"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="efafd04e"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="fd54121d"/>
       <xilinx:checksum xilinx:scope="ports" xilinx:value="76f4a61b"/>
-      <xilinx:checksum xilinx:scope="parameters" xilinx:value="83294ee5"/>
+      <xilinx:checksum xilinx:scope="parameters" xilinx:value="110e342c"/>
     </xilinx:packagingInfo>
   </spirit:vendorExtensions>
 </spirit:component>
