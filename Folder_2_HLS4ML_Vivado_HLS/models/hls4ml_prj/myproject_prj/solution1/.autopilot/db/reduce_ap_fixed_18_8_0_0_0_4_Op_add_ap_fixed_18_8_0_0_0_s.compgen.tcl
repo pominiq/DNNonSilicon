@@ -1,7 +1,7 @@
 # This script segment is generated automatically by AutoPilot
 
-set id 165
-set name myproject_mux_83_18_1_1
+set id 153
+set name myproject_mux_104_18_1_1
 set corename simcore_mux
 set op mux
 set stage_num 1
@@ -23,8 +23,12 @@ set din6_width 18
 set din6_signed 0
 set din7_width 18
 set din7_signed 0
-set din8_width 3
+set din8_width 18
 set din8_signed 0
+set din9_width 18
+set din9_signed 0
+set din10_width 4
+set din10_signed 0
 set dout_width 18
 if {${::AESL::PGuard_simmodel_gen}} {
 if {[info proc ap_gen_simcore_mux] == "ap_gen_simcore_mux"} {
@@ -56,6 +60,10 @@ eval "ap_gen_simcore_mux { \
     din7_signed ${din7_signed} \
     din8_width ${din8_width} \
     din8_signed ${din8_signed} \
+    din9_width ${din9_width} \
+    din9_signed ${din9_signed} \
+    din10_width ${din10_width} \
+    din10_signed ${din10_signed} \
     dout_width ${dout_width} \
 }"
 } else {
@@ -101,6 +109,10 @@ eval "::AESL_LIB_VIRTEX::xil_gen_pipemux { \
     din7_signed ${din7_signed} \
     din8_width ${din8_width} \
     din8_signed ${din8_signed} \
+    din9_width ${din9_width} \
+    din9_signed ${din9_signed} \
+    din10_width ${din10_width} \
+    din10_signed ${din10_signed} \
     dout_width ${dout_width} \
 }"
 } else {
@@ -119,7 +131,7 @@ if {${::AESL::PGuard_autoexp_gen}} {
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 170 \
+    id 158 \
     name x_0_V \
     type other \
     dir I \
@@ -134,7 +146,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 171 \
+    id 159 \
     name x_1_V \
     type other \
     dir I \
@@ -149,7 +161,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 172 \
+    id 160 \
     name x_2_V \
     type other \
     dir I \
@@ -164,7 +176,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 173 \
+    id 161 \
     name x_3_V \
     type other \
     dir I \
@@ -179,7 +191,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 174 \
+    id 162 \
     name x_4_V \
     type other \
     dir I \
@@ -194,7 +206,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 175 \
+    id 163 \
     name x_5_V \
     type other \
     dir I \
@@ -209,7 +221,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 176 \
+    id 164 \
     name x_6_V \
     type other \
     dir I \
@@ -224,7 +236,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 177 \
+    id 165 \
     name x_7_V \
     type other \
     dir I \
@@ -239,7 +251,37 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 178 \
+    id 166 \
+    name x_8_V \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_x_8_V \
+    op interface \
+    ports { x_8_V { I 17 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 167 \
+    name x_9_V \
+    type other \
+    dir I \
+    reset_level 1 \
+    sync_rst true \
+    corename dc_x_9_V \
+    op interface \
+    ports { x_9_V { I 17 vector } } \
+} "
+}
+
+# Direct connection:
+if {${::AESL::PGuard_autoexp_gen}} {
+eval "cg_default_interface_gen_dc { \
+    id 168 \
     name x_V_offset \
     type other \
     dir I \
@@ -261,7 +303,7 @@ eval "cg_default_interface_gen_dc { \
     sync_rst true \
     corename ap_ctrl \
     op interface \
-    ports { ap_start { I 1 bit } ap_ready { O 1 bit } ap_done { O 1 bit } ap_idle { O 1 bit } } \
+    ports { ap_ready { O 1 bit } } \
 } "
 }
 
@@ -277,66 +319,6 @@ eval "cg_default_interface_gen_dc { \
     op interface \
     ports { ap_return { O 18 vector } } \
 } "
-}
-
-
-# Adapter definition:
-set PortName ap_clk
-set DataWd 1 
-if {${::AESL::PGuard_autoexp_gen}} {
-if {[info proc cg_default_interface_gen_clock] == "cg_default_interface_gen_clock"} {
-eval "cg_default_interface_gen_clock { \
-    id -3 \
-    name ${PortName} \
-    reset_level 1 \
-    sync_rst true \
-    corename apif_ap_clk \
-    data_wd ${DataWd} \
-    op interface \
-}"
-} else {
-puts "@W \[IMPL-113\] Cannot find bus interface model in the library. Ignored generation of bus interface for '${PortName}'"
-}
-}
-
-
-# Adapter definition:
-set PortName ap_rst
-set DataWd 1 
-if {${::AESL::PGuard_autoexp_gen}} {
-if {[info proc cg_default_interface_gen_reset] == "cg_default_interface_gen_reset"} {
-eval "cg_default_interface_gen_reset { \
-    id -4 \
-    name ${PortName} \
-    reset_level 1 \
-    sync_rst true \
-    corename apif_ap_rst \
-    data_wd ${DataWd} \
-    op interface \
-}"
-} else {
-puts "@W \[IMPL-114\] Cannot find bus interface model in the library. Ignored generation of bus interface for '${PortName}'"
-}
-}
-
-
-# Adapter definition:
-set PortName ap_ce
-set DataWd 1 
-if {${::AESL::PGuard_autoexp_gen}} {
-if {[info proc cg_default_interface_gen_ce] == "cg_default_interface_gen_ce"} {
-eval "cg_default_interface_gen_ce { \
-    id -5 \
-    name ${PortName} \
-    reset_level 1 \
-    sync_rst true \
-    corename apif_ap_ce \
-    data_wd ${DataWd} \
-    op interface \
-}"
-} else {
-puts "@W \[IMPL-113\] Cannot find bus interface model in the library. Ignored generation of bus interface for '${PortName}'"
-}
 }
 
 

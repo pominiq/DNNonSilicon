@@ -1,0 +1,519 @@
+<stg><name>compute_global_pool<array,array<ap_fixed<16,6,5,3,0>,8u>,config6></name>
+
+
+<trans_list>
+</trans_list>
+
+
+
+<state_list>
+
+<state id="1" st_id="1">
+
+<operation id="2" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="17" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:0  %data_window_7_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_window_7_V_read)
+
+]]></Node>
+<StgValue><ssdm name="data_window_7_V_read_1"/></StgValue>
+</operation>
+
+<operation id="3" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="18" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:1  %data_window_6_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_window_6_V_read)
+
+]]></Node>
+<StgValue><ssdm name="data_window_6_V_read_1"/></StgValue>
+</operation>
+
+<operation id="4" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="19" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:2  %data_window_5_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_window_5_V_read)
+
+]]></Node>
+<StgValue><ssdm name="data_window_5_V_read_1"/></StgValue>
+</operation>
+
+<operation id="5" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="20" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:3  %data_window_4_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_window_4_V_read)
+
+]]></Node>
+<StgValue><ssdm name="data_window_4_V_read_1"/></StgValue>
+</operation>
+
+<operation id="6" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="21" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:4  %data_window_3_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_window_3_V_read)
+
+]]></Node>
+<StgValue><ssdm name="data_window_3_V_read_1"/></StgValue>
+</operation>
+
+<operation id="7" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="22" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:5  %data_window_2_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_window_2_V_read)
+
+]]></Node>
+<StgValue><ssdm name="data_window_2_V_read_1"/></StgValue>
+</operation>
+
+<operation id="8" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="23" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:6  %data_window_1_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_window_1_V_read)
+
+]]></Node>
+<StgValue><ssdm name="data_window_1_V_read_1"/></StgValue>
+</operation>
+
+<operation id="9" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="24" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:7  %data_window_0_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_window_0_V_read)
+
+]]></Node>
+<StgValue><ssdm name="data_window_0_V_read_1"/></StgValue>
+</operation>
+
+<operation id="10" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="25" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:8  %in_elem_data_7_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %in_elem_data_7_V_read)
+
+]]></Node>
+<StgValue><ssdm name="in_elem_data_7_V_read_1"/></StgValue>
+</operation>
+
+<operation id="11" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="26" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:9  %in_elem_data_6_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %in_elem_data_6_V_read)
+
+]]></Node>
+<StgValue><ssdm name="in_elem_data_6_V_read_1"/></StgValue>
+</operation>
+
+<operation id="12" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="27" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:10  %in_elem_data_5_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %in_elem_data_5_V_read)
+
+]]></Node>
+<StgValue><ssdm name="in_elem_data_5_V_read_1"/></StgValue>
+</operation>
+
+<operation id="13" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="28" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:11  %in_elem_data_4_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %in_elem_data_4_V_read)
+
+]]></Node>
+<StgValue><ssdm name="in_elem_data_4_V_read_1"/></StgValue>
+</operation>
+
+<operation id="14" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="29" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:12  %in_elem_data_3_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %in_elem_data_3_V_read)
+
+]]></Node>
+<StgValue><ssdm name="in_elem_data_3_V_read_1"/></StgValue>
+</operation>
+
+<operation id="15" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="30" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:13  %in_elem_data_2_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %in_elem_data_2_V_read)
+
+]]></Node>
+<StgValue><ssdm name="in_elem_data_2_V_read_1"/></StgValue>
+</operation>
+
+<operation id="16" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="31" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:14  %in_elem_data_1_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %in_elem_data_1_V_read)
+
+]]></Node>
+<StgValue><ssdm name="in_elem_data_1_V_read_1"/></StgValue>
+</operation>
+
+<operation id="17" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="32" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:15  %in_elem_data_0_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %in_elem_data_0_V_read)
+
+]]></Node>
+<StgValue><ssdm name="in_elem_data_0_V_read_1"/></StgValue>
+</operation>
+
+<operation id="18" st_id="1" stage="1" lat="1">
+<core>AddSub</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="33" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:16  %add_ln703 = add i16 %in_elem_data_0_V_read_1, %data_window_0_V_read_1
+
+]]></Node>
+<StgValue><ssdm name="add_ln703"/></StgValue>
+</operation>
+
+<operation id="19" st_id="1" stage="1" lat="1">
+<core>AddSub</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="34" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:17  %add_ln703_212 = add i16 %in_elem_data_1_V_read_1, %data_window_1_V_read_1
+
+]]></Node>
+<StgValue><ssdm name="add_ln703_212"/></StgValue>
+</operation>
+
+<operation id="20" st_id="1" stage="1" lat="1">
+<core>AddSub</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="35" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:18  %add_ln703_213 = add i16 %in_elem_data_2_V_read_1, %data_window_2_V_read_1
+
+]]></Node>
+<StgValue><ssdm name="add_ln703_213"/></StgValue>
+</operation>
+
+<operation id="21" st_id="1" stage="1" lat="1">
+<core>AddSub</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="36" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:19  %add_ln703_214 = add i16 %in_elem_data_3_V_read_1, %data_window_3_V_read_1
+
+]]></Node>
+<StgValue><ssdm name="add_ln703_214"/></StgValue>
+</operation>
+
+<operation id="22" st_id="1" stage="1" lat="1">
+<core>AddSub</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="37" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:20  %add_ln703_215 = add i16 %in_elem_data_4_V_read_1, %data_window_4_V_read_1
+
+]]></Node>
+<StgValue><ssdm name="add_ln703_215"/></StgValue>
+</operation>
+
+<operation id="23" st_id="1" stage="1" lat="1">
+<core>AddSub</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="38" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:21  %add_ln703_216 = add i16 %in_elem_data_5_V_read_1, %data_window_5_V_read_1
+
+]]></Node>
+<StgValue><ssdm name="add_ln703_216"/></StgValue>
+</operation>
+
+<operation id="24" st_id="1" stage="1" lat="1">
+<core>AddSub</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="39" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:22  %add_ln703_217 = add i16 %in_elem_data_6_V_read_1, %data_window_6_V_read_1
+
+]]></Node>
+<StgValue><ssdm name="add_ln703_217"/></StgValue>
+</operation>
+
+<operation id="25" st_id="1" stage="1" lat="1">
+<core>AddSub</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="40" bw="16" op_0_bw="16" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:23  %add_ln703_218 = add i16 %in_elem_data_7_V_read_1, %data_window_7_V_read_1
+
+]]></Node>
+<StgValue><ssdm name="add_ln703_218"/></StgValue>
+</operation>
+
+<operation id="26" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="41" bw="128" op_0_bw="128" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:24  %mrv = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } undef, i16 %add_ln703, 0
+
+]]></Node>
+<StgValue><ssdm name="mrv"/></StgValue>
+</operation>
+
+<operation id="27" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="42" bw="128" op_0_bw="128" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:25  %mrv_1 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv, i16 %add_ln703_212, 1
+
+]]></Node>
+<StgValue><ssdm name="mrv_1"/></StgValue>
+</operation>
+
+<operation id="28" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="43" bw="128" op_0_bw="128" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:26  %mrv_2 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_1, i16 %add_ln703_213, 2
+
+]]></Node>
+<StgValue><ssdm name="mrv_2"/></StgValue>
+</operation>
+
+<operation id="29" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="44" bw="128" op_0_bw="128" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:27  %mrv_3 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_2, i16 %add_ln703_214, 3
+
+]]></Node>
+<StgValue><ssdm name="mrv_3"/></StgValue>
+</operation>
+
+<operation id="30" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="45" bw="128" op_0_bw="128" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:28  %mrv_4 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_3, i16 %add_ln703_215, 4
+
+]]></Node>
+<StgValue><ssdm name="mrv_4"/></StgValue>
+</operation>
+
+<operation id="31" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="46" bw="128" op_0_bw="128" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:29  %mrv_5 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_4, i16 %add_ln703_216, 5
+
+]]></Node>
+<StgValue><ssdm name="mrv_5"/></StgValue>
+</operation>
+
+<operation id="32" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="47" bw="128" op_0_bw="128" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:30  %mrv_6 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_5, i16 %add_ln703_217, 6
+
+]]></Node>
+<StgValue><ssdm name="mrv_6"/></StgValue>
+</operation>
+
+<operation id="33" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="48" bw="128" op_0_bw="128" op_1_bw="16">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:31  %mrv_7 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_6, i16 %add_ln703_218, 7
+
+]]></Node>
+<StgValue><ssdm name="mrv_7"/></StgValue>
+</operation>
+
+<operation id="34" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="49" bw="0" op_0_bw="128">
+<![CDATA[
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:32  ret { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_7
+
+]]></Node>
+<StgValue><ssdm name="ret_ln490"/></StgValue>
+</operation>
+</state>
+</state_list>
+
+
+<ports>
+</ports>
+
+
+<dataflows>
+</dataflows>
+
+
+</stg>

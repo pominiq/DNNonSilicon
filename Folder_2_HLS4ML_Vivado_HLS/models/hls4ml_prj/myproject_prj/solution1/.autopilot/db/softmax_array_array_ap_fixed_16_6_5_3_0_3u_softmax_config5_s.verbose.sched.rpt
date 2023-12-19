@@ -1,0 +1,172 @@
+
+
+================================================================
+== Vivado HLS Report for 'softmax_array_array_ap_fixed_16_6_5_3_0_3u_softmax_config5_s'
+================================================================
+* Date:           Tue Dec 19 18:13:01 2023
+
+* Version:        2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)
+* Project:        myproject_prj
+* Solution:       solution1
+* Product family: zynq
+* Target device:  xc7z020-clg400-1
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+-----------+------------+
+    |  Clock |  Target  | Estimated | Uncertainty|
+    +--------+----------+-----------+------------+
+    |ap_clk  | 25.00 ns | 17.389 ns |   3.12 ns  |
+    +--------+----------+-----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+---------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval | Pipeline|
+    |   min   |   max   |    min   |    max   | min | max |   Type  |
+    +---------+---------+----------+----------+-----+-----+---------+
+    |        7|        7| 0.175 us | 0.175 us |    7|    7|   none  |
+    +---------+---------+----------+----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 0
+ResetActiveHigh: 1
+IsCombinational: 2
+IsDatapathOnly: 0
+HasWiredReturn: 1
+HasMFsm: 0
+HasVarLatency: 1
+IsPipeline: 0
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states : 8
+* Pipeline : 0
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 2 
+2 --> 3 
+3 --> 4 
+4 --> 5 
+5 --> 6 
+6 --> 7 
+7 --> 8 
+8 --> 
+
+* FSM state operations: 
+
+State 1 <SV = 0> <Delay = 0.00>
+ST_1 : Operation 9 [7/7] (0.00ns)   --->   "call fastcc void @"softmax_stable<array,array<ap_fixed<16,6,5,3,0>,3u>,softmax_config5>"(i16* %data_V_data_0_V, i16* %data_V_data_1_V, i16* %data_V_data_2_V, i16* %res_V_data_0_V, i16* %res_V_data_1_V, i16* %res_V_data_2_V)" [firmware/nnet_utils/nnet_activation_stream.h:362]   --->   Operation 9 'call' <Predicate = true> <Delay = 0.00> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 2 <SV = 1> <Delay = 17.3>
+ST_2 : Operation 10 [6/7] (17.3ns)   --->   "call fastcc void @"softmax_stable<array,array<ap_fixed<16,6,5,3,0>,3u>,softmax_config5>"(i16* %data_V_data_0_V, i16* %data_V_data_1_V, i16* %data_V_data_2_V, i16* %res_V_data_0_V, i16* %res_V_data_1_V, i16* %res_V_data_2_V)" [firmware/nnet_utils/nnet_activation_stream.h:362]   --->   Operation 10 'call' <Predicate = true> <Delay = 17.3> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 3 <SV = 2> <Delay = 17.3>
+ST_3 : Operation 11 [5/7] (17.3ns)   --->   "call fastcc void @"softmax_stable<array,array<ap_fixed<16,6,5,3,0>,3u>,softmax_config5>"(i16* %data_V_data_0_V, i16* %data_V_data_1_V, i16* %data_V_data_2_V, i16* %res_V_data_0_V, i16* %res_V_data_1_V, i16* %res_V_data_2_V)" [firmware/nnet_utils/nnet_activation_stream.h:362]   --->   Operation 11 'call' <Predicate = true> <Delay = 17.3> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 4 <SV = 3> <Delay = 17.3>
+ST_4 : Operation 12 [4/7] (17.3ns)   --->   "call fastcc void @"softmax_stable<array,array<ap_fixed<16,6,5,3,0>,3u>,softmax_config5>"(i16* %data_V_data_0_V, i16* %data_V_data_1_V, i16* %data_V_data_2_V, i16* %res_V_data_0_V, i16* %res_V_data_1_V, i16* %res_V_data_2_V)" [firmware/nnet_utils/nnet_activation_stream.h:362]   --->   Operation 12 'call' <Predicate = true> <Delay = 17.3> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 5 <SV = 4> <Delay = 17.3>
+ST_5 : Operation 13 [3/7] (17.3ns)   --->   "call fastcc void @"softmax_stable<array,array<ap_fixed<16,6,5,3,0>,3u>,softmax_config5>"(i16* %data_V_data_0_V, i16* %data_V_data_1_V, i16* %data_V_data_2_V, i16* %res_V_data_0_V, i16* %res_V_data_1_V, i16* %res_V_data_2_V)" [firmware/nnet_utils/nnet_activation_stream.h:362]   --->   Operation 13 'call' <Predicate = true> <Delay = 17.3> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 6 <SV = 5> <Delay = 17.3>
+ST_6 : Operation 14 [2/7] (17.3ns)   --->   "call fastcc void @"softmax_stable<array,array<ap_fixed<16,6,5,3,0>,3u>,softmax_config5>"(i16* %data_V_data_0_V, i16* %data_V_data_1_V, i16* %data_V_data_2_V, i16* %res_V_data_0_V, i16* %res_V_data_1_V, i16* %res_V_data_2_V)" [firmware/nnet_utils/nnet_activation_stream.h:362]   --->   Operation 14 'call' <Predicate = true> <Delay = 17.3> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 7 <SV = 6> <Delay = 5.59>
+ST_7 : Operation 15 [1/7] (5.59ns)   --->   "call fastcc void @"softmax_stable<array,array<ap_fixed<16,6,5,3,0>,3u>,softmax_config5>"(i16* %data_V_data_0_V, i16* %data_V_data_1_V, i16* %data_V_data_2_V, i16* %res_V_data_0_V, i16* %res_V_data_1_V, i16* %res_V_data_2_V)" [firmware/nnet_utils/nnet_activation_stream.h:362]   --->   Operation 15 'call' <Predicate = true> <Delay = 5.59> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 8 <SV = 7> <Delay = 0.00>
+ST_8 : Operation 16 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecInterface(i16* %data_V_data_2_V, [8 x i8]* @ap_fifo_str, i32 0, i32 0, [1 x i8]* @p_str1970, i32 0, i32 0, [1 x i8]* @p_str1971, [1 x i8]* @p_str1972, [1 x i8]* @p_str1973, i32 2, i32 2, i32 16, i32 16, [1 x i8]* @p_str1974, [1 x i8]* @p_str1975)"   --->   Operation 16 'specinterface' <Predicate = true> <Delay = 0.00>
+ST_8 : Operation 17 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecInterface(i16* %data_V_data_1_V, [8 x i8]* @ap_fifo_str, i32 0, i32 0, [1 x i8]* @p_str1963, i32 0, i32 0, [1 x i8]* @p_str1964, [1 x i8]* @p_str1965, [1 x i8]* @p_str1966, i32 2, i32 2, i32 16, i32 16, [1 x i8]* @p_str1967, [1 x i8]* @p_str1968)"   --->   Operation 17 'specinterface' <Predicate = true> <Delay = 0.00>
+ST_8 : Operation 18 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecInterface(i16* %data_V_data_0_V, [8 x i8]* @ap_fifo_str, i32 0, i32 0, [1 x i8]* @p_str1956, i32 0, i32 0, [1 x i8]* @p_str1957, [1 x i8]* @p_str1958, [1 x i8]* @p_str1959, i32 2, i32 2, i32 16, i32 16, [1 x i8]* @p_str1960, [1 x i8]* @p_str1961)"   --->   Operation 18 'specinterface' <Predicate = true> <Delay = 0.00>
+ST_8 : Operation 19 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecInterface(i16* %res_V_data_0_V, [5 x i8]* @p_str, i32 1, i32 1, [5 x i8]* @p_str5, i32 0, i32 0, [1 x i8]* @p_str6, [1 x i8]* @p_str6, [1 x i8]* @p_str6, i32 0, i32 0, i32 0, i32 0, [1 x i8]* @p_str6, [1 x i8]* @p_str6)"   --->   Operation 19 'specinterface' <Predicate = true> <Delay = 0.00>
+ST_8 : Operation 20 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecInterface(i16* %res_V_data_1_V, [5 x i8]* @p_str, i32 1, i32 1, [5 x i8]* @p_str5, i32 0, i32 0, [1 x i8]* @p_str6, [1 x i8]* @p_str6, [1 x i8]* @p_str6, i32 0, i32 0, i32 0, i32 0, [1 x i8]* @p_str6, [1 x i8]* @p_str6)"   --->   Operation 20 'specinterface' <Predicate = true> <Delay = 0.00>
+ST_8 : Operation 21 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecInterface(i16* %res_V_data_2_V, [5 x i8]* @p_str, i32 1, i32 1, [5 x i8]* @p_str5, i32 0, i32 0, [1 x i8]* @p_str6, [1 x i8]* @p_str6, [1 x i8]* @p_str6, i32 0, i32 0, i32 0, i32 0, [1 x i8]* @p_str6, [1 x i8]* @p_str6)"   --->   Operation 21 'specinterface' <Predicate = true> <Delay = 0.00>
+ST_8 : Operation 22 [1/1] (0.00ns)   --->   "ret void" [firmware/nnet_utils/nnet_activation_stream.h:371]   --->   Operation 22 'ret' <Predicate = true> <Delay = 0.00>
+
+
+============================================================
++ Verbose Summary: Timing violations
+============================================================
+Target clock period: 25ns, clock uncertainty: 3.12ns.
+
+ <State 1>: 0ns
+The critical path consists of the following:
+
+ <State 2>: 17.4ns
+The critical path consists of the following:
+	'call' operation ('call_ln362', firmware/nnet_utils/nnet_activation_stream.h:362) to 'softmax_stable<array,array<ap_fixed<16,6,5,3,0>,3u>,softmax_config5>' [17]  (17.4 ns)
+
+ <State 3>: 17.4ns
+The critical path consists of the following:
+	'call' operation ('call_ln362', firmware/nnet_utils/nnet_activation_stream.h:362) to 'softmax_stable<array,array<ap_fixed<16,6,5,3,0>,3u>,softmax_config5>' [17]  (17.4 ns)
+
+ <State 4>: 17.4ns
+The critical path consists of the following:
+	'call' operation ('call_ln362', firmware/nnet_utils/nnet_activation_stream.h:362) to 'softmax_stable<array,array<ap_fixed<16,6,5,3,0>,3u>,softmax_config5>' [17]  (17.4 ns)
+
+ <State 5>: 17.4ns
+The critical path consists of the following:
+	'call' operation ('call_ln362', firmware/nnet_utils/nnet_activation_stream.h:362) to 'softmax_stable<array,array<ap_fixed<16,6,5,3,0>,3u>,softmax_config5>' [17]  (17.4 ns)
+
+ <State 6>: 17.4ns
+The critical path consists of the following:
+	'call' operation ('call_ln362', firmware/nnet_utils/nnet_activation_stream.h:362) to 'softmax_stable<array,array<ap_fixed<16,6,5,3,0>,3u>,softmax_config5>' [17]  (17.4 ns)
+
+ <State 7>: 5.59ns
+The critical path consists of the following:
+	'call' operation ('call_ln362', firmware/nnet_utils/nnet_activation_stream.h:362) to 'softmax_stable<array,array<ap_fixed<16,6,5,3,0>,3u>,softmax_config5>' [17]  (5.59 ns)
+
+ <State 8>: 0ns
+The critical path consists of the following:
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+N/A
+* FSMD analyzer results:
+  - Output states:
+ - Input state : 
+  - Chain level:
+	State 1
+	State 2
+	State 3
+	State 4
+	State 5
+	State 6
+	State 7
+	State 8
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+N/A

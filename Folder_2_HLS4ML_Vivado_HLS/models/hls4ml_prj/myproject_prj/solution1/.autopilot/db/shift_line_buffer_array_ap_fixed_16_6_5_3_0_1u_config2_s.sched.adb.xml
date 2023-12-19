@@ -19,10 +19,10 @@
 
 <Node id="8" bw="16" op_0_bw="16" op_1_bw="16">
 <![CDATA[
-.critedge:0  %kernel_window_8_V_read_2 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_8_V_read)
+.critedge:0  %kernel_window_8_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_8_V_read)
 
 ]]></Node>
-<StgValue><ssdm name="kernel_window_8_V_read_2"/></StgValue>
+<StgValue><ssdm name="kernel_window_8_V_read_1"/></StgValue>
 </operation>
 
 <operation id="3" st_id="1" stage="1" lat="1">
@@ -34,10 +34,10 @@
 
 <Node id="9" bw="16" op_0_bw="16" op_1_bw="16">
 <![CDATA[
-.critedge:1  %kernel_window_7_V_read_2 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_7_V_read)
+.critedge:1  %kernel_window_7_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_7_V_read)
 
 ]]></Node>
-<StgValue><ssdm name="kernel_window_7_V_read_2"/></StgValue>
+<StgValue><ssdm name="kernel_window_7_V_read_1"/></StgValue>
 </operation>
 
 <operation id="4" st_id="1" stage="1" lat="1">
@@ -49,10 +49,10 @@
 
 <Node id="10" bw="16" op_0_bw="16" op_1_bw="16">
 <![CDATA[
-.critedge:2  %kernel_window_5_V_read_2 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_5_V_read)
+.critedge:2  %kernel_window_5_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_5_V_read)
 
 ]]></Node>
-<StgValue><ssdm name="kernel_window_5_V_read_2"/></StgValue>
+<StgValue><ssdm name="kernel_window_5_V_read_1"/></StgValue>
 </operation>
 
 <operation id="5" st_id="1" stage="1" lat="1">
@@ -64,10 +64,10 @@
 
 <Node id="11" bw="16" op_0_bw="16" op_1_bw="16">
 <![CDATA[
-.critedge:3  %kernel_window_4_V_read_2 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_4_V_read)
+.critedge:3  %kernel_window_4_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_4_V_read)
 
 ]]></Node>
-<StgValue><ssdm name="kernel_window_4_V_read_2"/></StgValue>
+<StgValue><ssdm name="kernel_window_4_V_read_1"/></StgValue>
 </operation>
 
 <operation id="6" st_id="1" stage="1" lat="1">
@@ -139,7 +139,7 @@
 
 <Node id="16" bw="0" op_0_bw="0" op_1_bw="0">
 <![CDATA[
-.critedge:8  call void (...)* @_ssdm_op_SpecLoopName([17 x i8]* @p_str39) nounwind
+.critedge:8  call void (...)* @_ssdm_op_SpecLoopName([17 x i8]* @p_str51) nounwind
 
 ]]></Node>
 <StgValue><ssdm name="specloopname_ln241"/></StgValue>
@@ -169,10 +169,10 @@
 
 <Node id="18" bw="16" op_0_bw="16" op_1_bw="16" op_2_bw="16" op_3_bw="1">
 <![CDATA[
-.critedge:10  %DataOut_V_8 = call i16 @"_ssdm_op_MemShiftRead.[28 x i16]P"(i16* getelementptr inbounds ([28 x i16]* @line_buffer_Array_V_1311_0, i64 0, i64 27), i16 %DataOut_V, i1 true)
+.critedge:10  %DataOut_V_1 = call i16 @"_ssdm_op_MemShiftRead.[28 x i16]P"(i16* getelementptr inbounds ([28 x i16]* @line_buffer_Array_V_1232_0, i64 0, i64 27), i16 %DataOut_V, i1 true)
 
 ]]></Node>
-<StgValue><ssdm name="DataOut_V_8"/></StgValue>
+<StgValue><ssdm name="DataOut_V_1"/></StgValue>
 </operation>
 
 <operation id="13" st_id="1" stage="1" lat="1">
@@ -199,10 +199,10 @@
 
 <Node id="20" bw="144" op_0_bw="144" op_1_bw="16">
 <![CDATA[
-.critedge:12  %mrv_36 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_s, i16 %kernel_window_4_V_read_2, 1
+.critedge:12  %mrv_1 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_s, i16 %kernel_window_4_V_read_1, 1
 
 ]]></Node>
-<StgValue><ssdm name="mrv_36"/></StgValue>
+<StgValue><ssdm name="mrv_1"/></StgValue>
 </operation>
 
 <operation id="15" st_id="1" stage="1" lat="1">
@@ -214,10 +214,10 @@
 
 <Node id="21" bw="144" op_0_bw="144" op_1_bw="16">
 <![CDATA[
-.critedge:13  %mrv_37 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_36, i16 %kernel_window_7_V_read_2, 2
+.critedge:13  %mrv_2 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_1, i16 %kernel_window_7_V_read_1, 2
 
 ]]></Node>
-<StgValue><ssdm name="mrv_37"/></StgValue>
+<StgValue><ssdm name="mrv_2"/></StgValue>
 </operation>
 
 <operation id="16" st_id="1" stage="1" lat="1">
@@ -229,7 +229,7 @@
 
 <Node id="22" bw="144" op_0_bw="144" op_1_bw="16">
 <![CDATA[
-.critedge:14  %mrv_3 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_37, i16 %kernel_window_2_V_read_1, 3
+.critedge:14  %mrv_3 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_2, i16 %kernel_window_2_V_read_1, 3
 
 ]]></Node>
 <StgValue><ssdm name="mrv_3"/></StgValue>
@@ -244,7 +244,7 @@
 
 <Node id="23" bw="144" op_0_bw="144" op_1_bw="16">
 <![CDATA[
-.critedge:15  %mrv_4 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_3, i16 %DataOut_V_8, 4
+.critedge:15  %mrv_4 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_3, i16 %DataOut_V_1, 4
 
 ]]></Node>
 <StgValue><ssdm name="mrv_4"/></StgValue>
@@ -259,7 +259,7 @@
 
 <Node id="24" bw="144" op_0_bw="144" op_1_bw="16">
 <![CDATA[
-.critedge:16  %mrv_5 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_4, i16 %kernel_window_5_V_read_2, 5
+.critedge:16  %mrv_5 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_4, i16 %kernel_window_5_V_read_1, 5
 
 ]]></Node>
 <StgValue><ssdm name="mrv_5"/></StgValue>
@@ -289,7 +289,7 @@
 
 <Node id="26" bw="144" op_0_bw="144" op_1_bw="16">
 <![CDATA[
-.critedge:18  %mrv_7 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_6, i16 %kernel_window_8_V_read_2, 7
+.critedge:18  %mrv_7 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_6, i16 %kernel_window_8_V_read_1, 7
 
 ]]></Node>
 <StgValue><ssdm name="mrv_7"/></StgValue>

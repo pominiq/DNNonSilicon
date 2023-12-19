@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vivado HLS Report for 'myproject'" level="0">
-<item name = "Date">Sun Dec 17 18:36:00 2023
+<item name = "Date">Tue Dec 19 18:13:02 2023
 </item>
 <item name = "Version">2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)</item>
 <item name = "Project">myproject_prj</item>
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">10.00 ns, 8.518 ns, 1.25 ns</column>
+<column name="ap_clk">25.00 ns, 21.192 ns, 3.12 ns</column>
 </table>
 </item>
 </section>
@@ -24,7 +24,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="8">, min, max, min, max, min, max, Type</keys>
-<column name="">29853, 29853, 0.299 ms, 0.299 ms, 29795, 29795, dataflow</column>
+<column name="">23, 23, 0.575 us, 0.575 us, 9, 9, dataflow</column>
 </table>
 </item>
 <item name = "Detail">

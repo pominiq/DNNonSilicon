@@ -2,8 +2,8 @@ set clock_constraint { \
     name clk \
     module myproject \
     port ap_clk \
-    period 10 \
-    uncertainty 1.25 \
+    period 25 \
+    uncertainty 3.125 \
 }
 
 set all_path {}

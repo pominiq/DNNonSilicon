@@ -2,27 +2,33 @@
 # General imports
 import logging
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # FATAL
-logging.getLogger('tensorflow').setLevel(logging.FATAL)
-
 import subprocess
 import time
 import numpy as np
-from sklearn.metrics import log_loss, accuracy_score # sklearn has an easy interface for testing
+import matplotlib.pyplot as plt
 
-# TensorFlow imports
+# TensorFlow and Keras imports
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # FATAL
+logging.getLogger('tensorflow').setLevel(logging.FATAL)
 import tensorflow as tf
 import tensorflow_model_optimization as tfmot
+from tensorflow_model_optimization.python.core.sparsity.keras import prune, pruning_callbacks, pruning_wrapper, pruning_schedule
 from keras.utils import to_categorical
-import numpy as np
-from keras.datasets import mnist
-from keras import layers, models
+from keras.datasets import mnist, imdb
+from keras import layers, models, preprocessing
+from qkeras.utils import _add_supported_quantized_objects
+
+# SciKit learn imports
+from sklearn.metrics import log_loss, accuracy_score # sklearn has an easy interface for testing
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 # HLS4ML imports
 import hls4ml # Engine for generating Verilog-files from ML models
 from hls4ml.model.profiling import numerical
 
-## Openlane related imports
+## Openlane2 imports
 from openlane.flows import SequentialFlow, Flow
 from openlane.steps import Yosys, Misc, OpenROAD, Magic, Netgen, Checker
 
@@ -31,12 +37,14 @@ current_script_path = os.path.dirname(os.path.abspath(__file__))
 # Navigate to the subfolder from the current script path
 subfolder_path = os.path.join(current_script_path, 'Folder_1_TensorFlow_model/TensorFlow_CNN_model')
 
-import time
+# Time stamp (may be used for saving files)
 timestr = time.strftime("%Y%m%d-%H%M%S") #used for timestamping iterations
 
 ## Set path for Vivado HLS
 os.environ['PATH'] += os.pathsep + '/tools/Xilinx/Vivado/2020.1/bin'
 
+
+## Openlane2 flow
 class Openlane2Flow(SequentialFlow):
     Steps = [
         Yosys.Synthesis,
@@ -66,6 +74,7 @@ class Openlane2Flow(SequentialFlow):
         Netgen.LVS
     ]
 
+## Main menu text for the terminal UI
 def main_menu_text(train, hls_model_comparison, build, openlane):
     print("Welcome to text-based UI version of the flow")
     print("_____________________________________________")
@@ -89,65 +98,233 @@ def main_menu_text(train, hls_model_comparison, build, openlane):
                                                                                                                                                 build,
                                                                                                                                                 openlane))
 
-# Downloads, trains and creates the example MNIST CNN model
-def create_example_model(train_images, train_labels, test_images, test_labels):
-        
+# Downloads, trains and creates 
+# the example MNIST Convolutional Neural Network (CNN) model with almost no optimization
+def create_example_model_MNIST():
+    # Tuple of NumPy arrays: (x_train, y_train), (x_test, y_test)
+    (train_images, train_labels), (test_images, test_labels) = mnist.load_data()
+    # Reshape and normalize images
+    train_images = train_images.reshape((60000, 28, 28, 1))
+    train_images = train_images.astype('float16') / 255
+    test_images = test_images.reshape((10000, 28, 28, 1))
+    test_images = test_images.astype('float16') / 255
+    # One-hot encode labels (keep this as float32 for stability in the loss calculations)
+    train_labels = to_categorical(train_labels, dtype='float32')
+    test_labels = to_categorical(test_labels, dtype='float32')
+
+    # Model architecture
     model = models.Sequential()
     model.add(layers.Conv2D(4, (3, 3), activation='relu', input_shape=(28, 28, 1)))
     model.add(layers.MaxPooling2D((4, 4)))
-    model.add(layers.Conv2D(8, (3, 3), activation='softmax'))
+    model.add(layers.Conv2D(8, (3, 3), activation='tanh'))
     model.add(layers.MaxPooling2D((2, 2)))
     model.add(layers.Flatten())
-    model.add(layers.Dense(10, dtype='float32', activation='tanh'))  # Ensure that the final layer has float32 dtype
+    model.add(layers.Dense(10, dtype='float32', activation='softmax'))  # Ensure that the final layer has float32 dtype
 
     model.compile(optimizer='adam',
-                loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True),
+                loss=tf.keras.losses.CategoricalCrossentropy(),
                 metrics=['accuracy'])
 
     # Train the CNN model
     model.fit(train_images, train_labels, epochs=10)
     print(model.summary())
 
-    print("___________2___________")
-    score = model.evaluate(test_images, test_labels, verbose=0)
-    print("Model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(score[0],score[1]*100))
-    save_model_and_dataset(model, train_images,train_labels,test_images,test_labels)
+    # Evaluate and quantize to 16-bit. Save all the models.
+    model_evaluation_and_generic_quantization(model, train_images, train_labels, test_images, test_labels)
+
+    return (model, test_images, test_labels)
+
+# Downloads, trains and creates 
+# the example MNIST YOLO Convolutional Neural Network (CNN) model with various optimizations for smaller architecture.
+def create_example_model_YOLO():
+
+    pruning = False
+
+    # Tuple of NumPy arrays: (x_train, y_train), (x_test, y_test)
+    (train_images, train_labels), (test_images, test_labels) = mnist.load_data()
+    # Reshape and normalize images
+    train_images = train_images.reshape((60000, 28, 28, 1))
+    train_images = train_images.astype('float16') / 255
+    test_images = test_images.reshape((10000, 28, 28, 1))
+    test_images = test_images.astype('float16') / 255
+    # One-hot encode labels (keep this as float32 for stability in the loss calculations)
+    train_labels = to_categorical(train_labels, dtype='float32')
+    test_labels = to_categorical(test_labels, dtype='float32')
+
+    # Model architecture
+    model = models.Sequential()
+    model.add(layers.Conv2D(8, (3, 3), activation='relu', input_shape=(28, 28, 1), use_bias=True))
+    model.add(layers.DepthwiseConv2D((3, 3), activation='relu', use_bias=True))
+    model.add(layers.GlobalAveragePooling2D()) # For some reason this is not implemented in HLS4ML
+    model.add(layers.Dense(10, dtype='float32', activation='softmax', use_bias=False))  # Ensure that the final layer has float32 dtype
+
+    if pruning == True:
+        pruning_schedule = tfmot.sparsity.keras.PolynomialDecay(initial_sparsity=0.0,
+                                                                final_sparsity=0.5,
+                                                                begin_step=2000,
+                                                                end_step=4000)
+        model = tfmot.sparsity.keras.prune_low_magnitude(model, 
+                                                        pruning_schedule=pruning_schedule)
+        # Define the pruning callback
+        callbacks = [
+        tfmot.sparsity.keras.UpdatePruningStep()
+        ]
+    else:
+        callbacks = []
 
 
-    print("___________3___________")
-    print("Quantization to 16-bit precision")
-    # Quantize the weights of the model
-    model_16bit = quantize_weights_to_16bit(model)
+    # Compile model
+    model.compile(optimizer='adam',
+                loss=tf.keras.losses.CategoricalCrossentropy(),
+                metrics=['accuracy'])
     
-    # serialize model to JSON
-    model_json = model_16bit.to_json()
-    with open("{}/model_16bit.json".format(subfolder_path), "w") as json_file:
-        json_file.write(model_json)
-    
-    # serialize weights to HDF5
-    model_16bit.save_weights("{}/model_16bit.weights.h5".format(subfolder_path))
-    print("Saved 16-bit model to disk")
-    
-    score = model_16bit.evaluate(test_images, test_labels, verbose=0)
-    print("16-bit Model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(score[0],score[1]*100))
-    
-    print("___________4___________")
-    # checks if this model can be implemented completely unrolled (=parallel)
-    # for Vivado-enforced unroll limit of 4096.
-    print("Completely Unrolled size must adhere to <4096 for Vivado compiler")
-    for layer in model.layers:
-        if layer.__class__.__name__ in ['Conv2D', 'Dense']:
-            w = layer.get_weights()[0]
-            layersize = np.prod(w.shape)
-            print("{}: {}".format(layer.name, layersize))  # 0 = weights, 1 = biases
-            if layersize > 4096:  # assuming that shape[0] is batch, i.e., 'None'
-                print("Layer {} is too large ({}), are you sure you want to train?".format(layer.name, layersize))
+    # Train the CNN model
+    model.fit(train_images, train_labels, epochs=10, callbacks=callbacks)
+    print(model.summary())
 
-    return model
+    if pruning == True:
+        # Check how many weights were set to zero (ie. verify if pruning worked)
+        w = model.layers[0].weights[0].numpy()
+        print('% of zeros = {}'.format(np.sum(w == 0) / np.size(w)))
+    
+    # Evaluate and quantize to 16-bit. Save all the models.
+    model_evaluation_and_generic_quantization(model, train_images, train_labels, test_images, test_labels)
+
+    return (model, test_images, test_labels)
+
+# Downloads, trains and creates 
+# the example IRIS Single Layer Perceptron (SLP) model
+def create_example_model_IRIS():
+    # Load Iris dataset
+    iris = load_iris()
+    # Features and labels
+    X = iris.data
+    y = iris.target
+    # Splitting the dataset into train and test sets
+    train_images, test_images, train_labels, test_labels = train_test_split(X, y, test_size=0.25, random_state=42)
+
+    # Scaling features
+    scaler = StandardScaler()
+    train_images = scaler.fit_transform(train_images)
+    test_images = scaler.transform(test_images.reshape(-1,4))
+
+    # Single layer perceptron
+    model = models.Sequential()
+    model.add(layers.Dense(128, activation='relu',input_shape=(4,))) # Single dense layer
+    model.add(layers.Dense(3, activation='softmax'))
+
+    model.compile(optimizer='adam',
+            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+            metrics=['accuracy'])
+
+    # Train the SLP model
+    model.fit(train_images, train_labels, epochs=10)
+    print(model.summary())
+
+    # Evaluate and quantize to 16-bit. Save all the models.
+    model_evaluation_and_generic_quantization(model, train_images, train_labels, test_images, test_labels)
+
+    return (model, test_images, test_labels)
+
+# Downloads, trains and creates 
+# the example IRIS Single Layer Perceptron (SLP) model with pruning
+def create_example_model_IRIS_pruned():
+
+    pruning = True
+
+    # Load Iris dataset
+    iris = load_iris()
+    # Features and labels
+    X = iris.data
+    y = iris.target
+    # Splitting the dataset into train and test sets
+    train_images, test_images, train_labels, test_labels = train_test_split(X, y, test_size=0.25, random_state=42)
+
+    # Scaling features
+    scaler = StandardScaler()
+    train_images = scaler.fit_transform(train_images)
+    test_images = scaler.transform(test_images.reshape(-1,4))
+
+    # Single layer perceptron
+    model = models.Sequential()
+    model.add(layers.Dense(128, activation='relu',input_shape=(4,), __name__='Dense')) # Single dense layer
+    model.add(layers.Dense(3, activation='softmax', __name__='Dense'))
+
+    if pruning == True:
+        pruning_schedule = tfmot.sparsity.keras.PolynomialDecay(initial_sparsity=0.0,
+                                                                final_sparsity=0.5,
+                                                                begin_step=2000,
+                                                                end_step=4000)
+        model = tfmot.sparsity.keras.prune_low_magnitude(model, 
+                                                        pruning_schedule=pruning_schedule)
+        # Define the pruning callback
+        callbacks = [
+        tfmot.sparsity.keras.UpdatePruningStep()
+        ]
+    else:
+        callbacks = []
+
+
+    # Compile model
+    model.compile(optimizer='adam',
+                loss=tf.keras.losses.CategoricalCrossentropy(),
+                metrics=['accuracy'])
+    
+    # Train the CNN model
+    model.fit(train_images, train_labels, epochs=10, callbacks=callbacks)
+    print(model.summary())
+
+    if pruning == True:
+        # Check how many weights were set to zero (ie. verify if pruning worked)
+        w = model.layers[0].weights[0].numpy()
+        print('% of zeros = {}'.format(np.sum(w == 0) / np.size(w)))
+
+    model.compile(optimizer='adam',
+            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+            metrics=['accuracy'])
+
+    # Train the SLP model
+    model.fit(train_images, train_labels, epochs=10)
+    print(model.summary())
+
+    # Evaluate and quantize to 16-bit. Save all the models.
+    model_evaluation_and_generic_quantization(model, train_images, train_labels, test_images, test_labels)
+
+    return (model, test_images, test_labels)
+
+
+# DOES NOT WORK
+# Downloads, trains and creates 
+# the example IMDB Recurrent Neural Network (RNN) model
+def create_example_model_IMDB():
+    # IMDB dataset particularly long. Thus I have reduced it to run faster.
+    num_words = 8000
+    maxlen = 500
+    # Tuple of NumPy arrays: (x_train, y_train), (x_test, y_test)
+    (train_images, train_labels), (test_images, test_labels) = imdb.load_data(num_words=num_words)
+    # Pad sequence (samples x time)
+    train_images = np.array(preprocessing.sequence.pad_sequences(train_images, maxlen=maxlen)).astype('float32')
+    test_images = np.array(preprocessing.sequence.pad_sequences(test_images, maxlen=maxlen)).astype('float32')
+
+    model = models.Sequential()
+    model.add(layers.Embedding(num_words, 32))
+    model.add(layers.SimpleRNN(32))
+    model.add(layers.Dense(1, activation='sigmoid'))
+
+    model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
+
+    model.fit(train_images, train_labels, epochs=4, batch_size=128)
+    print(model.summary())
+
+    # Evaluate and quantize to 16-bit. Save all the models.
+    model_evaluation_and_generic_quantization(model, train_images, train_labels, test_images, test_labels)
+
+    return (model, test_images, test_labels)
 
 # Loads keras model from folder
 def load_keras_model_from_json_file(modelname):
     
+    """
     # load json and create model
     json_file = open('{}/{}.json'.format(subfolder_path, modelname), 'r')
     loaded_model_json = json_file.read()
@@ -156,12 +333,31 @@ def load_keras_model_from_json_file(modelname):
     # load weights into new model
     loaded_model.load_weights("{}/{}.weights.h5".format(subfolder_path, modelname))
     print("Loaded model from disk")
+    """
+    # account for custom objects. In this script prunning is used
+    co = {}
+    _add_supported_quantized_objects(co)
+    co['PruneLowMagnitude'] = pruning_wrapper.PruneLowMagnitude
+    
+    # load json and create model
+    with open('{}/{}.json'.format(subfolder_path, modelname), 'r') as f:
+        json_file = f.read()
 
+    # load the actual model from .json-file and .h5-file
+    loaded_model = tf.keras.models.model_from_json(json_file, co)
+    loaded_model.load_weights("{}/{}.weights.h5".format(subfolder_path, modelname))
+    """
+    # Pretrained models need to apply prune API (assuming it was used)
+    loaded_model = prune.prune_low_magnitude(loaded_model)
+    print("Loaded model from disk")
+    """
     # evaluate loaded model on test data
     loaded_model.compile(optimizer='adam',
                   loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True),
                   metrics=['accuracy'])
     
+    print(loaded_model.summary())
+
     return loaded_model
 
 # Saves model and data
@@ -189,27 +385,73 @@ def save_model_and_dataset(model, train_images,train_labels,test_images,test_lab
     print("- Succesfully saved IO training and test sets as .npy-files")
 
 # Manually quantize weights to 16-bit
-def quantize_weights_to_16bit(model):
+def quantize_weights_to_16bit_and_save_model(model):
     for layer in model.layers:
         if hasattr(layer, 'weights'):
             weights = layer.get_weights()
             quantized_weights = [np.float16(w) for w in weights]
             layer.set_weights(quantized_weights)
+
+    # serialize model to JSON
+    model_json = model.to_json()
+    with open("{}/model_16bit.json".format(subfolder_path), "w") as json_file:
+        json_file.write(model_json)
+
+    # serialize weights to HDF5
+    model.save_weights("{}/model_16bit.weights.h5".format(subfolder_path))
+    print("Saved 16-bit model to disk")
+
     return model
 
+# Checks if Vivado HLS unrolled limit is withheld
+# Desc: Helper function which checks if the model layers can be implemented completely parallel (?)
+def test_Vivado_unrolled_limit_withheld(model):
+    # checks if this model can be implemented completely unrolled (=parallel)
+    # for Vivado-enforced unroll limit of 4096.
+    print("Completely Unrolled size must adhere to <4096 for Vivado compiler")
+    for layer in model.layers:
+        class_name = layer.__class__.__name__.lower()
+        if 'conv2d' in class_name or 'dense' in class_name:
+            w = layer.get_weights()[0]
+            layersize = np.prod(w.shape)
+            print("{}: {}".format(layer.name, layersize))  # 0 = weights, 1 = biases
+            if layersize > 4096:  # assuming that shape[0] is batch, i.e., 'None'
+                print("Layer {} is too large ({}), are you sure you want to train?".format(layer.name, layersize))
+
+# Flow for evaluating and quantizing model.
+# Also saves both 32-bit and 16-bit version of the model.
+# Uses save_model_and_dataset(), quantize_weights_to_16bit_and_save_model(), and test_Vivado_unrolled_limit_withheld()
+def model_evaluation_and_generic_quantization(model, train_images, train_labels, test_images, test_labels):
+
+    print("___________2___________")
+    print("Saving model and dataset. Evaluating model")
+    save_model_and_dataset(model,train_images,train_labels,test_images,test_labels)
+    score = model.evaluate(test_images, test_labels, verbose=0)
+    print("Model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(score[0],score[1]*100))
+
+    print("___________3___________")
+    print("Quantization to 16-bit precision")
+    model_16bit = quantize_weights_to_16bit_and_save_model(model)
+    score = model_16bit.evaluate(test_images, test_labels, verbose=0)
+    print("16-bit Model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(score[0],score[1]*100))
+    
+    print("___________4___________")
+    print("Producing results for unrolled limit (Vivado)")
+    test_Vivado_unrolled_limit_withheld(model)
+
 # Compiles HLS4Ml model from imported TF model based on config parameters
-def config_and_compile_hls4ml_model_from_keras_model(loaded_model):
+def config_and_compile_hls4ml_model_from_keras_model(model):
     
     # Load configuration in HLS4ML tool on keras model
-    config = hls4ml.utils.config_from_keras_model(loaded_model, 
+    config = hls4ml.utils.config_from_keras_model(model, 
                                                 granularity='model',
                                                 default_precision='ap_fixed<16,6>',
-                                                default_reuse_factor=64, #1,2,4,8,16,32,64,160,320. 
+                                                default_reuse_factor=8, #1,2,4,8,16,32,64,160,320. 
                                                 # or for Conv2D layer: 1,2,3,4,6,9,12,18,36,72,144,288
                                                 default_strategy='Resource',
                                                 )
 
-    hls_model = hls4ml.converters.convert_from_keras_model(loaded_model,
+    hls_model = hls4ml.converters.convert_from_keras_model(model,
                                                            hls_config=config,
                                                            io_type='io_stream', # Set to io_stream for CNN
                                                            clock_period=25,
@@ -231,63 +473,87 @@ def config_and_compile_hls4ml_model_from_keras_model(loaded_model):
     return hls_model
 
 # Compares the HLS4ML bit-stream model with TF model
-def hls_vs_tf_model_comparison(loaded_model, hls_model, test_images, test_labels)-> tuple:
+def hls_vs_tf_model_comparison(model, hls_model, test_images, test_labels)-> tuple:
+    
+    print("___________________________________________________________________")
+    try:
+        ## Determine accuracy of Kera model, for comparison
+        keras_score = model.evaluate(test_images, test_labels, verbose=0)
+        print("Keras  model evaluation \t Loss: {:.2f} \t Accuracy: {:.2f}%".format(keras_score[0],keras_score[1]*100))
+    except:
+        print("Failed to produce Keras score (first try)")
 
     # Set dtype of test_images, for interactions with numpy and scikitlearn functions
     test_images = np.ascontiguousarray(test_images, dtype='float32')
     hls_labels = hls_model.predict(test_images) # Executes the FPGA firmware with bit-accurate emulation on the CPU.
     print("FPGA simulation ready\n ")
-    
+
+    try: # Test if we are dealing with one-hot encoding or not. For us in accuracy score function
+        test_labels = np.argmax(test_labels,axis=1)
+    except:
+        pass
     # Calculating accuracy and crossentropy loss of HLS_model
-    hls_accuracy = accuracy_score(np.argmax(test_labels,axis=1), np.argmax(hls_labels, axis=1))
+    hls_accuracy = accuracy_score(test_labels, np.argmax(hls_labels, axis=1))
     hls_crossentropyloss = log_loss(y_true=test_labels, y_pred=hls_labels)
     metrics_tuple = (hls_crossentropyloss, hls_accuracy)
 
-    print("___________________________________________________________________")
-    print("HLS4ML model evaluation \t Loss: {:.2f} \t Accuracy: {:.2f}%".format(metrics_tuple[0], metrics_tuple[1]*100))    
-    ## Determine accuracy of Kera model, for comparison
-    keras_score = loaded_model.evaluate(test_images, test_labels, verbose=0)
-    print("Keras  model evaluation \t Loss: {:.2f} \t Accuracy: {:.2f}%".format(keras_score[0],keras_score[1]*100))
+    try:
+        ## Determine accuracy of Kera model, for comparison
+        keras_score = model.evaluate(test_images, test_labels, verbose=0)
+        print("Keras  model evaluation \t Loss: {:.2f} \t Accuracy: {:.2f}%".format(keras_score[0],keras_score[1]*100))
+    except:
+        print("Failed to produce Keras score (second try)")
+
+    print("HLS4ML model evaluation \t Loss: {:.2f} \t Accuracy: {:.2f}%".format(metrics_tuple[0], metrics_tuple[1]*100))
     print("___________________________________________________________________")
 
     return metrics_tuple
 
-
+# Main function. Here the actual flow is run
 def main():
-    #Flow step variables
-    train = False
-    hls_model_comparison = False
-    build = False
-    openlane = False
+    
+    # model filename without extension. Requires calling .json-file and weights.h5-file the same
+    # By default I have set it to the 16bit version as found in the subfolder directory
+    modelname =             "model_16bit"
 
+    #Flow step variables
+    train =                 True
+    hls_model_comparison =  True
+    build =                 True
+    openlane =              False
+
+    # List of example models
+    MNIST =                 False   # generic CNN
+    IRIS =                  False    # Single-layer Dense
+    IRIS_pruned =           True    # SLP with pruning test
+    IMDB =                  False   # Simple RNN (DOES NOT WORK)
+    YOLO =                  False   # small CNN with depth-wise Conv2D, GlobalAveragePooling, and pruned 50%
+
+
+    # Main menu text
     main_menu_text(train, hls_model_comparison, build, openlane)
 
-
-    # Step 1: Either train MNIST model or load model from a folder
+    # Step 1: Either train an example model or load model from a folder
     if train == True:
-        print("___________________________________\nTRAINING MNIST EXAMPLE MODEL\n___________________________________")
-        ## Load dataset
-        # Tuple of NumPy arrays: (x_train, y_train), (x_test, y_test)
-        (train_images, train_labels), (test_images, test_labels) = mnist.load_data()
-        # Reshape and normalize images
-        train_images = train_images.reshape((60000, 28, 28, 1))
-        train_images = train_images.astype('float16') / 255
-        test_images = test_images.reshape((10000, 28, 28, 1))
-        test_images = test_images.astype('float16') / 255
-        # One-hot encode labels (keep this as float32 for stability in the loss calculations)
-        train_labels = to_categorical(train_labels, dtype='float32')
-        test_labels = to_categorical(test_labels, dtype='float32')
-        # Create the example model
-        model = create_example_model(train_images,train_labels,test_images,test_labels)        
-    else:
-        print("___________________________________\nLOADING MODEL FROM SUBFOLDER PATH\n___________________________________")
-        # load data numpy test images and labels for dataset from same folder
-        test_images = np.load('{}/test_images.npy'.format(subfolder_path))
-        test_labels = np.load('{}/test_labels.npy'.format(subfolder_path))        
-        # model filename without extension. I requirement calling .json-file and weights.h5-file the same
-        modelname = "model"
-        model = load_keras_model_from_json_file(modelname)
+        print("___________________________________\nTRAINING MODELS\n___________________________________")
+        # Create the desired example model
+        if MNIST == True:
+            create_example_model_MNIST()
+        elif IRIS == True:
+            create_example_model_IRIS()
+        elif IRIS_pruned == True:
+            create_example_model_IRIS_pruned()
+        elif IMDB == True:
+            create_example_model_IMDB()
+        elif YOLO == True:
+            create_example_model_YOLO()
 
+
+    print("___________________________________\nLOADING MODEL FROM SUBFOLDER PATH\n___________________________________")
+    # load data numpy test images and labels for dataset from same folder
+    test_images = np.load('{}/test_images.npy'.format(subfolder_path))
+    test_labels = np.load('{}/test_labels.npy'.format(subfolder_path))        
+    model = load_keras_model_from_json_file(modelname)
 
     # Step 2: Create HLS model and make comparisons
     if hls_model_comparison == True:
@@ -295,7 +561,7 @@ def main():
         # Compile HLS4ML model from loaded model
         hls_model = config_and_compile_hls4ml_model_from_keras_model(model)
         # Output comparison
-        hls_vs_tf_model_comparison(model, hls_model,test_images,test_labels)
+        hls_vs_tf_model_comparison(model, hls_model, test_images, test_labels)
     else:
         print("___________________________________\nHLS MODEL NOT CREATED\n___________________________________")
         build = False
@@ -315,6 +581,7 @@ def main():
         hls4ml.report.read_vivado_report('Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj')
     else:
         print("___________________________________\nNO VERILOG GENERATED\n___________________________________")
+
 
     # Step 4: Run it through openlane
     if openlane == True:

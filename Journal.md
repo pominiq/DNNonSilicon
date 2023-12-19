@@ -1,4 +1,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# Agenda dec 18 23
+
+Error:
+TypeError: The added layer must be an instance of class Layer. Received: layer=PruneLowMagnitude of type <class 'str'>.
+
+
+	from qkeras.utils import _add_supported_quantized_objects
+	    from tensorflow_model_optimization.python.core.sparsity.keras import pruning_wrapper
+
+	    co = {}
+	    _add_supported_quantized_objects(co)
+	    co['PruneLowMagnitude'] = pruning_wrapper.PruneLowMagnitude
+	    model_pruned = tf.keras.models.load_model('pruned_cnn_model.h5', custom_objects=co)
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # Agenda dec 16 23
 
 Had a 5-6 day break. I feel quite down as of late. Had a bit of migraine, and jumping back into working out after a short break has left me super sore all over. Maybe those physical effects has lead to my tiredness, and the sense of demotivation, but at the same time, I feel like it might just be distractions from the fact that I am again... overworking myself, in the sense that I am "borrowing tomorrow's energy". I need a break lol. Though I do have a set of nice objectives and when written out actually seem quite manageable. I will post this at the top / banner of this journal, and maybe just log progress each day on them.
@@ -26,8 +42,10 @@ When this is done, I do not think I can do a lot more. There should probably be 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # Agenda dec 10 23
-Meeting with Ali. Not a lot to say. I will flesh it out in the next entry's to-do list.s
+Meeting with Ali. Not a lot to say. I will flesh it out in the next entry's to-do list
 
+Issue with detailed routing iterations.
+https://github.com/The-OpenROAD-Project/OpenLane/issues/2029
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 # Agenda dec 5 23
