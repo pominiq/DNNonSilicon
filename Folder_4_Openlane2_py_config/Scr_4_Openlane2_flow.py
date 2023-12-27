@@ -21,11 +21,15 @@ path = "/home/pominiq/projectfolder/"
 os.chdir(path)
 
 from openlane.flows import SequentialFlow, Flow
-from openlane.steps import Yosys, Misc, OpenROAD, Magic, Netgen, Checker
+from openlane.steps import Verilator, Yosys, Misc, OpenROAD, Magic, Netgen, Checker
 from openlane.steps.openroad import OpenGUI
 
-class MyFlow1(SequentialFlow):
+class Openlane2Flow(SequentialFlow):
     Steps = [
+        #Verilator.Lint,
+        #Checker.LintTimingConstructs,
+        #Checker.LintErrors,
+        #Checker.LintWarnings,
         Yosys.Synthesis,
         Checker.YosysUnmappedCells,
         Checker.YosysSynthChecks,
@@ -48,9 +52,13 @@ class MyFlow1(SequentialFlow):
         OpenROAD.FillInsertion,
         OpenROAD.IRDropReport,
         Magic.StreamOut,
+        Magic.WriteLEF,
         Magic.DRC,
+        Checker.MagicDRC,
         Magic.SpiceExtraction,
-        Netgen.LVS
+        Netgen.LVS,
+        Checker.LVS,
+        Yosys.EQY
     ]
 
 MyFlow2 = Flow.factory.get("Classic")
@@ -66,61 +74,51 @@ def main():
                 #       Insufficient width (3.22 um) to add straps on layer met4 in grid "stdcell_grid" with 
                 #       total strap width
                 # Need to define die area and parameters for pitch.
-    
-    flow = MyFlow1(
-        {
-            "PDK": "sky130A",
-            "DESIGN_NAME": "myproject",
-            "VERILOG_FILES": "refg::$DESIGN_DIR/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/impl/verilog/*.v",
-            "CLOCK_PORT": 'ap_clk',
-            "CLOCK_PERIOD": 25,
-            #### Sequential flow specific parameters ###
-            #"RUN_ANTENNA_REPAIR": False,
-            "RUN_DRT": True,
-            "RUN_FILL_INSERTION": True,
-            #"RUN_HEURISTIC_DIODE_INSERTION": False,
-            #### Yosys Synthesis specific parameters ###
-            "USE_LIGHTER": False,
-            "SYNTH_AUTONAME": False,
-            "SYNTH_NO_FLAT": False,
-            "SYNTH_SIZING": False,
-            "SYNTH_ABC_BUFFERING": True,
-            "SYNTH_SHARE_RESOURCES": True,
-            "SYNTH_STRATEGY": "AREA 3",
-            #"SYNTH_MAX_TRAN ": 1.0,
-            #"SYNTH_MAX_FANOUT ": 16,
-            #### Floorplan specific parameters ###
-            "FP_SIZING": "relative",
-            #"DIE_AREA": [0, 0, 10000, 10000],
-            "PL_TARGET_DENSITY_PCT": 50,
-            "FP_CORE_UTIL": 30,
-            "GPL_CELL_PADDING": 2,
-            "PL_ROUTABILITY_DRIVEN": True,
-            #"PL_BASIC_PLACEMENT": False,
-            "PL_MAX_DISPLACEMENT_X": 500,
-            "PL_MAX_DISPLACEMENT_Y": 500,
-            "GRT_ALLOW_CONGESTION": False,
-            #"PL_MACRO_HALO": "30 30",
-            #"PL_MACRO_CHANNEL": "30 30",
-            "FP_PDN_VPITCH": 30,
-            "FP_PDN_HPITCH": 30,
-            "FP_PDN_VOFFSET": 5,
-            "FP_PDN_HOFFSET": 5,
-            "FP_PDN_SKIPTRIM": False,
-            "PL_RESIZER_SETUP_SLACK_MARGIN": 0.4,
-            "PL_RESIZER_HOLD_SLACK_MARGIN": 0.4,
-            "GRT_RESIZER_SETUP_SLACK_MARGIN": 0.2,
-            "GRT_RESIZER_HOLD_SLACK_MARGIN": 0.2,
-            "MAGIC_DEF_LABELS": False,
-            #"HEURISTIC_ANTENNA_THRESHOLD": 110,
-            "GRT_ANTENNA_ITERS": 5,
-            "GRT_ADJUSTMENT": 0.2,
-        },
-        design_dir=".",
-    )
-
-    ## Starts the flow
-    flow.start()
+        flow = Openlane2Flow(
+            {
+                "PDK": "sky130A",
+                "DESIGN_NAME": "myproject",
+                "VERILOG_FILES": "refg::$DESIGN_DIR/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/impl/verilog/*.v",
+                "CLOCK_PORT": 'ap_clk',
+                "CLOCK_PERIOD": 25,
+                "RUN_HEURISTIC_DIODE_INSERTION": True,
+                #### Yosys Synthesis specific parameters ###
+                "USE_LIGHTER": False,
+                "SYNTH_AUTONAME": False,
+                "SYNTH_NO_FLAT": False,
+                "SYNTH_SIZING": False,
+                "SYNTH_ABC_BUFFERING": True,
+                "SYNTH_SHARE_RESOURCES": True,
+                "SYNTH_STRATEGY": "AREA 3",
+                #### Floorplan specific parameters ###
+                "FP_SIZING": "relative",
+                #"DIE_AREA": [0, 0, 10000, 10000],
+                "PL_TARGET_DENSITY_PCT": 50,
+                "FP_CORE_UTIL": 30,
+                "GPL_CELL_PADDING": 2,
+                "PL_ROUTABILITY_DRIVEN": True,
+                #"PL_BASIC_PLACEMENT": False, #Never run on large designs
+                "PL_MAX_DISPLACEMENT_X": 500,
+                "PL_MAX_DISPLACEMENT_Y": 500,
+                "GRT_ALLOW_CONGESTION": False,
+                "FP_PDN_VPITCH": 30,
+                "FP_PDN_HPITCH": 30,
+                "FP_PDN_VOFFSET": 5,
+                "FP_PDN_HOFFSET": 5,
+                "FP_PDN_SKIPTRIM": False,
+                "PL_RESIZER_SETUP_SLACK_MARGIN": 0.4,
+                "PL_RESIZER_HOLD_SLACK_MARGIN": 0.4,
+                "GRT_RESIZER_SETUP_SLACK_MARGIN": 0.2,
+                "GRT_RESIZER_HOLD_SLACK_MARGIN": 0.2,
+                "MAGIC_DEF_LABELS": False,
+                "HEURISTIC_ANTENNA_THRESHOLD": 110,
+                "GRT_ANTENNA_ITERS": 5,
+                "GRT_ADJUSTMENT": 0.2,
+            },
+            design_dir=".",
+        )
+        ## Starts the flow
+        flow.start()
 
 if __name__ == "__main__":
     main()
