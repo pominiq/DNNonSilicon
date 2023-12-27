@@ -30929,25 +30929,29 @@ template <typename T, unsigned N, T (*func)(T)> class lookup_table {
 # 41 "/tools/Xilinx/Vivado/2020.1/lnx64/tools/gcc/lib/gcc/x86_64-unknown-linux-gnu/4.6.3/../../../../include/c++/4.6.3/cstdio" 3
 # 41 "/tools/Xilinx/Vivado/2020.1/lnx64/tools/gcc/lib/gcc/x86_64-unknown-linux-gnu/4.6.3/../../../../include/c++/4.6.3/cstdio" 3
 # 9 "firmware/defines.h" 2
-# 18 "firmware/defines.h"
-typedef ap_fixed<16,6> input_t;
+# 37 "firmware/defines.h"
+typedef nnet::array<ap_fixed<16,6>, 1*1> input_t;
 typedef ap_fixed<16,6> model_default_t;
-typedef ap_fixed<16,6> layer2_t;
-typedef ap_uint<1> layer2_index;
-typedef ap_fixed<16,6> layer3_t;
-typedef ap_fixed<18,8> dense_relu_table_t;
-typedef ap_fixed<16,6> layer4_t;
-typedef ap_uint<1> layer4_index;
-typedef ap_fixed<16,6> result_t;
-typedef ap_fixed<18,8> dense_1_softmax_table_t;
-typedef ap_fixed<18,8,AP_RND,AP_SAT> dense_1_softmax_exp_table_t;
-typedef ap_fixed<18,8,AP_RND,AP_SAT> dense_1_softmax_inv_table_t;
+typedef nnet::array<ap_fixed<16,6>, 4*1> layer2_t;
+typedef nnet::array<ap_fixed<16,6>, 4*1> layer3_t;
+typedef ap_fixed<18,8> conv2d_relu_table_t;
+typedef nnet::array<ap_fixed<16,6>, 4*1> layer4_t;
+typedef nnet::array<ap_fixed<16,6>, 8*1> layer5_t;
+typedef nnet::array<ap_fixed<16,6>, 8*1> layer6_t;
+typedef ap_fixed<18,8> conv2d_1_relu_table_t;
+typedef nnet::array<ap_fixed<16,6>, 8*1> layer7_t;
+typedef nnet::array<ap_fixed<16,6>, 10*1> layer9_t;
+typedef ap_uint<1> layer9_index;
+typedef nnet::array<ap_fixed<16,6>, 10*1> result_t;
+typedef ap_fixed<18,8> dense_softmax_table_t;
+typedef ap_fixed<18,8,AP_RND,AP_SAT> dense_softmax_exp_table_t;
+typedef ap_fixed<18,8,AP_RND,AP_SAT> dense_softmax_inv_table_t;
 # 9 "firmware/myproject.h" 2
 
 
 void myproject(
-    input_t dense_input[4],
-    result_t layer5_out[3]
+    hls::stream<input_t> &conv2d_input,
+    hls::stream<result_t> &layer10_out
 );
 # 4 "firmware/myproject.cpp" 2
 # 1 "firmware/parameters.h" 1
@@ -60637,7 +60641,7 @@ _ssdm_op_SpecPipeline(-1, 1, 1, 0, "");
 
 
     typename CONFIG_T::exp_table_t exp_res[CONFIG_T::n_in];
-_ssdm_SpecArrayPartition( exp_res, 1, "COMPLETE", 0, "");
+_ssdm_SpecArrayPartition( &exp_res, 1, "COMPLETE", 0, "");
  typename CONFIG_T::exp_table_t exp_sum(0);
     for (unsigned i = 0; i < CONFIG_T::n_in; i++) {
 _ssdm_Unroll(0,0,0, "");
@@ -60694,7 +60698,7 @@ _ssdm_Unroll(0,0,0, "");
 
 
     typename CONFIG_T::exp_table_t exp_res[CONFIG_T::n_in];
-_ssdm_SpecArrayPartition( exp_res, 1, "COMPLETE", 0, "");
+_ssdm_SpecArrayPartition( &exp_res, 1, "COMPLETE", 0, "");
  typename CONFIG_T::exp_table_t exp_sum(0);
     for (unsigned i = 0; i < CONFIG_T::n_in; i++) {
 _ssdm_Unroll(0,0,0, "");
@@ -61563,7 +61567,7 @@ void softmax_latency(hls::stream<data_T> &data, hls::stream<res_T> &res) {
 
 
     typename CONFIG_T::exp_table_t exp_res[data_T::size];
-_ssdm_SpecArrayPartition( &exp_res, 1, "COMPLETE", 0, "");
+_ssdm_SpecArrayPartition( exp_res, 1, "COMPLETE", 0, "");
  typename CONFIG_T::exp_table_t exp_sum(0);
 SoftmaxExpLoop:
     for (unsigned i = 0; i < CONFIG_T::n_in / data_T::size; i++) {
@@ -61624,7 +61628,7 @@ void softmax_stable(hls::stream<data_T> &data, hls::stream<res_T> &res) {
     constexpr unsigned ii = data_T::size / multiplier_limit;
 
     typename data_T::value_type data_array[data_T::size];
-_ssdm_SpecArrayPartition( &data_array, 1, "COMPLETE", 0, "");
+_ssdm_SpecArrayPartition( data_array, 1, "COMPLETE", 0, "");
 SoftmaxArrayLoop:
     for (unsigned i = 0; i < CONFIG_T::n_in / data_T::size; i++) {
 _ssdm_op_SpecPipeline(ii, 1, 1, 0, "");
@@ -61650,7 +61654,7 @@ _ssdm_Unroll(0,0,0, "");
 
 
         typename CONFIG_T::exp_table_t exp_res[data_T::size];
-_ssdm_SpecArrayPartition( &exp_res, 1, "COMPLETE", 0, "");
+_ssdm_SpecArrayPartition( exp_res, 1, "COMPLETE", 0, "");
  typename CONFIG_T::exp_table_t exp_sum(0);
         for (unsigned j = 0; j < data_T::size; j++) {
 _ssdm_Unroll(0,0,0, "");
@@ -62207,15 +62211,12 @@ _ssdm_Unroll(0,0,0, "");
 
 }
 # 12 "firmware/parameters.h" 2
-# 1 "firmware/nnet_utils/nnet_dense.h" 1
+# 1 "firmware/nnet_utils/nnet_conv2d.h" 1
 
 
 
 
-
-# 1 "firmware/nnet_utils/nnet_dense_latency.h" 1
-
-
+# 1 "firmware/nnet_utils/nnet_conv2d_latency.h" 1
 
 
 
@@ -62327,9 +62328,107 @@ inline typename std::enable_if<(!std::is_same<data_T, ap_uint<1>>::value), res_T
 }
 
 }
-# 8 "firmware/nnet_utils/nnet_dense_latency.h" 2
+# 6 "firmware/nnet_utils/nnet_conv2d_latency.h" 2
+# 1 "/tools/Xilinx/Vivado/2020.1/lnx64/tools/gcc/lib/gcc/x86_64-unknown-linux-gnu/4.6.3/../../../../include/c++/4.6.3/cstdlib" 1 3
+# 41 "/tools/Xilinx/Vivado/2020.1/lnx64/tools/gcc/lib/gcc/x86_64-unknown-linux-gnu/4.6.3/../../../../include/c++/4.6.3/cstdlib" 3
+# 41 "/tools/Xilinx/Vivado/2020.1/lnx64/tools/gcc/lib/gcc/x86_64-unknown-linux-gnu/4.6.3/../../../../include/c++/4.6.3/cstdlib" 3
+# 7 "firmware/nnet_utils/nnet_conv2d_latency.h" 2
+
+namespace nnet {
+
+template <class data_T, class res_T, typename CONFIG_T>
+void conv_2d_latency_cl(
+    data_T data[CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_chan],
+    res_T res[CONFIG_T::out_height * CONFIG_T::out_width * CONFIG_T::n_filt],
+    typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+    constexpr unsigned mult_n_in = CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan;
+    constexpr unsigned mult_n_out = CONFIG_T::n_filt;
+
+    data_T data_buf[CONFIG_T::n_pixels][mult_n_in];
+_ssdm_SpecArrayPartition( &data_buf, 0, "COMPLETE", 0, "");
+
+ typename CONFIG_T::accum_t mult[mult_n_in * mult_n_out];
+_ssdm_SpecArrayPartition( &mult, 1, "COMPLETE", 0, "");
+
+ typename CONFIG_T::accum_t acc[mult_n_out];
+_ssdm_SpecArrayPartition( &acc, 1, "COMPLETE", 0, "");
+
+_ssdm_SpecArrayPartition( &weights, 1, "COMPLETE", 0, "");
+_ssdm_SpecArrayPartition( &biases, 1, "COMPLETE", 0, "");
 
 
+_ssdm_op_SpecResourceLimit(CONFIG_T::mult_config::multiplier_limit, "mul", "", "", "");
+
+PartitionLoop:
+    for (int i_part = 0; i_part < CONFIG_T::n_partitions; i_part++) {
+_ssdm_op_SpecPipeline(CONFIG_T::reuse_factor, 1, 1, 0, ""); _ssdm_SpecLoopRewind(0, "");
+
+ CONFIG_T::template fill_buffer<data_T, CONFIG_T>::fill_buffer(data, data_buf, i_part);
+
+    PixelLoop:
+        for (unsigned i_pxl = 0; i_pxl < CONFIG_T::n_pixels; i_pxl++) {
+_ssdm_Unroll(0,0,0, "");
+
+ data_T cache;
+
+
+        Product1:
+            for (int i_in = 0; i_in < mult_n_in; i_in++) {
+_ssdm_Unroll(0,0,0, "");
+ cache = data_buf[i_pxl][i_in];
+            Product2:
+                for (int i_out = 0; i_out < mult_n_out; i_out++) {
+_ssdm_Unroll(0,0,0, "");
+ mult[i_in * mult_n_out + i_out] =
+                        CONFIG_T::mult_config::template product<data_T, typename CONFIG_T::mult_config::weight_t>::product(
+                            cache, weights[i_in * mult_n_out + i_out]);
+                }
+            }
+
+
+        ResetAccum:
+            for (int i_acc = 0; i_acc < mult_n_out; i_acc++) {
+_ssdm_Unroll(0,0,0, "");
+ acc[i_acc] = (typename CONFIG_T::accum_t)biases[i_acc];
+            }
+
+
+        Accum1:
+            for (int i_in = 0; i_in < mult_n_in; i_in++) {
+_ssdm_Unroll(0,0,0, "");
+ Accum2:
+                for (int i_out = 0; i_out < mult_n_out; i_out++) {
+_ssdm_Unroll(0,0,0, "");
+ acc[i_out] += mult[i_in * mult_n_out + i_out];
+                }
+            }
+
+
+        Result:
+            for (int i_res = 0; i_res < mult_n_out; i_res++) {
+_ssdm_Unroll(0,0,0, "");
+ *(res++) = cast<data_T, res_T, typename CONFIG_T::mult_config>(acc[i_res]);
+            }
+        }
+    }
+}
+
+}
+# 6 "firmware/nnet_utils/nnet_conv2d.h" 2
+# 1 "firmware/nnet_utils/nnet_conv2d_resource.h" 1
+
+
+
+
+# 1 "firmware/nnet_utils/nnet_dense.h" 1
+
+
+
+
+
+# 1 "firmware/nnet_utils/nnet_dense_latency.h" 1
+# 10 "firmware/nnet_utils/nnet_dense_latency.h"
 namespace nnet {
 
 template <class data_T, class res_T, typename CONFIG_T>
@@ -62696,7 +62795,768 @@ _ssdm_InlineSelf(0, "");
 }
 
 }
+# 6 "firmware/nnet_utils/nnet_conv2d_resource.h" 2
+
+namespace nnet {
+
+template <class data_T, class res_T, typename CONFIG_T>
+void conv_2d_resource_cl(
+    data_T data[CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_chan],
+    res_T res[CONFIG_T::out_height * CONFIG_T::out_width * CONFIG_T::n_filt],
+    typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+    constexpr unsigned mult_n_in = CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan;
+    constexpr unsigned mult_n_out = CONFIG_T::n_filt;
+    constexpr unsigned block_factor = ((mult_n_in * mult_n_out + CONFIG_T::reuse_factor - 1) / CONFIG_T::reuse_factor);
+
+    constexpr unsigned multscale = block_factor / mult_n_out;
+
+    (static_cast <bool> ((block_factor % mult_n_out == 0 || CONFIG_T::reuse_factor >= mult_n_in) && "The current Reuse Factor is not allowed") ? void (0) : __assert_fail ("(block_factor % mult_n_out == 0 || CONFIG_T::reuse_factor >= mult_n_in) && \"The current Reuse Factor is not allowed\"", "firmware/nnet_utils/nnet_conv2d_resource.h", 22, __extension__ __PRETTY_FUNCTION__));
+
+    (static_cast <bool> ((CONFIG_T::reuse_factor <= CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan) && "This function is correct only for RF <= FILT_HEIGHT * FILT_WIDTH * N_CHAN") ? void (0) : __assert_fail ("(CONFIG_T::reuse_factor <= CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan) && \"This function is correct only for RF <= FILT_HEIGHT * FILT_WIDTH * N_CHAN\"", "firmware/nnet_utils/nnet_conv2d_resource.h", 24, __extension__ __PRETTY_FUNCTION__));
+
+
+    data_T data_buf[CONFIG_T::n_pixels][mult_n_in];
+_ssdm_SpecArrayPartition( &data_buf, 0, "COMPLETE", 0, "");
+
+_ssdm_SpecArrayReshape( &weights, 1,  "BLOCK",  block_factor, "");
+_ssdm_SpecArrayPartition( &biases, 1, "COMPLETE", 0, "");
+
+ typename CONFIG_T::accum_t acc[CONFIG_T::n_pixels][mult_n_out];
+_ssdm_SpecArrayPartition( &acc, 0, "COMPLETE", 0, "");
+
+PartitionLoop:
+    for (unsigned i_part = 0; i_part < CONFIG_T::n_partitions; i_part++) {
+
+
+        CONFIG_T::template fill_buffer<data_T, CONFIG_T>::fill_buffer(data, data_buf, i_part);
+
+    PixelInitAccumLoop:
+        for (unsigned i_pxl = 0; i_pxl < CONFIG_T::n_pixels; i_pxl++) {
+_ssdm_Unroll(0,0,0, "");
+
+ InitAccumLoop:
+            for (unsigned i_acc = 0; i_acc < mult_n_out; i_acc++) {
+_ssdm_Unroll(0,0,0, "");
+ acc[i_pxl][i_acc] = (typename CONFIG_T::accum_t)biases[i_acc];
+            }
+        }
+
+    ReuseLoop:
+        for (unsigned i_rf = 0; i_rf < CONFIG_T::reuse_factor; i_rf++) {
+_ssdm_op_SpecPipeline(1, 1, 1, 0, ""); _ssdm_SpecLoopRewind(0, "");
+
+ unsigned i_w = i_rf;
+            unsigned i_in = i_rf;
+            unsigned i_out = 0;
+            unsigned i_acc = 0;
+
+        MultLoop:
+            for (unsigned i_blk = 0; i_blk < block_factor; i_blk++) {
+_ssdm_Unroll(0,0,0, "");
+
+ PixelMultLoop:
+                for (unsigned i_pxl = 0; i_pxl < CONFIG_T::n_pixels; i_pxl++) {
+_ssdm_Unroll(0,0,0, "");
+
+ acc[i_pxl][i_out] += static_cast<typename CONFIG_T::accum_t>(
+                        CONFIG_T::mult_config::template product<data_T, typename CONFIG_T::mult_config::weight_t>::product(
+                            data_buf[i_pxl][i_in], weights[i_w]));
+                }
+
+
+                i_w += CONFIG_T::reuse_factor;
+
+                i_in += CONFIG_T::reuse_factor;
+                if (i_in >= mult_n_in) {
+                    i_in = i_rf;
+                }
+
+                if (i_acc + 1 >= multscale) {
+                    i_acc = 0;
+                    i_out++;
+                } else {
+                    i_acc++;
+                }
+            }
+        }
+
+    PixelResultLoop:
+        for (unsigned i_pxl = 0; i_pxl < CONFIG_T::n_pixels; i_pxl++) {
+_ssdm_Unroll(0,0,0, "");
+
+ ResultLoop:
+            for (unsigned i_res = 0; i_res < mult_n_out; i_res++) {
+_ssdm_Unroll(0,0,0, "");
+ *(res++) = cast<data_T, res_T, typename CONFIG_T::mult_config>(acc[i_pxl][i_res]);
+            }
+        }
+    }
+}
+
+}
+# 7 "firmware/nnet_utils/nnet_conv2d.h" 2
+# 1 "/tools/Xilinx/Vivado/2020.1/lnx64/tools/gcc/lib/gcc/x86_64-unknown-linux-gnu/4.6.3/../../../../include/c++/4.6.3/cstdlib" 1 3
+# 41 "/tools/Xilinx/Vivado/2020.1/lnx64/tools/gcc/lib/gcc/x86_64-unknown-linux-gnu/4.6.3/../../../../include/c++/4.6.3/cstdlib" 3
+# 41 "/tools/Xilinx/Vivado/2020.1/lnx64/tools/gcc/lib/gcc/x86_64-unknown-linux-gnu/4.6.3/../../../../include/c++/4.6.3/cstdlib" 3
+# 8 "firmware/nnet_utils/nnet_conv2d.h" 2
+
+namespace nnet {
+
+struct conv2d_config {
+
+    typedef float bias_t;
+    typedef float weight_t;
+    typedef float accum_t;
+
+
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const unsigned in_height = 10;
+    static const unsigned in_width = 10;
+    static const unsigned n_chan = 1;
+    static const unsigned filt_height = 1;
+    static const unsigned filt_width = 1;
+    static const unsigned kernel_size = filt_height * filt_width;
+    static const unsigned n_filt = 1;
+    static const unsigned stride_height = 1;
+    static const unsigned stride_width = 1;
+    static const unsigned out_height = 10;
+    static const unsigned out_width = 10;
+    static const unsigned dilation_height = 1;
+    static const unsigned dilation_width = 1;
+
+    static const unsigned reuse_factor = 1;
+    static const bool store_weights_in_bram = false;
+    static const unsigned n_zeros = 0;
+};
+
+template <class data_T, class res_T, typename CONFIG_T>
+void conv_2d_cl(
+    data_T data[CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_chan],
+    res_T res[CONFIG_T::out_height * CONFIG_T::out_width * CONFIG_T::n_filt],
+    typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+_ssdm_InlineRegion(0, "");
+
+ if (CONFIG_T::strategy == nnet::latency) {
+        conv_2d_latency_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+    } else {
+        conv_2d_resource_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pointwise_conv_2d_cl(data_T data[CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_chan],
+                          res_T res[CONFIG_T::out_height * CONFIG_T::out_width * CONFIG_T::n_filt],
+                          typename CONFIG_T::weight_t weights[CONFIG_T::n_chan * CONFIG_T::n_filt],
+                          typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+    (static_cast <bool> (CONFIG_T::filt_width == 1) ? void (0) : __assert_fail ("CONFIG_T::filt_width == 1", "firmware/nnet_utils/nnet_conv2d.h", 61, __extension__ __PRETTY_FUNCTION__));
+
+_ssdm_InlineRegion(0, "");
+
+
+ if (CONFIG_T::strategy == nnet::latency) {
+        conv_2d_latency_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+    } else {
+        conv_2d_resource_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+    }
+}
+
+}
 # 13 "firmware/parameters.h" 2
+# 1 "firmware/nnet_utils/nnet_conv2d_stream.h" 1
+
+
+
+# 1 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/ap_shift_reg.h" 1
+# 83 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/ap_shift_reg.h"
+template<typename __SHIFT_T__, unsigned int __SHIFT_DEPTH__ = 32>
+class ap_shift_reg
+{
+  public:
+
+    inline __attribute__((always_inline)) ap_shift_reg() { }
+    inline __attribute__((always_inline)) ap_shift_reg(const char* name) { }
+
+  private:
+
+    ap_shift_reg(const ap_shift_reg< __SHIFT_T__, __SHIFT_DEPTH__ >& shreg)
+    {
+        for (unsigned i = 0; i < __SHIFT_DEPTH__; ++i)
+            Array[i] = shreg.Array[i];
+    }
+
+    ap_shift_reg& operator = (const ap_shift_reg< __SHIFT_T__,
+        __SHIFT_DEPTH__ >& shreg)
+    {
+        for (unsigned i = 0; i < __SHIFT_DEPTH__; ++i)
+            Array[i] = shreg.Array[i];
+        return *this;
+    }
+
+  public:
+
+    inline __attribute__((always_inline)) __SHIFT_T__ shift(__SHIFT_T__ DataIn,
+        unsigned int Addr = __SHIFT_DEPTH__ - 1, bool Enable = true)
+    {
+
+        __SHIFT_T__ DataOut;
+        _ssdm_op_MemShiftRead(&Array[Addr], &DataOut, &DataIn, Enable);
+        return DataOut;
+
+
+
+
+
+
+    }
+
+
+    inline __attribute__((always_inline)) __SHIFT_T__ read(unsigned int Addr = __SHIFT_DEPTH__ - 1) const
+    {
+
+        __SHIFT_T__ DataOut;
+        __SHIFT_T__ DataIn;
+        _ssdm_op_MemShiftRead(&Array[Addr], &DataOut, &DataIn, false);
+        return DataOut;
+
+
+
+    }
+
+  protected:
+    __SHIFT_T__ Array[__SHIFT_DEPTH__] ;
+};
+# 5 "firmware/nnet_utils/nnet_conv2d_stream.h" 2
+
+
+# 1 "firmware/nnet_utils/nnet_conv_stream.h" 1
+
+
+
+
+
+
+
+
+namespace nnet {
+
+enum class conv_implementation { linebuffer = 0, encoded = 1 };
+
+
+
+
+template <unsigned K, unsigned S, unsigned W> unsigned scale_index_K_gte_S(const unsigned idx) {
+_ssdm_InlineSelf(0, "");
+
+ if (idx < K - S) {
+        return idx;
+    }
+
+    constexpr unsigned nW = ((W - K) / S) * S + K;
+    constexpr unsigned sW = (((K + S - 1) / S) - 1) * S + K;
+    if (idx >= nW) {
+        return sW;
+    }
+
+    const unsigned r = nW - idx;
+    if (r <= K - S) {
+        return sW - r;
+    }
+
+    return K - S + (idx - (K - S)) % S;
+}
+
+template <unsigned K, unsigned S, unsigned W> unsigned scale_index_K_lt_S(const unsigned idx) {
+_ssdm_InlineSelf(0, "");
+
+ if (idx < S - K) {
+        return idx;
+    }
+
+    constexpr unsigned nW = ((W - K) / S) * S + K;
+    constexpr unsigned sW = (((S + K - 1) / K) - 1) * S + K;
+    if (idx >= nW) {
+        return sW;
+    }
+
+    const unsigned r = nW - idx;
+    if (r <= S - K) {
+        return sW - r;
+    }
+
+    return S - K + (idx - (S - K)) % S;
+}
+
+template <unsigned K, unsigned S, unsigned W> class scale_index_regular {
+  public:
+    static unsigned scale_index(const unsigned idx) {
+_ssdm_InlineSelf(0, "");
+
+ if (K >= S) {
+            return scale_index_K_gte_S<K, S, W>(idx);
+        } else {
+            return scale_index_K_lt_S<K, S, W>(idx);
+        }
+    }
+};
+
+template <unsigned K, unsigned S, unsigned W> class scale_index_unscaled {
+  public:
+    static unsigned scale_index(const unsigned idx) {
+_ssdm_InlineSelf(0, "");
+ return idx;
+    }
+};
+
+template <class data_T, class res_T, typename CONFIG_T>
+void mult_buffer(hls::stream<typename data_T::value_type> data_window[CONFIG_T::kernel_size * CONFIG_T::n_chan],
+                 res_T &res_pack, hls::stream<res_T> &res_stream, unsigned &outputs_ready,
+                 typename CONFIG_T::weight_t weights[CONFIG_T::kernel_size * CONFIG_T::n_chan * CONFIG_T::n_filt],
+                 typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+_ssdm_InlineSelf(0, "");
+
+ typename data_T::value_type data[CONFIG_T::kernel_size * CONFIG_T::n_chan];
+_ssdm_SpecArrayPartition( data, 1, "COMPLETE", 0, "");
+ typename res_T::value_type res[CONFIG_T::n_filt];
+_ssdm_SpecArrayPartition( res, 1, "COMPLETE", 0, "");
+
+InitData:
+    for (int id = 0; id < CONFIG_T::kernel_size * CONFIG_T::n_chan; id++) {
+_ssdm_Unroll(0,0,0, "");
+ data[id] = data_window[id].read();
+    }
+
+_ssdm_InlineAll(1, "");
+ if (CONFIG_T::strategy == nnet::latency) {
+        dense_latency<typename data_T::value_type, typename res_T::value_type, typename CONFIG_T::mult_config>(
+            data, res, weights, biases);
+    } else {
+        dense_resource<typename data_T::value_type, typename res_T::value_type, typename CONFIG_T::mult_config>(
+            data, res, weights, biases);
+    }
+
+CastLoop:
+    for (unsigned jj = 0; jj < CONFIG_T::n_filt; jj++) {
+_ssdm_Unroll(0,0,0, "");
+ if (res_T::size / CONFIG_T::n_filt == 1) {
+            res_pack[jj] = res[jj];
+        } else {
+            res_pack[outputs_ready * CONFIG_T::n_filt + jj] = res[jj];
+        }
+    }
+
+    if (res_T::size / CONFIG_T::n_filt == 1) {
+        res_stream.write(res_pack);
+    } else {
+        if (outputs_ready == (res_T::size / CONFIG_T::n_filt) - 1) {
+            res_stream.write(res_pack);
+            outputs_ready = 0;
+        } else {
+            outputs_ready++;
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_output_encoded(const data_T &in_elem,
+                            hls::stream<typename data_T::value_type> data_window[CONFIG_T::kernel_size * CONFIG_T::n_chan],
+                            hls::stream<res_T> &res, res_T &res_pack, unsigned &outputs_ready,
+                            typename CONFIG_T::weight_t weights[CONFIG_T::kernel_size * CONFIG_T::n_chan * CONFIG_T::n_filt],
+                            typename CONFIG_T::bias_t biases[CONFIG_T::n_filt], ap_uint<CONFIG_T::kernel_size> *pixel_idx) {
+_ssdm_InlineSelf(0, "");
+
+MultLoop:
+    for (unsigned p = 0; p < data_T::size / CONFIG_T::n_chan; p++) {
+_ssdm_op_SpecPipeline(CONFIG_T::reuse_factor, 1, 1, 0, "");
+ CopyDataFilt:
+        for (unsigned f = 0; f < CONFIG_T::kernel_size; f++) {
+_ssdm_Unroll(0,0,0, "");
+ CopyDataChan:
+            for (unsigned c = 0; c < CONFIG_T::n_chan; c++) {
+_ssdm_Unroll(0,0,0, "");
+ if (pixel_idx[p][f])
+                    data_window[f * CONFIG_T::n_chan + c].write(in_elem[p * CONFIG_T::n_chan + c]);
+            }
+        }
+        if (pixel_idx[p][CONFIG_T::kernel_size - 1]) {
+            mult_buffer<data_T, res_T, CONFIG_T>(data_window, res_pack, res, outputs_ready, weights, biases);
+        }
+    }
+}
+
+
+
+
+template <class data_T, typename CONFIG_T>
+void kernel_shift_1d(const data_T &in_elem,
+                     typename data_T::value_type kernel_window[CONFIG_T::filt_width * CONFIG_T::n_chan]) {
+_ssdm_InlineSelf(0, "");
+
+
+ static const int filt_width = CONFIG_T::filt_width - 1;
+_ssdm_SpecConstant(&filt_width);
+# 164 "firmware/nnet_utils/nnet_conv_stream.h"
+
+KernelShiftWidth:
+    for (int i_iw = 0; i_iw < filt_width; i_iw++) {
+_ssdm_op_SpecPipeline(1, 1, 1, 0, "");
+ KernelShiftChannel:
+        for (unsigned i_ic = 0; i_ic < CONFIG_T::n_chan; i_ic++) {
+_ssdm_Unroll(0,0,0, "");
+
+ kernel_window[i_iw * CONFIG_T::n_chan + i_ic] = kernel_window[(i_iw + 1) * CONFIG_T::n_chan + i_ic];
+        }
+    }
+
+
+    static const int lastheight = (CONFIG_T::filt_width - 1) * CONFIG_T::n_chan;
+_ssdm_SpecConstant(&lastheight);
+# 177 "firmware/nnet_utils/nnet_conv_stream.h"
+
+KernelPushChannel:
+    for (int i_ic = 0; i_ic < CONFIG_T::n_chan; i_ic++) {
+_ssdm_Unroll(0,0,0, "");
+ kernel_window[lastheight + i_ic] = in_elem[i_ic];
+    }
+}
+
+template <class data_T, typename CONFIG_T>
+void kernel_shift_2d(
+    typename data_T::value_type shift_buffer[CONFIG_T::filt_height][CONFIG_T::n_chan],
+    typename data_T::value_type kernel_window[CONFIG_T::filt_width * CONFIG_T::filt_height * CONFIG_T::n_chan]) {
+_ssdm_InlineSelf(0, "");
+
+
+ static const int filt_width = CONFIG_T::filt_width - 1;
+_ssdm_SpecConstant(&filt_width);
+# 192 "firmware/nnet_utils/nnet_conv_stream.h"
+
+KernelShiftWidth:
+    for (int i_iw = 0; i_iw < filt_width; i_iw++) {
+_ssdm_op_SpecPipeline(1, 1, 1, 0, "");
+ KernelShiftHeight:
+        for (unsigned i_ih = 0; i_ih < CONFIG_T::filt_height; i_ih++) {
+        KernelShiftChannel:
+            for (unsigned i_ic = 0; i_ic < CONFIG_T::n_chan; i_ic++) {
+
+                kernel_window[i_ih * CONFIG_T::filt_width * CONFIG_T::n_chan + i_iw * CONFIG_T::n_chan + i_ic] =
+                    kernel_window[i_ih * CONFIG_T::filt_width * CONFIG_T::n_chan + (i_iw + 1) * CONFIG_T::n_chan + i_ic];
+            }
+        }
+    }
+
+
+    static const int lastheight = (CONFIG_T::filt_width - 1) * CONFIG_T::n_chan;
+_ssdm_SpecConstant(&lastheight);
+# 208 "firmware/nnet_utils/nnet_conv_stream.h"
+
+KernelPushHeight:
+    for (int i_ih = 0; i_ih < CONFIG_T::filt_height; i_ih++) {
+_ssdm_Unroll(0,0,0, "");
+ KernelPushChannel:
+        for (int i_ic = 0; i_ic < CONFIG_T::n_chan; i_ic++) {
+            kernel_window[lastheight + i_ih * CONFIG_T::filt_width * CONFIG_T::n_chan + i_ic] = shift_buffer[i_ih][i_ic];
+        }
+    }
+}
+
+template <class data_T, typename CONFIG_T>
+void shift_line_buffer(
+    const data_T &in_elem,
+    ap_shift_reg<typename data_T::value_type, CONFIG_T::in_width> line_buffer[(CONFIG_T::filt_height - 1 > 1 ? CONFIG_T::filt_height - 1 : 1)]
+                                                                             [CONFIG_T::n_chan],
+    typename data_T::value_type kernel_window[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan]) {
+
+_ssdm_op_SpecPipeline(-1, 1, 1, 0, "");
+
+
+ typename data_T::value_type shift_buffer[CONFIG_T::filt_height][CONFIG_T::n_chan];
+_ssdm_SpecArrayPartition( shift_buffer, 0, "COMPLETE", 0, "");
+
+UpdateBuffer:
+    for (int i_ic = 0; i_ic < CONFIG_T::n_chan; i_ic++) {
+_ssdm_Unroll(0,0,0, "");
+
+
+ shift_buffer[CONFIG_T::filt_height - 1][i_ic] = in_elem[i_ic];
+    }
+
+LineBufferDataIn:
+    for (int i_ic = 0; i_ic < CONFIG_T::n_chan; i_ic++) {
+
+    LineBufferShift:
+        for (unsigned i_ih = 1; i_ih < CONFIG_T::filt_height; i_ih++) {
+_ssdm_Unroll(0,0,0, "");
+ typename data_T::value_type pop_elem = line_buffer[i_ih - 1][i_ic].shift(
+                shift_buffer[CONFIG_T::filt_height - i_ih][i_ic]);
+            shift_buffer[CONFIG_T::filt_height - i_ih - 1][i_ic] =
+                pop_elem;
+        }
+    }
+    kernel_shift_2d<data_T, CONFIG_T>(shift_buffer, kernel_window);
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_output_buffer_2d(
+    const data_T &in_elem,
+    ap_shift_reg<typename data_T::value_type, CONFIG_T::in_width> line_buffer[(CONFIG_T::filt_height - 1 > 1 ? CONFIG_T::filt_height - 1 : 1)]
+                                                                             [CONFIG_T::n_chan],
+    hls::stream<res_T> &res_stream,
+    typename CONFIG_T::weight_t weights[CONFIG_T::kernel_size * CONFIG_T::n_chan * CONFIG_T::n_filt],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+_ssdm_InlineSelf(2, "");
+
+
+ const static int lShiftX = CONFIG_T::filt_width - 1;
+_ssdm_SpecConstant(&lShiftX);
+# 266 "firmware/nnet_utils/nnet_conv_stream.h"
+
+    const static int lShiftY = CONFIG_T::filt_height - 1;
+_ssdm_SpecConstant(&lShiftY);
+# 267 "firmware/nnet_utils/nnet_conv_stream.h"
+
+
+
+    static int pX = 0;
+    static int pY = 0;
+
+    static int sX = 0;
+    static int sY = 0;
+
+    static typename data_T::value_type kernel_data[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan];
+_ssdm_SpecArrayPartition( &kernel_data, 1, "COMPLETE", 0, "");
+
+ typename res_T::value_type res_out[CONFIG_T::n_filt];
+_ssdm_SpecArrayPartition( res_out, 0, "COMPLETE", 0, "");
+
+ res_T res_pack;
+_ssdm_DataPack( &res_pack, 0, 0, "", "", "");
+
+
+ nnet::shift_line_buffer<data_T, CONFIG_T>(in_elem, line_buffer, kernel_data);
+
+
+    if ((sX - lShiftX) == 0 && (sY - lShiftY) == 0 && pY > lShiftY - 1 && pX > lShiftX - 1) {
+
+
+
+        if (CONFIG_T::strategy == nnet::latency) {
+            dense_latency<typename data_T::value_type, typename res_T::value_type, typename CONFIG_T::mult_config>(
+                kernel_data, res_out, weights, biases);
+        } else {
+            dense_resource<typename data_T::value_type, typename res_T::value_type, typename CONFIG_T::mult_config>(
+                kernel_data, res_out, weights, biases);
+        }
+
+
+    CastLoop:
+        for (unsigned i_ic = 0; i_ic < CONFIG_T::n_filt; i_ic++) {
+_ssdm_Unroll(0,0,0, "");
+ res_pack[i_ic] = res_out[i_ic];
+        }
+
+
+        res_stream.write(res_pack);
+    }
+
+
+    if (pX + 1 == CONFIG_T::in_width)
+    {
+        pX = 0;
+        sX = 0;
+        if (pY + 1 == CONFIG_T::in_height) {
+            pY = 0;
+            sY = 0;
+        } else {
+            pY = pY + 1;
+
+            sY = ((sY - lShiftY) == 0) ? sY - CONFIG_T::stride_height + 1 : sY + 1;
+        }
+    } else {
+        pX = pX + 1;
+
+        sX = ((sX - lShiftX) == 0) ? sX - CONFIG_T::stride_width + 1 : sX + 1;
+    }
+}
+
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_output_buffer_1d(
+    const data_T &in_elem, hls::stream<res_T> &res_stream,
+    typename CONFIG_T::weight_t weights[CONFIG_T::kernel_size * CONFIG_T::n_chan * CONFIG_T::n_filt],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+_ssdm_InlineSelf(0, "");
+
+
+ const static int lShiftX = CONFIG_T::filt_width - 1;
+_ssdm_SpecConstant(&lShiftX);
+# 341 "firmware/nnet_utils/nnet_conv_stream.h"
+
+
+
+    static int pX = 0;
+    static int sX = 0;
+
+    static typename data_T::value_type kernel_data[CONFIG_T::filt_width * CONFIG_T::n_chan];
+_ssdm_SpecArrayPartition( &kernel_data, 1, "COMPLETE", 0, "");
+
+ typename res_T::value_type res_out[CONFIG_T::n_filt];
+_ssdm_SpecArrayPartition( res_out, 0, "COMPLETE", 0, "");
+
+ res_T res_pack;
+_ssdm_DataPack( &res_pack, 0, 0, "", "", "");
+
+
+ nnet::kernel_shift_1d<data_T, CONFIG_T>(in_elem, kernel_data);
+
+
+    if ((sX - lShiftX) == 0 && pX > lShiftX - 1) {
+
+
+_ssdm_InlineAll(1, "");
+ if (CONFIG_T::strategy == nnet::latency) {
+            dense_latency<typename data_T::value_type, typename res_T::value_type, typename CONFIG_T::mult_config>(
+                kernel_data, res_out, weights, biases);
+        } else {
+            dense_resource<typename data_T::value_type, typename res_T::value_type, typename CONFIG_T::mult_config>(
+                kernel_data, res_out, weights, biases);
+        }
+
+
+    CastLoop:
+        for (unsigned i_ic = 0; i_ic < CONFIG_T::n_filt; i_ic++) {
+_ssdm_Unroll(0,0,0, "");
+ res_pack[i_ic] = res_out[i_ic];
+        }
+
+
+        res_stream.write(res_pack);
+    }
+
+
+    if (pX + 1 == CONFIG_T::in_width)
+    {
+        pX = 0;
+        sX = 0;
+    } else {
+        pX = pX + 1;
+
+        sX = ((sX - lShiftX) == 0) ? sX - CONFIG_T::stride_width + 1 : sX + 1;
+    }
+}
+
+}
+# 8 "firmware/nnet_utils/nnet_conv2d_stream.h" 2
+
+namespace nnet {
+
+template <class data_T, typename CONFIG_T>
+void compute_scaled_indices_2d(const unsigned h_idx, const unsigned w_idx,
+                               ap_uint<CONFIG_T::filt_height * CONFIG_T::filt_width> *pixel_idx) {
+    const unsigned sh_idx = CONFIG_T::template scale_index_height<CONFIG_T::filt_height, CONFIG_T::stride_height,
+                                                                  CONFIG_T::in_height>::scale_index(h_idx);
+    unsigned wp_idx = w_idx * (data_T::size / CONFIG_T::n_chan);
+
+ComputeIndex:
+    for (unsigned p = 0; p < data_T::size / CONFIG_T::n_chan; p++) {
+_ssdm_Unroll(0,0,0, "");
+
+ unsigned sw_idx = CONFIG_T::template scale_index_width<CONFIG_T::filt_width, CONFIG_T::stride_width,
+                                                               CONFIG_T::in_width>::scale_index(wp_idx + p);
+        pixel_idx[p] = CONFIG_T::pixels[sh_idx * CONFIG_T::min_width + sw_idx];
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void conv_2d_encoded_cl(
+    hls::stream<data_T> &data, hls::stream<res_T> &res,
+    typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+    (static_cast <bool> (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_conv2d_stream.h", 33, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::filt_height == CONFIG_T::filt_width) ? void (0) : __assert_fail ("CONFIG_T::filt_height == CONFIG_T::filt_width", "firmware/nnet_utils/nnet_conv2d_stream.h", 34, __extension__ __PRETTY_FUNCTION__));
+
+    hls::stream<typename data_T::value_type> data_window[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan];
+    const int win_depth = CONFIG_T::filt_height * CONFIG_T::out_width;
+    for (unsigned i_out = 0; i_out < CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan; i_out++) {
+_ssdm_SpecStream( &data_window[i_out], 0, win_depth, "");
+ }
+
+_ssdm_SpecArrayPartition( &CONFIG_T::pixels, 1, "COMPLETE", 0, "");
+
+ res_T res_pack;
+_ssdm_DataPack( &res_pack, 0, 0, "", "", "");
+ unsigned outputs_ready = 0;
+
+    ap_uint<CONFIG_T::filt_height * CONFIG_T::filt_width> pixel_idx[data_T::size / CONFIG_T::n_chan];
+_ssdm_SpecArrayPartition( pixel_idx, 1, "COMPLETE", 0, "");
+
+ReadInputHeight:
+    for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
+    ReadInputWidth:
+        for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width / (data_T::size / CONFIG_T::n_chan); i_iw++) {
+_ssdm_SpecLoopFlatten(0, "");
+ if (CONFIG_T::strategy == nnet::latency && data_T::size / CONFIG_T::n_chan == 1) {
+_ssdm_op_SpecPipeline(CONFIG_T::reuse_factor, 1, 1, 0, "");
+ }
+            compute_scaled_indices_2d<data_T, CONFIG_T>(i_ih, i_iw, pixel_idx);
+            compute_output_encoded<data_T, res_T, CONFIG_T>(data.read(), data_window, res, res_pack, outputs_ready, weights,
+                                                            biases, pixel_idx);
+        }
+    }
+}
+
+
+template <class data_T, class res_T, typename CONFIG_T>
+void conv_2d_buffer_cl(
+    hls::stream<data_T> &data, hls::stream<res_T> &res,
+    typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+    (static_cast <bool> (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_conv2d_stream.h", 72, __extension__ __PRETTY_FUNCTION__));
+
+    static ap_shift_reg<typename data_T::value_type, CONFIG_T::in_width> line_buffer[(CONFIG_T::filt_height - 1 > 1 ? CONFIG_T::filt_height - 1 : 1)]
+                                                                                    [CONFIG_T::n_chan];
+_ssdm_SpecArrayPartition( &line_buffer, 2, "COMPLETE", 0, "");
+
+ReadInputHeight:
+    for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
+    ReadInputWidth:
+        for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width; i_iw++) {
+_ssdm_SpecLoopFlatten(0, "");
+ if (CONFIG_T::strategy == nnet::latency) {
+_ssdm_op_SpecPipeline(CONFIG_T::reuse_factor, 1, 1, 0, "");
+ }
+            if (CONFIG_T::filt_height > 1) {
+                compute_output_buffer_2d<data_T, res_T, CONFIG_T>(data.read(), line_buffer, res, weights, biases);
+            } else {
+                compute_output_buffer_1d<data_T, res_T, CONFIG_T>(data.read(), res, weights, biases);
+            }
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void conv_2d_cl(
+    hls::stream<data_T> &data, hls::stream<res_T> &res,
+    typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+_ssdm_InlineAll(1, "");
+ switch (CONFIG_T::implementation) {
+    case conv_implementation::linebuffer:
+        conv_2d_buffer_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+        break;
+    case conv_implementation::encoded:
+        conv_2d_encoded_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+        break;
+    }
+}
+
+}
+# 14 "firmware/parameters.h" 2
+
 # 1 "firmware/nnet_utils/nnet_dense_compressed.h" 1
 
 
@@ -62786,7 +63646,7 @@ _ssdm_Unroll(0,0,0, "");
 }
 
 }
-# 14 "firmware/parameters.h" 2
+# 16 "firmware/parameters.h" 2
 # 1 "firmware/nnet_utils/nnet_dense_stream.h" 1
 
 
@@ -62818,10 +63678,10 @@ void dense(hls::stream<data_T> &data_stream, hls::stream<res_T> &res_stream,
            typename CONFIG_T::weight_t weights[CONFIG_T::n_in * CONFIG_T::n_out],
            typename CONFIG_T::bias_t biases[CONFIG_T::n_out]) {
     typename data_T::value_type data[CONFIG_T::n_in];
-_ssdm_SpecArrayPartition( &data, 1, "COMPLETE", 0, "");
+_ssdm_SpecArrayPartition( data, 1, "COMPLETE", 0, "");
 
  typename res_T::value_type res[CONFIG_T::n_out];
-_ssdm_SpecArrayPartition( &res, 1, "COMPLETE", 0, "");
+_ssdm_SpecArrayPartition( res, 1, "COMPLETE", 0, "");
 
 DataPrepare:
     for (int i_in = 0; i_in < CONFIG_T::n_in / data_T::size; i_in++) {
@@ -62855,110 +63715,2126 @@ _ssdm_Unroll(0,0,0, "");
 }
 
 }
-# 15 "firmware/parameters.h" 2
+# 17 "firmware/parameters.h" 2
+# 1 "firmware/nnet_utils/nnet_pooling.h" 1
+
+
+
+
+
+
+namespace nnet {
+
+
+template <typename T, int N> T max(T x[N]) {
+    T y = x[0];
+    for (int i = 1; i < N; i++) {
+        y = x[i] > y ? x[i] : y;
+    }
+    return y;
+}
+
+template <int W, int N> ap_int<W> avg(ap_int<W> (&x)[N]) {
+
+    ap_int<W + ceillog2(N)> tmp = 0;
+    for (int i = 0; i < N; i++) {
+        tmp += x[i];
+    }
+    tmp /= N;
+
+    ap_int<W> y = tmp;
+    return tmp;
+}
+
+template <int W, int I, int N> ap_fixed<W, I> avg(ap_fixed<W, I> (&x)[N]) {
+
+    ap_fixed<W + ceillog2(N), I + ceillog2(N)> tmp = 0;
+    for (int i = 0; i < N; i++) {
+        tmp += x[i];
+    }
+    tmp /= N;
+
+    ap_fixed<W, I> y = tmp;
+    return y;
+}
+
+
+template <typename T, int N> T avg(T (&x)[N]) {
+    T y = 0;
+    for (int i = 0; i < N; i++) {
+        y += x[i];
+    }
+    y /= N;
+    return y;
+}
+
+
+enum Pool_Op { Max, Average };
+template <typename T, int N, Pool_Op op> T pool_op(T (&x)[N]) {
+    switch (op) {
+    case Max:
+        return max<T, N>(x);
+    case Average:
+        return avg(x);
+
+    }
+}
+
+template <typename T, Pool_Op op> T pad_val() {
+
+
+
+
+
+
+
+    switch (op) {
+    case Max: {
+        T x = 0;
+        x[x.width - 1] = 1;
+        return x;
+        break;
+    }
+    case Average:
+        return 0;
+    }
+}
+
+struct pooling1d_config {
+
+    static const unsigned n_in = 10;
+    static const unsigned pool_width = 2;
+    static const unsigned stride_width = 2;
+    static const unsigned n_out = (n_in - pool_width) / stride_width + 1;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const bool count_pad = false;
+
+    static const Pool_Op pool_op = Max;
+};
+
+template <typename CONFIG_T> constexpr int pool_op_limit_1d() {
+    return CONFIG_T::n_in * CONFIG_T::n_filt / CONFIG_T::reuse_factor;
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling1d_cl(data_T data[CONFIG_T::n_in * CONFIG_T::n_filt], res_T res[CONFIG_T::n_out * CONFIG_T::n_filt]) {
+_ssdm_op_SpecPipeline(CONFIG_T::reuse_factor, 1, 1, 0, "");
+
+
+ const int limit = pool_op_limit_1d<CONFIG_T>();
+_ssdm_op_SpecResourceLimit(limit, "", "", "CONFIG_T::pool_op", "");
+
+ unsigned padded_width = CONFIG_T::n_in + CONFIG_T::pad_left + CONFIG_T::pad_right;
+    if (CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) {
+        padded_width -= padded_width - (padded_width / CONFIG_T::stride_width * CONFIG_T::stride_width);
+    }
+
+    for (int ff = 0; ff < CONFIG_T::n_filt; ff++) {
+
+        for (int ii = 0; ii < padded_width; ii += CONFIG_T::stride_width) {
+            data_T pool[CONFIG_T::pool_width];
+_ssdm_SpecArrayPartition( &pool, 0, "COMPLETE", 0, "");
+
+ unsigned img_overlap = 0;
+
+            for (int jj = 0; jj < CONFIG_T::stride_width; jj++) {
+                if (ii + jj < CONFIG_T::pad_left || ii + jj >= (padded_width - CONFIG_T::pad_right)) {
+
+                    pool[jj] = pad_val<data_T, CONFIG_T::pool_op>();
+                    if (CONFIG_T::count_pad)
+                        img_overlap++;
+                } else {
+                    pool[jj] = data[(ii + jj - CONFIG_T::pad_left) * CONFIG_T::n_filt + ff];
+                    img_overlap++;
+                }
+            }
+
+
+
+            res[(ii / CONFIG_T::stride_width) * CONFIG_T::n_filt + ff] =
+                pool_op<data_T, CONFIG_T::pool_width, CONFIG_T::pool_op>(pool);
+
+            if (CONFIG_T::pool_op == Average) {
+                data_T rescale = static_cast<data_T>(CONFIG_T::pool_width) / img_overlap;
+                res[(ii / CONFIG_T::stride_width) * CONFIG_T::n_filt + ff] *= rescale;
+            }
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void global_pooling1d_cl(data_T data[CONFIG_T::n_in * CONFIG_T::n_filt], res_T res[CONFIG_T::n_filt]) {
+_ssdm_op_SpecPipeline(CONFIG_T::reuse_factor, 1, 1, 0, "");
+
+ (static_cast <bool> (CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_pooling.h", 151, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pool_width == CONFIG_T::stride_width) ? void (0) : __assert_fail ("CONFIG_T::pool_width == CONFIG_T::stride_width", "firmware/nnet_utils/nnet_pooling.h", 152, __extension__ __PRETTY_FUNCTION__));
+
+
+    const int limit = pool_op_limit_1d<CONFIG_T>();
+_ssdm_op_SpecResourceLimit(limit, "", "", "CONFIG_T::pool_op", "");
+
+ for (int ff = 0; ff < CONFIG_T::n_filt; ff++) {
+        data_T pool[CONFIG_T::n_in];
+_ssdm_SpecArrayPartition( &pool, 0, "COMPLETE", 0, "");
+ for (int jj = 0; jj < CONFIG_T::n_in; jj++) {
+            pool[jj] = data[jj * CONFIG_T::n_filt + ff];
+        }
+
+        res[ff] = pool_op<data_T, CONFIG_T::n_in, CONFIG_T::pool_op>(pool);
+    }
+}
+
+struct pooling2d_config {
+
+    static const unsigned in_height = 10;
+    static const unsigned in_width = 10;
+    static const unsigned n_filt = 4;
+    static const unsigned stride_height = 2;
+    static const unsigned stride_width = 2;
+    static const unsigned pool_height = 2;
+    static const unsigned pool_width = 2;
+    static const unsigned out_height = (in_height - pool_height) / stride_height + 1;
+    static const unsigned out_width = (in_width - pool_width) / stride_width + 1;
+
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const bool count_pad = false;
+
+    static const Pool_Op pool_op = Max;
+
+    static const unsigned reuse_factor = 1;
+
+
+    typedef float accum_t;
+};
+
+template <typename CONFIG_T> constexpr int pool_op_limit() {
+    return (CONFIG_T::out_height * CONFIG_T::out_width) * CONFIG_T::n_filt / CONFIG_T::reuse_factor;
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling2d_cl(data_T data[CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_filt],
+                  res_T res[CONFIG_T::out_height * CONFIG_T::out_width * CONFIG_T::n_filt]) {
+_ssdm_op_SpecPipeline(CONFIG_T::reuse_factor, 1, 1, 0, "");
+
+
+ const int limit = pool_op_limit<CONFIG_T>();
+_ssdm_op_SpecResourceLimit(limit, "", "", "CONFIG_T::pool_op", "");
+
+ unsigned padded_height = CONFIG_T::in_height + CONFIG_T::pad_top + CONFIG_T::pad_bottom;
+    unsigned padded_width = CONFIG_T::in_width + CONFIG_T::pad_left + CONFIG_T::pad_right;
+    if (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) {
+        padded_height -= padded_height - (padded_height / CONFIG_T::stride_height * CONFIG_T::stride_height);
+        padded_width -= padded_width - (padded_width / CONFIG_T::stride_width * CONFIG_T::stride_width);
+    }
+
+    for (int ff = 0; ff < CONFIG_T::n_filt; ff++) {
+
+        for (int ii = 0; ii < padded_height; ii += CONFIG_T::stride_height) {
+
+            for (int jj = 0; jj < padded_width; jj += CONFIG_T::stride_width) {
+                data_T pool[CONFIG_T::pool_height * CONFIG_T::pool_width];
+_ssdm_SpecArrayPartition( &pool, 0, "COMPLETE", 0, "");
+
+ unsigned img_overlap = 0;
+
+                for (int kk = 0; kk < CONFIG_T::stride_height; kk++) {
+
+                    for (int ll = 0; ll < CONFIG_T::stride_width; ll++) {
+                        if (ii + kk < CONFIG_T::pad_top || ii + kk >= (padded_height - CONFIG_T::pad_bottom) ||
+                            jj + ll < CONFIG_T::pad_left || jj + ll >= (padded_width - CONFIG_T::pad_right)) {
+
+                            pool[kk * CONFIG_T::stride_width + ll] = pad_val<data_T, CONFIG_T::pool_op>();
+                            if (CONFIG_T::count_pad)
+                                img_overlap++;
+                        } else {
+                            pool[kk * CONFIG_T::stride_width + ll] =
+                                data[(ii + kk - CONFIG_T::pad_top) * CONFIG_T::in_width * CONFIG_T::n_filt +
+                                     (jj + ll - CONFIG_T::pad_left) * CONFIG_T::n_filt + ff];
+                            img_overlap++;
+                        }
+                    }
+                }
+
+
+
+                res[(ii / CONFIG_T::stride_height) * CONFIG_T::out_width * CONFIG_T::n_filt +
+                    (jj / CONFIG_T::stride_width) * CONFIG_T::n_filt + ff] =
+                    pool_op<data_T, CONFIG_T::pool_height * CONFIG_T::pool_width, CONFIG_T::pool_op>(pool);
+
+                if (CONFIG_T::pool_op == Average) {
+                    data_T rescale =
+                        static_cast<data_T>(CONFIG_T::pool_height) * static_cast<data_T>(CONFIG_T::pool_width) / img_overlap;
+                    res[(ii / CONFIG_T::stride_height) * CONFIG_T::out_width * CONFIG_T::n_filt +
+                        (jj / CONFIG_T::stride_width) * CONFIG_T::n_filt + ff] *= rescale;
+                }
+            }
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling2d_cf(data_T data[CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_filt],
+                  res_T res[CONFIG_T::out_height * CONFIG_T::out_width * CONFIG_T::n_filt]) {
+_ssdm_op_SpecPipeline(CONFIG_T::reuse_factor, 1, 1, 0, "");
+
+
+ const int limit = pool_op_limit<CONFIG_T>();
+_ssdm_op_SpecResourceLimit(limit, "", "", "CONFIG_T::pool_op", "");
+
+ unsigned padded_height = CONFIG_T::in_height + CONFIG_T::pad_top + CONFIG_T::pad_bottom;
+    unsigned padded_width = CONFIG_T::in_width + CONFIG_T::pad_left + CONFIG_T::pad_right;
+    if (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) {
+        padded_height -= padded_height - (padded_height / CONFIG_T::stride_height * CONFIG_T::stride_height);
+        padded_width -= padded_width - (padded_width / CONFIG_T::stride_width * CONFIG_T::stride_width);
+    }
+
+    for (int ff = 0; ff < CONFIG_T::n_filt; ff++) {
+
+        for (int ii = 0; ii < padded_height; ii += CONFIG_T::stride_height) {
+
+            for (int jj = 0; jj < padded_width; jj += CONFIG_T::stride_width) {
+                data_T pool[CONFIG_T::pool_height * CONFIG_T::pool_width];
+_ssdm_SpecArrayPartition( &pool, 0, "COMPLETE", 0, "");
+
+ unsigned img_overlap = 0;
+
+                for (int kk = 0; kk < CONFIG_T::stride_height; kk++) {
+
+                    for (int ll = 0; ll < CONFIG_T::stride_width; ll++) {
+                        if (ii + kk < CONFIG_T::pad_top || ii + kk >= (padded_height - CONFIG_T::pad_bottom) ||
+                            jj + ll < CONFIG_T::pad_left || jj + ll >= (padded_width - CONFIG_T::pad_right)) {
+
+                            pool[kk * CONFIG_T::stride_width + ll] = pad_val<data_T, CONFIG_T::pool_op>();
+                            if (CONFIG_T::count_pad)
+                                img_overlap++;
+                        } else {
+                            pool[kk * CONFIG_T::stride_width + ll] =
+                                data[(ii + kk - CONFIG_T::pad_top) * CONFIG_T::in_width +
+                                     ff * CONFIG_T::in_width * CONFIG_T::in_height + ll + jj - CONFIG_T::pad_left];
+                            img_overlap++;
+                        }
+                    }
+                }
+
+
+
+                res[(ii / CONFIG_T::stride_height) * CONFIG_T::out_width + (jj / CONFIG_T::stride_width) +
+                    ff * CONFIG_T::out_height * CONFIG_T::out_width] =
+                    pool_op<data_T, CONFIG_T::pool_height * CONFIG_T::pool_width, CONFIG_T::pool_op>(pool);
+
+                if (CONFIG_T::pool_op == Average) {
+                    data_T rescale =
+                        static_cast<data_T>(CONFIG_T::pool_height) * static_cast<data_T>(CONFIG_T::pool_width) / img_overlap;
+                    res[(ii / CONFIG_T::stride_height) * CONFIG_T::out_width + (jj / CONFIG_T::stride_width) +
+                        ff * CONFIG_T::out_height * CONFIG_T::out_width] *= rescale;
+                }
+            }
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void global_pooling2d_cl(data_T data[CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_filt],
+                         res_T res[CONFIG_T::n_filt]) {
+    (static_cast <bool> (CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_pooling.h", 324, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0", "firmware/nnet_utils/nnet_pooling.h", 325, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pool_width == CONFIG_T::stride_width) ? void (0) : __assert_fail ("CONFIG_T::pool_width == CONFIG_T::stride_width", "firmware/nnet_utils/nnet_pooling.h", 326, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pool_height == CONFIG_T::stride_height) ? void (0) : __assert_fail ("CONFIG_T::pool_height == CONFIG_T::stride_height", "firmware/nnet_utils/nnet_pooling.h", 327, __extension__ __PRETTY_FUNCTION__));
+
+_ssdm_op_SpecPipeline(CONFIG_T::reuse_factor, 1, 1, 0, "");
+
+ const int limit = pool_op_limit<CONFIG_T>();
+_ssdm_op_SpecResourceLimit(limit, "", "", "pool_op", "");
+
+FiltLoop:
+    for (int filt = 0; filt < CONFIG_T::n_filt; filt++) {
+        data_T pool[CONFIG_T::in_height * CONFIG_T::in_width];
+
+    InputLoop:
+        for (int i = 0; i < CONFIG_T::in_height * CONFIG_T::in_width; i++) {
+            pool[i] = data[i * CONFIG_T::n_filt + filt];
+        }
+
+        res[filt] = static_cast<res_T>(pool_op<data_T, CONFIG_T::in_height * CONFIG_T::in_width, CONFIG_T::pool_op>(pool));
+    }
+}
+
+}
+# 18 "firmware/parameters.h" 2
+# 1 "firmware/nnet_utils/nnet_pooling_stream.h" 1
+
+
+
+
+
+
+
+
+# 1 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h" 1
+# 36 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+# 1 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/hls_half.h" 1
+# 3274 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/hls_half.h"
+extern half half_nan(const char *tagp);
+
+
+
+
+
+extern half half_atan(half t);
+extern half half_atan2(half y, half x);
+extern half half_copysign(half x, half y);
+
+extern half half_fabs(half x);
+
+extern half half_abs(half x);
+extern half half_fma(half x, half y, half z);
+extern half half_mad(half x, half y, half z);
+extern half half_frexp (half x, int* exp);
+extern half half_ldexp (half x, int exp);
+extern half half_fmax(half x, half y);
+
+extern half half_fmin(half x, half y);
+
+extern half half_asin(half t_in);
+extern half half_acos(half t_in);
+extern half half_sin(half t_in);
+extern half half_cos(half t_in);
+extern void half_sincos(half x, half *sin, half *cos);
+extern half half_sinh(half t_in);
+extern half half_cosh(half t_in);
+extern half half_sinpi(half t_in);
+extern half half_cospi(half t_in);
+extern half half_recip(half x);
+extern half half_sqrt(half x);
+extern half half_rsqrt(half x);
+extern half half_cbrt(half x);
+extern half half_hypot(half x, half y);
+extern half half_log(half x);
+extern half half_log10(half x);
+extern half half_log2(half x);
+extern half half_logb(half x);
+extern half half_log1p(half x);
+extern int half_ilogb(half x);
+extern half half_exp(half x);
+extern half half_exp10(half x);
+extern half half_exp2(half x);
+extern half half_expm1(half x);
+extern half half_pow(half x, half y);
+extern half half_powr(half x, half y);
+extern half half_pown(half x, int y);
+extern half half_rootn(half x, int y);
+extern half half_floor(half x);
+
+extern half half_ceil(half x);
+
+extern half half_trunc(half x);
+
+extern half half_round(half x);
+
+extern half half_nearbyint(half x);
+extern half half_rint(half x);
+extern long int half_lrint(half x);
+extern long long int half_llrint(half x);
+extern long int half_lround(half x);
+extern long long int half_llround(half x);
+extern half half_modf(half x, half *intpart);
+
+extern half half_fract(half x, half *intpart);
+extern half half_nextafter(half x, half y);
+extern half half_fmod(half x, half y);
+extern half half_remainder(half x, half y);
+extern half half_remquo(half x, half y, int* quo);
+extern half half_divide(half x, half y);
+# 37 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h" 2
+# 68 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+namespace hls {
+
+    template<typename T>
+    class numeric_limits {
+    public:
+        static T max() { return std::numeric_limits<T>::max(); }
+        static T min() { return std::numeric_limits<T>::min(); }
+        static T epsilon() { return std::numeric_limits<T>::epsilon(); }
+    };
+
+    template <int W, int I, ap_q_mode Q, ap_o_mode O>
+    class numeric_limits<ap_fixed<W,I,Q,O> > {
+    public:
+        static ap_fixed<W,I,Q,O> max() {
+            ap_int<W> m = ::hls::numeric_limits<ap_int<W> >::max();
+            ap_fixed<W,I,Q,O> x;
+            x(W-1,0) = m(W-1,0);
+            return x;
+        }
+        static ap_fixed<W,I,Q,O> min() {
+            ap_int<W> m = ::hls::numeric_limits<ap_int<W> >::min();
+            ap_fixed<W,I,Q,O> x;
+            x(W-1,0) = m(W-1,0);
+            return x;
+        }
+        static ap_fixed<W,I,Q,O> epsilon() {
+          ap_fixed<W,I,Q,O> x = 0;
+          x[0] = 1;
+
+          return x;
+        }
+    };
+
+    template <int W, int I, ap_q_mode Q, ap_o_mode O>
+    class numeric_limits<ap_ufixed<W,I,Q,O> > {
+    public:
+        static ap_ufixed<W,I,Q,O> max() {
+            ap_uint<W> m = ::hls::numeric_limits<ap_uint<W> >::max();
+            ap_ufixed<W,I,Q,O> x;
+            x(W-1,0) = m(W-1,0);
+            return x;
+        }
+        static ap_ufixed<W,I,Q,O> min() { return 0; }
+        static ap_ufixed<W,I,Q,O> epsilon() {
+          ap_ufixed<W,I,Q,O> x = 0;
+          x[0] = 1;
+          return x;
+        }
+    };
+
+    template <int W>
+    class numeric_limits<ap_int<W> > {
+    public:
+        static ap_int<W> max() { ap_int<W> m = min(); return ~m; }
+        static ap_int<W> min() { ap_int<W> m = 0; m[W-1] = 1; return m; }
+        static ap_int<W> epsilon() {
+          ap_int<W> x = 0;
+          x[0] = 1;
+          return x;
+        }
+    };
+
+    template <int W>
+    class numeric_limits<ap_uint<W> > {
+    public:
+        static ap_uint<W> max() { ap_uint<W> zero = 0; return ~zero; }
+        static ap_uint<W> min() { return 0; }
+        static ap_uint<W> epsilon() {
+          ap_uint<W> x = 0;
+          x[0] = 1;
+          return x;
+        }
+    };
+}
+
+
+namespace hlstmp {
+
+    template<typename T>
+    class numeric_limits {
+    public:
+        static T max() { return std::numeric_limits<T>::max(); }
+        static T min() { return std::numeric_limits<T>::min(); }
+        static T epsilon() { return std::numeric_limits<T>::epsilon(); }
+    };
+
+    template <int W, int I, ap_q_mode Q, ap_o_mode O>
+    class numeric_limits<ap_fixed<W,I,Q,O> > {
+    public:
+        static ap_fixed<W,I,Q,O> max() {
+            ap_int<W> m = ::hlstmp::numeric_limits<ap_int<W> >::max();
+            ap_fixed<W,I,Q,O> x;
+            x(W-1,0) = m(W-1,0);
+            return x;
+        }
+        static ap_fixed<W,I,Q,O> min() {
+            ap_int<W> m = ::hlstmp::numeric_limits<ap_int<W> >::min();
+            ap_fixed<W,I,Q,O> x;
+            x(W-1,0) = m(W-1,0);
+            return x;
+        }
+        static ap_fixed<W,I,Q,O> epsilon() {
+          ap_fixed<W,I,Q,O> x = 0;
+          x[0] = 1;
+
+          return x;
+        }
+    };
+
+    template <int W, int I, ap_q_mode Q, ap_o_mode O>
+    class numeric_limits<ap_ufixed<W,I,Q,O> > {
+    public:
+        static ap_ufixed<W,I,Q,O> max() {
+            ap_uint<W> m = ::hlstmp::numeric_limits<ap_uint<W> >::max();
+            ap_ufixed<W,I,Q,O> x;
+            x(W-1,0) = m(W-1,0);
+            return x;
+        }
+        static ap_ufixed<W,I,Q,O> min() { return 0; }
+        static ap_ufixed<W,I,Q,O> epsilon() {
+          ap_ufixed<W,I,Q,O> x = 0;
+          x[0] = 1;
+          return x;
+        }
+    };
+
+    template <int W>
+    class numeric_limits<ap_int<W> > {
+    public:
+        static ap_int<W> max() { ap_int<W> m = min(); return ~m; }
+        static ap_int<W> min() { ap_int<W> m = 0; m[W-1] = 1; return m; }
+        static ap_int<W> epsilon() {
+          ap_int<W> x = 0;
+          x[0] = 1;
+          return x;
+        }
+    };
+
+    template <int W>
+    class numeric_limits<ap_uint<W> > {
+    public:
+        static ap_uint<W> max() { ap_uint<W> zero = 0; return ~zero; }
+        static ap_uint<W> min() { return 0; }
+        static ap_uint<W> epsilon() {
+          ap_uint<W> x = 0;
+          x[0] = 1;
+          return x;
+        }
+    };
+}
+
+
+static inline
+const
+uint32_t pow2(uint32_t e)
+{
+    switch(e) {
+        case 0: return 1; break;
+        case 1: return 2; break;
+        case 2: return 4; break;
+        case 3: return 8; break;
+        case 4: return 16; break;
+        case 5: return 32; break;
+        case 6: return 64; break;
+        case 7: return 128; break;
+        case 8: return 256; break;
+        case 9: return 512; break;
+        case 10: return 1024; break;
+        case 11: return 2048; break;
+        default: return 0;
+    }
+}
+
+template<class T>
+T reg(T in)
+{
+
+_ssdm_InlineSelf(2, "");
+_ssdm_op_SpecInterface(0, "ap_none", 1, 1, "", 0, 0, "", "", "", 0, 0, 0, 0, "", "");
+
+    return in;
+}
+# 264 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+static inline
+float to_float(float v)
+{
+    return v;
+}
+
+template<int _W, int _I>
+float to_float(ap_fixed<_W, _I> v)
+{
+    return v.to_float();
+}
+# 283 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+template <typename T>
+class fp_struct
+{
+};
+
+union single_cast {
+    float f;
+    uint32_t i;
+};
+
+template <>
+class fp_struct<float>
+{
+public:
+    const static int EXP_INFNAN = 255;
+    const static int EXP_BIAS = 127;
+    const static int EXP_BITS = 8;
+    const static int SIG_BITS = 23;
+    const static int BITS = 32;
+
+    fp_struct() {
+    }
+    fp_struct(float f) {
+
+
+        union single_cast dc;
+        dc.f = f;
+        ap_uint<32> data = dc.i;
+
+
+
+
+
+        sign[0] = data[31];
+        exp(7,0)= data(30,23);
+        sig(22,0)= data(22,0);
+    }
+    fp_struct(ap_uint<32> data) {
+        sign[0] = data[31];
+        exp(7,0)= data(30,23);
+        sig(22,0)= data(22,0);
+    }
+    fp_struct(uint32_t i) {
+        ap_uint<32> data = i;
+        sign[0] = data[31];
+        exp(7,0)= data(30,23);
+        sig(22,0)= data(22,0);
+    }
+    inline ap_uint<32> data() const {
+        ap_uint<32> t;
+        t[31] = sign[0];
+        t(30,23) = exp(7,0);
+        t(22,0) = sig(22,0);
+        return t;
+    }
+    inline int expv() const {
+        return exp-127;
+    }
+    inline int32_t to_int() const {
+        return data().to_int();
+    }
+    inline float to_float() const {
+
+
+        union single_cast ret;
+        ret.i = data().to_uint();
+        return ret.f;
+
+
+
+
+
+
+
+    }
+    inline void set_mantissa(ap_ufixed<1+SIG_BITS,1> mantissa) {
+        ap_ufixed<SIG_BITS,0> significand = mantissa;
+        sig = significand(SIG_BITS-1,0);
+    }
+    inline ap_ufixed<1+SIG_BITS,1> mantissa() const {
+        ap_ufixed<1+SIG_BITS,1> y = 0;
+        y(y.wl()-1,0) = sig(SIG_BITS-1,0);
+        y[y.wl()-1] = 1;
+        return y;
+    }
+    inline float to_ieee() const {
+        return to_float();
+    }
+    inline int __signbit() const {
+        return sign.to_int();
+    }
+
+    static float infinity() {
+        fp_struct<float> x;
+        x.sign = 0;
+        x.exp = -1;
+        x.sig = 0;
+        return x.to_ieee();
+    }
+
+    static float minus_infinity() {
+        fp_struct<float> x;
+        x.sign = 1;
+        x.exp = -1;
+        x.sig = 0;
+        return x.to_ieee();
+    }
+
+    typedef uint32_t inttype;
+    typedef ap_uint<32> data_type;
+    ap_uint<1> sign;
+    ap_uint<EXP_BITS> exp;
+    ap_uint<SIG_BITS> sig;
+};
+# 413 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+static inline
+void
+castSingle(
+    float din,
+    fp_struct<float> &dout)
+{
+    fp_struct<float> t(din);
+    dout = t;
+}
+
+static inline
+float
+castSingle(
+    fp_struct<float> din)
+{
+    return din.to_float();
+}
+
+static inline
+void
+dumpSingle(
+    float da,
+    fp_struct<float> ds)
+{
+# 447 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+}
+
+
+
+
+
+
+
+union double_cast {
+    double d;
+    uint64_t i;
+};
+
+template <>
+class fp_struct<double>
+{
+public:
+    const static int EXP_INFNAN = 2047;
+    const static int EXP_BIAS = 1023;
+    const static int EXP_BITS = 11;
+    const static int SIG_BITS = 52;
+    const static int BITS = 64;
+
+    fp_struct() {
+    }
+    fp_struct(double f) {
+        union double_cast dc;
+        dc.d = f;
+        ap_uint<64> data = dc.i;
+        sign[0] = data[63];
+        exp(10,0) = data(62,52);
+        sig(51,0) = data(51,0);
+    }
+    fp_struct(ap_uint<64> data) {
+        sign[0] = data[63];
+        exp(10,0) = data(62,52);
+        sig(51,0) = data(51,0);
+    }
+    fp_struct(uint64_t i) {
+        ap_uint<64> data = i;
+        sign[0] = data[EXP_BITS+SIG_BITS+1-1];
+        exp(EXP_BITS-1,0) = data(EXP_BITS-1+SIG_BITS,SIG_BITS);
+        sig(SIG_BITS-1,0) = data(SIG_BITS-1,0);
+    }
+    inline ap_uint<64> data() const {
+        ap_uint<64> t;
+        t[EXP_BITS+SIG_BITS+1-1] = sign[0];
+        t(EXP_BITS-1+SIG_BITS,SIG_BITS) = exp(EXP_BITS-1,0);
+        t(SIG_BITS-1,0) = sig(SIG_BITS-1,0);
+        return t;
+    }
+    inline int64_t to_int() const {
+        return data().to_int64();
+    }
+    inline int expv() const {
+        return exp-1023;
+    }
+    inline ap_uint<20> sig_msb() const {
+        return sig(51,32);
+    }
+    inline ap_uint<32> sig_lsb() const {
+        return sig(31,0);
+    }
+    inline double to_double() const {
+        union double_cast ret;
+        ret.i = data().to_uint64();
+        return ret.d;
+    }
+    inline void set_mantissa(ap_ufixed<1+SIG_BITS,1> mantissa) {
+        ap_ufixed<SIG_BITS,0> significand = mantissa;
+        sig = significand(SIG_BITS-1,0);
+    }
+    inline ap_ufixed<1+SIG_BITS,1> mantissa() const {
+        ap_ufixed<1+SIG_BITS,1> y = 0;
+        y(y.wl()-1,0) = sig(SIG_BITS-1,0);
+        y[y.wl()-1] = 1;
+        return y;
+    }
+    inline double to_ieee() const {
+        return to_double();
+    }
+    inline int __signbit() const {
+        return sign.to_int();
+    }
+
+    static double infinity() {
+        fp_struct<double> x;
+        x.sign = 0;
+        x.exp = -1;
+        x.sig = 0;
+        return x.to_ieee();
+    }
+
+    static double minus_infinity() {
+        fp_struct<double> x;
+        x.sign = 1;
+        x.exp = -1;
+        x.sig = 0;
+        return x.to_ieee();
+    }
+
+    typedef uint64_t inttype;
+    typedef ap_uint<64> data_type;
+    ap_uint<1> sign;
+    ap_uint<EXP_BITS> exp;
+    ap_uint<SIG_BITS> sig;
+};
+# 566 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+static inline
+void
+castDouble(
+    double din,
+    fp_struct<double> &dout)
+{
+    fp_struct<double> t(din);
+    dout = t;
+}
+
+static inline
+double
+castDouble(
+    fp_struct<double> din)
+{
+    return din.to_double();
+}
+
+static inline
+void
+dumpDouble(
+    double da,
+    fp_struct<double> ds)
+{
+# 600 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+}
+# 610 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+union half_cast {
+    half d;
+    uint16_t i;
+};
+
+
+template <>
+class fp_struct<half>
+{
+public:
+    const static int EXP_INFNAN = 31;
+    const static int EXP_BIAS = 15;
+    const static int EXP_BITS = 5;
+    const static int SIG_BITS = 10;
+    const static int BITS = 16;
+
+    fp_struct() {
+    }
+    fp_struct(half f) {
+
+        union half_cast dc;
+        dc.d = f;
+        ap_uint<16> data = dc.i;
+
+
+
+        sign[0] = data[EXP_BITS+SIG_BITS+1-1];
+        exp(EXP_BITS-1,0) = data(EXP_BITS-1+SIG_BITS,SIG_BITS);
+        sig(SIG_BITS-1,0) = data(SIG_BITS-1,0);
+    }
+    fp_struct(ap_uint<16> data) {
+        sign[0] = data[EXP_BITS+SIG_BITS+1-1];
+        exp(EXP_BITS-1,0) = data(EXP_BITS-1+SIG_BITS,SIG_BITS);
+        sig(SIG_BITS-1,0) = data(SIG_BITS-1,0);
+    }
+    fp_struct(uint16_t i) {
+        ap_uint<16> data = i;
+        sign[0] = data[EXP_BITS+SIG_BITS+1-1];
+        exp(EXP_BITS-1,0) = data(EXP_BITS-1+SIG_BITS,SIG_BITS);
+        sig(SIG_BITS-1,0) = data(SIG_BITS-1,0);
+    }
+    inline ap_uint<16> data() const {
+        ap_uint<16> t;
+        t[EXP_BITS+SIG_BITS+1-1] = sign[0];
+        t(EXP_BITS-1+SIG_BITS,SIG_BITS) = exp(EXP_BITS-1,0);
+        t(SIG_BITS-1,0) = sig(SIG_BITS-1,0);
+        return t;
+    }
+    inline int expv() const {
+        return exp-EXP_BIAS;
+    }
+    inline int16_t to_int() const {
+        return uint16_t(data().to_int());
+    }
+    inline half to_half() const {
+
+        union half_cast ret;
+        ret.i = data().to_uint64();
+        return ret.d;
+
+
+
+
+
+    }
+    inline void set_mantissa(ap_ufixed<1+SIG_BITS,1> mantissa) {
+        ap_ufixed<SIG_BITS,0> significand = mantissa;
+        sig = significand(SIG_BITS-1,0);
+    }
+    inline ap_ufixed<1+SIG_BITS,1> mantissa() const {
+        ap_ufixed<1+SIG_BITS,1> y = 0;
+        y(y.wl()-1,0) = sig(SIG_BITS-1,0);
+        y[y.wl()-1] = 1;
+        return y;
+    }
+    inline half to_ieee() const {
+        return to_half();
+    }
+    inline int __signbit() const {
+        return sign.to_int();
+    }
+
+    static half infinity() {
+        fp_struct<half> x;
+        x.sign = 0;
+        x.exp = -1;
+        x.sig = 0;
+        return x.to_ieee();
+    }
+
+    static half minus_infinity() {
+        fp_struct<half> x;
+        x.sign = 1;
+        x.exp = -1;
+        x.sig = 0;
+        return x.to_ieee();
+    }
+
+    typedef uint16_t inttype;
+    typedef ap_uint<16> data_type;
+    ap_uint<1> sign;
+    ap_uint<EXP_BITS> exp;
+    ap_uint<SIG_BITS> sig;
+};
+# 726 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+static inline
+void
+castHalf(
+    half din,
+    fp_struct<half> &dout)
+{
+    fp_struct<half> t(din);
+    dout = t;
+}
+
+static inline
+half
+castHalf(
+    fp_struct<half> din)
+{
+    return din.to_half();
+}
+
+static inline
+void
+dumpHalf(
+    half da,
+    fp_struct<half> ds)
+{
+# 760 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+}
+# 775 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+template < unsigned int _Base, unsigned int _Num >
+class Power
+{
+public:
+    static const unsigned int Value = _Base * Power< _Base, _Num - 1 >::Value;
+};
+
+template < unsigned int _Base >
+class Power< _Base, 0 >
+{
+public:
+    static const unsigned int Value = 1;
+};
+# 797 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+template < unsigned int _Num, unsigned int _I=_Num/2>
+class BitWidth
+{
+public:
+    static const unsigned int Value = 1 + BitWidth<_Num,_I/2>::Value;
+};
+
+template <unsigned int _Num>
+class BitWidth<_Num, 0>
+{
+public:
+    static const unsigned int Value = 1;
+};
+# 819 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+template < unsigned int _Num, unsigned int _I=_Num/2>
+class UnsignedBitWidth
+{
+public:
+    static const unsigned int Value = 1 + UnsignedBitWidth<_Num,_I/2>::Value;
+};
+
+template <unsigned int _Num>
+class UnsignedBitWidth<_Num, 0>
+{
+public:
+    static const unsigned int Value = 0;
+};
+# 840 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+template < typename T >
+class Type_BitWidth
+{
+public:
+    static const unsigned int Value = 8*sizeof(T);
+};
+
+template <int W >
+class Type_BitWidth< ap_uint<W> >
+{
+public:
+    static const unsigned int Value = W;
+};
+
+template < int W >
+class Type_BitWidth< ap_int<W> >
+{
+public:
+    static const unsigned int Value = W;
+};
+
+template < int W, int I >
+class Type_BitWidth< ap_ufixed<W, I> >
+{
+public:
+    static const unsigned int Value = W;
+};
+
+template < int W, int I >
+class Type_BitWidth< ap_fixed<W, I> >
+{
+public:
+    static const unsigned int Value = W;
+};
+# 888 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+template <typename _T, int _Num, int _I=_Num-1>
+class Table : public Table<_T, _Num, _I-1>
+{
+public:
+    typedef typename _T::TableType TableType;
+    static const typename _T::TableType dummy;
+    static const int size = _Num;
+
+};
+
+template <typename _T, int _Num>
+class Table<_T, _Num, 0>
+{
+public:
+    static const typename _T::TableType dummy;
+    static typename _T::TableType array[_Num];
+};
+# 915 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+template <typename _T, int _Num, int _I>
+const typename _T::TableType Table<_T, _Num, _I>::dummy
+    = Table<_T, _Num, 0>::array[_I] = _T::apply(_I,_Num) + 0*Table<_T, _Num, _I-1>::dummy;
+
+template <typename _T, int _Num>
+const typename _T::TableType Table<_T, _Num, 0>::dummy
+    = Table<_T, _Num, 0>::array[0] = _T::apply(0,_Num);
+
+
+
+
+template <typename _T, int _Num>
+typename _T::TableType Table<_T, _Num, 0>::array[_Num];
+
+
+
+template <class T>
+struct is_fptype { static const bool value = false; };
+template <> struct is_fptype<float> { static const bool value = true; };
+template <> struct is_fptype<double> { static const bool value = true; };
+template <> struct is_fptype<half> { static const bool value = true; };
+
+template <class T>
+struct is_integraltype { static const bool value = false; };
+template <> struct is_integraltype<int> { static const bool value = true; };
+template <> struct is_integraltype<unsigned int> { static const bool value = true; };
+template <> struct is_integraltype<char> { static const bool value = true; };
+template <> struct is_integraltype<signed char> { static const bool value = true; };
+template <> struct is_integraltype<unsigned char> { static const bool value = true; };
+template <> struct is_integraltype<short> { static const bool value = true; };
+template <> struct is_integraltype<unsigned short> { static const bool value = true; };
+template <> struct is_integraltype<long> { static const bool value = true; };
+template <> struct is_integraltype<unsigned long> { static const bool value = true; };
+template <> struct is_integraltype<long long> { static const bool value = true; };
+template <> struct is_integraltype<unsigned long long> { static const bool value = true; };
+template <int W> struct is_integraltype<ap_int<W> > { static const bool value = true; };
+template <int W> struct is_integraltype<ap_uint<W> > { static const bool value = true; };
+
+template <class T>
+struct is_fixedtype { static const bool value = false; };
+template <int W, int I, ap_q_mode Q, ap_o_mode O> struct is_fixedtype<ap_fixed<W,I,Q,O> > { static const bool value = true; };
+template <int W, int I, ap_q_mode Q, ap_o_mode O> struct is_fixedtype<ap_ufixed<W,I,Q,O> > { static const bool value = true; };
+
+namespace hls {
+    template<bool B, class T = void>
+    struct enable_if {};
+
+    template<class T>
+    struct enable_if<true, T> { typedef T type; };
+    template<typename T, T _v>
+    struct integral_constant
+    {
+        static const T value = _v;
+        typedef T value_type;
+        typedef integral_constant<T,_v> type;
+        operator value_type() { return value; }
+    };
+
+    typedef integral_constant<bool, true> true_type;
+    typedef integral_constant<bool, false> false_type;
+
+    template<typename T1, typename T2>
+    struct is_same;
+
+    template<typename T1, typename T2>
+    struct is_same : public false_type { };
+
+    template<typename T1>
+    struct is_same<T1,T1> : public true_type { };
+
+    template<typename T>
+    struct is_arithmetic : public integral_constant<bool, (is_integraltype<T>::value || is_fptype<T>::value)> { };
+}
+
+template<typename T1, typename T2>
+struct enable_or { static const bool value = T1::value || T2::value; };
+
+template<typename T1, typename T2>
+struct enable_and { static const bool value = T1::value && T2::value; };
+
+
+
+template<typename T, bool = is_integraltype<T>::value>
+struct __promote { typedef double type; };
+
+template<typename T>
+struct __promote<T, false> { };
+
+template<>
+struct __promote<double> { typedef double type; };
+
+template<>
+struct __promote<float> { typedef float type; };
+
+template<>
+struct __promote<half> { typedef half type; };
+# 10 "firmware/nnet_utils/nnet_pooling_stream.h" 2
+
+namespace nnet {
+
+
+
+
+
+template <class T, int N, class CONFIG_T> T reduce_pool(T x[N]) {
+_ssdm_InlineSelf(0, "");
+ if (CONFIG_T::pool_op == Max) {
+        Op_max<T> op_max;
+        return reduce<T, N, Op_max<T>>(x, op_max);
+    } else {
+        Op_add<T> op_add;
+        T sum = reduce<T, N, Op_add<T>>(x, op_add);
+        return sum / N;
+    }
+}
+
+template <unsigned TABLE_SIZE, unsigned POOL_SIZE> void init_pool_table(unsigned table[TABLE_SIZE]) {
+    for (unsigned ii = 0; ii < TABLE_SIZE; ii++) {
+        table[ii] = ii % POOL_SIZE;
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_pool_encoded_2d(
+    const unsigned h_idx, const unsigned w_idx, const data_T &in_elem,
+    hls::stream<typename data_T::value_type> data_window[CONFIG_T::pool_height * CONFIG_T::pool_width * CONFIG_T::n_filt],
+    hls::stream<res_T> &res, res_T &res_pack, unsigned &outputs_ready) {
+
+    constexpr unsigned nH =
+        ((CONFIG_T::in_height - CONFIG_T::pool_height) / CONFIG_T::stride_height) * CONFIG_T::stride_height +
+        CONFIG_T::pool_height;
+
+    constexpr unsigned sH =
+        (((CONFIG_T::pool_height + CONFIG_T::stride_height - 1) / CONFIG_T::stride_height) - 1) * CONFIG_T::stride_height + CONFIG_T::pool_height;
+
+    constexpr unsigned nW = ((CONFIG_T::in_width - CONFIG_T::pool_width) / CONFIG_T::stride_width) * CONFIG_T::stride_width +
+                            CONFIG_T::pool_width;
+
+    constexpr unsigned sW =
+        (((CONFIG_T::pool_width + CONFIG_T::stride_width - 1) / CONFIG_T::stride_width) - 1) * CONFIG_T::stride_width + CONFIG_T::pool_width;
+
+
+    bool initialized = false;
+    unsigned pool_table_height[CONFIG_T::in_height];
+    unsigned pool_table_width[CONFIG_T::in_width];
+
+
+
+
+
+    if (!initialized) {
+        init_pool_table<CONFIG_T::in_height, CONFIG_T::pool_height>(pool_table_height);
+        init_pool_table<CONFIG_T::in_width, CONFIG_T::pool_width>(pool_table_width);
+        initialized = true;
+    }
+
+_ssdm_InlineSelf(0, "");
+
+ if (data_T::size / CONFIG_T::n_filt > 1) {
+_ssdm_SpecArrayPartition( pool_table_height, 1, "COMPLETE", 0, "");
+_ssdm_SpecArrayPartition( pool_table_width, 1, "COMPLETE", 0, "");
+ }
+
+    typename CONFIG_T::accum_t pool_window[CONFIG_T::pool_height * CONFIG_T::pool_width];
+_ssdm_SpecArrayPartition( pool_window, 1, "COMPLETE", 0, "");
+
+ const unsigned sh_idx = pool_table_height[h_idx] * CONFIG_T::pool_width;
+    const unsigned wp_idx = w_idx * (data_T::size / CONFIG_T::n_filt);
+
+PixelLoop:
+    for (unsigned p = 0; p < data_T::size / CONFIG_T::n_filt; p++) {
+_ssdm_op_SpecPipeline(-1, 1, 1, 0, "");
+
+ ap_uint<CONFIG_T::pool_height *CONFIG_T::pool_width> filt_mask = 0;
+        if ((h_idx < nH) && (wp_idx + p < nW)) {
+            filt_mask = sh_idx + pool_table_width[wp_idx + p] + 1;
+        }
+
+    CopyDataFilt:
+        for (unsigned c = 0; c < CONFIG_T::n_filt; c++) {
+            if (filt_mask > 0)
+                data_window[c * CONFIG_T::pool_height * CONFIG_T::pool_width + filt_mask.to_uint() - 1].write(
+                    in_elem[p * CONFIG_T::n_filt + c]);
+        }
+
+        if (filt_mask == CONFIG_T::pool_height * CONFIG_T::pool_width) {
+        FiltLoop:
+            for (unsigned c = 0; c < CONFIG_T::n_filt; c++) {
+            PoolLoop:
+                for (unsigned f = 0; f < CONFIG_T::pool_height * CONFIG_T::pool_width; f++) {
+                    pool_window[f] = data_window[c * CONFIG_T::pool_height * CONFIG_T::pool_width + f].read();
+                }
+                if (res_T::size / CONFIG_T::n_filt ==
+                    1) {
+                    res_pack[c] =
+                        reduce_pool<typename CONFIG_T::accum_t, CONFIG_T::pool_height * CONFIG_T::pool_width, CONFIG_T>(
+                            pool_window);
+                } else {
+                    res_pack[outputs_ready * CONFIG_T::n_filt + c] =
+                        reduce_pool<typename CONFIG_T::accum_t, CONFIG_T::pool_height * CONFIG_T::pool_width, CONFIG_T>(
+                            pool_window);
+                }
+            }
+            if (res_T::size / CONFIG_T::n_filt ==
+                1) {
+                res.write(res_pack);
+            } else {
+                if (outputs_ready == (res_T::size / CONFIG_T::n_filt) - 1) {
+                    res.write(res_pack);
+                    outputs_ready = 0;
+                } else {
+                    outputs_ready++;
+                }
+            }
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling2d_encoded_cl(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+    (static_cast <bool> (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_pooling_stream.h", 133, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pool_height == CONFIG_T::stride_height && CONFIG_T::pool_width == CONFIG_T::stride_width) ? void (0) : __assert_fail ("CONFIG_T::pool_height == CONFIG_T::stride_height && CONFIG_T::pool_width == CONFIG_T::stride_width", "firmware/nnet_utils/nnet_pooling_stream.h", 134, __extension__ __PRETTY_FUNCTION__));
+
+    res_T res_pack;
+_ssdm_DataPack( &res_pack, 0, 0, "", "", "");
+ unsigned outputs_ready = 0;
+
+    hls::stream<typename data_T::value_type> data_window[CONFIG_T::pool_height * CONFIG_T::pool_width * CONFIG_T::n_filt];
+    constexpr int win_depth = CONFIG_T::pool_height * CONFIG_T::out_width;
+    for (unsigned i_out = 0; i_out < CONFIG_T::pool_height * CONFIG_T::pool_width * CONFIG_T::n_filt; i_out++) {
+_ssdm_SpecStream( &data_window[i_out], 0, win_depth, "");
+ }
+
+    constexpr int pack_factor = data_T::size / CONFIG_T::n_filt;
+
+ReadInputHeight:
+    for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
+    ReadInputWidth:
+        for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width / (pack_factor); i_iw++) {
+_ssdm_SpecLoopFlatten(0, "");
+ if (res_T::size / CONFIG_T::n_filt == 1) {
+_ssdm_op_SpecPipeline(pack_factor, 1, 1, 0, "");
+ }
+            compute_pool_encoded_2d<data_T, res_T, CONFIG_T>(i_ih, i_iw, data.read(), data_window, res, res_pack,
+                                                             outputs_ready);
+        }
+    }
+}
+
+
+
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_pool_buffer_2d(const data_T &in_elem,
+                            ap_shift_reg<typename data_T::value_type, CONFIG_T::in_width>
+                                line_buffer[(CONFIG_T::pool_height - 1 > 1 ? CONFIG_T::pool_height - 1 : 1)][CONFIG_T::n_filt],
+                            hls::stream<res_T> &res) {
+_ssdm_InlineSelf(0, "");
+ const static int lShiftX = CONFIG_T::pool_width - 1;
+_ssdm_SpecConstant(&lShiftX);
+# 171 "firmware/nnet_utils/nnet_pooling_stream.h"
+
+    const static int lShiftY = CONFIG_T::pool_height - 1;
+_ssdm_SpecConstant(&lShiftY);
+# 172 "firmware/nnet_utils/nnet_pooling_stream.h"
+
+    static int pX = 0;
+    static int pY = 0;
+    static int sX = 0;
+    static int sY = 0;
+
+    typename CONFIG_T::accum_t pool_window[CONFIG_T::pool_height * CONFIG_T::pool_width];
+_ssdm_SpecArrayPartition( pool_window, 1, "COMPLETE", 0, "");
+
+ static typename data_T::value_type kernel_data[CONFIG_T::pool_height * CONFIG_T::pool_width * CONFIG_T::n_filt];
+_ssdm_SpecArrayPartition( &kernel_data, 0, "COMPLETE", 0, "");
+
+ res_T res_pack;
+_ssdm_DataPack( &res_pack, 0, 0, "", "", "");
+
+
+ nnet::shift_line_buffer<data_T, CONFIG_T>(in_elem, line_buffer, kernel_data);
+
+
+    if ((sX - lShiftX) == 0 && (sY - lShiftY) == 0 && pY > lShiftY - 1 && pX > lShiftX - 1) {
+    FiltLoop:
+        for (unsigned i_ic = 0; i_ic < CONFIG_T::n_filt; i_ic++) {
+_ssdm_op_SpecPipeline(-1, 1, 1, 0, "");
+
+
+ PoolLoop:
+            for (unsigned i_ihw = 0; i_ihw < CONFIG_T::pool_height * CONFIG_T::pool_width; i_ihw++) {
+                pool_window[i_ihw] = kernel_data[i_ihw * CONFIG_T::n_filt + i_ic];
+            }
+
+
+            res_pack[i_ic] =
+                reduce_pool<typename CONFIG_T::accum_t, CONFIG_T::pool_height * CONFIG_T::pool_width, CONFIG_T>(pool_window);
+        }
+
+
+        res.write(res_pack);
+    }
+
+
+    if (pX + 1 == CONFIG_T::in_width)
+    {
+        pX = 0;
+        sX = 0;
+        if (pY + 1 == CONFIG_T::in_height) {
+            pY = 0;
+            sY = 0;
+        } else {
+            pY = pY + 1;
+
+            sY = ((sY - lShiftY) == 0) ? sY - CONFIG_T::stride_height + 1 : sY + 1;
+        }
+    } else {
+        pX = pX + 1;
+
+        sX = ((sX - lShiftX) == 0) ? sX - CONFIG_T::stride_width + 1 : sX + 1;
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling2d_buffer_cl(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+    (static_cast <bool> (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_pooling_stream.h", 233, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pool_height == CONFIG_T::stride_height && CONFIG_T::pool_width == CONFIG_T::stride_width) ? void (0) : __assert_fail ("CONFIG_T::pool_height == CONFIG_T::stride_height && CONFIG_T::pool_width == CONFIG_T::stride_width", "firmware/nnet_utils/nnet_pooling_stream.h", 234, __extension__ __PRETTY_FUNCTION__));
+
+    static ap_shift_reg<typename data_T::value_type, CONFIG_T::in_width> line_buffer[(CONFIG_T::pool_height - 1 > 1 ? CONFIG_T::pool_height - 1 : 1)]
+                                                                                    [CONFIG_T::n_filt];
+_ssdm_SpecArrayPartition( &line_buffer, 2, "COMPLETE", 0, "");
+
+ReadInputHeight:
+    for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
+    ReadInputWidth:
+        for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width; i_iw++) {
+_ssdm_SpecLoopFlatten(0, "");
+_ssdm_op_SpecPipeline(-1, 1, 1, 0, "");
+
+ compute_pool_buffer_2d<data_T, res_T, CONFIG_T>(data.read(), line_buffer, res);
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling2d_cl(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+_ssdm_InlineAll(1, "");
+ switch (CONFIG_T::implementation) {
+    case conv_implementation::linebuffer:
+        pooling2d_buffer_cl<data_T, res_T, CONFIG_T>(data, res);
+        break;
+    case conv_implementation::encoded:
+        pooling2d_encoded_cl<data_T, res_T, CONFIG_T>(data, res);
+        break;
+    }
+}
+
+
+
+
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_pool_encoded_1d(const unsigned w_idx, const data_T &in_elem,
+                             hls::stream<typename data_T::value_type> data_window[CONFIG_T::pool_width * CONFIG_T::n_filt],
+                             hls::stream<res_T> &res, res_T &res_pack, unsigned &outputs_ready) {
+
+    constexpr unsigned nW =
+        ((CONFIG_T::n_in - CONFIG_T::pool_width) / CONFIG_T::stride_width) * CONFIG_T::stride_width + CONFIG_T::pool_width;
+
+    constexpr unsigned sW =
+        (((CONFIG_T::pool_width + CONFIG_T::stride_width - 1) / CONFIG_T::stride_width) - 1) * CONFIG_T::stride_width + CONFIG_T::pool_width;
+
+
+    bool initialized = false;
+    unsigned pool_table_width[CONFIG_T::n_in];
+
+
+
+
+    if (!initialized) {
+        init_pool_table<CONFIG_T::n_in, CONFIG_T::pool_width>(pool_table_width);
+        initialized = true;
+    }
+
+_ssdm_InlineSelf(0, "");
+
+ if (data_T::size / CONFIG_T::n_filt > 1) {
+_ssdm_SpecArrayPartition( &pool_table_width, 1, "COMPLETE", 0, "");
+ }
+
+    typename CONFIG_T::accum_t pool_window[CONFIG_T::pool_width];
+_ssdm_SpecArrayPartition( &pool_window, 1, "COMPLETE", 0, "");
+
+ const unsigned wp_idx = w_idx * (data_T::size / CONFIG_T::n_filt);
+
+PixelLoop:
+    for (unsigned p = 0; p < data_T::size / CONFIG_T::n_filt; p++) {
+_ssdm_op_SpecPipeline(-1, 1, 1, 0, "");
+
+ ap_uint<CONFIG_T::pool_width> filt_mask = 0;
+        if (wp_idx + p < nW) {
+            filt_mask = pool_table_width[wp_idx + p] + 1;
+        }
+
+    CopyDataFilt:
+        for (unsigned c = 0; c < CONFIG_T::n_filt; c++) {
+            if (filt_mask > 0)
+                data_window[c * CONFIG_T::pool_width + filt_mask.to_uint() - 1].write(in_elem[p * CONFIG_T::n_filt + c]);
+        }
+
+        if (filt_mask == CONFIG_T::pool_width) {
+        FiltLoop:
+            for (unsigned c = 0; c < CONFIG_T::n_filt; c++) {
+            PoolLoop:
+                for (unsigned f = 0; f < CONFIG_T::pool_width; f++) {
+                    pool_window[f] = data_window[c * CONFIG_T::pool_width + f].read();
+                }
+                if (res_T::size / CONFIG_T::n_filt ==
+                    1) {
+                    res_pack[c] = reduce_pool<typename CONFIG_T::accum_t, CONFIG_T::pool_width, CONFIG_T>(pool_window);
+                } else {
+                    res_pack[outputs_ready * CONFIG_T::n_filt + c] =
+                        reduce_pool<typename CONFIG_T::accum_t, CONFIG_T::pool_width, CONFIG_T>(pool_window);
+                }
+            }
+            if (res_T::size / CONFIG_T::n_filt ==
+                1) {
+                res.write(res_pack);
+            } else {
+                if (outputs_ready == (res_T::size / CONFIG_T::n_filt) - 1) {
+                    res.write(res_pack);
+                    outputs_ready = 0;
+                } else {
+                    outputs_ready++;
+                }
+            }
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling1d_encoded_cl(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+    (static_cast <bool> (CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_pooling_stream.h", 350, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pool_width == CONFIG_T::stride_width) ? void (0) : __assert_fail ("CONFIG_T::pool_width == CONFIG_T::stride_width", "firmware/nnet_utils/nnet_pooling_stream.h", 351, __extension__ __PRETTY_FUNCTION__));
+
+    res_T res_pack;
+_ssdm_DataPack( &res_pack, 0, 0, "", "", "");
+ unsigned outputs_ready = 0;
+
+    hls::stream<typename data_T::value_type> data_window[CONFIG_T::pool_width * CONFIG_T::n_filt];
+    constexpr int win_depth = CONFIG_T::n_out;
+    for (unsigned i_out = 0; i_out < CONFIG_T::pool_width * CONFIG_T::n_filt; i_out++) {
+_ssdm_SpecStream( &data_window[i_out], 0, win_depth, "");
+ }
+
+    constexpr int pack_factor = data_T::size / CONFIG_T::n_filt;
+
+ReadInputWidth:
+    for (unsigned i_iw = 0; i_iw < CONFIG_T::n_in / (pack_factor); i_iw++) {
+_ssdm_SpecLoopFlatten(0, "");
+ if (res_T::size / CONFIG_T::n_filt == 1) {
+_ssdm_op_SpecPipeline(pack_factor, 1, 1, 0, "");
+ }
+        compute_pool_encoded_1d<data_T, res_T, CONFIG_T>(i_iw, data.read(), data_window, res, res_pack, outputs_ready);
+    }
+}
+
+
+
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_pool_buffer_1d(const data_T &in_elem, hls::stream<res_T> &res) {
+_ssdm_InlineSelf(0, "");
+ const static int lShiftX = CONFIG_T::pool_width - 1;
+_ssdm_SpecConstant(&lShiftX);
+# 381 "firmware/nnet_utils/nnet_pooling_stream.h"
+
+
+    static int pX = 0;
+    static int sX = 0;
+
+    typename CONFIG_T::accum_t pool_window[CONFIG_T::pool_width];
+_ssdm_SpecArrayPartition( &pool_window, 1, "COMPLETE", 0, "");
+
+ static typename data_T::value_type kernel_data[CONFIG_T::pool_width * CONFIG_T::n_filt];
+_ssdm_SpecArrayPartition( &kernel_data, 0, "COMPLETE", 0, "");
+
+ res_T res_pack;
+_ssdm_DataPack( &res_pack, 0, 0, "", "", "");
+
+
+
+ nnet::kernel_shift_1d<data_T, CONFIG_T>(in_elem, kernel_data);
+
+
+    if ((sX - lShiftX) == 0 && pX > lShiftX - 1) {
+    FiltLoop:
+        for (unsigned i_ic = 0; i_ic < CONFIG_T::n_filt; i_ic++) {
+_ssdm_op_SpecPipeline(-1, 1, 1, 0, "");
+
+
+ PoolLoop:
+            for (unsigned i_iw = 0; i_iw < CONFIG_T::pool_width; i_iw++) {
+                pool_window[i_iw] = kernel_data[i_iw * CONFIG_T::n_filt + i_ic];
+            }
+
+
+            res_pack[i_ic] = reduce_pool<typename CONFIG_T::accum_t, CONFIG_T::pool_width, CONFIG_T>(pool_window);
+        }
+
+
+        res.write(res_pack);
+    }
+
+
+    if (pX + 1 == CONFIG_T::n_in)
+    {
+        pX = 0;
+        sX = 0;
+    } else {
+        pX = pX + 1;
+
+        sX = ((sX - lShiftX) == 0) ? sX - CONFIG_T::stride_width + 1 : sX + 1;
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling1d_buffer_cl(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+    (static_cast <bool> (CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_pooling_stream.h", 433, __extension__ __PRETTY_FUNCTION__));
+
+ReadInputWidth:
+    for (unsigned i_iw = 0; i_iw < CONFIG_T::n_in; i_iw++) {
+_ssdm_SpecLoopFlatten(0, "");
+_ssdm_op_SpecPipeline(-1, 1, 1, 0, "");
+ compute_pool_buffer_1d<data_T, res_T, CONFIG_T>(data.read(), res);
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling1d_cl(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+_ssdm_InlineAll(1, "");
+ switch (CONFIG_T::implementation) {
+    case conv_implementation::linebuffer:
+        pooling1d_buffer_cl<data_T, res_T, CONFIG_T>(data, res);
+        break;
+    case conv_implementation::encoded:
+        pooling1d_encoded_cl<data_T, res_T, CONFIG_T>(data, res);
+        break;
+    }
+}
+
+
+
+
+
+template <class T, int N, class CONFIG_T> T reduce_global_pool(T x, T y[N]) {
+_ssdm_InlineSelf(0, "");
+ if (CONFIG_T::pool_op == Max) {
+        Op_max<T> op_max;
+        T y_max = reduce<T, N, Op_max<T>>(y, op_max);
+        return (x > y_max) ? x : y_max;
+    } else {
+        Op_add<T> op_add;
+        T y_sum = reduce<T, N, Op_add<T>>(y, op_add);
+        return x + y_sum;
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_global_pool(const data_T &in_elem, typename CONFIG_T::accum_t data_window[CONFIG_T::n_filt]) {
+PoolFilt:
+    for (unsigned c = 0; c < CONFIG_T::n_filt; c++) {
+_ssdm_Unroll(0,0,0, "");
+
+ typename CONFIG_T::accum_t data_pack[data_T::size / CONFIG_T::n_filt];
+_ssdm_SpecArrayPartition( &data_pack, 0, "COMPLETE", 0, "");
+
+ PixelLoop:
+        for (unsigned p = 0; p < data_T::size / CONFIG_T::n_filt; p++) {
+_ssdm_Unroll(0,0,0, "");
+ data_pack[p] = in_elem[p * CONFIG_T::n_filt + c];
+        }
+        data_window[c] = reduce_global_pool<typename CONFIG_T::accum_t, data_T::size / CONFIG_T::n_filt, CONFIG_T>(
+            data_window[c], data_pack);
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void global_pooling2d_cl(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+    (static_cast <bool> (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_pooling_stream.h", 494, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pool_height == CONFIG_T::stride_height && CONFIG_T::pool_width == CONFIG_T::stride_width) ? void (0) : __assert_fail ("CONFIG_T::pool_height == CONFIG_T::stride_height && CONFIG_T::pool_width == CONFIG_T::stride_width", "firmware/nnet_utils/nnet_pooling_stream.h", 495, __extension__ __PRETTY_FUNCTION__));
+
+    typename CONFIG_T::accum_t data_window[CONFIG_T::n_filt];
+_ssdm_SpecArrayPartition( &data_window, 1, "COMPLETE", 0, "");
+
+ typename CONFIG_T::accum_t init = 0;
+    if (CONFIG_T::pool_op == Max) {
+        init = hls::numeric_limits<typename CONFIG_T::accum_t>::min();
+    }
+
+PoolInitLoop:
+    for (unsigned i_init = 0; i_init < CONFIG_T::n_filt; i_init++) {
+_ssdm_Unroll(0,0,0, "");
+ data_window[i_init] = init;
+    }
+
+ReadInputHeight:
+    for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
+    ReadInputWidth:
+        for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width / (data_T::size / CONFIG_T::n_filt); i_iw++) {
+_ssdm_SpecLoopFlatten(0, "");
+ compute_global_pool<data_T, res_T, CONFIG_T>(data.read(), data_window);
+        }
+    }
+
+    if (CONFIG_T::pool_op == Max) {
+    MaxPoolRes:
+        for (unsigned i_res = 0; i_res < CONFIG_T::n_filt / res_T::size; i_res++) {
+_ssdm_op_SpecPipeline(-1, 1, 1, 0, "");
+
+ res_T res_pack;
+_ssdm_DataPack( &res_pack, 0, 0, "", "", "");
+ MaxPoolPack:
+            for (unsigned i_pack = 0; i_pack < res_T::size; i_pack++) {
+_ssdm_Unroll(0,0,0, "");
+ res_pack[i_pack] = data_window[i_pack];
+            }
+            res.write(res_pack);
+        }
+    } else {
+    AvgPoolRes:
+        for (unsigned i_res = 0; i_res < CONFIG_T::n_filt / res_T::size; i_res++) {
+_ssdm_op_SpecPipeline(-1, 1, 1, 0, "");
+
+ res_T res_pack;
+_ssdm_DataPack( &res_pack, 0, 0, "", "", "");
+ AvgPoolPack:
+            for (unsigned i_pack = 0; i_pack < res_T::size; i_pack++) {
+_ssdm_Unroll(0,0,0, "");
+ res_pack[i_pack] = data_window[i_pack] / (CONFIG_T::in_height * CONFIG_T::in_width);
+            }
+            res.write(res_pack);
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void global_pooling1d_cl(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+    (static_cast <bool> (CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_pooling_stream.h", 553, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pool_width == CONFIG_T::stride_width) ? void (0) : __assert_fail ("CONFIG_T::pool_width == CONFIG_T::stride_width", "firmware/nnet_utils/nnet_pooling_stream.h", 554, __extension__ __PRETTY_FUNCTION__));
+
+    typename CONFIG_T::accum_t data_window[CONFIG_T::n_filt];
+_ssdm_SpecArrayPartition( &data_window, 1, "COMPLETE", 0, "");
+
+ typename CONFIG_T::accum_t init = 0;
+    if (CONFIG_T::pool_op == Max) {
+        init = hls::numeric_limits<typename CONFIG_T::accum_t>::min();
+    }
+
+PoolInitLoop:
+    for (unsigned i_init = 0; i_init < CONFIG_T::n_filt; i_init++) {
+_ssdm_Unroll(0,0,0, "");
+ data_window[i_init] = init;
+    }
+
+ReadInput:
+    for (unsigned i_iw = 0; i_iw < CONFIG_T::n_in / (data_T::size / CONFIG_T::n_filt); i_iw++) {
+_ssdm_SpecLoopFlatten(0, "");
+ compute_global_pool<data_T, res_T, CONFIG_T>(data.read(), data_window);
+    }
+
+    if (CONFIG_T::pool_op == Max) {
+    MaxPoolRes:
+        for (unsigned i_res = 0; i_res < CONFIG_T::n_filt / res_T::size; i_res++) {
+_ssdm_op_SpecPipeline(-1, 1, 1, 0, "");
+
+ res_T res_pack;
+_ssdm_DataPack( &res_pack, 0, 0, "", "", "");
+ MaxPoolPack:
+            for (unsigned i_pack = 0; i_pack < res_T::size; i_pack++) {
+_ssdm_Unroll(0,0,0, "");
+ res_pack[i_pack] = data_window[i_pack];
+            }
+            res.write(res_pack);
+        }
+    } else {
+    AvgPoolRes:
+        for (unsigned i_res = 0; i_res < CONFIG_T::n_filt / res_T::size; i_res++) {
+_ssdm_op_SpecPipeline(-1, 1, 1, 0, "");
+
+ res_T res_pack;
+_ssdm_DataPack( &res_pack, 0, 0, "", "", "");
+ AvgPoolPack:
+            for (unsigned i_pack = 0; i_pack < res_T::size; i_pack++) {
+_ssdm_Unroll(0,0,0, "");
+ res_pack[i_pack] = data_window[i_pack] / CONFIG_T::n_in;
+            }
+            res.write(res_pack);
+        }
+    }
+}
+
+}
+# 19 "firmware/parameters.h" 2
 
 
 # 1 "firmware/weights/w2.h" 1
 # 12 "firmware/weights/w2.h"
-model_default_t w2[512] = {-0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.1467285156, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.3620605469, 0.0000000000, -0.0000000000, -0.0000000000, 0.3361816406, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.3627929688, -0.0000000000, -0.3437500000, -0.0000000000, 0.2924804688, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.2910156250, 0.0000000000, 0.2526855469, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.3798828125, 0.2868652344, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.3420410156, 0.0000000000, 0.2734375000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.2446289062, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.2215576172, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.2320556641, -0.0000000000, 0.0000000000, 0.2056884766, 0.0000000000, 0.3393554688, 0.3806152344, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.2631835938, 0.0000000000, -0.3281250000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.2573242188, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.3361816406, -0.0000000000, 0.0000000000, 0.2700195312, 0.0000000000, -0.3029785156, 0.0000000000, -0.0000000000, -0.0000000000, -0.2423095703, -0.2658691406, -0.0000000000, -0.0000000000, -0.0000000000, -0.2712402344, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.3000488281, 0.0000000000, 0.3483886719, 0.0000000000, -0.2797851562, -0.0000000000, -0.0000000000, 0.2139892578, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.2032470703, 0.2729492188, 0.0000000000, -0.3039550781, 0.2049560547, -0.0000000000, -0.3166503906, 0.0000000000, -0.3508300781, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.2312011719, -0.3198242188, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.2668457031, 0.0000000000, -0.2370605469, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.2924804688, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.2612304688, 0.0000000000, -0.4006347656, 0.0000000000, 0.0000000000, -0.2587890625, -0.2587890625, -0.0000000000, -0.0000000000, 0.0000000000, -0.2946777344, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.2695312500, -0.2271728516, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.4211425781, -0.2907714844, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.2575683594, -0.2739257812, 0.0000000000, -0.2810058594, 0.3486328125, 0.0000000000, -0.0000000000, -0.0000000000, -0.2778320312, 0.0000000000, -0.0000000000, 0.2064208984, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.3771972656, 0.0000000000, -0.2373046875, -0.0000000000, 0.4020996094, -0.0000000000, 0.0000000000, 0.0000000000, 0.3347167969, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.3496093750, 0.0000000000, -0.0000000000, -0.2125244141, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.2551269531, 0.2087402344, -0.0000000000, 0.0000000000, -0.4123535156, -0.3598632812, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.4335937500, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.2406005859, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.2524414062, 0.0000000000, 0.0000000000, 0.0000000000, -0.4123535156, -0.4270019531, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.4318847656, 0.2583007812, 0.0000000000, -0.0000000000, -0.0000000000, 0.4235839844, -0.4040527344, 0.0000000000, -0.0000000000, 0.2561035156, -0.0000000000, 0.3562011719, 0.3254394531, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.3981933594, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.2551269531, 0.2602539062, -0.4099121094, -0.0000000000, -0.3854980469, -0.2358398438, 0.0000000000, 0.4047851562, -0.4523925781, -0.0000000000, 0.3273925781, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.3767089844, -0.0000000000, 0.3413085938, 0.2814941406, -0.3825683594, -0.0000000000, -0.2485351562, 0.3815917969, -0.1456298828, -0.0000000000, -0.0000000000, -0.3337402344, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.2998046875, 0.0000000000, -0.3869628906, -0.0000000000, -0.0000000000, -0.4023437500, -0.3337402344, 0.0000000000, 0.2792968750, -0.0000000000, -0.0000000000, 0.3442382812, -0.3078613281, 0.0000000000, 0.2595214844, -0.0000000000, -0.3820800781, -0.0000000000, -0.1624755859, -0.0000000000, 0.0000000000, 0.0000000000, -0.3588867188, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.4204101562, -0.0000000000, -0.3413085938, -0.0000000000, -0.0000000000, -0.2568359375, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.2108154297, -0.3281250000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.3698730469, 0.2397460938, 0.2491455078, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.2119140625, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.2673339844, -0.0000000000, -0.0000000000, -0.0000000000, 0.3984375000, 0.0000000000, -0.0000000000, 0.0000000000, 0.2139892578, 0.0000000000, -0.0000000000, -0.2863769531, 0.0000000000, -0.3835449219, 0.0000000000, -0.0000000000, 0.2915039062, -0.0000000000, 0.4240722656, 0.3200683594, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.4182128906, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.2331542969, -0.0000000000, -0.0000000000, 0.3195800781, -0.0000000000, -0.2347412109, 0.0000000000};
-# 18 "firmware/parameters.h" 2
+model_default_t w2[36] = {0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -1.8085937500, 1.6699218750, -0.0000000000, 0.0000000000, 0.0000000000, -1.2773437500, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -1.0322265625, 0.0000000000, 0.0000000000, 0.0000000000, 1.5234375000, -1.4072265625, 0.0000000000, 1.4531250000, 0.0000000000, -0.0000000000, 2.0156250000, 0.0000000000, 0.0000000000, -1.3505859375};
+# 22 "firmware/parameters.h" 2
 # 1 "firmware/weights/b2.h" 1
 # 12 "firmware/weights/b2.h"
-model_default_t b2[128] = {-0.0460510254, 0.1500244141, 0.2341308594, -0.1386718750, 0.1163330078, 0.2239990234, 0.0195922852, 0.2370605469, 0.3022460938, 0.1473388672, -0.0283050537, 0.1075439453, 0.2805175781, 0.1409912109, -0.0572204590, 0.0445251465, 0.2167968750, -0.0032482147, -0.0028324127, 0.2924804688, 0.2237548828, 0.1339111328, -0.0332946777, 0.2949218750, 0.0068092346, 0.2050781250, 0.0298919678, 0.2137451172, 0.0569152832, -0.0378417969, 0.1278076172, 0.1047973633, 0.2142333984, -0.0852050781, -0.1023559570, 0.0828247070, -0.0065765381, -0.1085205078, 0.1209716797, 0.0498046875, 0.0177764893, 0.2849121094, 0.0581359863, 0.1549072266, 0.2436523438, 0.0050735474, 0.0886230469, 0.0621032715, 0.1870117188, -0.0368652344, 0.1690673828, -0.0354919434, 0.2220458984, 0.0038471222, 0.2322998047, 0.2885742188, -0.0311126709, 0.0980224609, -0.0081176758, 0.1358642578, -0.0063781738, -0.0538024902, -0.0460815430, 0.0664672852, 0.1071166992, 0.2778320312, 0.1649169922, -0.0052871704, 0.1376953125, -0.0966796875, 0.3334960938, 0.1967773438, -0.0870361328, -0.0064353943, 0.1223144531, -0.0425109863, 0.0407409668, 0.1369628906, 0.1260986328, -0.0339660645, -0.0700683594, -0.0543823242, -0.0406799316, 0.0416564941, 0.0242462158, 0.2083740234, 0.1111450195, -0.0657348633, 0.2534179688, 0.2895507812, 0.1431884766, 0.0549621582, -0.0021343231, 0.0808715820, 0.1934814453, -0.0594177246, -0.0455017090, -0.0440063477, -0.0510253906, 0.2622070312, -0.0412597656, -0.0856323242, 0.2812500000, 0.2595214844, -0.0336914062, 0.0921020508, 0.1896972656, 0.1809082031, 0.1440429688, -0.0033340454, 0.1848144531, -0.0366516113, -0.0421447754, 0.0639648438, 0.2014160156, 0.1478271484, -0.0878906250, 0.0271606445, 0.2287597656, -0.0040664673, -0.0140075684, -0.0411071777, -0.0462646484, 0.1987304688, 0.1071166992, 0.1563720703, 0.0665283203, 0.1735839844};
-# 19 "firmware/parameters.h" 2
-# 1 "firmware/weights/w4.h" 1
-# 12 "firmware/weights/w4.h"
-model_default_t w4[384] = {-0.0000000000, -0.4328613281, 0.3830566406, 0.0000000000, -0.4169921875, -0.4382324219, 0.3493652344, 0.0000000000, -0.3876953125, -0.0000000000, -0.4504394531, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.2496337891, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.3525390625, 0.0000000000, 0.3632812500, 0.0000000000, -0.5034179688, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.3791503906, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.3896484375, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.3750000000, 0.0000000000, 0.3447265625, 0.0000000000, -0.0000000000, -0.2402343750, -0.0000000000, -0.0000000000, -0.2741699219, -0.2651367188, 0.0000000000, -0.0000000000, -0.4211425781, -0.3178710938, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.3312988281, -0.0000000000, -0.0000000000, 0.0000000000, -0.3850097656, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.2309570312, -0.0000000000, 0.3625488281, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.3071289062, 0.0000000000, -0.0000000000, 0.0000000000, -0.3913574219, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.3691406250, -0.0000000000, -0.3913574219, 0.3811035156, -0.0000000000, -0.0000000000, -0.0000000000, 0.4074707031, -0.3308105469, -0.0000000000, -0.3933105469, 0.4035644531, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.2491455078, -0.0000000000, -0.3776855469, 0.4045410156, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.5068359375, 0.2585449219, 0.0000000000, 0.3830566406, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.3635253906, 0.0000000000, 0.2805175781, -0.0000000000, 0.3627929688, -0.3527832031, -0.0000000000, -0.4404296875, 0.0000000000, 0.3195800781, -0.0000000000, 0.0000000000, -0.0000000000, 0.3752441406, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.3906250000, -0.3735351562, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.3574218750, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.3962402344, 0.0000000000, -0.0000000000, -0.4594726562, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.3710937500, -0.0000000000, -0.2709960938, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.3828125000, -0.0000000000, 0.0000000000, -0.3789062500, -0.0000000000, -0.4492187500, -0.0000000000, 0.0000000000, -0.3554687500, 0.0000000000, -0.0000000000, -0.0000000000, -0.2320556641, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.5078125000, -0.0000000000, 0.2990722656, -0.3037109375, -0.0000000000, -0.3774414062, 0.3679199219, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.3701171875, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.3315429688, 0.3376464844, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.4335937500, 0.0000000000, -0.0000000000, -0.4575195312, 0.0000000000, -0.0000000000, 0.3693847656, -0.0000000000, -0.0000000000, 0.0000000000, -0.4033203125, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.2675781250, -0.0000000000, 0.3032226562, -0.2883300781, -0.0000000000, 0.0000000000, -0.2463378906, -0.0000000000, -0.4916992188, 0.4030761719, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.4831542969, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.4306640625, 0.0000000000, 0.0000000000, -0.4533691406, -0.0000000000, -0.0000000000, 0.3771972656, 0.0000000000, -0.3786621094, -0.0000000000, -0.0000000000, 0.3222656250, -0.0000000000, -0.0000000000, 0.0000000000, -0.3146972656, -0.0000000000, -0.0000000000, 0.0000000000, 0.2954101562, 0.0000000000, -0.0000000000, -0.3813476562, -0.0000000000, 0.3830566406, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.3005371094, 0.0000000000, -0.3222656250, 0.0000000000, -0.0000000000, -0.0000000000, -0.3710937500, 0.4306640625, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.3171386719, 0.0000000000, -0.0000000000, -0.2663574219, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.4033203125, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.3627929688, -0.0000000000, -0.3771972656, 0.0000000000, -0.0000000000, -0.0000000000, -0.4003906250, 0.0000000000, -0.0000000000};
-# 20 "firmware/parameters.h" 2
-# 1 "firmware/weights/b4.h" 1
-# 12 "firmware/weights/b4.h"
-model_default_t b4[3] = {-0.1678466797, 0.1688232422, -0.1042480469};
-# 21 "firmware/parameters.h" 2
+model_default_t b2[4] = {0.0698852539, -0.8476562500, -0.0030899048, -0.0061149597};
+# 23 "firmware/parameters.h" 2
+# 1 "firmware/weights/w5.h" 1
+# 12 "firmware/weights/w5.h"
+model_default_t w5[288] = {-0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.4692382812, 0.8754882812, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.4963378906, 1.0751953125, -0.0000000000, -0.7993164062, 0.0000000000, -0.0000000000, -0.4680175781, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.5405273438, -0.0000000000, 1.0117187500, 0.0000000000, -0.8540039062, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.5751953125, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.3784179688, 0.4860839844, -0.0000000000, 0.7299804688, -0.0000000000, -0.0000000000, -0.0000000000, -0.1478271484, 0.0000000000, -0.0000000000, -0.0000000000, -0.7509765625, -0.0000000000, -0.0000000000, -0.2626953125, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.5937500000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.8686523438, -0.6381835938, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.7358398438, -0.0000000000, -0.0000000000, 0.0000000000, 0.2275390625, 0.2353515625, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.4248046875, -0.6147460938, 0.4865722656, -0.0000000000, 0.8632812500, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.4313964844, 0.0000000000, 0.2060546875, -0.0000000000, 1.6210937500, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.6137695312, 0.0000000000, 0.7802734375, -1.6845703125, -0.0000000000, 0.0000000000, -0.8237304688, -0.8896484375, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.3037109375, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 1.0927734375, -1.3466796875, 0.0000000000, 0.8017578125, 1.2158203125, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.1185302734, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.4943847656, 0.0000000000, -0.4731445312, -0.0000000000, -1.0351562500, -0.0000000000, 0.0000000000, -0.0000000000, -0.1864013672, 0.0000000000, -0.0000000000, 1.1767578125, -0.0000000000, 0.0199584961, 0.0000000000, -0.5009765625, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.3203125000, -0.0000000000, 2.0234375000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.9326171875, -0.0000000000, -0.0000000000, -0.7416992188, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0753784180, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -1.8916015625, 1.5126953125, 0.9980468750, -0.0000000000, 1.7099609375, -0.0000000000, 0.0000000000, 0.0000000000, -0.6323242188, 0.5830078125, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.7597656250, 0.0000000000, 0.0000000000, -0.7504882812, -0.6567382812, -0.0000000000, -0.0000000000, 0.0000000000, -0.5292968750, 0.0000000000, -0.0000000000, 0.3854980469, 0.7861328125, -0.0000000000, -1.2558593750, 0.0000000000, -0.0000000000, 0.9482421875, 0.0000000000, 0.0000000000, -0.0000000000, 0.8754882812, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.7709960938, 0.0000000000, 0.0000000000, 0.5903320312, 0.8544921875, -0.0000000000, 1.2070312500, -0.0000000000, -0.4550781250, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000};
+# 24 "firmware/parameters.h" 2
+# 1 "firmware/weights/b5.h" 1
+# 12 "firmware/weights/b5.h"
+model_default_t b5[8] = {2.1113281250, -1.8242187500, 0.1150512695, 1.0781250000, -1.1943359375, 0.1849365234, 0.8227539062, 0.7666015625};
+# 25 "firmware/parameters.h" 2
+# 1 "firmware/weights/w9.h" 1
+# 12 "firmware/weights/w9.h"
+model_default_t w9[320] = {-0.0000000000, 0.0000000000, -0.9218750000, -0.9472656250, 0.0000000000, 0.0000000000, 0.5747070312, -1.1845703125, -0.8330078125, -1.9228515625, -0.0000000000, 0.0000000000, -1.0947265625, -0.8085937500, 0.0000000000, -0.0000000000, 1.2304687500, -0.8398437500, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.4692382812, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.5283203125, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0390930176, -0.6616210938, 0.7934570312, 0.0000000000, -0.0252838135, 0.0000000000, 0.0000000000, -0.0000000000, -1.2294921875, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.7094726562, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.2343750000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.8520507812, -0.0000000000, -0.0000000000, 0.0000000000, -1.6484375000, 0.0000000000, -0.0000000000, -0.0000000000, 0.5073242188, 0.6689453125, -0.0000000000, 0.0000000000, -1.1982421875, -0.4143066406, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 1.5195312500, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -1.2021484375, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.8862304688, 0.0000000000, 0.0000000000, 0.6401367188, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.2312011719, -0.7788085938, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.6611328125, -0.0000000000, -0.9482421875, 0.0000000000, -0.7270507812, -0.0000000000, -0.0000000000, -0.9736328125, -0.6157226562, 0.0000000000, -2.0058593750, -0.0000000000, -0.0000000000, -0.7973632812, -0.0000000000, -0.2185058594, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -1.7402343750, -0.5644531250, -1.3974609375, -3.4218750000, 1.0361328125, -1.9140625000, 0.0000000000, 1.4511718750, 0.0000000000, -0.0000000000, -0.8837890625, 0.0000000000, -0.7797851562, 0.7270507812, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -1.1455078125, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -1.2431640625, 1.1337890625, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.8935546875, 0.0000000000, -0.0000000000, -0.4665527344, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.2612304688, -0.0000000000, 0.3281250000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.3940429688, 0.0000000000, -0.0000000000, -0.1555175781, 0.8398437500, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.8559570312, -0.0000000000, -1.2597656250, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.7290039062, -0.0000000000, 0.0000000000, 0.8286132812, -0.0000000000, -0.0000000000, 0.0000000000, -1.2646484375, -0.0000000000, 0.0000000000, -1.6630859375, -0.0000000000, 0.0000000000, -0.0000000000, -0.2961425781, 0.0000000000, -1.9189453125, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -1.2246093750, -0.0000000000, 0.0000000000, -0.8959960938, 0.0000000000, -1.1953125000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.8769531250, -0.0000000000, -0.0000000000, -1.4023437500, -1.6699218750, -0.0000000000, 0.0000000000, -0.0000000000, 0.2600097656, -0.0000000000, 0.0000000000, -0.0000000000, -1.4462890625, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -1.1582031250, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -1.1601562500, -0.0000000000, -0.7797851562, 0.0000000000, -0.0294799805, -0.0000000000, 0.6811523438, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000};
+# 26 "firmware/parameters.h" 2
+# 1 "firmware/weights/b9.h" 1
+# 12 "firmware/weights/b9.h"
+model_default_t b9[10] = {0.1923828125, 0.7875976562, -0.0818481445, 2.0878906250, -1.2812500000, 0.5727539062, 0.4177246094, 0.6157226562, -1.6044921875, -0.8022460938};
+# 27 "firmware/parameters.h" 2
 
 
 
-struct config2 : nnet::dense_config {
-    static const unsigned n_in = 4;
-    static const unsigned n_out = 128;
-    static const unsigned io_type = nnet::io_parallel;
+struct config2_mult : nnet::dense_config {
+    static const unsigned n_in = 9;
+    static const unsigned n_out = 4;
+    static const unsigned reuse_factor = 16;
     static const unsigned strategy = nnet::latency;
-    static const unsigned reuse_factor = 8;
-    static const unsigned n_zeros = 384;
-    static const unsigned n_nonzeros = 128;
+    static const unsigned n_zeros = 27;
     static const unsigned multiplier_limit = ((n_in * n_out + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
-    static const bool store_weights_in_bram = false;
     typedef model_default_t accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
-    typedef layer2_index index_t;
     template<class x_T, class y_T>
     using product = nnet::product::mult<x_T, y_T>;
 };
+
+struct config2 : nnet::conv2d_config {
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const unsigned in_height = 28;
+    static const unsigned in_width = 28;
+    static const unsigned n_chan = 1;
+    static const unsigned filt_height = 3;
+    static const unsigned filt_width = 3;
+    static const unsigned kernel_size = filt_height * filt_width;
+    static const unsigned n_filt = 4;
+    static const unsigned stride_height = 1;
+    static const unsigned stride_width = 1;
+    static const unsigned out_height = 26;
+    static const unsigned out_width = 26;
+    static const unsigned reuse_factor = 16;
+    static const unsigned n_zeros = 27;
+    static const unsigned multiplier_limit =
+        ((kernel_size * n_chan * n_filt + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
+    static const bool store_weights_in_bram = false;
+    static const unsigned strategy = nnet::latency;
+    static const nnet::conv_implementation implementation = nnet::conv_implementation::linebuffer;
+    static const unsigned min_height = 5;
+    static const unsigned min_width = 5;
+    static const ap_uint<filt_height * filt_width> pixels[min_height * min_width];
+    static const unsigned n_partitions = 676;
+    static const unsigned n_pixels = out_height * out_width / n_partitions;
+    template<class data_T, class CONFIG_T>
+    using fill_buffer = nnet::FillConv2DBuffer<data_T, CONFIG_T>;
+    typedef model_default_t accum_t;
+    typedef model_default_t bias_t;
+    typedef model_default_t weight_t;
+    typedef config2_mult mult_config;
+    template<unsigned K, unsigned S, unsigned W>
+    using scale_index_height = nnet::scale_index_regular<K, S, W>;
+    template<unsigned K, unsigned S, unsigned W>
+    using scale_index_width = nnet::scale_index_regular<K, S, W>;
+};
+const ap_uint<config2::filt_height * config2::filt_width> config2::pixels[] = {1,3,7,6,4,9,27,63,54,36,73,219,511,438,292,72,216,504,432,288,64,192,448,384,256};
 
 
 struct relu_config3 : nnet::activ_config {
-    static const unsigned n_in = 128;
+    static const unsigned n_in = 2704;
     static const unsigned table_size = 1024;
-    static const unsigned io_type = nnet::io_parallel;
-    static const unsigned reuse_factor = 8;
-    typedef dense_relu_table_t table_t;
+    static const unsigned io_type = nnet::io_stream;
+    static const unsigned reuse_factor = 16;
+    typedef conv2d_relu_table_t table_t;
 };
 
 
-struct config4 : nnet::dense_config {
-    static const unsigned n_in = 128;
-    static const unsigned n_out = 3;
-    static const unsigned io_type = nnet::io_parallel;
+struct config4 : nnet::pooling2d_config {
+    static const unsigned in_height = 26;
+    static const unsigned in_width = 26;
+    static const unsigned n_filt = 4;
+    static const unsigned stride_height = 4;
+    static const unsigned stride_width = 4;
+    static const unsigned pool_height = 4;
+    static const unsigned pool_width = 4;
+
+    static const unsigned filt_height = pool_height;
+    static const unsigned filt_width = pool_width;
+    static const unsigned n_chan = n_filt;
+
+    static const unsigned out_height = 6;
+    static const unsigned out_width = 6;
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const bool count_pad = false;
+    static const nnet::Pool_Op pool_op = nnet::Max;
+    static const nnet::conv_implementation implementation = nnet::conv_implementation::linebuffer;
+    static const unsigned reuse_factor = 16;
+    typedef model_default_t accum_t;
+};
+
+
+struct config5_mult : nnet::dense_config {
+    static const unsigned n_in = 36;
+    static const unsigned n_out = 8;
+    static const unsigned reuse_factor = 16;
     static const unsigned strategy = nnet::latency;
-    static const unsigned reuse_factor = 8;
-    static const unsigned n_zeros = 288;
-    static const unsigned n_nonzeros = 96;
+    static const unsigned n_zeros = 216;
+    static const unsigned multiplier_limit = ((n_in * n_out + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
+    typedef model_default_t accum_t;
+    typedef model_default_t bias_t;
+    typedef model_default_t weight_t;
+    template<class x_T, class y_T>
+    using product = nnet::product::mult<x_T, y_T>;
+};
+
+struct config5 : nnet::conv2d_config {
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const unsigned in_height = 6;
+    static const unsigned in_width = 6;
+    static const unsigned n_chan = 4;
+    static const unsigned filt_height = 3;
+    static const unsigned filt_width = 3;
+    static const unsigned kernel_size = filt_height * filt_width;
+    static const unsigned n_filt = 8;
+    static const unsigned stride_height = 1;
+    static const unsigned stride_width = 1;
+    static const unsigned out_height = 4;
+    static const unsigned out_width = 4;
+    static const unsigned reuse_factor = 16;
+    static const unsigned n_zeros = 216;
+    static const unsigned multiplier_limit =
+        ((kernel_size * n_chan * n_filt + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
+    static const bool store_weights_in_bram = false;
+    static const unsigned strategy = nnet::latency;
+    static const nnet::conv_implementation implementation = nnet::conv_implementation::linebuffer;
+    static const unsigned min_height = 5;
+    static const unsigned min_width = 5;
+    static const ap_uint<filt_height * filt_width> pixels[min_height * min_width];
+    static const unsigned n_partitions = 16;
+    static const unsigned n_pixels = out_height * out_width / n_partitions;
+    template<class data_T, class CONFIG_T>
+    using fill_buffer = nnet::FillConv2DBuffer<data_T, CONFIG_T>;
+    typedef model_default_t accum_t;
+    typedef model_default_t bias_t;
+    typedef model_default_t weight_t;
+    typedef config5_mult mult_config;
+    template<unsigned K, unsigned S, unsigned W>
+    using scale_index_height = nnet::scale_index_regular<K, S, W>;
+    template<unsigned K, unsigned S, unsigned W>
+    using scale_index_width = nnet::scale_index_regular<K, S, W>;
+};
+const ap_uint<config5::filt_height * config5::filt_width> config5::pixels[] = {1,3,7,6,4,9,27,63,54,36,73,219,511,438,292,72,216,504,432,288,64,192,448,384,256};
+
+
+struct relu_config6 : nnet::activ_config {
+    static const unsigned n_in = 128;
+    static const unsigned table_size = 1024;
+    static const unsigned io_type = nnet::io_stream;
+    static const unsigned reuse_factor = 16;
+    typedef conv2d_1_relu_table_t table_t;
+};
+
+
+struct config7 : nnet::pooling2d_config {
+    static const unsigned in_height = 4;
+    static const unsigned in_width = 4;
+    static const unsigned n_filt = 8;
+    static const unsigned stride_height = 2;
+    static const unsigned stride_width = 2;
+    static const unsigned pool_height = 2;
+    static const unsigned pool_width = 2;
+
+    static const unsigned filt_height = pool_height;
+    static const unsigned filt_width = pool_width;
+    static const unsigned n_chan = n_filt;
+
+    static const unsigned out_height = 2;
+    static const unsigned out_width = 2;
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const bool count_pad = false;
+    static const nnet::Pool_Op pool_op = nnet::Max;
+    static const nnet::conv_implementation implementation = nnet::conv_implementation::linebuffer;
+    static const unsigned reuse_factor = 16;
+    typedef model_default_t accum_t;
+};
+
+
+struct config9 : nnet::dense_config {
+    static const unsigned n_in = 32;
+    static const unsigned n_out = 10;
+    static const unsigned io_type = nnet::io_stream;
+    static const unsigned strategy = nnet::latency;
+    static const unsigned reuse_factor = 16;
+    static const unsigned n_zeros = 240;
+    static const unsigned n_nonzeros = 80;
     static const unsigned multiplier_limit = ((n_in * n_out + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
     static const bool store_weights_in_bram = false;
     typedef model_default_t accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
-    typedef layer4_index index_t;
+    typedef layer9_index index_t;
     template<class x_T, class y_T>
     using product = nnet::product::mult<x_T, y_T>;
 };
 
 
-struct softmax_config5 : nnet::activ_config {
-    static const unsigned n_in = 3;
+struct softmax_config10 : nnet::activ_config {
+    static const unsigned n_in = 10;
     static const unsigned table_size = 1024;
-    static const unsigned io_type = nnet::io_parallel;
-    static const unsigned reuse_factor = 8;
+    static const unsigned io_type = nnet::io_stream;
+    static const unsigned reuse_factor = 16;
     static const unsigned axis = -1;
     static const nnet::softmax_implementation implementation = nnet::softmax_implementation::stable;
-    typedef dense_1_softmax_exp_table_t exp_table_t;
-    typedef dense_1_softmax_inv_table_t inv_table_t;
+    typedef dense_softmax_exp_table_t exp_table_t;
+    typedef dense_softmax_inv_table_t inv_table_t;
 };
 # 5 "firmware/myproject.cpp" 2
 
 void myproject(
-    input_t dense_input[4],
-    result_t layer5_out[3]
-) {_ssdm_SpecArrayDimSize(dense_input, 4);_ssdm_SpecArrayDimSize(layer5_out, 3);
+    hls::stream<input_t> &conv2d_input,
+    hls::stream<result_t> &layer10_out
+) {
 
 
-_ssdm_SpecArrayReshape( dense_input, 0,  "COMPLETE",  0, "");
-_ssdm_SpecArrayPartition( layer5_out, 0, "COMPLETE", 0, "");
-_ssdm_op_SpecInterface(dense_input, "ap_vld", 0, 0, "", 0, 0, "", "", "", 0, 0, 0, 0, "", "");_ssdm_op_SpecInterface(layer5_out, "ap_vld", 0, 0, "", 0, 0, "", "", "", 0, 0, 0, 0, "", "");
-_ssdm_op_SpecPipeline(-1, 1, 1, 0, "");
+_ssdm_op_SpecInterface(&conv2d_input, "axis", 1, 1, "both", 0, 0, "", "", "", 0, 0, 0, 0, "", "");_ssdm_op_SpecInterface(&layer10_out, "axis", 1, 1, "both", 0, 0, "", "", "", 0, 0, 0, 0, "", "");
+_ssdm_op_SpecDataflowPipeline(-1, 0, "");
 # 35 "firmware/myproject.cpp"
- layer2_t layer2_out[128];
-_ssdm_SpecArrayPartition( layer2_out, 0, "COMPLETE", 0, "");
- nnet::dense<input_t, layer2_t, config2>(dense_input, layer2_out, w2, b2);
+ hls::stream<layer2_t> layer2_out("layer2_out");
+_ssdm_SpecStream( &layer2_out, 0, 676, "");
+ nnet::conv_2d_cl<input_t, layer2_t, config2>(conv2d_input, layer2_out, w2, b2);
 
-    layer3_t layer3_out[128];
-_ssdm_SpecArrayPartition( layer3_out, 0, "COMPLETE", 0, "");
+    hls::stream<layer3_t> layer3_out("layer3_out");
+_ssdm_SpecStream( &layer3_out, 0, 676, "");
  nnet::relu<layer2_t, layer3_t, relu_config3>(layer2_out, layer3_out);
 
-    layer4_t layer4_out[3];
-_ssdm_SpecArrayPartition( layer4_out, 0, "COMPLETE", 0, "");
- nnet::dense<layer3_t, layer4_t, config4>(layer3_out, layer4_out, w4, b4);
+    hls::stream<layer4_t> layer4_out("layer4_out");
+_ssdm_SpecStream( &layer4_out, 0, 36, "");
+ nnet::pooling2d_cl<layer3_t, layer4_t, config4>(layer3_out, layer4_out);
 
-    nnet::softmax<layer4_t, result_t, softmax_config5>(layer4_out, layer5_out);
+    hls::stream<layer5_t> layer5_out("layer5_out");
+_ssdm_SpecStream( &layer5_out, 0, 16, "");
+ nnet::conv_2d_cl<layer4_t, layer5_t, config5>(layer4_out, layer5_out, w5, b5);
+
+    hls::stream<layer6_t> layer6_out("layer6_out");
+_ssdm_SpecStream( &layer6_out, 0, 16, "");
+ nnet::relu<layer5_t, layer6_t, relu_config6>(layer5_out, layer6_out);
+
+    hls::stream<layer7_t> layer7_out("layer7_out");
+_ssdm_SpecStream( &layer7_out, 0, 4, "");
+ nnet::pooling2d_cl<layer6_t, layer7_t, config7>(layer6_out, layer7_out);
+
+    auto& layer8_out = layer7_out;
+    hls::stream<layer9_t> layer9_out("layer9_out");
+_ssdm_SpecStream( &layer9_out, 0, 1, "");
+ nnet::dense<layer7_t, layer9_t, config9>(layer8_out, layer9_out, w9, b9);
+
+    nnet::softmax<layer9_t, result_t, softmax_config10>(layer9_out, layer10_out);
 
 }

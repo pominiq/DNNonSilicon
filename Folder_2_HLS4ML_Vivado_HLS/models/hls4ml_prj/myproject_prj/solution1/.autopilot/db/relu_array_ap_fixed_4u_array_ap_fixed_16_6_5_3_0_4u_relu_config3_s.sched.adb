@@ -476,7 +476,7 @@
 					<Obj>
 						<type>0</type>
 						<id>28</id>
-						<name>empty_41</name>
+						<name>empty_35</name>
 						<fileName>firmware/nnet_utils/nnet_activation_stream.h</fileName>
 						<fileDirectory>/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj</fileDirectory>
 						<lineNumber>44</lineNumber>
@@ -1870,8 +1870,8 @@
 			<mDepth>-1</mDepth>
 			<mMinTripCount>-1</mMinTripCount>
 			<mMaxTripCount>-1</mMaxTripCount>
-			<mMinLatency>679</mMinLatency>
-			<mMaxLatency>679</mMaxLatency>
+			<mMinLatency>678</mMinLatency>
+			<mMaxLatency>678</mMaxLatency>
 			<mIsDfPipe>0</mIsDfPipe>
 			<mDfPipe class_id="-1"></mDfPipe>
 		</item>
@@ -1912,11 +1912,11 @@
 				<item>44</item>
 			</basic_blocks>
 			<mII>1</mII>
-			<mDepth>3</mDepth>
+			<mDepth>2</mDepth>
 			<mMinTripCount>676</mMinTripCount>
 			<mMaxTripCount>676</mMaxTripCount>
-			<mMinLatency>677</mMinLatency>
-			<mMaxLatency>677</mMaxLatency>
+			<mMinLatency>676</mMinLatency>
+			<mMaxLatency>676</mMaxLatency>
 			<mIsDfPipe>0</mIsDfPipe>
 			<mDfPipe class_id="-1"></mDfPipe>
 		</item>
@@ -2021,77 +2021,77 @@
 		<item>
 			<first>33</first>
 			<second>
-				<first>3</first>
+				<first>2</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>34</first>
 			<second>
-				<first>3</first>
+				<first>2</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>35</first>
 			<second>
-				<first>3</first>
+				<first>2</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>36</first>
 			<second>
-				<first>3</first>
+				<first>2</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>37</first>
 			<second>
-				<first>3</first>
+				<first>2</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>38</first>
 			<second>
-				<first>3</first>
+				<first>2</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>39</first>
 			<second>
-				<first>3</first>
+				<first>2</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>40</first>
 			<second>
-				<first>3</first>
+				<first>2</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>41</first>
 			<second>
-				<first>3</first>
+				<first>2</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>43</first>
 			<second>
-				<first>3</first>
+				<first>2</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>45</first>
 			<second>
-				<first>4</first>
+				<first>3</first>
 				<second>0</second>
 			</second>
 		</item>
@@ -2117,7 +2117,7 @@
 			<first>44</first>
 			<second>
 				<first>2</first>
-				<second>3</second>
+				<second>2</second>
 			</second>
 		</item>
 		<item>
@@ -2146,7 +2146,7 @@
 			<anchor_node>-1</anchor_node>
 			<region_type>8</region_type>
 			<interval>1</interval>
-			<pipe_depth>3</pipe_depth>
+			<pipe_depth>2</pipe_depth>
 		</item>
 	</regions>
 	<dp_fu_nodes class_id="34" tracking_level="0" version="0">

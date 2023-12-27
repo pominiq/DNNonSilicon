@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vivado HLS Report for 'compute_output_buffer_2d_array_array_ap_fixed_16_6_5_3_0_4u_config2_s'" level="0">
-<item name = "Date">Sun Dec 17 18:35:32 2023
+<item name = "Date">Wed Dec 27 21:19:38 2023
 </item>
 <item name = "Version">2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)</item>
 <item name = "Project">myproject_prj</item>
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">10.00 ns, 7.806 ns, 1.25 ns</column>
+<column name="ap_clk">25.00 ns, 15.194 ns, 3.12 ns</column>
 </table>
 </item>
 </section>
@@ -24,15 +24,15 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="8">, min, max, min, max, min, max, Type</keys>
-<column name="">36, 36, 0.360 us, 0.360 us, 37, 37, function</column>
+<column name="">4, 4, 0.100 us, 0.100 us, 5, 5, function</column>
 </table>
 </item>
 <item name = "Detail">
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="0">
 <keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
-<column name="grp_dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config2_mult_0_0_0_0_0_fu_142">dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config2_mult_0_0_0_0_0, 35, 35, 0.350 us, 0.350 us, 36, 36, function</column>
-<column name="call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_155">shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s, 0, 0, 0 ns, 0 ns, 1, 1, function</column>
+<column name="grp_dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config2_mult_0_0_0_0_0_fu_138">dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config2_mult_0_0_0_0_0, 3, 3, 75.000 ns, 75.000 ns, 4, 4, function</column>
+<column name="call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_148">shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s, 0, 0, 0 ns, 0 ns, 1, 1, function</column>
 </table>
 </item>
 <item name = "Loop"><table name="" hasTotal="0">

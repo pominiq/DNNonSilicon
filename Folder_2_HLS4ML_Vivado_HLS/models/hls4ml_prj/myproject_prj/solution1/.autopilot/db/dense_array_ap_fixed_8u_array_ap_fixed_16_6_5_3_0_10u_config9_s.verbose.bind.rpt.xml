@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vivado HLS Report for 'dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s'" level="0">
-<item name = "Date">Sun Dec 17 18:35:58 2023
+<item name = "Date">Wed Dec 27 21:19:46 2023
 </item>
 <item name = "Version">2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)</item>
 <item name = "Project">myproject_prj</item>
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">10.00 ns, 8.324 ns, 1.25 ns</column>
+<column name="ap_clk">25.00 ns, 15.463 ns, 3.12 ns</column>
 </table>
 </item>
 </section>
@@ -24,14 +24,14 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="8">, min, max, min, max, min, max, Type</keys>
-<column name="">67, 67, 0.670 us, 0.670 us, 67, 67, none</column>
+<column name="">21, 21, 0.525 us, 0.525 us, 21, 21, none</column>
 </table>
 </item>
 <item name = "Detail">
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="0">
 <keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
-<column name="grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497">dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s, 60, 60, 0.600 us, 0.600 us, 61, 61, function</column>
+<column name="grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_489">dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s, 15, 15, 0.375 us, 0.375 us, 16, 16, function</column>
 </table>
 </item>
 <item name = "Loop"><table name="" hasTotal="0">

@@ -177,7 +177,7 @@ set RtlHierarchyInfo {[
 		"ControlExist" : "1", "ap_start" : "1", "ap_ready" : "1", "ap_done" : "1", "ap_continue" : "1", "ap_idle" : "1",
 		"Pipeline" : "None", "UnalignedPipeline" : "0", "RewindPipeline" : "0", "ProcessNetwork" : "0",
 		"II" : "0",
-		"VariableLatency" : "1", "ExactLatency" : "-1", "EstimateLatencyMin" : "20", "EstimateLatencyMax" : "20",
+		"VariableLatency" : "1", "ExactLatency" : "-1", "EstimateLatencyMin" : "18", "EstimateLatencyMax" : "18",
 		"Combinational" : "0",
 		"Datapath" : "0",
 		"ClockEnable" : "0",
@@ -269,14 +269,14 @@ set RtlHierarchyInfo {[
 	{"ID" : "6", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.line_buffer_Array_V_3_0_5_U", "Parent" : "0"},
 	{"ID" : "7", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.line_buffer_Array_V_3_0_6_U", "Parent" : "0"},
 	{"ID" : "8", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.line_buffer_Array_V_3_0_7_U", "Parent" : "0"},
-	{"ID" : "9", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U213", "Parent" : "0"},
-	{"ID" : "10", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U214", "Parent" : "0"},
-	{"ID" : "11", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U215", "Parent" : "0"},
-	{"ID" : "12", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U216", "Parent" : "0"},
-	{"ID" : "13", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U217", "Parent" : "0"},
-	{"ID" : "14", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U218", "Parent" : "0"},
-	{"ID" : "15", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U219", "Parent" : "0"},
-	{"ID" : "16", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U220", "Parent" : "0"}]}
+	{"ID" : "9", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U168", "Parent" : "0"},
+	{"ID" : "10", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U169", "Parent" : "0"},
+	{"ID" : "11", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U170", "Parent" : "0"},
+	{"ID" : "12", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U171", "Parent" : "0"},
+	{"ID" : "13", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U172", "Parent" : "0"},
+	{"ID" : "14", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U173", "Parent" : "0"},
+	{"ID" : "15", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U174", "Parent" : "0"},
+	{"ID" : "16", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U175", "Parent" : "0"}]}
 
 
 set ArgLastReadFirstWriteLatency {
@@ -289,14 +289,14 @@ set ArgLastReadFirstWriteLatency {
 		data_V_data_5_V {Type I LastRead 2 FirstWrite -1}
 		data_V_data_6_V {Type I LastRead 2 FirstWrite -1}
 		data_V_data_7_V {Type I LastRead 2 FirstWrite -1}
-		res_V_data_0_V {Type O LastRead -1 FirstWrite 4}
-		res_V_data_1_V {Type O LastRead -1 FirstWrite 4}
-		res_V_data_2_V {Type O LastRead -1 FirstWrite 4}
-		res_V_data_3_V {Type O LastRead -1 FirstWrite 4}
-		res_V_data_4_V {Type O LastRead -1 FirstWrite 4}
-		res_V_data_5_V {Type O LastRead -1 FirstWrite 4}
-		res_V_data_6_V {Type O LastRead -1 FirstWrite 4}
-		res_V_data_7_V {Type O LastRead -1 FirstWrite 4}
+		res_V_data_0_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_1_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_2_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_3_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_4_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_5_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_6_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_7_V {Type O LastRead -1 FirstWrite 2}
 		pX {Type IO LastRead -1 FirstWrite -1}
 		sX {Type IO LastRead -1 FirstWrite -1}
 		pY {Type IO LastRead -1 FirstWrite -1}
@@ -329,8 +329,8 @@ set ArgLastReadFirstWriteLatency {
 set hasDtUnsupportedChannel 0
 
 set PerformanceInfo {[
-	{"Name" : "Latency", "Min" : "20", "Max" : "20"}
-	, {"Name" : "Interval", "Min" : "20", "Max" : "20"}
+	{"Name" : "Latency", "Min" : "18", "Max" : "18"}
+	, {"Name" : "Interval", "Min" : "18", "Max" : "18"}
 ]}
 
 set PipelineEnableSignalInfo {[
@@ -534,7 +534,7 @@ set RtlHierarchyInfo {[
 		"ControlExist" : "1", "ap_start" : "1", "ap_ready" : "1", "ap_done" : "1", "ap_continue" : "1", "ap_idle" : "1",
 		"Pipeline" : "None", "UnalignedPipeline" : "0", "RewindPipeline" : "0", "ProcessNetwork" : "0",
 		"II" : "0",
-		"VariableLatency" : "1", "ExactLatency" : "-1", "EstimateLatencyMin" : "20", "EstimateLatencyMax" : "20",
+		"VariableLatency" : "1", "ExactLatency" : "-1", "EstimateLatencyMin" : "18", "EstimateLatencyMax" : "18",
 		"Combinational" : "0",
 		"Datapath" : "0",
 		"ClockEnable" : "0",
@@ -626,14 +626,14 @@ set RtlHierarchyInfo {[
 	{"ID" : "6", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.line_buffer_Array_V_3_0_5_U", "Parent" : "0"},
 	{"ID" : "7", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.line_buffer_Array_V_3_0_6_U", "Parent" : "0"},
 	{"ID" : "8", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.line_buffer_Array_V_3_0_7_U", "Parent" : "0"},
-	{"ID" : "9", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U213", "Parent" : "0"},
-	{"ID" : "10", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U214", "Parent" : "0"},
-	{"ID" : "11", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U215", "Parent" : "0"},
-	{"ID" : "12", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U216", "Parent" : "0"},
-	{"ID" : "13", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U217", "Parent" : "0"},
-	{"ID" : "14", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U218", "Parent" : "0"},
-	{"ID" : "15", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U219", "Parent" : "0"},
-	{"ID" : "16", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U220", "Parent" : "0"}]}
+	{"ID" : "9", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U168", "Parent" : "0"},
+	{"ID" : "10", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U169", "Parent" : "0"},
+	{"ID" : "11", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U170", "Parent" : "0"},
+	{"ID" : "12", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U171", "Parent" : "0"},
+	{"ID" : "13", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U172", "Parent" : "0"},
+	{"ID" : "14", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U173", "Parent" : "0"},
+	{"ID" : "15", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U174", "Parent" : "0"},
+	{"ID" : "16", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.myproject_mux_42_16_1_1_U175", "Parent" : "0"}]}
 
 
 set ArgLastReadFirstWriteLatency {
@@ -646,14 +646,14 @@ set ArgLastReadFirstWriteLatency {
 		data_V_data_5_V {Type I LastRead 2 FirstWrite -1}
 		data_V_data_6_V {Type I LastRead 2 FirstWrite -1}
 		data_V_data_7_V {Type I LastRead 2 FirstWrite -1}
-		res_V_data_0_V {Type O LastRead -1 FirstWrite 4}
-		res_V_data_1_V {Type O LastRead -1 FirstWrite 4}
-		res_V_data_2_V {Type O LastRead -1 FirstWrite 4}
-		res_V_data_3_V {Type O LastRead -1 FirstWrite 4}
-		res_V_data_4_V {Type O LastRead -1 FirstWrite 4}
-		res_V_data_5_V {Type O LastRead -1 FirstWrite 4}
-		res_V_data_6_V {Type O LastRead -1 FirstWrite 4}
-		res_V_data_7_V {Type O LastRead -1 FirstWrite 4}
+		res_V_data_0_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_1_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_2_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_3_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_4_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_5_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_6_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_7_V {Type O LastRead -1 FirstWrite 2}
 		pX {Type IO LastRead -1 FirstWrite -1}
 		sX {Type IO LastRead -1 FirstWrite -1}
 		pY {Type IO LastRead -1 FirstWrite -1}
@@ -686,8 +686,8 @@ set ArgLastReadFirstWriteLatency {
 set hasDtUnsupportedChannel 0
 
 set PerformanceInfo {[
-	{"Name" : "Latency", "Min" : "20", "Max" : "20"}
-	, {"Name" : "Interval", "Min" : "20", "Max" : "20"}
+	{"Name" : "Latency", "Min" : "18", "Max" : "18"}
+	, {"Name" : "Interval", "Min" : "18", "Max" : "18"}
 ]}
 
 set PipelineEnableSignalInfo {[

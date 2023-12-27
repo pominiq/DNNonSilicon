@@ -12,21 +12,18 @@ set ProfileFlag 0
 set StallSigGenFlag 0
 set isEnableWaveformDebug 1
 set C_modelName {shift_line_buffer<array<ap_fixed<16, 6, 5, 3, 0>, 4u>, config5>}
-set C_modelType { int 576 }
+set C_modelType { int 528 }
 set C_modelArgList {
 	{ in_elem_data_0_V_read int 16 regular  }
 	{ in_elem_data_1_V_read int 16 regular  }
 	{ in_elem_data_2_V_read int 16 regular  }
 	{ in_elem_data_3_V_read int 16 regular  }
 	{ kernel_window_4_V_read int 16 regular  }
-	{ kernel_window_5_V_read int 16 regular  }
 	{ kernel_window_6_V_read int 16 regular  }
 	{ kernel_window_7_V_read int 16 regular  }
 	{ kernel_window_8_V_read int 16 regular  }
-	{ kernel_window_9_V_read int 16 regular  }
 	{ kernel_window_10_V_read int 16 regular  }
 	{ kernel_window_11_V_read int 16 regular  }
-	{ kernel_window_16_V_read int 16 regular  }
 	{ kernel_window_17_V_read int 16 regular  }
 	{ kernel_window_18_V_read int 16 regular  }
 	{ kernel_window_19_V_read int 16 regular  }
@@ -49,14 +46,11 @@ set C_modelArgMapList {[
  	{ "Name" : "in_elem_data_2_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "in_elem_data_3_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_4_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
- 	{ "Name" : "kernel_window_5_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_6_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_7_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_8_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
- 	{ "Name" : "kernel_window_9_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_10_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_11_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
- 	{ "Name" : "kernel_window_16_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_17_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_18_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_19_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
@@ -72,9 +66,9 @@ set C_modelArgMapList {[
  	{ "Name" : "kernel_window_33_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_34_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_35_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
- 	{ "Name" : "ap_return", "interface" : "wire", "bitwidth" : 576} ]}
+ 	{ "Name" : "ap_return", "interface" : "wire", "bitwidth" : 528} ]}
 # RTL Port declarations: 
-set portNum 71
+set portNum 65
 set portList { 
 	{ ap_clk sc_in sc_logic 1 clock -1 } 
 	{ ap_rst sc_in sc_logic 1 reset -1 active_high_sync } 
@@ -87,29 +81,26 @@ set portList {
 	{ in_elem_data_2_V_read sc_in sc_lv 16 signal 2 } 
 	{ in_elem_data_3_V_read sc_in sc_lv 16 signal 3 } 
 	{ kernel_window_4_V_read sc_in sc_lv 16 signal 4 } 
-	{ kernel_window_5_V_read sc_in sc_lv 16 signal 5 } 
-	{ kernel_window_6_V_read sc_in sc_lv 16 signal 6 } 
-	{ kernel_window_7_V_read sc_in sc_lv 16 signal 7 } 
-	{ kernel_window_8_V_read sc_in sc_lv 16 signal 8 } 
-	{ kernel_window_9_V_read sc_in sc_lv 16 signal 9 } 
-	{ kernel_window_10_V_read sc_in sc_lv 16 signal 10 } 
-	{ kernel_window_11_V_read sc_in sc_lv 16 signal 11 } 
-	{ kernel_window_16_V_read sc_in sc_lv 16 signal 12 } 
-	{ kernel_window_17_V_read sc_in sc_lv 16 signal 13 } 
-	{ kernel_window_18_V_read sc_in sc_lv 16 signal 14 } 
-	{ kernel_window_19_V_read sc_in sc_lv 16 signal 15 } 
-	{ kernel_window_20_V_read sc_in sc_lv 16 signal 16 } 
-	{ kernel_window_21_V_read sc_in sc_lv 16 signal 17 } 
-	{ kernel_window_22_V_read sc_in sc_lv 16 signal 18 } 
-	{ kernel_window_23_V_read sc_in sc_lv 16 signal 19 } 
-	{ kernel_window_28_V_read sc_in sc_lv 16 signal 20 } 
-	{ kernel_window_29_V_read sc_in sc_lv 16 signal 21 } 
-	{ kernel_window_30_V_read sc_in sc_lv 16 signal 22 } 
-	{ kernel_window_31_V_read sc_in sc_lv 16 signal 23 } 
-	{ kernel_window_32_V_read sc_in sc_lv 16 signal 24 } 
-	{ kernel_window_33_V_read sc_in sc_lv 16 signal 25 } 
-	{ kernel_window_34_V_read sc_in sc_lv 16 signal 26 } 
-	{ kernel_window_35_V_read sc_in sc_lv 16 signal 27 } 
+	{ kernel_window_6_V_read sc_in sc_lv 16 signal 5 } 
+	{ kernel_window_7_V_read sc_in sc_lv 16 signal 6 } 
+	{ kernel_window_8_V_read sc_in sc_lv 16 signal 7 } 
+	{ kernel_window_10_V_read sc_in sc_lv 16 signal 8 } 
+	{ kernel_window_11_V_read sc_in sc_lv 16 signal 9 } 
+	{ kernel_window_17_V_read sc_in sc_lv 16 signal 10 } 
+	{ kernel_window_18_V_read sc_in sc_lv 16 signal 11 } 
+	{ kernel_window_19_V_read sc_in sc_lv 16 signal 12 } 
+	{ kernel_window_20_V_read sc_in sc_lv 16 signal 13 } 
+	{ kernel_window_21_V_read sc_in sc_lv 16 signal 14 } 
+	{ kernel_window_22_V_read sc_in sc_lv 16 signal 15 } 
+	{ kernel_window_23_V_read sc_in sc_lv 16 signal 16 } 
+	{ kernel_window_28_V_read sc_in sc_lv 16 signal 17 } 
+	{ kernel_window_29_V_read sc_in sc_lv 16 signal 18 } 
+	{ kernel_window_30_V_read sc_in sc_lv 16 signal 19 } 
+	{ kernel_window_31_V_read sc_in sc_lv 16 signal 20 } 
+	{ kernel_window_32_V_read sc_in sc_lv 16 signal 21 } 
+	{ kernel_window_33_V_read sc_in sc_lv 16 signal 22 } 
+	{ kernel_window_34_V_read sc_in sc_lv 16 signal 23 } 
+	{ kernel_window_35_V_read sc_in sc_lv 16 signal 24 } 
 	{ ap_return_0 sc_out sc_lv 16 signal -1 } 
 	{ ap_return_1 sc_out sc_lv 16 signal -1 } 
 	{ ap_return_2 sc_out sc_lv 16 signal -1 } 
@@ -143,9 +134,6 @@ set portList {
 	{ ap_return_30 sc_out sc_lv 16 signal -1 } 
 	{ ap_return_31 sc_out sc_lv 16 signal -1 } 
 	{ ap_return_32 sc_out sc_lv 16 signal -1 } 
-	{ ap_return_33 sc_out sc_lv 16 signal -1 } 
-	{ ap_return_34 sc_out sc_lv 16 signal -1 } 
-	{ ap_return_35 sc_out sc_lv 16 signal -1 } 
 	{ ap_ce sc_in sc_logic 1 ce -1 } 
 }
 set NewPortList {[ 
@@ -160,14 +148,11 @@ set NewPortList {[
  	{ "name": "in_elem_data_2_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "in_elem_data_2_V_read", "role": "default" }} , 
  	{ "name": "in_elem_data_3_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "in_elem_data_3_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_4_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_4_V_read", "role": "default" }} , 
- 	{ "name": "kernel_window_5_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_5_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_6_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_6_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_7_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_7_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_8_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_8_V_read", "role": "default" }} , 
- 	{ "name": "kernel_window_9_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_9_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_10_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_10_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_11_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_11_V_read", "role": "default" }} , 
- 	{ "name": "kernel_window_16_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_16_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_17_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_17_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_18_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_18_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_19_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_19_V_read", "role": "default" }} , 
@@ -216,9 +201,6 @@ set NewPortList {[
  	{ "name": "ap_return_30", "direction": "out", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "ap_return_30", "role": "default" }} , 
  	{ "name": "ap_return_31", "direction": "out", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "ap_return_31", "role": "default" }} , 
  	{ "name": "ap_return_32", "direction": "out", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "ap_return_32", "role": "default" }} , 
- 	{ "name": "ap_return_33", "direction": "out", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "ap_return_33", "role": "default" }} , 
- 	{ "name": "ap_return_34", "direction": "out", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "ap_return_34", "role": "default" }} , 
- 	{ "name": "ap_return_35", "direction": "out", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "ap_return_35", "role": "default" }} , 
  	{ "name": "ap_ce", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "ce", "bundle":{"name": "ap_ce", "role": "default" }}  ]}
 
 set RtlHierarchyInfo {[
@@ -241,14 +223,11 @@ set RtlHierarchyInfo {[
 			{"Name" : "in_elem_data_2_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "in_elem_data_3_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_4_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "kernel_window_5_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_6_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_7_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_8_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "kernel_window_9_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_10_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_11_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "kernel_window_16_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_17_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_18_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_19_V_read", "Type" : "None", "Direction" : "I"},
@@ -289,14 +268,11 @@ set ArgLastReadFirstWriteLatency {
 		in_elem_data_2_V_read {Type I LastRead 0 FirstWrite -1}
 		in_elem_data_3_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_4_V_read {Type I LastRead 0 FirstWrite -1}
-		kernel_window_5_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_6_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_7_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_8_V_read {Type I LastRead 0 FirstWrite -1}
-		kernel_window_9_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_10_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_11_V_read {Type I LastRead 0 FirstWrite -1}
-		kernel_window_16_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_17_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_18_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_19_V_read {Type I LastRead 0 FirstWrite -1}
@@ -337,14 +313,11 @@ set Spec2ImplPortList {
 	in_elem_data_2_V_read { ap_none {  { in_elem_data_2_V_read in_data 0 16 } } }
 	in_elem_data_3_V_read { ap_none {  { in_elem_data_3_V_read in_data 0 16 } } }
 	kernel_window_4_V_read { ap_none {  { kernel_window_4_V_read in_data 0 16 } } }
-	kernel_window_5_V_read { ap_none {  { kernel_window_5_V_read in_data 0 16 } } }
 	kernel_window_6_V_read { ap_none {  { kernel_window_6_V_read in_data 0 16 } } }
 	kernel_window_7_V_read { ap_none {  { kernel_window_7_V_read in_data 0 16 } } }
 	kernel_window_8_V_read { ap_none {  { kernel_window_8_V_read in_data 0 16 } } }
-	kernel_window_9_V_read { ap_none {  { kernel_window_9_V_read in_data 0 16 } } }
 	kernel_window_10_V_read { ap_none {  { kernel_window_10_V_read in_data 0 16 } } }
 	kernel_window_11_V_read { ap_none {  { kernel_window_11_V_read in_data 0 16 } } }
-	kernel_window_16_V_read { ap_none {  { kernel_window_16_V_read in_data 0 16 } } }
 	kernel_window_17_V_read { ap_none {  { kernel_window_17_V_read in_data 0 16 } } }
 	kernel_window_18_V_read { ap_none {  { kernel_window_18_V_read in_data 0 16 } } }
 	kernel_window_19_V_read { ap_none {  { kernel_window_19_V_read in_data 0 16 } } }
@@ -375,21 +348,18 @@ set ProfileFlag 0
 set StallSigGenFlag 0
 set isEnableWaveformDebug 1
 set C_modelName {shift_line_buffer<array<ap_fixed<16, 6, 5, 3, 0>, 4u>, config5>}
-set C_modelType { int 576 }
+set C_modelType { int 528 }
 set C_modelArgList {
 	{ in_elem_data_0_V_read int 16 regular  }
 	{ in_elem_data_1_V_read int 16 regular  }
 	{ in_elem_data_2_V_read int 16 regular  }
 	{ in_elem_data_3_V_read int 16 regular  }
 	{ kernel_window_4_V_read int 16 regular  }
-	{ kernel_window_5_V_read int 16 regular  }
 	{ kernel_window_6_V_read int 16 regular  }
 	{ kernel_window_7_V_read int 16 regular  }
 	{ kernel_window_8_V_read int 16 regular  }
-	{ kernel_window_9_V_read int 16 regular  }
 	{ kernel_window_10_V_read int 16 regular  }
 	{ kernel_window_11_V_read int 16 regular  }
-	{ kernel_window_16_V_read int 16 regular  }
 	{ kernel_window_17_V_read int 16 regular  }
 	{ kernel_window_18_V_read int 16 regular  }
 	{ kernel_window_19_V_read int 16 regular  }
@@ -412,14 +382,11 @@ set C_modelArgMapList {[
  	{ "Name" : "in_elem_data_2_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "in_elem_data_3_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_4_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
- 	{ "Name" : "kernel_window_5_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_6_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_7_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_8_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
- 	{ "Name" : "kernel_window_9_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_10_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_11_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
- 	{ "Name" : "kernel_window_16_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_17_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_18_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_19_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
@@ -435,9 +402,9 @@ set C_modelArgMapList {[
  	{ "Name" : "kernel_window_33_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_34_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
  	{ "Name" : "kernel_window_35_V_read", "interface" : "wire", "bitwidth" : 16, "direction" : "READONLY"} , 
- 	{ "Name" : "ap_return", "interface" : "wire", "bitwidth" : 576} ]}
+ 	{ "Name" : "ap_return", "interface" : "wire", "bitwidth" : 528} ]}
 # RTL Port declarations: 
-set portNum 71
+set portNum 65
 set portList { 
 	{ ap_clk sc_in sc_logic 1 clock -1 } 
 	{ ap_rst sc_in sc_logic 1 reset -1 active_high_sync } 
@@ -450,29 +417,26 @@ set portList {
 	{ in_elem_data_2_V_read sc_in sc_lv 16 signal 2 } 
 	{ in_elem_data_3_V_read sc_in sc_lv 16 signal 3 } 
 	{ kernel_window_4_V_read sc_in sc_lv 16 signal 4 } 
-	{ kernel_window_5_V_read sc_in sc_lv 16 signal 5 } 
-	{ kernel_window_6_V_read sc_in sc_lv 16 signal 6 } 
-	{ kernel_window_7_V_read sc_in sc_lv 16 signal 7 } 
-	{ kernel_window_8_V_read sc_in sc_lv 16 signal 8 } 
-	{ kernel_window_9_V_read sc_in sc_lv 16 signal 9 } 
-	{ kernel_window_10_V_read sc_in sc_lv 16 signal 10 } 
-	{ kernel_window_11_V_read sc_in sc_lv 16 signal 11 } 
-	{ kernel_window_16_V_read sc_in sc_lv 16 signal 12 } 
-	{ kernel_window_17_V_read sc_in sc_lv 16 signal 13 } 
-	{ kernel_window_18_V_read sc_in sc_lv 16 signal 14 } 
-	{ kernel_window_19_V_read sc_in sc_lv 16 signal 15 } 
-	{ kernel_window_20_V_read sc_in sc_lv 16 signal 16 } 
-	{ kernel_window_21_V_read sc_in sc_lv 16 signal 17 } 
-	{ kernel_window_22_V_read sc_in sc_lv 16 signal 18 } 
-	{ kernel_window_23_V_read sc_in sc_lv 16 signal 19 } 
-	{ kernel_window_28_V_read sc_in sc_lv 16 signal 20 } 
-	{ kernel_window_29_V_read sc_in sc_lv 16 signal 21 } 
-	{ kernel_window_30_V_read sc_in sc_lv 16 signal 22 } 
-	{ kernel_window_31_V_read sc_in sc_lv 16 signal 23 } 
-	{ kernel_window_32_V_read sc_in sc_lv 16 signal 24 } 
-	{ kernel_window_33_V_read sc_in sc_lv 16 signal 25 } 
-	{ kernel_window_34_V_read sc_in sc_lv 16 signal 26 } 
-	{ kernel_window_35_V_read sc_in sc_lv 16 signal 27 } 
+	{ kernel_window_6_V_read sc_in sc_lv 16 signal 5 } 
+	{ kernel_window_7_V_read sc_in sc_lv 16 signal 6 } 
+	{ kernel_window_8_V_read sc_in sc_lv 16 signal 7 } 
+	{ kernel_window_10_V_read sc_in sc_lv 16 signal 8 } 
+	{ kernel_window_11_V_read sc_in sc_lv 16 signal 9 } 
+	{ kernel_window_17_V_read sc_in sc_lv 16 signal 10 } 
+	{ kernel_window_18_V_read sc_in sc_lv 16 signal 11 } 
+	{ kernel_window_19_V_read sc_in sc_lv 16 signal 12 } 
+	{ kernel_window_20_V_read sc_in sc_lv 16 signal 13 } 
+	{ kernel_window_21_V_read sc_in sc_lv 16 signal 14 } 
+	{ kernel_window_22_V_read sc_in sc_lv 16 signal 15 } 
+	{ kernel_window_23_V_read sc_in sc_lv 16 signal 16 } 
+	{ kernel_window_28_V_read sc_in sc_lv 16 signal 17 } 
+	{ kernel_window_29_V_read sc_in sc_lv 16 signal 18 } 
+	{ kernel_window_30_V_read sc_in sc_lv 16 signal 19 } 
+	{ kernel_window_31_V_read sc_in sc_lv 16 signal 20 } 
+	{ kernel_window_32_V_read sc_in sc_lv 16 signal 21 } 
+	{ kernel_window_33_V_read sc_in sc_lv 16 signal 22 } 
+	{ kernel_window_34_V_read sc_in sc_lv 16 signal 23 } 
+	{ kernel_window_35_V_read sc_in sc_lv 16 signal 24 } 
 	{ ap_return_0 sc_out sc_lv 16 signal -1 } 
 	{ ap_return_1 sc_out sc_lv 16 signal -1 } 
 	{ ap_return_2 sc_out sc_lv 16 signal -1 } 
@@ -506,9 +470,6 @@ set portList {
 	{ ap_return_30 sc_out sc_lv 16 signal -1 } 
 	{ ap_return_31 sc_out sc_lv 16 signal -1 } 
 	{ ap_return_32 sc_out sc_lv 16 signal -1 } 
-	{ ap_return_33 sc_out sc_lv 16 signal -1 } 
-	{ ap_return_34 sc_out sc_lv 16 signal -1 } 
-	{ ap_return_35 sc_out sc_lv 16 signal -1 } 
 	{ ap_ce sc_in sc_logic 1 ce -1 } 
 }
 set NewPortList {[ 
@@ -523,14 +484,11 @@ set NewPortList {[
  	{ "name": "in_elem_data_2_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "in_elem_data_2_V_read", "role": "default" }} , 
  	{ "name": "in_elem_data_3_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "in_elem_data_3_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_4_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_4_V_read", "role": "default" }} , 
- 	{ "name": "kernel_window_5_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_5_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_6_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_6_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_7_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_7_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_8_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_8_V_read", "role": "default" }} , 
- 	{ "name": "kernel_window_9_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_9_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_10_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_10_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_11_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_11_V_read", "role": "default" }} , 
- 	{ "name": "kernel_window_16_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_16_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_17_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_17_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_18_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_18_V_read", "role": "default" }} , 
  	{ "name": "kernel_window_19_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "kernel_window_19_V_read", "role": "default" }} , 
@@ -579,9 +537,6 @@ set NewPortList {[
  	{ "name": "ap_return_30", "direction": "out", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "ap_return_30", "role": "default" }} , 
  	{ "name": "ap_return_31", "direction": "out", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "ap_return_31", "role": "default" }} , 
  	{ "name": "ap_return_32", "direction": "out", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "ap_return_32", "role": "default" }} , 
- 	{ "name": "ap_return_33", "direction": "out", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "ap_return_33", "role": "default" }} , 
- 	{ "name": "ap_return_34", "direction": "out", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "ap_return_34", "role": "default" }} , 
- 	{ "name": "ap_return_35", "direction": "out", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "ap_return_35", "role": "default" }} , 
  	{ "name": "ap_ce", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "ce", "bundle":{"name": "ap_ce", "role": "default" }}  ]}
 
 set RtlHierarchyInfo {[
@@ -604,14 +559,11 @@ set RtlHierarchyInfo {[
 			{"Name" : "in_elem_data_2_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "in_elem_data_3_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_4_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "kernel_window_5_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_6_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_7_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_8_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "kernel_window_9_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_10_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_11_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "kernel_window_16_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_17_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_18_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_19_V_read", "Type" : "None", "Direction" : "I"},
@@ -652,14 +604,11 @@ set ArgLastReadFirstWriteLatency {
 		in_elem_data_2_V_read {Type I LastRead 0 FirstWrite -1}
 		in_elem_data_3_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_4_V_read {Type I LastRead 0 FirstWrite -1}
-		kernel_window_5_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_6_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_7_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_8_V_read {Type I LastRead 0 FirstWrite -1}
-		kernel_window_9_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_10_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_11_V_read {Type I LastRead 0 FirstWrite -1}
-		kernel_window_16_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_17_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_18_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_19_V_read {Type I LastRead 0 FirstWrite -1}
@@ -700,14 +649,11 @@ set Spec2ImplPortList {
 	in_elem_data_2_V_read { ap_none {  { in_elem_data_2_V_read in_data 0 16 } } }
 	in_elem_data_3_V_read { ap_none {  { in_elem_data_3_V_read in_data 0 16 } } }
 	kernel_window_4_V_read { ap_none {  { kernel_window_4_V_read in_data 0 16 } } }
-	kernel_window_5_V_read { ap_none {  { kernel_window_5_V_read in_data 0 16 } } }
 	kernel_window_6_V_read { ap_none {  { kernel_window_6_V_read in_data 0 16 } } }
 	kernel_window_7_V_read { ap_none {  { kernel_window_7_V_read in_data 0 16 } } }
 	kernel_window_8_V_read { ap_none {  { kernel_window_8_V_read in_data 0 16 } } }
-	kernel_window_9_V_read { ap_none {  { kernel_window_9_V_read in_data 0 16 } } }
 	kernel_window_10_V_read { ap_none {  { kernel_window_10_V_read in_data 0 16 } } }
 	kernel_window_11_V_read { ap_none {  { kernel_window_11_V_read in_data 0 16 } } }
-	kernel_window_16_V_read { ap_none {  { kernel_window_16_V_read in_data 0 16 } } }
 	kernel_window_17_V_read { ap_none {  { kernel_window_17_V_read in_data 0 16 } } }
 	kernel_window_18_V_read { ap_none {  { kernel_window_18_V_read in_data 0 16 } } }
 	kernel_window_19_V_read { ap_none {  { kernel_window_19_V_read in_data 0 16 } } }

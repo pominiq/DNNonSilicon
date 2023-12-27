@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vivado HLS Report for 'reduce_ap_fixed_18_8_0_0_0_4_Op_add_ap_fixed_18_8_0_0_0_s'" level="0">
-<item name = "Date">Tue Dec 19 20:26:36 2023
+<item name = "Date">Wed Dec 27 21:20:05 2023
 </item>
 <item name = "Version">2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)</item>
 <item name = "Project">myproject_prj</item>
@@ -61,10 +61,10 @@
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="1">
 <keys size="7">Instance, Module, BRAM_18K, DSP48E, FF, LUT, URAM</keys>
-<column name="myproject_mux_104_18_1_1_U153">myproject_mux_104_18_1_1, 0, 0, 0, 55, 0</column>
-<column name="myproject_mux_104_18_1_1_U154">myproject_mux_104_18_1_1, 0, 0, 0, 55, 0</column>
-<column name="myproject_mux_104_18_1_1_U155">myproject_mux_104_18_1_1, 0, 0, 0, 55, 0</column>
-<column name="myproject_mux_104_18_1_1_U156">myproject_mux_104_18_1_1, 0, 0, 0, 55, 0</column>
+<column name="myproject_mux_104_18_1_1_U242">myproject_mux_104_18_1_1, 0, 0, 0, 55, 0</column>
+<column name="myproject_mux_104_18_1_1_U243">myproject_mux_104_18_1_1, 0, 0, 0, 55, 0</column>
+<column name="myproject_mux_104_18_1_1_U244">myproject_mux_104_18_1_1, 0, 0, 0, 55, 0</column>
+<column name="myproject_mux_104_18_1_1_U245">myproject_mux_104_18_1_1, 0, 0, 0, 55, 0</column>
 </table>
 </item>
 <item name = "DSP48E"><table name="" hasTotal="0">

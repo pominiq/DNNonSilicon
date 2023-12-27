@@ -9,8 +9,8 @@
 
 // Prototype of top level function for C-synthesis
 void myproject(
-    input_t dense_input[N_INPUT_1_1],
-    result_t layer5_out[N_LAYER_4]
+    hls::stream<input_t> &conv2d_input,
+    hls::stream<result_t> &layer10_out
 );
 
 #endif

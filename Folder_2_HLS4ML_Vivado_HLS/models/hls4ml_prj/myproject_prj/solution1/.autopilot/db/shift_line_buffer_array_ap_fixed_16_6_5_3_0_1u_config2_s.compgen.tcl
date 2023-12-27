@@ -112,36 +112,6 @@ eval "cg_default_interface_gen_dc { \
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
     id 3 \
-    name kernel_window_1_V_read \
-    type other \
-    dir I \
-    reset_level 1 \
-    sync_rst true \
-    corename dc_kernel_window_1_V_read \
-    op interface \
-    ports { kernel_window_1_V_read { I 16 vector } } \
-} "
-}
-
-# Direct connection:
-if {${::AESL::PGuard_autoexp_gen}} {
-eval "cg_default_interface_gen_dc { \
-    id 4 \
-    name kernel_window_2_V_read \
-    type other \
-    dir I \
-    reset_level 1 \
-    sync_rst true \
-    corename dc_kernel_window_2_V_read \
-    op interface \
-    ports { kernel_window_2_V_read { I 16 vector } } \
-} "
-}
-
-# Direct connection:
-if {${::AESL::PGuard_autoexp_gen}} {
-eval "cg_default_interface_gen_dc { \
-    id 5 \
     name kernel_window_4_V_read \
     type other \
     dir I \
@@ -156,7 +126,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 6 \
+    id 4 \
     name kernel_window_5_V_read \
     type other \
     dir I \
@@ -171,7 +141,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 7 \
+    id 5 \
     name kernel_window_7_V_read \
     type other \
     dir I \
@@ -186,7 +156,7 @@ eval "cg_default_interface_gen_dc { \
 # Direct connection:
 if {${::AESL::PGuard_autoexp_gen}} {
 eval "cg_default_interface_gen_dc { \
-    id 8 \
+    id 6 \
     name kernel_window_8_V_read \
     type other \
     dir I \

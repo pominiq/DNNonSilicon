@@ -17,12 +17,12 @@
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="8" bw="16" op_0_bw="16" op_1_bw="16">
+<Node id="6" bw="16" op_0_bw="16" op_1_bw="16">
 <![CDATA[
-.critedge:0  %kernel_window_8_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_8_V_read)
+.critedge:0  %kernel_window_8_V_read_2 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_8_V_read)
 
 ]]></Node>
-<StgValue><ssdm name="kernel_window_8_V_read_1"/></StgValue>
+<StgValue><ssdm name="kernel_window_8_V_read_2"/></StgValue>
 </operation>
 
 <operation id="3" st_id="1" stage="1" lat="1">
@@ -32,12 +32,12 @@
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="9" bw="16" op_0_bw="16" op_1_bw="16">
+<Node id="7" bw="16" op_0_bw="16" op_1_bw="16">
 <![CDATA[
-.critedge:1  %kernel_window_7_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_7_V_read)
+.critedge:1  %kernel_window_7_V_read_2 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_7_V_read)
 
 ]]></Node>
-<StgValue><ssdm name="kernel_window_7_V_read_1"/></StgValue>
+<StgValue><ssdm name="kernel_window_7_V_read_2"/></StgValue>
 </operation>
 
 <operation id="4" st_id="1" stage="1" lat="1">
@@ -47,7 +47,7 @@
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="10" bw="16" op_0_bw="16" op_1_bw="16">
+<Node id="8" bw="16" op_0_bw="16" op_1_bw="16">
 <![CDATA[
 .critedge:2  %kernel_window_5_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_5_V_read)
 
@@ -62,12 +62,12 @@
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="11" bw="16" op_0_bw="16" op_1_bw="16">
+<Node id="9" bw="16" op_0_bw="16" op_1_bw="16">
 <![CDATA[
-.critedge:3  %kernel_window_4_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_4_V_read)
+.critedge:3  %kernel_window_4_V_read_2 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_4_V_read)
 
 ]]></Node>
-<StgValue><ssdm name="kernel_window_4_V_read_1"/></StgValue>
+<StgValue><ssdm name="kernel_window_4_V_read_2"/></StgValue>
 </operation>
 
 <operation id="6" st_id="1" stage="1" lat="1">
@@ -77,12 +77,12 @@
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="12" bw="16" op_0_bw="16" op_1_bw="16">
+<Node id="10" bw="16" op_0_bw="16" op_1_bw="16">
 <![CDATA[
-.critedge:4  %kernel_window_2_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_2_V_read)
+.critedge:4  %in_elem_data_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %in_elem_data_V_read)
 
 ]]></Node>
-<StgValue><ssdm name="kernel_window_2_V_read_1"/></StgValue>
+<StgValue><ssdm name="in_elem_data_V_read_1"/></StgValue>
 </operation>
 
 <operation id="7" st_id="1" stage="1" lat="1">
@@ -92,12 +92,12 @@
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="13" bw="16" op_0_bw="16" op_1_bw="16">
+<Node id="11" bw="0" op_0_bw="0" op_1_bw="32" op_2_bw="32" op_3_bw="32" op_4_bw="32" op_5_bw="0">
 <![CDATA[
-.critedge:5  %kernel_window_1_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %kernel_window_1_V_read)
+.critedge:5  call void (...)* @_ssdm_op_SpecPipeline(i32 -1, i32 1, i32 1, i32 0, [1 x i8]* @p_str10) nounwind
 
 ]]></Node>
-<StgValue><ssdm name="kernel_window_1_V_read_1"/></StgValue>
+<StgValue><ssdm name="specpipeline_ln226"/></StgValue>
 </operation>
 
 <operation id="8" st_id="1" stage="1" lat="1">
@@ -107,72 +107,72 @@
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="14" bw="16" op_0_bw="16" op_1_bw="16">
+<Node id="12" bw="0" op_0_bw="0" op_1_bw="0">
 <![CDATA[
-.critedge:6  %in_elem_data_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %in_elem_data_V_read)
-
-]]></Node>
-<StgValue><ssdm name="in_elem_data_V_read_1"/></StgValue>
-</operation>
-
-<operation id="9" st_id="1" stage="1" lat="1">
-<core>NULL</core>
-<MemPortIdVec></MemPortIdVec>
-<condition id="-1">
-<or_exp><and_exp></and_exp></or_exp>
-</condition>
-
-<Node id="15" bw="0" op_0_bw="0" op_1_bw="32" op_2_bw="32" op_3_bw="32" op_4_bw="32" op_5_bw="0">
-<![CDATA[
-.critedge:7  call void (...)* @_ssdm_op_SpecPipeline(i32 -1, i32 1, i32 1, i32 0, [1 x i8]* @p_str10) nounwind
-
-]]></Node>
-<StgValue><ssdm name="specpipeline_ln226"/></StgValue>
-</operation>
-
-<operation id="10" st_id="1" stage="1" lat="1">
-<core>NULL</core>
-<MemPortIdVec></MemPortIdVec>
-<condition id="-1">
-<or_exp><and_exp></and_exp></or_exp>
-</condition>
-
-<Node id="16" bw="0" op_0_bw="0" op_1_bw="0">
-<![CDATA[
-.critedge:8  call void (...)* @_ssdm_op_SpecLoopName([17 x i8]* @p_str51) nounwind
+.critedge:6  call void (...)* @_ssdm_op_SpecLoopName([17 x i8]* @p_str42) nounwind
 
 ]]></Node>
 <StgValue><ssdm name="specloopname_ln241"/></StgValue>
 </operation>
 
-<operation id="11" st_id="1" stage="1" lat="1">
+<operation id="9" st_id="1" stage="1" lat="1">
 <core>ShiftReg</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="17" bw="16" op_0_bw="16" op_1_bw="16" op_2_bw="16" op_3_bw="1">
+<Node id="13" bw="16" op_0_bw="16" op_1_bw="16" op_2_bw="16" op_3_bw="1">
 <![CDATA[
-.critedge:9  %DataOut_V = call i16 @"_ssdm_op_MemShiftRead.[28 x i16]P"(i16* getelementptr inbounds ([28 x i16]* @line_buffer_Array_V_0_0, i64 0, i64 27), i16 %in_elem_data_V_read_1, i1 true)
+.critedge:7  %DataOut_V = call i16 @"_ssdm_op_MemShiftRead.[28 x i16]P"(i16* getelementptr inbounds ([28 x i16]* @line_buffer_Array_V_0_0, i64 0, i64 27), i16 %in_elem_data_V_read_1, i1 true)
 
 ]]></Node>
 <StgValue><ssdm name="DataOut_V"/></StgValue>
 </operation>
 
-<operation id="12" st_id="1" stage="1" lat="1">
+<operation id="10" st_id="1" stage="1" lat="1">
 <core>ShiftReg</core>
 <MemPortIdVec></MemPortIdVec>
 <condition id="-1">
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="18" bw="16" op_0_bw="16" op_1_bw="16" op_2_bw="16" op_3_bw="1">
+<Node id="14" bw="16" op_0_bw="16" op_1_bw="16" op_2_bw="16" op_3_bw="1">
 <![CDATA[
-.critedge:10  %DataOut_V_1 = call i16 @"_ssdm_op_MemShiftRead.[28 x i16]P"(i16* getelementptr inbounds ([28 x i16]* @line_buffer_Array_V_1232_0, i64 0, i64 27), i16 %DataOut_V, i1 true)
+.critedge:8  %DataOut_V_8 = call i16 @"_ssdm_op_MemShiftRead.[28 x i16]P"(i16* getelementptr inbounds ([28 x i16]* @line_buffer_Array_V_1282_0, i64 0, i64 27), i16 %DataOut_V, i1 true)
 
 ]]></Node>
-<StgValue><ssdm name="DataOut_V_1"/></StgValue>
+<StgValue><ssdm name="DataOut_V_8"/></StgValue>
+</operation>
+
+<operation id="11" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="15" bw="112" op_0_bw="112" op_1_bw="16">
+<![CDATA[
+.critedge:9  %newret1 = insertvalue { i16, i16, i16, i16, i16, i16, i16 } undef, i16 %kernel_window_4_V_read_2, 0
+
+]]></Node>
+<StgValue><ssdm name="newret1"/></StgValue>
+</operation>
+
+<operation id="12" st_id="1" stage="1" lat="1">
+<core>NULL</core>
+<MemPortIdVec></MemPortIdVec>
+<condition id="-1">
+<or_exp><and_exp></and_exp></or_exp>
+</condition>
+
+<Node id="16" bw="112" op_0_bw="112" op_1_bw="16">
+<![CDATA[
+.critedge:10  %newret3 = insertvalue { i16, i16, i16, i16, i16, i16, i16 } %newret1, i16 %kernel_window_7_V_read_2, 1
+
+]]></Node>
+<StgValue><ssdm name="newret3"/></StgValue>
 </operation>
 
 <operation id="13" st_id="1" stage="1" lat="1">
@@ -182,12 +182,12 @@
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="19" bw="144" op_0_bw="144" op_1_bw="16">
+<Node id="17" bw="112" op_0_bw="112" op_1_bw="16">
 <![CDATA[
-.critedge:11  %mrv_s = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } undef, i16 %kernel_window_1_V_read_1, 0
+.critedge:11  %newret5 = insertvalue { i16, i16, i16, i16, i16, i16, i16 } %newret3, i16 %DataOut_V_8, 2
 
 ]]></Node>
-<StgValue><ssdm name="mrv_s"/></StgValue>
+<StgValue><ssdm name="newret5"/></StgValue>
 </operation>
 
 <operation id="14" st_id="1" stage="1" lat="1">
@@ -197,12 +197,12 @@
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="20" bw="144" op_0_bw="144" op_1_bw="16">
+<Node id="18" bw="112" op_0_bw="112" op_1_bw="16">
 <![CDATA[
-.critedge:12  %mrv_1 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_s, i16 %kernel_window_4_V_read_1, 1
+.critedge:12  %newret7 = insertvalue { i16, i16, i16, i16, i16, i16, i16 } %newret5, i16 %kernel_window_5_V_read_1, 3
 
 ]]></Node>
-<StgValue><ssdm name="mrv_1"/></StgValue>
+<StgValue><ssdm name="newret7"/></StgValue>
 </operation>
 
 <operation id="15" st_id="1" stage="1" lat="1">
@@ -212,12 +212,12 @@
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="21" bw="144" op_0_bw="144" op_1_bw="16">
+<Node id="19" bw="112" op_0_bw="112" op_1_bw="16">
 <![CDATA[
-.critedge:13  %mrv_2 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_1, i16 %kernel_window_7_V_read_1, 2
+.critedge:13  %newret9 = insertvalue { i16, i16, i16, i16, i16, i16, i16 } %newret7, i16 %DataOut_V, 4
 
 ]]></Node>
-<StgValue><ssdm name="mrv_2"/></StgValue>
+<StgValue><ssdm name="newret9"/></StgValue>
 </operation>
 
 <operation id="16" st_id="1" stage="1" lat="1">
@@ -227,12 +227,12 @@
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="22" bw="144" op_0_bw="144" op_1_bw="16">
+<Node id="20" bw="112" op_0_bw="112" op_1_bw="16">
 <![CDATA[
-.critedge:14  %mrv_3 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_2, i16 %kernel_window_2_V_read_1, 3
+.critedge:14  %newret11 = insertvalue { i16, i16, i16, i16, i16, i16, i16 } %newret9, i16 %kernel_window_8_V_read_2, 5
 
 ]]></Node>
-<StgValue><ssdm name="mrv_3"/></StgValue>
+<StgValue><ssdm name="newret11"/></StgValue>
 </operation>
 
 <operation id="17" st_id="1" stage="1" lat="1">
@@ -242,12 +242,12 @@
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="23" bw="144" op_0_bw="144" op_1_bw="16">
+<Node id="21" bw="112" op_0_bw="112" op_1_bw="16">
 <![CDATA[
-.critedge:15  %mrv_4 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_3, i16 %DataOut_V_1, 4
+.critedge:15  %newret13 = insertvalue { i16, i16, i16, i16, i16, i16, i16 } %newret11, i16 %in_elem_data_V_read_1, 6
 
 ]]></Node>
-<StgValue><ssdm name="mrv_4"/></StgValue>
+<StgValue><ssdm name="newret13"/></StgValue>
 </operation>
 
 <operation id="18" st_id="1" stage="1" lat="1">
@@ -257,72 +257,12 @@
 <or_exp><and_exp></and_exp></or_exp>
 </condition>
 
-<Node id="24" bw="144" op_0_bw="144" op_1_bw="16">
+<Node id="22" bw="0" op_0_bw="112">
 <![CDATA[
-.critedge:16  %mrv_5 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_4, i16 %kernel_window_5_V_read_1, 5
+.critedge:16  ret { i16, i16, i16, i16, i16, i16, i16 } %newret13
 
 ]]></Node>
-<StgValue><ssdm name="mrv_5"/></StgValue>
-</operation>
-
-<operation id="19" st_id="1" stage="1" lat="1">
-<core>NULL</core>
-<MemPortIdVec></MemPortIdVec>
-<condition id="-1">
-<or_exp><and_exp></and_exp></or_exp>
-</condition>
-
-<Node id="25" bw="144" op_0_bw="144" op_1_bw="16">
-<![CDATA[
-.critedge:17  %mrv_6 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_5, i16 %DataOut_V, 6
-
-]]></Node>
-<StgValue><ssdm name="mrv_6"/></StgValue>
-</operation>
-
-<operation id="20" st_id="1" stage="1" lat="1">
-<core>NULL</core>
-<MemPortIdVec></MemPortIdVec>
-<condition id="-1">
-<or_exp><and_exp></and_exp></or_exp>
-</condition>
-
-<Node id="26" bw="144" op_0_bw="144" op_1_bw="16">
-<![CDATA[
-.critedge:18  %mrv_7 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_6, i16 %kernel_window_8_V_read_1, 7
-
-]]></Node>
-<StgValue><ssdm name="mrv_7"/></StgValue>
-</operation>
-
-<operation id="21" st_id="1" stage="1" lat="1">
-<core>NULL</core>
-<MemPortIdVec></MemPortIdVec>
-<condition id="-1">
-<or_exp><and_exp></and_exp></or_exp>
-</condition>
-
-<Node id="27" bw="144" op_0_bw="144" op_1_bw="16">
-<![CDATA[
-.critedge:19  %mrv_8 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_7, i16 %in_elem_data_V_read_1, 8
-
-]]></Node>
-<StgValue><ssdm name="mrv_8"/></StgValue>
-</operation>
-
-<operation id="22" st_id="1" stage="1" lat="1">
-<core>NULL</core>
-<MemPortIdVec></MemPortIdVec>
-<condition id="-1">
-<or_exp><and_exp></and_exp></or_exp>
-</condition>
-
-<Node id="28" bw="0" op_0_bw="144">
-<![CDATA[
-.critedge:20  ret { i16, i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_8
-
-]]></Node>
-<StgValue><ssdm name="ret_ln253"/></StgValue>
+<StgValue><ssdm name="ret_ln221"/></StgValue>
 </operation>
 </state>
 </state_list>

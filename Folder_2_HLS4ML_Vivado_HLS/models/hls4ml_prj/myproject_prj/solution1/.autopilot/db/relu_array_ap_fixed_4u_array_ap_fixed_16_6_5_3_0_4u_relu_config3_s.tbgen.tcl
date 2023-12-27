@@ -113,7 +113,7 @@ set RtlHierarchyInfo {[
 		"ControlExist" : "1", "ap_start" : "1", "ap_ready" : "1", "ap_done" : "1", "ap_continue" : "1", "ap_idle" : "1",
 		"Pipeline" : "None", "UnalignedPipeline" : "0", "RewindPipeline" : "0", "ProcessNetwork" : "0",
 		"II" : "0",
-		"VariableLatency" : "1", "ExactLatency" : "-1", "EstimateLatencyMin" : "679", "EstimateLatencyMax" : "679",
+		"VariableLatency" : "1", "ExactLatency" : "-1", "EstimateLatencyMin" : "678", "EstimateLatencyMax" : "678",
 		"Combinational" : "0",
 		"Datapath" : "0",
 		"ClockEnable" : "0",
@@ -153,16 +153,16 @@ set ArgLastReadFirstWriteLatency {
 		data_V_data_1_V {Type I LastRead 2 FirstWrite -1}
 		data_V_data_2_V {Type I LastRead 2 FirstWrite -1}
 		data_V_data_3_V {Type I LastRead 2 FirstWrite -1}
-		res_V_data_0_V {Type O LastRead -1 FirstWrite 3}
-		res_V_data_1_V {Type O LastRead -1 FirstWrite 3}
-		res_V_data_2_V {Type O LastRead -1 FirstWrite 3}
-		res_V_data_3_V {Type O LastRead -1 FirstWrite 3}}}
+		res_V_data_0_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_1_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_2_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_3_V {Type O LastRead -1 FirstWrite 2}}}
 
 set hasDtUnsupportedChannel 0
 
 set PerformanceInfo {[
-	{"Name" : "Latency", "Min" : "679", "Max" : "679"}
-	, {"Name" : "Interval", "Min" : "679", "Max" : "679"}
+	{"Name" : "Latency", "Min" : "678", "Max" : "678"}
+	, {"Name" : "Interval", "Min" : "678", "Max" : "678"}
 ]}
 
 set PipelineEnableSignalInfo {[
@@ -294,7 +294,7 @@ set RtlHierarchyInfo {[
 		"ControlExist" : "1", "ap_start" : "1", "ap_ready" : "1", "ap_done" : "1", "ap_continue" : "1", "ap_idle" : "1",
 		"Pipeline" : "None", "UnalignedPipeline" : "0", "RewindPipeline" : "0", "ProcessNetwork" : "0",
 		"II" : "0",
-		"VariableLatency" : "1", "ExactLatency" : "-1", "EstimateLatencyMin" : "679", "EstimateLatencyMax" : "679",
+		"VariableLatency" : "1", "ExactLatency" : "-1", "EstimateLatencyMin" : "678", "EstimateLatencyMax" : "678",
 		"Combinational" : "0",
 		"Datapath" : "0",
 		"ClockEnable" : "0",
@@ -334,16 +334,16 @@ set ArgLastReadFirstWriteLatency {
 		data_V_data_1_V {Type I LastRead 2 FirstWrite -1}
 		data_V_data_2_V {Type I LastRead 2 FirstWrite -1}
 		data_V_data_3_V {Type I LastRead 2 FirstWrite -1}
-		res_V_data_0_V {Type O LastRead -1 FirstWrite 3}
-		res_V_data_1_V {Type O LastRead -1 FirstWrite 3}
-		res_V_data_2_V {Type O LastRead -1 FirstWrite 3}
-		res_V_data_3_V {Type O LastRead -1 FirstWrite 3}}}
+		res_V_data_0_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_1_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_2_V {Type O LastRead -1 FirstWrite 2}
+		res_V_data_3_V {Type O LastRead -1 FirstWrite 2}}}
 
 set hasDtUnsupportedChannel 0
 
 set PerformanceInfo {[
-	{"Name" : "Latency", "Min" : "679", "Max" : "679"}
-	, {"Name" : "Interval", "Min" : "679", "Max" : "679"}
+	{"Name" : "Latency", "Min" : "678", "Max" : "678"}
+	, {"Name" : "Interval", "Min" : "678", "Max" : "678"}
 ]}
 
 set PipelineEnableSignalInfo {[

@@ -193,7 +193,7 @@ set RtlHierarchyInfo {[
 		"ControlExist" : "1", "ap_start" : "1", "ap_ready" : "1", "ap_done" : "1", "ap_continue" : "1", "ap_idle" : "1",
 		"Pipeline" : "None", "UnalignedPipeline" : "0", "RewindPipeline" : "0", "ProcessNetwork" : "0",
 		"II" : "0",
-		"VariableLatency" : "1", "ExactLatency" : "-1", "EstimateLatencyMin" : "67", "EstimateLatencyMax" : "67",
+		"VariableLatency" : "1", "ExactLatency" : "-1", "EstimateLatencyMin" : "7", "EstimateLatencyMax" : "7",
 		"Combinational" : "0",
 		"Datapath" : "0",
 		"ClockEnable" : "0",
@@ -255,14 +255,14 @@ set RtlHierarchyInfo {[
 			{"Name" : "res_stream_V_data_9_V", "Type" : "Fifo", "Direction" : "O", "DependentProc" : "0", "DependentChan" : "0",
 				"BlockSignal" : [
 					{"Name" : "res_stream_V_data_9_V_blk_n", "Type" : "RtlSignal"}]}]},
-	{"ID" : "1", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497", "Parent" : "0",
+	{"ID" : "1", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.call_ret_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_489", "Parent" : "0",
 		"CDFG" : "dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s",
 		"Protocol" : "ap_ctrl_hs",
-		"ControlExist" : "1", "ap_start" : "1", "ap_ready" : "1", "ap_done" : "1", "ap_continue" : "0", "ap_idle" : "1",
+		"ControlExist" : "0", "ap_start" : "0", "ap_ready" : "1", "ap_done" : "0", "ap_continue" : "0", "ap_idle" : "0",
 		"Pipeline" : "None", "UnalignedPipeline" : "0", "RewindPipeline" : "0", "ProcessNetwork" : "0",
-		"II" : "61",
-		"VariableLatency" : "0", "ExactLatency" : "60", "EstimateLatencyMin" : "60", "EstimateLatencyMax" : "60",
-		"Combinational" : "0",
+		"II" : "1",
+		"VariableLatency" : "0", "ExactLatency" : "0", "EstimateLatencyMin" : "0", "EstimateLatencyMax" : "0",
+		"Combinational" : "1",
 		"Datapath" : "0",
 		"ClockEnable" : "0",
 		"HasSubDataflow" : "0",
@@ -272,7 +272,6 @@ set RtlHierarchyInfo {[
 			{"Name" : "data_0_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_1_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_2_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "data_3_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_4_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_5_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_6_V_read", "Type" : "None", "Direction" : "I"},
@@ -294,7 +293,6 @@ set RtlHierarchyInfo {[
 			{"Name" : "data_22_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_23_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_24_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "data_25_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_26_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_27_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_28_V_read", "Type" : "None", "Direction" : "I"},
@@ -313,55 +311,53 @@ set ArgLastReadFirstWriteLatency {
 		data_stream_V_data_5_V {Type I LastRead 2 FirstWrite -1}
 		data_stream_V_data_6_V {Type I LastRead 2 FirstWrite -1}
 		data_stream_V_data_7_V {Type I LastRead 2 FirstWrite -1}
-		res_stream_V_data_0_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_1_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_2_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_3_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_4_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_5_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_6_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_7_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_8_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_9_V {Type O LastRead -1 FirstWrite 63}}
+		res_stream_V_data_0_V {Type O LastRead -1 FirstWrite 3}
+		res_stream_V_data_1_V {Type O LastRead -1 FirstWrite 3}
+		res_stream_V_data_2_V {Type O LastRead -1 FirstWrite 3}
+		res_stream_V_data_3_V {Type O LastRead -1 FirstWrite 3}
+		res_stream_V_data_4_V {Type O LastRead -1 FirstWrite 3}
+		res_stream_V_data_5_V {Type O LastRead -1 FirstWrite 3}
+		res_stream_V_data_6_V {Type O LastRead -1 FirstWrite 3}
+		res_stream_V_data_7_V {Type O LastRead -1 FirstWrite 3}
+		res_stream_V_data_8_V {Type O LastRead -1 FirstWrite 3}
+		res_stream_V_data_9_V {Type O LastRead -1 FirstWrite 3}}
 	dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s {
-		data_0_V_read {Type I LastRead 44 FirstWrite -1}
+		data_0_V_read {Type I LastRead 0 FirstWrite -1}
 		data_1_V_read {Type I LastRead 0 FirstWrite -1}
 		data_2_V_read {Type I LastRead 0 FirstWrite -1}
-		data_3_V_read {Type I LastRead 23 FirstWrite -1}
 		data_4_V_read {Type I LastRead 0 FirstWrite -1}
-		data_5_V_read {Type I LastRead 2 FirstWrite -1}
-		data_6_V_read {Type I LastRead 4 FirstWrite -1}
-		data_7_V_read {Type I LastRead 6 FirstWrite -1}
-		data_8_V_read {Type I LastRead 7 FirstWrite -1}
-		data_9_V_read {Type I LastRead 9 FirstWrite -1}
-		data_10_V_read {Type I LastRead 9 FirstWrite -1}
-		data_11_V_read {Type I LastRead 10 FirstWrite -1}
-		data_12_V_read {Type I LastRead 10 FirstWrite -1}
-		data_13_V_read {Type I LastRead 11 FirstWrite -1}
-		data_14_V_read {Type I LastRead 11 FirstWrite -1}
-		data_15_V_read {Type I LastRead 12 FirstWrite -1}
+		data_5_V_read {Type I LastRead 0 FirstWrite -1}
+		data_6_V_read {Type I LastRead 0 FirstWrite -1}
+		data_7_V_read {Type I LastRead 0 FirstWrite -1}
+		data_8_V_read {Type I LastRead 0 FirstWrite -1}
+		data_9_V_read {Type I LastRead 0 FirstWrite -1}
+		data_10_V_read {Type I LastRead 0 FirstWrite -1}
+		data_11_V_read {Type I LastRead 0 FirstWrite -1}
+		data_12_V_read {Type I LastRead 0 FirstWrite -1}
+		data_13_V_read {Type I LastRead 0 FirstWrite -1}
+		data_14_V_read {Type I LastRead 0 FirstWrite -1}
+		data_15_V_read {Type I LastRead 0 FirstWrite -1}
 		data_16_V_read {Type I LastRead 0 FirstWrite -1}
-		data_17_V_read {Type I LastRead 16 FirstWrite -1}
-		data_18_V_read {Type I LastRead 17 FirstWrite -1}
-		data_19_V_read {Type I LastRead 19 FirstWrite -1}
-		data_20_V_read {Type I LastRead 21 FirstWrite -1}
-		data_21_V_read {Type I LastRead 23 FirstWrite -1}
-		data_22_V_read {Type I LastRead 25 FirstWrite -1}
-		data_23_V_read {Type I LastRead 27 FirstWrite -1}
-		data_24_V_read {Type I LastRead 29 FirstWrite -1}
-		data_25_V_read {Type I LastRead 31 FirstWrite -1}
+		data_17_V_read {Type I LastRead 0 FirstWrite -1}
+		data_18_V_read {Type I LastRead 0 FirstWrite -1}
+		data_19_V_read {Type I LastRead 0 FirstWrite -1}
+		data_20_V_read {Type I LastRead 0 FirstWrite -1}
+		data_21_V_read {Type I LastRead 0 FirstWrite -1}
+		data_22_V_read {Type I LastRead 0 FirstWrite -1}
+		data_23_V_read {Type I LastRead 0 FirstWrite -1}
+		data_24_V_read {Type I LastRead 0 FirstWrite -1}
 		data_26_V_read {Type I LastRead 0 FirstWrite -1}
-		data_27_V_read {Type I LastRead 34 FirstWrite -1}
-		data_28_V_read {Type I LastRead 36 FirstWrite -1}
-		data_29_V_read {Type I LastRead 38 FirstWrite -1}
-		data_30_V_read {Type I LastRead 40 FirstWrite -1}
-		data_31_V_read {Type I LastRead 42 FirstWrite -1}}}
+		data_27_V_read {Type I LastRead 0 FirstWrite -1}
+		data_28_V_read {Type I LastRead 0 FirstWrite -1}
+		data_29_V_read {Type I LastRead 0 FirstWrite -1}
+		data_30_V_read {Type I LastRead 0 FirstWrite -1}
+		data_31_V_read {Type I LastRead 0 FirstWrite -1}}}
 
 set hasDtUnsupportedChannel 0
 
 set PerformanceInfo {[
-	{"Name" : "Latency", "Min" : "67", "Max" : "67"}
-	, {"Name" : "Interval", "Min" : "67", "Max" : "67"}
+	{"Name" : "Latency", "Min" : "7", "Max" : "7"}
+	, {"Name" : "Interval", "Min" : "7", "Max" : "7"}
 ]}
 
 set PipelineEnableSignalInfo {[
@@ -583,7 +579,7 @@ set RtlHierarchyInfo {[
 		"ControlExist" : "1", "ap_start" : "1", "ap_ready" : "1", "ap_done" : "1", "ap_continue" : "1", "ap_idle" : "1",
 		"Pipeline" : "None", "UnalignedPipeline" : "0", "RewindPipeline" : "0", "ProcessNetwork" : "0",
 		"II" : "0",
-		"VariableLatency" : "1", "ExactLatency" : "-1", "EstimateLatencyMin" : "67", "EstimateLatencyMax" : "67",
+		"VariableLatency" : "1", "ExactLatency" : "-1", "EstimateLatencyMin" : "21", "EstimateLatencyMax" : "21",
 		"Combinational" : "0",
 		"Datapath" : "0",
 		"ClockEnable" : "0",
@@ -645,13 +641,13 @@ set RtlHierarchyInfo {[
 			{"Name" : "res_stream_V_data_9_V", "Type" : "Fifo", "Direction" : "O", "DependentProc" : "0", "DependentChan" : "0",
 				"BlockSignal" : [
 					{"Name" : "res_stream_V_data_9_V_blk_n", "Type" : "RtlSignal"}]}]},
-	{"ID" : "1", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_497", "Parent" : "0",
+	{"ID" : "1", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s_fu_489", "Parent" : "0",
 		"CDFG" : "dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s",
 		"Protocol" : "ap_ctrl_hs",
 		"ControlExist" : "1", "ap_start" : "1", "ap_ready" : "1", "ap_done" : "1", "ap_continue" : "0", "ap_idle" : "1",
 		"Pipeline" : "None", "UnalignedPipeline" : "0", "RewindPipeline" : "0", "ProcessNetwork" : "0",
-		"II" : "61",
-		"VariableLatency" : "0", "ExactLatency" : "60", "EstimateLatencyMin" : "60", "EstimateLatencyMax" : "60",
+		"II" : "16",
+		"VariableLatency" : "0", "ExactLatency" : "15", "EstimateLatencyMin" : "15", "EstimateLatencyMax" : "15",
 		"Combinational" : "0",
 		"Datapath" : "0",
 		"ClockEnable" : "0",
@@ -662,7 +658,6 @@ set RtlHierarchyInfo {[
 			{"Name" : "data_0_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_1_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_2_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "data_3_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_4_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_5_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_6_V_read", "Type" : "None", "Direction" : "I"},
@@ -684,7 +679,6 @@ set RtlHierarchyInfo {[
 			{"Name" : "data_22_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_23_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_24_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "data_25_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_26_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_27_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_28_V_read", "Type" : "None", "Direction" : "I"},
@@ -703,55 +697,53 @@ set ArgLastReadFirstWriteLatency {
 		data_stream_V_data_5_V {Type I LastRead 2 FirstWrite -1}
 		data_stream_V_data_6_V {Type I LastRead 2 FirstWrite -1}
 		data_stream_V_data_7_V {Type I LastRead 2 FirstWrite -1}
-		res_stream_V_data_0_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_1_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_2_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_3_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_4_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_5_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_6_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_7_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_8_V {Type O LastRead -1 FirstWrite 63}
-		res_stream_V_data_9_V {Type O LastRead -1 FirstWrite 63}}
+		res_stream_V_data_0_V {Type O LastRead -1 FirstWrite 17}
+		res_stream_V_data_1_V {Type O LastRead -1 FirstWrite 17}
+		res_stream_V_data_2_V {Type O LastRead -1 FirstWrite 17}
+		res_stream_V_data_3_V {Type O LastRead -1 FirstWrite 17}
+		res_stream_V_data_4_V {Type O LastRead -1 FirstWrite 17}
+		res_stream_V_data_5_V {Type O LastRead -1 FirstWrite 17}
+		res_stream_V_data_6_V {Type O LastRead -1 FirstWrite 17}
+		res_stream_V_data_7_V {Type O LastRead -1 FirstWrite 17}
+		res_stream_V_data_8_V {Type O LastRead -1 FirstWrite 17}
+		res_stream_V_data_9_V {Type O LastRead -1 FirstWrite 17}}
 	dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s {
 		data_0_V_read {Type I LastRead 0 FirstWrite -1}
 		data_1_V_read {Type I LastRead 1 FirstWrite -1}
-		data_2_V_read {Type I LastRead 1 FirstWrite -1}
-		data_3_V_read {Type I LastRead 48 FirstWrite -1}
-		data_4_V_read {Type I LastRead 1 FirstWrite -1}
-		data_5_V_read {Type I LastRead 3 FirstWrite -1}
-		data_6_V_read {Type I LastRead 4 FirstWrite -1}
-		data_7_V_read {Type I LastRead 6 FirstWrite -1}
-		data_8_V_read {Type I LastRead 7 FirstWrite -1}
-		data_9_V_read {Type I LastRead 8 FirstWrite -1}
-		data_10_V_read {Type I LastRead 10 FirstWrite -1}
-		data_11_V_read {Type I LastRead 11 FirstWrite -1}
-		data_12_V_read {Type I LastRead 11 FirstWrite -1}
-		data_13_V_read {Type I LastRead 12 FirstWrite -1}
-		data_14_V_read {Type I LastRead 12 FirstWrite -1}
-		data_15_V_read {Type I LastRead 13 FirstWrite -1}
-		data_16_V_read {Type I LastRead 15 FirstWrite -1}
-		data_17_V_read {Type I LastRead 0 FirstWrite -1}
-		data_18_V_read {Type I LastRead 18 FirstWrite -1}
-		data_19_V_read {Type I LastRead 20 FirstWrite -1}
-		data_20_V_read {Type I LastRead 21 FirstWrite -1}
-		data_21_V_read {Type I LastRead 23 FirstWrite -1}
-		data_22_V_read {Type I LastRead 25 FirstWrite -1}
-		data_23_V_read {Type I LastRead 27 FirstWrite -1}
-		data_24_V_read {Type I LastRead 29 FirstWrite -1}
-		data_25_V_read {Type I LastRead 31 FirstWrite -1}
-		data_26_V_read {Type I LastRead 0 FirstWrite -1}
-		data_27_V_read {Type I LastRead 34 FirstWrite -1}
-		data_28_V_read {Type I LastRead 36 FirstWrite -1}
-		data_29_V_read {Type I LastRead 38 FirstWrite -1}
-		data_30_V_read {Type I LastRead 40 FirstWrite -1}
-		data_31_V_read {Type I LastRead 0 FirstWrite -1}}}
+		data_2_V_read {Type I LastRead 2 FirstWrite -1}
+		data_4_V_read {Type I LastRead 2 FirstWrite -1}
+		data_5_V_read {Type I LastRead 2 FirstWrite -1}
+		data_6_V_read {Type I LastRead 3 FirstWrite -1}
+		data_7_V_read {Type I LastRead 3 FirstWrite -1}
+		data_8_V_read {Type I LastRead 3 FirstWrite -1}
+		data_9_V_read {Type I LastRead 4 FirstWrite -1}
+		data_10_V_read {Type I LastRead 4 FirstWrite -1}
+		data_11_V_read {Type I LastRead 5 FirstWrite -1}
+		data_12_V_read {Type I LastRead 5 FirstWrite -1}
+		data_13_V_read {Type I LastRead 5 FirstWrite -1}
+		data_14_V_read {Type I LastRead 6 FirstWrite -1}
+		data_15_V_read {Type I LastRead 7 FirstWrite -1}
+		data_16_V_read {Type I LastRead 7 FirstWrite -1}
+		data_17_V_read {Type I LastRead 8 FirstWrite -1}
+		data_18_V_read {Type I LastRead 9 FirstWrite -1}
+		data_19_V_read {Type I LastRead 9 FirstWrite -1}
+		data_20_V_read {Type I LastRead 10 FirstWrite -1}
+		data_21_V_read {Type I LastRead 10 FirstWrite -1}
+		data_22_V_read {Type I LastRead 11 FirstWrite -1}
+		data_23_V_read {Type I LastRead 11 FirstWrite -1}
+		data_24_V_read {Type I LastRead 12 FirstWrite -1}
+		data_26_V_read {Type I LastRead 12 FirstWrite -1}
+		data_27_V_read {Type I LastRead 13 FirstWrite -1}
+		data_28_V_read {Type I LastRead 13 FirstWrite -1}
+		data_29_V_read {Type I LastRead 14 FirstWrite -1}
+		data_30_V_read {Type I LastRead 14 FirstWrite -1}
+		data_31_V_read {Type I LastRead 15 FirstWrite -1}}}
 
 set hasDtUnsupportedChannel 0
 
 set PerformanceInfo {[
-	{"Name" : "Latency", "Min" : "67", "Max" : "67"}
-	, {"Name" : "Interval", "Min" : "67", "Max" : "67"}
+	{"Name" : "Latency", "Min" : "21", "Max" : "21"}
+	, {"Name" : "Interval", "Min" : "21", "Max" : "21"}
 ]}
 
 set PipelineEnableSignalInfo {[

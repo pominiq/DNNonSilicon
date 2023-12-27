@@ -36,7 +36,7 @@ set structIsPacked0 "0"
 set DataType0 [list "nnet::array<ap_fixed<16, 6, 5, 3, 0>, 1>" "struct array" $structMem0 1 0 $structParameter0 $structArgument0 $NameSpace0 $structIsPacked0]
 set Port0 [list $PortName0 $Interface0 $DataType0 $Pointer0 $Dims0 $Const0 $Volatile0 $ArrayOpt0]
 lappend PortList $Port0
-set PortName1 "layer10_out"
+set PortName1 "layer8_out"
 set BitWidth1 "160"
 set ArrayOpt1 ""
 set Const1 "0"

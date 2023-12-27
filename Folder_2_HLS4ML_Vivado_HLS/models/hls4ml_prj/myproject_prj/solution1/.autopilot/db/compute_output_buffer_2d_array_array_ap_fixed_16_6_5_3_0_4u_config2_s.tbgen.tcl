@@ -4,7 +4,7 @@ set isTaskLevelControl 1
 set isCombinational 0
 set isDatapathOnly 0
 set isFreeRunPipelineModule 0
-set isPipelined 0
+set isPipelined 1
 set pipeline_type function
 set FunctionProtocol ap_ctrl_hs
 set isOneStateSeq 0
@@ -35,7 +35,6 @@ set portList {
 	{ ap_done sc_out sc_logic 1 predone -1 } 
 	{ ap_idle sc_out sc_logic 1 done -1 } 
 	{ ap_ready sc_out sc_logic 1 ready -1 } 
-	{ in_elem_data_V_read sc_in sc_lv 16 signal 0 } 
 	{ res_stream_V_data_0_V_din sc_out sc_lv 16 signal 1 } 
 	{ res_stream_V_data_0_V_full_n sc_in sc_logic 1 signal 1 } 
 	{ res_stream_V_data_0_V_write sc_out sc_logic 1 signal 1 } 
@@ -48,11 +47,12 @@ set portList {
 	{ res_stream_V_data_3_V_din sc_out sc_lv 16 signal 4 } 
 	{ res_stream_V_data_3_V_full_n sc_in sc_logic 1 signal 4 } 
 	{ res_stream_V_data_3_V_write sc_out sc_logic 1 signal 4 } 
+	{ ap_ce sc_in sc_logic 1 ce -1 } 
+	{ in_elem_data_V_read sc_in sc_lv 16 signal 0 } 
 	{ res_stream_V_data_0_V_blk_n sc_out sc_logic 1 signal -1 } 
 	{ res_stream_V_data_1_V_blk_n sc_out sc_logic 1 signal -1 } 
 	{ res_stream_V_data_2_V_blk_n sc_out sc_logic 1 signal -1 } 
 	{ res_stream_V_data_3_V_blk_n sc_out sc_logic 1 signal -1 } 
-	{ ap_ce sc_in sc_logic 1 ce -1 } 
 }
 set NewPortList {[ 
 	{ "name": "ap_clk", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "clock", "bundle":{"name": "ap_clk", "role": "default" }} , 
@@ -61,7 +61,6 @@ set NewPortList {[
  	{ "name": "ap_done", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "predone", "bundle":{"name": "ap_done", "role": "default" }} , 
  	{ "name": "ap_idle", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "done", "bundle":{"name": "ap_idle", "role": "default" }} , 
  	{ "name": "ap_ready", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "ready", "bundle":{"name": "ap_ready", "role": "default" }} , 
- 	{ "name": "in_elem_data_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "in_elem_data_V_read", "role": "default" }} , 
  	{ "name": "res_stream_V_data_0_V_din", "direction": "out", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "res_stream_V_data_0_V", "role": "din" }} , 
  	{ "name": "res_stream_V_data_0_V_full_n", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "signal", "bundle":{"name": "res_stream_V_data_0_V", "role": "full_n" }} , 
  	{ "name": "res_stream_V_data_0_V_write", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "signal", "bundle":{"name": "res_stream_V_data_0_V", "role": "write" }} , 
@@ -74,20 +73,21 @@ set NewPortList {[
  	{ "name": "res_stream_V_data_3_V_din", "direction": "out", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "res_stream_V_data_3_V", "role": "din" }} , 
  	{ "name": "res_stream_V_data_3_V_full_n", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "signal", "bundle":{"name": "res_stream_V_data_3_V", "role": "full_n" }} , 
  	{ "name": "res_stream_V_data_3_V_write", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "signal", "bundle":{"name": "res_stream_V_data_3_V", "role": "write" }} , 
+ 	{ "name": "ap_ce", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "ce", "bundle":{"name": "ap_ce", "role": "default" }} , 
+ 	{ "name": "in_elem_data_V_read", "direction": "in", "datatype": "sc_lv", "bitwidth":16, "type": "signal", "bundle":{"name": "in_elem_data_V_read", "role": "default" }} , 
  	{ "name": "res_stream_V_data_0_V_blk_n", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "signal", "bundle":{"name": "res_stream_V_data_0_V_blk_n", "role": "default" }} , 
  	{ "name": "res_stream_V_data_1_V_blk_n", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "signal", "bundle":{"name": "res_stream_V_data_1_V_blk_n", "role": "default" }} , 
  	{ "name": "res_stream_V_data_2_V_blk_n", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "signal", "bundle":{"name": "res_stream_V_data_2_V_blk_n", "role": "default" }} , 
- 	{ "name": "res_stream_V_data_3_V_blk_n", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "signal", "bundle":{"name": "res_stream_V_data_3_V_blk_n", "role": "default" }} , 
- 	{ "name": "ap_ce", "direction": "in", "datatype": "sc_logic", "bitwidth":1, "type": "ce", "bundle":{"name": "ap_ce", "role": "default" }}  ]}
+ 	{ "name": "res_stream_V_data_3_V_blk_n", "direction": "out", "datatype": "sc_logic", "bitwidth":1, "type": "signal", "bundle":{"name": "res_stream_V_data_3_V_blk_n", "role": "default" }}  ]}
 
 set RtlHierarchyInfo {[
 	{"ID" : "0", "Level" : "0", "Path" : "`AUTOTB_DUT_INST", "Parent" : "", "Child" : ["1", "2"],
 		"CDFG" : "compute_output_buffer_2d_array_array_ap_fixed_16_6_5_3_0_4u_config2_s",
 		"Protocol" : "ap_ctrl_hs",
 		"ControlExist" : "1", "ap_start" : "1", "ap_ready" : "1", "ap_done" : "1", "ap_continue" : "0", "ap_idle" : "1",
-		"Pipeline" : "None", "UnalignedPipeline" : "0", "RewindPipeline" : "0", "ProcessNetwork" : "0",
-		"II" : "34",
-		"VariableLatency" : "0", "ExactLatency" : "33", "EstimateLatencyMin" : "33", "EstimateLatencyMax" : "33",
+		"Pipeline" : "Aligned", "UnalignedPipeline" : "0", "RewindPipeline" : "0", "ProcessNetwork" : "0",
+		"II" : "1",
+		"VariableLatency" : "0", "ExactLatency" : "1", "EstimateLatencyMin" : "1", "EstimateLatencyMax" : "1",
 		"Combinational" : "0",
 		"Datapath" : "0",
 		"ClockEnable" : "1",
@@ -108,46 +108,41 @@ set RtlHierarchyInfo {[
 			{"Name" : "res_stream_V_data_3_V", "Type" : "Fifo", "Direction" : "O",
 				"BlockSignal" : [
 					{"Name" : "res_stream_V_data_3_V_blk_n", "Type" : "RtlPort"}]},
-			{"Name" : "kernel_data_V_1312", "Type" : "OVld", "Direction" : "IO"},
-			{"Name" : "kernel_data_V_2313", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "kernel_data_V_4", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "kernel_data_V_5", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "kernel_data_V_7", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "kernel_data_V_8", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "line_buffer_Array_V_0_0", "Type" : "Memory", "Direction" : "X",
 				"SubConnect" : [
-					{"ID" : "2", "SubInstance" : "call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_155", "Port" : "line_buffer_Array_V_0_0"}]},
-			{"Name" : "line_buffer_Array_V_1311_0", "Type" : "Memory", "Direction" : "X",
+					{"ID" : "2", "SubInstance" : "call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_149", "Port" : "line_buffer_Array_V_0_0"}]},
+			{"Name" : "line_buffer_Array_V_1282_0", "Type" : "Memory", "Direction" : "X",
 				"SubConnect" : [
-					{"ID" : "2", "SubInstance" : "call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_155", "Port" : "line_buffer_Array_V_1311_0"}]},
+					{"ID" : "2", "SubInstance" : "call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_149", "Port" : "line_buffer_Array_V_1282_0"}]},
 			{"Name" : "sX_3", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "sY_3", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "pY_3", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "pX_3", "Type" : "OVld", "Direction" : "IO"}]},
-	{"ID" : "1", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.grp_dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config2_mult_0_0_0_0_0_fu_142", "Parent" : "0",
+	{"ID" : "1", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.call_ret_dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config2_mult_0_0_0_0_0_fu_139", "Parent" : "0",
 		"CDFG" : "dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config2_mult_0_0_0_0_0",
 		"Protocol" : "ap_ctrl_hs",
-		"ControlExist" : "1", "ap_start" : "1", "ap_ready" : "1", "ap_done" : "1", "ap_continue" : "0", "ap_idle" : "1",
+		"ControlExist" : "0", "ap_start" : "0", "ap_ready" : "1", "ap_done" : "0", "ap_continue" : "0", "ap_idle" : "0",
 		"Pipeline" : "None", "UnalignedPipeline" : "0", "RewindPipeline" : "0", "ProcessNetwork" : "0",
-		"II" : "33",
-		"VariableLatency" : "0", "ExactLatency" : "32", "EstimateLatencyMin" : "32", "EstimateLatencyMax" : "32",
-		"Combinational" : "0",
+		"II" : "1",
+		"VariableLatency" : "0", "ExactLatency" : "0", "EstimateLatencyMin" : "0", "EstimateLatencyMax" : "0",
+		"Combinational" : "1",
 		"Datapath" : "0",
-		"ClockEnable" : "1",
+		"ClockEnable" : "0",
 		"HasSubDataflow" : "0",
 		"InDataflowNetwork" : "0",
 		"HasNonBlockingOperation" : "0",
 		"Port" : [
-			{"Name" : "data_0_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "data_1_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_2_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_3_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "data_4_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_5_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_6_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_7_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_8_V_read", "Type" : "None", "Direction" : "I"}]},
-	{"ID" : "2", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_155", "Parent" : "0", "Child" : ["3", "4"],
+	{"ID" : "2", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_149", "Parent" : "0", "Child" : ["3", "4"],
 		"CDFG" : "shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s",
 		"Protocol" : "ap_ctrl_hs",
 		"ControlExist" : "1", "ap_start" : "1", "ap_ready" : "1", "ap_done" : "1", "ap_continue" : "0", "ap_idle" : "1",
@@ -162,66 +157,58 @@ set RtlHierarchyInfo {[
 		"HasNonBlockingOperation" : "0",
 		"Port" : [
 			{"Name" : "in_elem_data_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "kernel_window_1_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "kernel_window_2_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_4_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_5_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_7_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_8_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "line_buffer_Array_V_0_0", "Type" : "Memory", "Direction" : "X"},
-			{"Name" : "line_buffer_Array_V_1311_0", "Type" : "Memory", "Direction" : "X"}]},
-	{"ID" : "3", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_155.line_buffer_Array_V_0_0_U", "Parent" : "2"},
-	{"ID" : "4", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_155.line_buffer_Array_V_1311_0_U", "Parent" : "2"}]}
+			{"Name" : "line_buffer_Array_V_1282_0", "Type" : "Memory", "Direction" : "X"}]},
+	{"ID" : "3", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_149.line_buffer_Array_V_0_0_U", "Parent" : "2"},
+	{"ID" : "4", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_149.line_buffer_Array_V_1282_0_U", "Parent" : "2"}]}
 
 
 set ArgLastReadFirstWriteLatency {
 	compute_output_buffer_2d_array_array_ap_fixed_16_6_5_3_0_4u_config2_s {
 		in_elem_data_V_read {Type I LastRead 0 FirstWrite -1}
-		res_stream_V_data_0_V {Type O LastRead -1 FirstWrite 33}
-		res_stream_V_data_1_V {Type O LastRead -1 FirstWrite 33}
-		res_stream_V_data_2_V {Type O LastRead -1 FirstWrite 33}
-		res_stream_V_data_3_V {Type O LastRead -1 FirstWrite 33}
-		kernel_data_V_1312 {Type IO LastRead -1 FirstWrite -1}
-		kernel_data_V_2313 {Type IO LastRead -1 FirstWrite -1}
+		res_stream_V_data_0_V {Type O LastRead -1 FirstWrite 1}
+		res_stream_V_data_1_V {Type O LastRead -1 FirstWrite 1}
+		res_stream_V_data_2_V {Type O LastRead -1 FirstWrite 1}
+		res_stream_V_data_3_V {Type O LastRead -1 FirstWrite 1}
 		kernel_data_V_4 {Type IO LastRead -1 FirstWrite -1}
 		kernel_data_V_5 {Type IO LastRead -1 FirstWrite -1}
 		kernel_data_V_7 {Type IO LastRead -1 FirstWrite -1}
 		kernel_data_V_8 {Type IO LastRead -1 FirstWrite -1}
 		line_buffer_Array_V_0_0 {Type X LastRead -1 FirstWrite -1}
-		line_buffer_Array_V_1311_0 {Type X LastRead -1 FirstWrite -1}
+		line_buffer_Array_V_1282_0 {Type X LastRead -1 FirstWrite -1}
 		sX_3 {Type IO LastRead -1 FirstWrite -1}
 		sY_3 {Type IO LastRead -1 FirstWrite -1}
 		pY_3 {Type IO LastRead -1 FirstWrite -1}
 		pX_3 {Type IO LastRead -1 FirstWrite -1}}
 	dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config2_mult_0_0_0_0_0 {
-		data_0_V_read {Type I LastRead 0 FirstWrite -1}
-		data_1_V_read {Type I LastRead 4 FirstWrite -1}
-		data_2_V_read {Type I LastRead 8 FirstWrite -1}
-		data_3_V_read {Type I LastRead 12 FirstWrite -1}
-		data_4_V_read {Type I LastRead 14 FirstWrite -1}
-		data_5_V_read {Type I LastRead 16 FirstWrite -1}
-		data_6_V_read {Type I LastRead 20 FirstWrite -1}
-		data_7_V_read {Type I LastRead 24 FirstWrite -1}
-		data_8_V_read {Type I LastRead 28 FirstWrite -1}}
+		data_2_V_read {Type I LastRead 0 FirstWrite -1}
+		data_3_V_read {Type I LastRead 0 FirstWrite -1}
+		data_5_V_read {Type I LastRead 0 FirstWrite -1}
+		data_6_V_read {Type I LastRead 0 FirstWrite -1}
+		data_7_V_read {Type I LastRead 0 FirstWrite -1}
+		data_8_V_read {Type I LastRead 0 FirstWrite -1}}
 	shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s {
 		in_elem_data_V_read {Type I LastRead 0 FirstWrite -1}
-		kernel_window_1_V_read {Type I LastRead 0 FirstWrite -1}
-		kernel_window_2_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_4_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_5_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_7_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_8_V_read {Type I LastRead 0 FirstWrite -1}
 		line_buffer_Array_V_0_0 {Type X LastRead -1 FirstWrite -1}
-		line_buffer_Array_V_1311_0 {Type X LastRead -1 FirstWrite -1}}}
+		line_buffer_Array_V_1282_0 {Type X LastRead -1 FirstWrite -1}}}
 
 set hasDtUnsupportedChannel 0
 
 set PerformanceInfo {[
-	{"Name" : "Latency", "Min" : "33", "Max" : "33"}
-	, {"Name" : "Interval", "Min" : "34", "Max" : "34"}
+	{"Name" : "Latency", "Min" : "1", "Max" : "1"}
+	, {"Name" : "Interval", "Min" : "1", "Max" : "1"}
 ]}
 
 set PipelineEnableSignalInfo {[
+	{"Pipeline" : "0", "EnableSignal" : "ap_enable_pp0"}
 ]}
 
 set Spec2ImplPortList { 
@@ -319,8 +306,8 @@ set RtlHierarchyInfo {[
 		"Protocol" : "ap_ctrl_hs",
 		"ControlExist" : "1", "ap_start" : "1", "ap_ready" : "1", "ap_done" : "1", "ap_continue" : "0", "ap_idle" : "1",
 		"Pipeline" : "None", "UnalignedPipeline" : "0", "RewindPipeline" : "0", "ProcessNetwork" : "0",
-		"II" : "37",
-		"VariableLatency" : "0", "ExactLatency" : "36", "EstimateLatencyMin" : "36", "EstimateLatencyMax" : "36",
+		"II" : "5",
+		"VariableLatency" : "0", "ExactLatency" : "4", "EstimateLatencyMin" : "4", "EstimateLatencyMax" : "4",
 		"Combinational" : "0",
 		"Datapath" : "0",
 		"ClockEnable" : "1",
@@ -341,29 +328,27 @@ set RtlHierarchyInfo {[
 			{"Name" : "res_stream_V_data_3_V", "Type" : "Fifo", "Direction" : "O",
 				"BlockSignal" : [
 					{"Name" : "res_stream_V_data_3_V_blk_n", "Type" : "RtlPort"}]},
-			{"Name" : "kernel_data_V_1312", "Type" : "OVld", "Direction" : "IO"},
-			{"Name" : "kernel_data_V_2313", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "kernel_data_V_4", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "kernel_data_V_5", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "kernel_data_V_7", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "kernel_data_V_8", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "line_buffer_Array_V_0_0", "Type" : "Memory", "Direction" : "X",
 				"SubConnect" : [
-					{"ID" : "2", "SubInstance" : "call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_155", "Port" : "line_buffer_Array_V_0_0"}]},
-			{"Name" : "line_buffer_Array_V_1311_0", "Type" : "Memory", "Direction" : "X",
+					{"ID" : "2", "SubInstance" : "call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_148", "Port" : "line_buffer_Array_V_0_0"}]},
+			{"Name" : "line_buffer_Array_V_1282_0", "Type" : "Memory", "Direction" : "X",
 				"SubConnect" : [
-					{"ID" : "2", "SubInstance" : "call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_155", "Port" : "line_buffer_Array_V_1311_0"}]},
+					{"ID" : "2", "SubInstance" : "call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_148", "Port" : "line_buffer_Array_V_1282_0"}]},
 			{"Name" : "sX_3", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "sY_3", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "pY_3", "Type" : "OVld", "Direction" : "IO"},
 			{"Name" : "pX_3", "Type" : "OVld", "Direction" : "IO"}]},
-	{"ID" : "1", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.grp_dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config2_mult_0_0_0_0_0_fu_142", "Parent" : "0",
+	{"ID" : "1", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.grp_dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config2_mult_0_0_0_0_0_fu_138", "Parent" : "0",
 		"CDFG" : "dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config2_mult_0_0_0_0_0",
 		"Protocol" : "ap_ctrl_hs",
 		"ControlExist" : "1", "ap_start" : "1", "ap_ready" : "1", "ap_done" : "1", "ap_continue" : "0", "ap_idle" : "1",
 		"Pipeline" : "None", "UnalignedPipeline" : "0", "RewindPipeline" : "0", "ProcessNetwork" : "0",
-		"II" : "36",
-		"VariableLatency" : "0", "ExactLatency" : "35", "EstimateLatencyMin" : "35", "EstimateLatencyMax" : "35",
+		"II" : "4",
+		"VariableLatency" : "0", "ExactLatency" : "3", "EstimateLatencyMin" : "3", "EstimateLatencyMax" : "3",
 		"Combinational" : "0",
 		"Datapath" : "0",
 		"ClockEnable" : "1",
@@ -371,16 +356,13 @@ set RtlHierarchyInfo {[
 		"InDataflowNetwork" : "0",
 		"HasNonBlockingOperation" : "0",
 		"Port" : [
-			{"Name" : "data_0_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "data_1_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_2_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_3_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "data_4_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_5_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_6_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_7_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "data_8_V_read", "Type" : "None", "Direction" : "I"}]},
-	{"ID" : "2", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_155", "Parent" : "0", "Child" : ["3", "4"],
+	{"ID" : "2", "Level" : "1", "Path" : "`AUTOTB_DUT_INST.call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_148", "Parent" : "0", "Child" : ["3", "4"],
 		"CDFG" : "shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s",
 		"Protocol" : "ap_ctrl_hs",
 		"ControlExist" : "1", "ap_start" : "1", "ap_ready" : "1", "ap_done" : "1", "ap_continue" : "0", "ap_idle" : "1",
@@ -395,63 +377,54 @@ set RtlHierarchyInfo {[
 		"HasNonBlockingOperation" : "0",
 		"Port" : [
 			{"Name" : "in_elem_data_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "kernel_window_1_V_read", "Type" : "None", "Direction" : "I"},
-			{"Name" : "kernel_window_2_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_4_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_5_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_7_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "kernel_window_8_V_read", "Type" : "None", "Direction" : "I"},
 			{"Name" : "line_buffer_Array_V_0_0", "Type" : "Memory", "Direction" : "X"},
-			{"Name" : "line_buffer_Array_V_1311_0", "Type" : "Memory", "Direction" : "X"}]},
-	{"ID" : "3", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_155.line_buffer_Array_V_0_0_U", "Parent" : "2"},
-	{"ID" : "4", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_155.line_buffer_Array_V_1311_0_U", "Parent" : "2"}]}
+			{"Name" : "line_buffer_Array_V_1282_0", "Type" : "Memory", "Direction" : "X"}]},
+	{"ID" : "3", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_148.line_buffer_Array_V_0_0_U", "Parent" : "2"},
+	{"ID" : "4", "Level" : "2", "Path" : "`AUTOTB_DUT_INST.call_ret2_shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_fu_148.line_buffer_Array_V_1282_0_U", "Parent" : "2"}]}
 
 
 set ArgLastReadFirstWriteLatency {
 	compute_output_buffer_2d_array_array_ap_fixed_16_6_5_3_0_4u_config2_s {
-		in_elem_data_V_read {Type I LastRead 0 FirstWrite -1}
-		res_stream_V_data_0_V {Type O LastRead -1 FirstWrite 36}
-		res_stream_V_data_1_V {Type O LastRead -1 FirstWrite 36}
-		res_stream_V_data_2_V {Type O LastRead -1 FirstWrite 36}
-		res_stream_V_data_3_V {Type O LastRead -1 FirstWrite 36}
-		kernel_data_V_1312 {Type IO LastRead -1 FirstWrite -1}
-		kernel_data_V_2313 {Type IO LastRead -1 FirstWrite -1}
+		in_elem_data_V_read {Type I LastRead 1 FirstWrite -1}
+		res_stream_V_data_0_V {Type O LastRead -1 FirstWrite 4}
+		res_stream_V_data_1_V {Type O LastRead -1 FirstWrite 4}
+		res_stream_V_data_2_V {Type O LastRead -1 FirstWrite 4}
+		res_stream_V_data_3_V {Type O LastRead -1 FirstWrite 4}
 		kernel_data_V_4 {Type IO LastRead -1 FirstWrite -1}
 		kernel_data_V_5 {Type IO LastRead -1 FirstWrite -1}
 		kernel_data_V_7 {Type IO LastRead -1 FirstWrite -1}
 		kernel_data_V_8 {Type IO LastRead -1 FirstWrite -1}
 		line_buffer_Array_V_0_0 {Type X LastRead -1 FirstWrite -1}
-		line_buffer_Array_V_1311_0 {Type X LastRead -1 FirstWrite -1}
+		line_buffer_Array_V_1282_0 {Type X LastRead -1 FirstWrite -1}
 		sX_3 {Type IO LastRead -1 FirstWrite -1}
 		sY_3 {Type IO LastRead -1 FirstWrite -1}
 		pY_3 {Type IO LastRead -1 FirstWrite -1}
 		pX_3 {Type IO LastRead -1 FirstWrite -1}}
 	dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config2_mult_0_0_0_0_0 {
-		data_0_V_read {Type I LastRead 0 FirstWrite -1}
-		data_1_V_read {Type I LastRead 4 FirstWrite -1}
-		data_2_V_read {Type I LastRead 8 FirstWrite -1}
-		data_3_V_read {Type I LastRead 12 FirstWrite -1}
-		data_4_V_read {Type I LastRead 16 FirstWrite -1}
-		data_5_V_read {Type I LastRead 20 FirstWrite -1}
-		data_6_V_read {Type I LastRead 24 FirstWrite -1}
-		data_7_V_read {Type I LastRead 28 FirstWrite -1}
-		data_8_V_read {Type I LastRead 31 FirstWrite -1}}
+		data_2_V_read {Type I LastRead 0 FirstWrite -1}
+		data_3_V_read {Type I LastRead 1 FirstWrite -1}
+		data_5_V_read {Type I LastRead 1 FirstWrite -1}
+		data_6_V_read {Type I LastRead 2 FirstWrite -1}
+		data_7_V_read {Type I LastRead 3 FirstWrite -1}
+		data_8_V_read {Type I LastRead 3 FirstWrite -1}}
 	shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s {
 		in_elem_data_V_read {Type I LastRead 0 FirstWrite -1}
-		kernel_window_1_V_read {Type I LastRead 0 FirstWrite -1}
-		kernel_window_2_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_4_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_5_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_7_V_read {Type I LastRead 0 FirstWrite -1}
 		kernel_window_8_V_read {Type I LastRead 0 FirstWrite -1}
 		line_buffer_Array_V_0_0 {Type X LastRead -1 FirstWrite -1}
-		line_buffer_Array_V_1311_0 {Type X LastRead -1 FirstWrite -1}}}
+		line_buffer_Array_V_1282_0 {Type X LastRead -1 FirstWrite -1}}}
 
 set hasDtUnsupportedChannel 0
 
 set PerformanceInfo {[
-	{"Name" : "Latency", "Min" : "36", "Max" : "36"}
-	, {"Name" : "Interval", "Min" : "37", "Max" : "37"}
+	{"Name" : "Latency", "Min" : "4", "Max" : "4"}
+	, {"Name" : "Interval", "Min" : "5", "Max" : "5"}
 ]}
 
 set PipelineEnableSignalInfo {[

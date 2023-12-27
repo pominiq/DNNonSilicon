@@ -102,25 +102,34 @@ def create_example_model_YOLO(pruning):
 
     # Model architecture
     model = models.Sequential()
-    model.add(layers.Conv2D(8, (3, 3), activation='relu', input_shape=(28, 28, 1), use_bias=True))
-    model.add(layers.DepthwiseConv2D((3, 3), activation='relu', use_bias=True))
-    model.add(layers.GlobalAveragePooling2D()) # For some reason this is not implemented in HLS4ML
-    model.add(layers.Dense(10, dtype='float32', activation='softmax', use_bias=False))  # Ensure that the final layer has float32 dtype
+    model.add(layers.Conv2D(4, (3, 3), activation='relu', input_shape=(28, 28, 1)))
+    model.add(layers.MaxPooling2D((4, 4)))
+    model.add(layers.Conv2D(8, (3, 3), activation='relu'))
+    model.add(layers.MaxPooling2D((2, 2)))
+    model.add(layers.Flatten())
+    #model.add(layers.Conv2D(8, (3, 3), activation='relu', input_shape=(28, 28, 1)))
+    #model.add(layers.GlobalAveragePooling2D())
+    #model.add(layers.DepthwiseConv2D((3, 3), activation='relu'))
+    #model.add(layers.GlobalAveragePooling2D())
+    #model.add(layers.Flatten())
+    model.add(layers.Dense(10, dtype='float32', activation='softmax'))  # Ensure that the final layer has float32 dtype
 
     model.compile(optimizer='adam',
                   loss=tf.keras.losses.CategoricalCrossentropy(),
                   metrics=['accuracy'])
     
+    # Train the CNN model
+    model.fit(train_images, train_labels, epochs=10)
     print(model.summary())
-    w = model.layers[0].weights[0].numpy()
-    print('Model:\t% of zeros = {}'.format(np.sum(w == 0) / np.size(w)))
+    score = model.evaluate(test_images, test_labels, verbose=0)
+    print("Model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(score[0],score[1]*100))
 
     ### PRUNING
     if pruning == True:
-        pruning_schedule = tfmot.sparsity.keras.PolynomialDecay(initial_sparsity=0.0,
-                                                                final_sparsity=0.5,
-                                                                begin_step=2000,
-                                                                end_step=4000)
+        print("_________ With Pruning _________")
+        pruning_schedule = tfmot.sparsity.keras.ConstantSparsity(0.75,
+                                                                begin_step=0,
+                                                                frequency=1)
         pruned_model = tfmot.sparsity.keras.prune_low_magnitude(model, 
                                                         pruning_schedule=pruning_schedule)
         # Define the pruning callback
@@ -132,12 +141,16 @@ def create_example_model_YOLO(pruning):
                   loss=tf.keras.losses.CategoricalCrossentropy(),
                   metrics=['accuracy'])
    
-        # Train the CNN model
-        pruned_model.fit(train_images, train_labels, epochs=5, callbacks=callbacks)
+        # Train the SLP model
+        pruned_model.fit(train_images, train_labels, epochs=10, callbacks=callbacks)
         print(pruned_model.summary())
         # Check how many weights were set to zero (ie. verify if pruning worked)
         w = pruned_model.layers[0].weights[0].numpy()
+        print(w)
         print('Pruned:\t% of zeros = {}'.format(np.sum(w == 0) / np.size(w)))
+        score = pruned_model.evaluate(test_images, test_labels, verbose=0)
+        print("Pruned model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(score[0],score[1]*100))
+
 
         # To preserve layer type (for compatibility with HLS4ML), the prune mask created
         # by tfmot is effectively removed
@@ -147,17 +160,8 @@ def create_example_model_YOLO(pruning):
         w = model.layers[0].weights[0].numpy()
         print('Model:\t% of zeros = {}'.format(np.sum(w == 0) / np.size(w)))
 
-    else:
-        callbacks = []
-
-        model.compile(optimizer='adam',
-                  loss=tf.keras.losses.CategoricalCrossentropy(),
-                  metrics=['accuracy'])
-    
-        # Train the CNN model
-        model.fit(train_images, train_labels, epochs=10, callbacks=callbacks)
-        print(model.summary())
-
+        score = model.evaluate(test_images, test_labels, verbose=0)
+        print("Post-save pruned model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(score[0],score[1]*100))
 
     # Evaluate and quantize to 16-bit. Save all the models.
     model_evaluation_and_generic_quantization(model, train_images, train_labels, test_images, test_labels)
@@ -289,17 +293,7 @@ def replace_model_weights_with_prune_equivalent(model, pruned_model):
 
 # Loads keras model from folder
 def load_keras_model_from_json_file(modelname):
-    
-    """
-    # load json and create model
-    json_file = open('{}/{}.json'.format(subfolder_path, modelname), 'r')
-    loaded_model_json = json_file.read()
-    json_file.close()
-    loaded_model = tf.keras.models.model_from_json(loaded_model_json)
-    # load weights into new model
-    loaded_model.load_weights("{}/{}.weights.h5".format(subfolder_path, modelname))
-    print("Loaded model from disk")
-    """
+
     # account for custom objects. In this script prunning is used
     co = {}
     _add_supported_quantized_objects(co)
@@ -438,6 +432,40 @@ def config_and_compile_hls4ml_model_from_keras_model(model,default_reuse_factor,
     
     return hls_model
 
+# Compiles HLS4Ml model from imported TF model based on config parameters
+def config_and_compile_hls4ml_model_from_CNN_model(model,default_reuse_factor,clock_period):
+    
+    # Load configuration in HLS4ML tool on keras model
+    config = hls4ml.utils.config_from_keras_model(model, 
+                                                granularity='model',
+                                                default_precision='ap_fixed<16,6>',
+                                                default_reuse_factor=default_reuse_factor, #1,2,4,8,16,32,64,160,320. 
+                                                # or for Conv2D layer: 1,2,3,4,6,9,12,18,36,72,144,288
+                                                default_strategy='Latency',
+                                                )
+
+    hls_model = hls4ml.converters.convert_from_keras_model(model,
+                                                           hls_config=config,
+                                                           io_type='io_stream', # Set to io_stream for CNN
+                                                           clock_period=clock_period,
+                                                           output_dir='Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj',
+                                                           part='xc7z020clg400-1',
+                                                           backend='Vivado'
+                                                           )
+    
+    print("___________________________________________________________________")
+    print("HLS4ML conversion succesful\n ")
+    # .plot_model function saves model to .png
+    hls4ml.utils.plot_model(hls_model, to_file="hls_model.png", show_shapes=True, show_precision=True)
+    print("HLS4ML model plot saved\n ")
+
+    #################################### PREDICTIONS ON FPGA FIRMWARE ####################################
+    # Readies the HLS model for emulation
+    hls_model.compile()
+    
+    return hls_model
+
+
 # Compares the HLS4ML bit-stream model with TF model
 def hls_vs_tf_model_comparison(model, hls_model, test_images, test_labels)-> tuple:
     
@@ -529,6 +557,8 @@ def main_menu_text(train, hls_model_comparison, build, openlane):
                                                                                                                                                 build,
                                                                                                                                                 openlane))
 
+    print("\nSupported Keras layers")
+    print(get_supported_keras_layers())
 
 ###############################################################################################
 ############################################ MAIN #############################################
@@ -540,11 +570,11 @@ def main():
     modelname =             "model_16bit"
 
     #Flow step variables
-    train =                 True
+    train =                 False
     pruning =               True
 
     hls_model_comparison =  True
-    default_reuse_factor =  8
+    default_reuse_factor =  16
     clock_period =          25
 
     build =                 True
@@ -552,15 +582,12 @@ def main():
 
     # List of example models
     MNIST =                 False   # generic CNN
-    IRIS =                  True    # Single-layer Dense, with pruned 50%
+    IRIS =                  False    # Single-layer Dense, with pruned 50%
     IMDB =                  False   # Simple RNN (DOES NOT WORK)
-    YOLO =                  False   # small CNN with depth-wise Conv2D, GlobalAveragePooling, and pruned 50%
+    YOLO =                  True   # small CNN with depth-wise Conv2D, GlobalAveragePooling, and pruned 50%
 
     # Main menu text
     main_menu_text(train, hls_model_comparison, build, openlane)
-
-    print("Supported Keras layers")
-    print(get_supported_keras_layers())
 
     # Step 1: Either train an example model or load model from a folder
     if train == True:
@@ -586,7 +613,11 @@ def main():
     if hls_model_comparison == True:
         print("___________________________________\nGENERATING HLS MODEL W/ COMPARISON\n___________________________________")
         # Compile HLS4ML model from loaded model
-        hls_model = config_and_compile_hls4ml_model_from_keras_model(model,default_reuse_factor,clock_period)
+        if YOLO == True or MNIST == True:
+            hls_model = config_and_compile_hls4ml_model_from_CNN_model(model,default_reuse_factor,clock_period)
+        else:
+            hls_model = config_and_compile_hls4ml_model_from_keras_model(model,default_reuse_factor,clock_period)
+
         # Output comparison
         hls_vs_tf_model_comparison(model, hls_model, test_images, test_labels)
     else:
