@@ -676,7 +676,7 @@
 				<m_isOnCriticalPath>0</m_isOnCriticalPath>
 				<m_isLCDNode>0</m_isLCDNode>
 				<m_isStartOfPath>0</m_isStartOfPath>
-				<m_delay>14.7</m_delay>
+				<m_delay>18.7</m_delay>
 				<m_topoIndex>7</m_topoIndex>
 				<m_clusterGroupNumber>-1</m_clusterGroupNumber>
 			</item>
@@ -1266,8 +1266,8 @@
 			<mDepth>-1</mDepth>
 			<mMinTripCount>-1</mMinTripCount>
 			<mMaxTripCount>-1</mMaxTripCount>
-			<mMinLatency>29010</mMinLatency>
-			<mMaxLatency>29010</mMaxLatency>
+			<mMinLatency>6275</mMinLatency>
+			<mMaxLatency>6275</mMaxLatency>
 			<mIsDfPipe>0</mIsDfPipe>
 			<mDfPipe class_id="-1"></mDfPipe>
 		</item>
@@ -1307,12 +1307,12 @@
 				<item>40</item>
 				<item>50</item>
 			</basic_blocks>
-			<mII>37</mII>
-			<mDepth>37</mDepth>
+			<mII>8</mII>
+			<mDepth>10</mDepth>
 			<mMinTripCount>784</mMinTripCount>
 			<mMaxTripCount>784</mMaxTripCount>
-			<mMinLatency>29008</mMinLatency>
-			<mMaxLatency>29008</mMaxLatency>
+			<mMinLatency>6273</mMinLatency>
+			<mMaxLatency>6273</mMaxLatency>
 			<mIsDfPipe>0</mIsDfPipe>
 			<mDfPipe class_id="-1"></mDfPipe>
 		</item>
@@ -1390,20 +1390,20 @@
 			<first>48</first>
 			<second>
 				<first>2</first>
-				<second>35</second>
+				<second>8</second>
 			</second>
 		</item>
 		<item>
 			<first>49</first>
 			<second>
-				<first>37</first>
+				<first>10</first>
 				<second>0</second>
 			</second>
 		</item>
 		<item>
 			<first>51</first>
 			<second>
-				<first>38</first>
+				<first>11</first>
 				<second>0</second>
 			</second>
 		</item>
@@ -1429,7 +1429,7 @@
 			<first>50</first>
 			<second>
 				<first>2</first>
-				<second>37</second>
+				<second>10</second>
 			</second>
 		</item>
 		<item>
@@ -1457,8 +1457,8 @@
 			</nodes>
 			<anchor_node>-1</anchor_node>
 			<region_type>8</region_type>
-			<interval>37</interval>
-			<pipe_depth>37</pipe_depth>
+			<interval>8</interval>
+			<pipe_depth>10</pipe_depth>
 		</item>
 	</regions>
 	<dp_fu_nodes class_id="34" tracking_level="0" version="0">

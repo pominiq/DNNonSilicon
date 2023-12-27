@@ -5,7 +5,7 @@ set ID 169
 set hasByteEnable 0
 set MemName softmax_stable_array_array_ap_fixed_16_6_5_3_0_10u_softmax_config8_s_exp_table1
 set CoreName ap_simcore_mem
-set PortList { 1 }
+set PortList { 1 1 }
 set DataWd 17
 set AddrRange 1024
 set AddrWd 10
@@ -31,7 +31,7 @@ if {[info proc ap_gen_simcore_mem] == "ap_gen_simcore_mem"} {
     sync_rst true \
     stage_num ${NumOfStage}  \
     registered_input ${RegisteredInput} \
-    port_num 1 \
+    port_num 2 \
     port_list \{${PortList}\} \
     data_wd ${DataWd} \
     addr_wd ${AddrWd} \
@@ -66,7 +66,7 @@ if {[info proc ::AESL_LIB_VIRTEX::xil_gen_ROM] == "::AESL_LIB_VIRTEX::xil_gen_RO
     sync_rst true \
     stage_num ${NumOfStage}  \
     registered_input ${RegisteredInput} \
-    port_num 1 \
+    port_num 2 \
     port_list \{${PortList}\} \
     data_wd ${DataWd} \
     addr_wd ${AddrWd} \
@@ -184,7 +184,7 @@ eval "::AESL_LIB_XILADAPTER::native_axis_add { \
     corename {} \
     metadata {  } \
     op interface \
-    ports { res_V_data_0_V_TDATA { O 16 vector } res_V_data_0_V_TVALID { O 1 bit } res_V_data_0_V_TREADY { I 1 bit } } \
+    ports { res_V_data_0_V_TREADY { I 1 bit } res_V_data_0_V_TDATA { O 16 vector } res_V_data_0_V_TVALID { O 1 bit } } \
 } "
 } else {
 puts "@W \[IMPL-110\] Cannot find bus interface model in the library. Ignored generation of bus interface for 'res_V_data_0_V'"

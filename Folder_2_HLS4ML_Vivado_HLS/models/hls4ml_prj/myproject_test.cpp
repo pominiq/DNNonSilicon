@@ -58,9 +58,9 @@ int main(int argc, char **argv) {
             }
 
             // hls-fpga-machine-learning insert data
-      hls::stream<input_t> dense_input("dense_input");
+      input_t dense_input[N_INPUT_1_1];
       nnet::copy_data<float, input_t, 0, N_INPUT_1_1>(in, dense_input);
-      hls::stream<result_t> layer5_out("layer5_out");
+      result_t layer5_out[N_LAYER_4];
 
             // hls-fpga-machine-learning insert top-level-function
             myproject(dense_input,layer5_out);
@@ -87,9 +87,9 @@ int main(int argc, char **argv) {
         std::cout << "INFO: Unable to open input/predictions file, using default input." << std::endl;
 
         // hls-fpga-machine-learning insert zero
-    hls::stream<input_t> dense_input("dense_input");
+    input_t dense_input[N_INPUT_1_1];
     nnet::fill_zero<input_t, N_INPUT_1_1>(dense_input);
-    hls::stream<result_t> layer5_out("layer5_out");
+    result_t layer5_out[N_LAYER_4];
 
         // hls-fpga-machine-learning insert top-level-function
         myproject(dense_input,layer5_out);

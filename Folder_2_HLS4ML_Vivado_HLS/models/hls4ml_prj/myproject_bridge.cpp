@@ -53,10 +53,10 @@ void myproject_float(
     float layer5_out[N_LAYER_4]
 ) {
 
-    hls::stream<input_t> dense_input_ap("dense_input");
+    input_t dense_input_ap[N_INPUT_1_1];
     nnet::convert_data<float, input_t, N_INPUT_1_1>(dense_input, dense_input_ap);
 
-    hls::stream<result_t> layer5_out_ap("layer5_out");
+    result_t layer5_out_ap[N_LAYER_4];
 
     myproject(dense_input_ap,layer5_out_ap);
 
@@ -67,10 +67,10 @@ void myproject_double(
     double dense_input[N_INPUT_1_1],
     double layer5_out[N_LAYER_4]
 ) {
-    hls::stream<input_t> dense_input_ap("dense_input");
+    input_t dense_input_ap[N_INPUT_1_1];
     nnet::convert_data<double, input_t, N_INPUT_1_1>(dense_input, dense_input_ap);
 
-    hls::stream<result_t> layer5_out_ap("layer5_out");
+    result_t layer5_out_ap[N_LAYER_4];
 
     myproject(dense_input_ap,layer5_out_ap);
 

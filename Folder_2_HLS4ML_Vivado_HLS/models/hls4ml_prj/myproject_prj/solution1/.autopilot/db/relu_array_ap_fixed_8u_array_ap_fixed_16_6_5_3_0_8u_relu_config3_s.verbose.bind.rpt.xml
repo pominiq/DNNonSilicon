@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vivado HLS Report for 'relu_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_8u_relu_config3_s'" level="0">
-<item name = "Date">Tue Dec 19 17:43:18 2023
+<item name = "Date">Tue Dec 19 20:17:50 2023
 </item>
 <item name = "Version">2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)</item>
 <item name = "Project">myproject_prj</item>

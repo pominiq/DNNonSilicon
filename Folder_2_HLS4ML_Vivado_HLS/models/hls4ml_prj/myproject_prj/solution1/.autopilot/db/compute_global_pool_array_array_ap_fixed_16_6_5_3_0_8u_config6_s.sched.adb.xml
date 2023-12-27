@@ -274,10 +274,10 @@ reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:16  %add_ln703 =
 
 <Node id="34" bw="16" op_0_bw="16" op_1_bw="16">
 <![CDATA[
-reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:17  %add_ln703_212 = add i16 %in_elem_data_1_V_read_1, %data_window_1_V_read_1
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:17  %add_ln703_137 = add i16 %in_elem_data_1_V_read_1, %data_window_1_V_read_1
 
 ]]></Node>
-<StgValue><ssdm name="add_ln703_212"/></StgValue>
+<StgValue><ssdm name="add_ln703_137"/></StgValue>
 </operation>
 
 <operation id="20" st_id="1" stage="1" lat="1">
@@ -289,10 +289,10 @@ reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:17  %add_ln703_2
 
 <Node id="35" bw="16" op_0_bw="16" op_1_bw="16">
 <![CDATA[
-reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:18  %add_ln703_213 = add i16 %in_elem_data_2_V_read_1, %data_window_2_V_read_1
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:18  %add_ln703_138 = add i16 %in_elem_data_2_V_read_1, %data_window_2_V_read_1
 
 ]]></Node>
-<StgValue><ssdm name="add_ln703_213"/></StgValue>
+<StgValue><ssdm name="add_ln703_138"/></StgValue>
 </operation>
 
 <operation id="21" st_id="1" stage="1" lat="1">
@@ -304,10 +304,10 @@ reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:18  %add_ln703_2
 
 <Node id="36" bw="16" op_0_bw="16" op_1_bw="16">
 <![CDATA[
-reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:19  %add_ln703_214 = add i16 %in_elem_data_3_V_read_1, %data_window_3_V_read_1
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:19  %add_ln703_139 = add i16 %in_elem_data_3_V_read_1, %data_window_3_V_read_1
 
 ]]></Node>
-<StgValue><ssdm name="add_ln703_214"/></StgValue>
+<StgValue><ssdm name="add_ln703_139"/></StgValue>
 </operation>
 
 <operation id="22" st_id="1" stage="1" lat="1">
@@ -319,10 +319,10 @@ reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:19  %add_ln703_2
 
 <Node id="37" bw="16" op_0_bw="16" op_1_bw="16">
 <![CDATA[
-reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:20  %add_ln703_215 = add i16 %in_elem_data_4_V_read_1, %data_window_4_V_read_1
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:20  %add_ln703_140 = add i16 %in_elem_data_4_V_read_1, %data_window_4_V_read_1
 
 ]]></Node>
-<StgValue><ssdm name="add_ln703_215"/></StgValue>
+<StgValue><ssdm name="add_ln703_140"/></StgValue>
 </operation>
 
 <operation id="23" st_id="1" stage="1" lat="1">
@@ -334,10 +334,10 @@ reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:20  %add_ln703_2
 
 <Node id="38" bw="16" op_0_bw="16" op_1_bw="16">
 <![CDATA[
-reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:21  %add_ln703_216 = add i16 %in_elem_data_5_V_read_1, %data_window_5_V_read_1
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:21  %add_ln703_141 = add i16 %in_elem_data_5_V_read_1, %data_window_5_V_read_1
 
 ]]></Node>
-<StgValue><ssdm name="add_ln703_216"/></StgValue>
+<StgValue><ssdm name="add_ln703_141"/></StgValue>
 </operation>
 
 <operation id="24" st_id="1" stage="1" lat="1">
@@ -349,10 +349,10 @@ reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:21  %add_ln703_2
 
 <Node id="39" bw="16" op_0_bw="16" op_1_bw="16">
 <![CDATA[
-reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:22  %add_ln703_217 = add i16 %in_elem_data_6_V_read_1, %data_window_6_V_read_1
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:22  %add_ln703_142 = add i16 %in_elem_data_6_V_read_1, %data_window_6_V_read_1
 
 ]]></Node>
-<StgValue><ssdm name="add_ln703_217"/></StgValue>
+<StgValue><ssdm name="add_ln703_142"/></StgValue>
 </operation>
 
 <operation id="25" st_id="1" stage="1" lat="1">
@@ -364,10 +364,10 @@ reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:22  %add_ln703_2
 
 <Node id="40" bw="16" op_0_bw="16" op_1_bw="16">
 <![CDATA[
-reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:23  %add_ln703_218 = add i16 %in_elem_data_7_V_read_1, %data_window_7_V_read_1
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:23  %add_ln703_143 = add i16 %in_elem_data_7_V_read_1, %data_window_7_V_read_1
 
 ]]></Node>
-<StgValue><ssdm name="add_ln703_218"/></StgValue>
+<StgValue><ssdm name="add_ln703_143"/></StgValue>
 </operation>
 
 <operation id="26" st_id="1" stage="1" lat="1">
@@ -394,7 +394,7 @@ reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:24  %mrv = inser
 
 <Node id="42" bw="128" op_0_bw="128" op_1_bw="16">
 <![CDATA[
-reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:25  %mrv_1 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv, i16 %add_ln703_212, 1
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:25  %mrv_1 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv, i16 %add_ln703_137, 1
 
 ]]></Node>
 <StgValue><ssdm name="mrv_1"/></StgValue>
@@ -409,7 +409,7 @@ reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:25  %mrv_1 = ins
 
 <Node id="43" bw="128" op_0_bw="128" op_1_bw="16">
 <![CDATA[
-reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:26  %mrv_2 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_1, i16 %add_ln703_213, 2
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:26  %mrv_2 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_1, i16 %add_ln703_138, 2
 
 ]]></Node>
 <StgValue><ssdm name="mrv_2"/></StgValue>
@@ -424,7 +424,7 @@ reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:26  %mrv_2 = ins
 
 <Node id="44" bw="128" op_0_bw="128" op_1_bw="16">
 <![CDATA[
-reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:27  %mrv_3 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_2, i16 %add_ln703_214, 3
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:27  %mrv_3 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_2, i16 %add_ln703_139, 3
 
 ]]></Node>
 <StgValue><ssdm name="mrv_3"/></StgValue>
@@ -439,7 +439,7 @@ reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:27  %mrv_3 = ins
 
 <Node id="45" bw="128" op_0_bw="128" op_1_bw="16">
 <![CDATA[
-reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:28  %mrv_4 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_3, i16 %add_ln703_215, 4
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:28  %mrv_4 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_3, i16 %add_ln703_140, 4
 
 ]]></Node>
 <StgValue><ssdm name="mrv_4"/></StgValue>
@@ -454,7 +454,7 @@ reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:28  %mrv_4 = ins
 
 <Node id="46" bw="128" op_0_bw="128" op_1_bw="16">
 <![CDATA[
-reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:29  %mrv_5 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_4, i16 %add_ln703_216, 5
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:29  %mrv_5 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_4, i16 %add_ln703_141, 5
 
 ]]></Node>
 <StgValue><ssdm name="mrv_5"/></StgValue>
@@ -469,7 +469,7 @@ reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:29  %mrv_5 = ins
 
 <Node id="47" bw="128" op_0_bw="128" op_1_bw="16">
 <![CDATA[
-reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:30  %mrv_6 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_5, i16 %add_ln703_217, 6
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:30  %mrv_6 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_5, i16 %add_ln703_142, 6
 
 ]]></Node>
 <StgValue><ssdm name="mrv_6"/></StgValue>
@@ -484,7 +484,7 @@ reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:30  %mrv_6 = ins
 
 <Node id="48" bw="128" op_0_bw="128" op_1_bw="16">
 <![CDATA[
-reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:31  %mrv_7 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_6, i16 %add_ln703_218, 7
+reduce_global_pool<ap_fixed<16, 6, 5, 3, 0>, 1, config6>.exit.0:31  %mrv_7 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_6, i16 %add_ln703_143, 7
 
 ]]></Node>
 <StgValue><ssdm name="mrv_7"/></StgValue>

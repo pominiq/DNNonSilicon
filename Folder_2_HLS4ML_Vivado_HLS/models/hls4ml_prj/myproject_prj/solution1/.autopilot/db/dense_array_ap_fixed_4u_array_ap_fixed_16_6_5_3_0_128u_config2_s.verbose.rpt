@@ -3,7 +3,7 @@
 ================================================================
 == Vivado HLS Report for 'dense_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_128u_config2_s'
 ================================================================
-* Date:           Tue Dec 19 18:13:26 2023
+* Date:           Wed Dec 27 14:28:20 2023
 
 * Version:        2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)
 * Project:        myproject_prj
@@ -56,16 +56,16 @@
 |DSP              |        -|      -|       -|      -|    -|
 |Expression       |        -|      -|       0|      6|    -|
 |FIFO             |        -|      -|       -|      -|    -|
-|Instance         |        -|     64|    6164|  16384|    -|
+|Instance         |        -|     64|    6102|  16275|    -|
 |Memory           |        -|      -|       -|      -|    -|
 |Multiplexer      |        -|      -|       -|   1244|    -|
 |Register         |        -|      -|       8|      -|    -|
 +-----------------+---------+-------+--------+-------+-----+
-|Total            |        0|     64|    6172|  17634|    0|
+|Total            |        0|     64|    6110|  17525|    0|
 +-----------------+---------+-------+--------+-------+-----+
 |Available        |      280|    220|  106400|  53200|    0|
 +-----------------+---------+-------+--------+-------+-----+
-|Utilization (%)  |        0|     29|       5|     33|    0|
+|Utilization (%)  |        0|     29|       5|     32|    0|
 +-----------------+---------+-------+--------+-------+-----+
 
 + Detail: 
@@ -73,9 +73,9 @@
     +-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------+-------+------+-------+-----+
     |                                   Instance                                  |                              Module                             | BRAM_18K| DSP48E|  FF  |  LUT  | URAM|
     +-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------+-------+------+-------+-----+
-    |grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config2_s_fu_2230  |dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config2_s  |        0|     64|  6164|  16384|    0|
+    |grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config2_s_fu_2230  |dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config2_s  |        0|     64|  6102|  16275|    0|
     +-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------+-------+------+-------+-----+
-    |Total                                                                        |                                                                 |        0|     64|  6164|  16384|    0|
+    |Total                                                                        |                                                                 |        0|     64|  6102|  16275|    0|
     +-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------+-------+------+-------+-----+
 
     * DSP48E: 
@@ -709,13 +709,13 @@ IsGatedGlobalClock: 0
 
 * FSM state operations: 
 
-State 1 <SV = 0> <Delay = 11.5>
+State 1 <SV = 0> <Delay = 11.6>
 ST_1 : Operation 7 [1/1] (0.00ns)   --->   "%empty = call { i16, i16, i16, i16 } @_ssdm_op_Read.axis.volatile.i16P.i16P.i16P.i16P(i16* %data_stream_V_data_0_V, i16* %data_stream_V_data_1_V, i16* %data_stream_V_data_2_V, i16* %data_stream_V_data_3_V)" [firmware/nnet_utils/nnet_dense_stream.h:40]   --->   Operation 7 'read' 'empty' <Predicate = true> <Delay = 0.00> <Core = "AXI4Stream">   --->   Core 5 'AXI4Stream' <Latency = 0> <II = 1> <Delay = 1.00> <Adapter> <Opcode : >
 ST_1 : Operation 8 [1/1] (0.00ns)   --->   "%tmp_data_0_V_2 = extractvalue { i16, i16, i16, i16 } %empty, 0" [firmware/nnet_utils/nnet_dense_stream.h:40]   --->   Operation 8 'extractvalue' 'tmp_data_0_V_2' <Predicate = true> <Delay = 0.00>
 ST_1 : Operation 9 [1/1] (0.00ns)   --->   "%tmp_data_1_V_2 = extractvalue { i16, i16, i16, i16 } %empty, 1" [firmware/nnet_utils/nnet_dense_stream.h:40]   --->   Operation 9 'extractvalue' 'tmp_data_1_V_2' <Predicate = true> <Delay = 0.00>
 ST_1 : Operation 10 [1/1] (0.00ns)   --->   "%tmp_data_2_V_2 = extractvalue { i16, i16, i16, i16 } %empty, 2" [firmware/nnet_utils/nnet_dense_stream.h:40]   --->   Operation 10 'extractvalue' 'tmp_data_2_V_2' <Predicate = true> <Delay = 0.00>
 ST_1 : Operation 11 [1/1] (0.00ns)   --->   "%tmp_data_3_V_1 = extractvalue { i16, i16, i16, i16 } %empty, 3" [firmware/nnet_utils/nnet_dense_stream.h:40]   --->   Operation 11 'extractvalue' 'tmp_data_3_V_1' <Predicate = true> <Delay = 0.00>
-ST_1 : Operation 12 [6/6] (11.5ns)   --->   "%call_ret = call fastcc { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } @"dense_wrapper<ap_fixed<16, 6, 5, 3, 0>, ap_fixed<16, 6, 5, 3, 0>, config2>"(i16 %tmp_data_0_V_2, i16 %tmp_data_1_V_2, i16 %tmp_data_2_V_2, i16 %tmp_data_3_V_1)" [firmware/nnet_utils/nnet_dense_stream.h:48]   --->   Operation 12 'call' 'call_ret' <Predicate = true> <Delay = 11.5> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+ST_1 : Operation 12 [6/6] (11.6ns)   --->   "%call_ret = call fastcc { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } @"dense_wrapper<ap_fixed<16, 6, 5, 3, 0>, ap_fixed<16, 6, 5, 3, 0>, config2>"(i16 %tmp_data_0_V_2, i16 %tmp_data_1_V_2, i16 %tmp_data_2_V_2, i16 %tmp_data_3_V_1)" [firmware/nnet_utils/nnet_dense_stream.h:48]   --->   Operation 12 'call' 'call_ret' <Predicate = true> <Delay = 11.6> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
 
 State 2 <SV = 1> <Delay = 12.9>
 ST_2 : Operation 13 [5/6] (12.9ns)   --->   "%call_ret = call fastcc { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } @"dense_wrapper<ap_fixed<16, 6, 5, 3, 0>, ap_fixed<16, 6, 5, 3, 0>, config2>"(i16 %tmp_data_0_V_2, i16 %tmp_data_1_V_2, i16 %tmp_data_2_V_2, i16 %tmp_data_3_V_1)" [firmware/nnet_utils/nnet_dense_stream.h:48]   --->   Operation 13 'call' 'call_ret' <Predicate = true> <Delay = 12.9> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
@@ -12539,7 +12539,7 @@ ret_ln64          (ret          ) [ 0000000]
 |----------|-----------------------------------------------------------------------------|---------|---------|---------|---------|
 | Operation|                               Functional Unit                               |  DSP48E |  Delay  |    FF   |   LUT   |
 |----------|-----------------------------------------------------------------------------|---------|---------|---------|---------|
-|   call   | grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config2_s_fu_2230 |    64   | 242.902 |   6129  |  13941  |
+|   call   | grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config2_s_fu_2230 |    64   | 241.667 |   6057  |  13934  |
 |----------|-----------------------------------------------------------------------------|---------|---------|---------|---------|
 |   read   |                              empty_read_fu_1830                             |    0    |    0    |    0    |    0    |
 |----------|-----------------------------------------------------------------------------|---------|---------|---------|---------|
@@ -12678,7 +12678,7 @@ ret_ln64          (ret          ) [ 0000000]
 |          |                            tmp_data_126_V_fu_2888                           |    0    |    0    |    0    |    0    |
 |          |                            tmp_data_127_V_fu_2893                           |    0    |    0    |    0    |    0    |
 |----------|-----------------------------------------------------------------------------|---------|---------|---------|---------|
-|   Total  |                                                                             |    64   | 242.902 |   6129  |  13941  |
+|   Total  |                                                                             |    64   | 241.667 |   6057  |  13934  |
 |----------|-----------------------------------------------------------------------------|---------|---------|---------|---------|
 
 Memories:
@@ -12712,10 +12712,10 @@ N/A
 +-----------+--------+--------+--------+--------+
 |           | DSP48E |  Delay |   FF   |   LUT  |
 +-----------+--------+--------+--------+--------+
-|  Function |   64   |   242  |  6129  |  13941 |
+|  Function |   64   |   241  |  6057  |  13934 |
 |   Memory  |    -   |    -   |    -   |    -   |
 |Multiplexer|    -   |    5   |    -   |   27   |
 |  Register |    -   |    -   |   48   |    -   |
 +-----------+--------+--------+--------+--------+
-|   Total   |   64   |   248  |  6177  |  13968 |
+|   Total   |   64   |   246  |  6105  |  13961 |
 +-----------+--------+--------+--------+--------+

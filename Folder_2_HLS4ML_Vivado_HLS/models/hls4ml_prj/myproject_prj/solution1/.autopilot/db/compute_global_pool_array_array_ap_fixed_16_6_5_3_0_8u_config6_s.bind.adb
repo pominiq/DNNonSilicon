@@ -1307,7 +1307,7 @@
 					<Obj>
 						<type>0</type>
 						<id>34</id>
-						<name>add_ln703_212</name>
+						<name>add_ln703_137</name>
 						<fileName>firmware/nnet_utils/nnet_pooling_stream.h</fileName>
 						<fileDirectory>/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj</fileDirectory>
 						<lineNumber>469</lineNumber>
@@ -1363,7 +1363,7 @@
 					<Obj>
 						<type>0</type>
 						<id>35</id>
-						<name>add_ln703_213</name>
+						<name>add_ln703_138</name>
 						<fileName>firmware/nnet_utils/nnet_pooling_stream.h</fileName>
 						<fileDirectory>/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj</fileDirectory>
 						<lineNumber>469</lineNumber>
@@ -1419,7 +1419,7 @@
 					<Obj>
 						<type>0</type>
 						<id>36</id>
-						<name>add_ln703_214</name>
+						<name>add_ln703_139</name>
 						<fileName>firmware/nnet_utils/nnet_pooling_stream.h</fileName>
 						<fileDirectory>/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj</fileDirectory>
 						<lineNumber>469</lineNumber>
@@ -1475,7 +1475,7 @@
 					<Obj>
 						<type>0</type>
 						<id>37</id>
-						<name>add_ln703_215</name>
+						<name>add_ln703_140</name>
 						<fileName>firmware/nnet_utils/nnet_pooling_stream.h</fileName>
 						<fileDirectory>/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj</fileDirectory>
 						<lineNumber>469</lineNumber>
@@ -1531,7 +1531,7 @@
 					<Obj>
 						<type>0</type>
 						<id>38</id>
-						<name>add_ln703_216</name>
+						<name>add_ln703_141</name>
 						<fileName>firmware/nnet_utils/nnet_pooling_stream.h</fileName>
 						<fileDirectory>/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj</fileDirectory>
 						<lineNumber>469</lineNumber>
@@ -1587,7 +1587,7 @@
 					<Obj>
 						<type>0</type>
 						<id>39</id>
-						<name>add_ln703_217</name>
+						<name>add_ln703_142</name>
 						<fileName>firmware/nnet_utils/nnet_pooling_stream.h</fileName>
 						<fileDirectory>/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj</fileDirectory>
 						<lineNumber>469</lineNumber>
@@ -1643,7 +1643,7 @@
 					<Obj>
 						<type>0</type>
 						<id>40</id>
-						<name>add_ln703_218</name>
+						<name>add_ln703_143</name>
 						<fileName>firmware/nnet_utils/nnet_pooling_stream.h</fileName>
 						<fileDirectory>/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj</fileDirectory>
 						<lineNumber>469</lineNumber>
@@ -3308,7 +3308,7 @@
 		<count>16</count>
 		<item_version>0</item_version>
 		<item class_id="43" tracking_level="0" version="0">
-			<first>add_ln703_212_fu_138</first>
+			<first>add_ln703_137_fu_138</first>
 			<second>
 				<count>1</count>
 				<item_version>0</item_version>
@@ -3316,7 +3316,7 @@
 			</second>
 		</item>
 		<item>
-			<first>add_ln703_213_fu_144</first>
+			<first>add_ln703_138_fu_144</first>
 			<second>
 				<count>1</count>
 				<item_version>0</item_version>
@@ -3324,7 +3324,7 @@
 			</second>
 		</item>
 		<item>
-			<first>add_ln703_214_fu_150</first>
+			<first>add_ln703_139_fu_150</first>
 			<second>
 				<count>1</count>
 				<item_version>0</item_version>
@@ -3332,7 +3332,7 @@
 			</second>
 		</item>
 		<item>
-			<first>add_ln703_215_fu_156</first>
+			<first>add_ln703_140_fu_156</first>
 			<second>
 				<count>1</count>
 				<item_version>0</item_version>
@@ -3340,7 +3340,7 @@
 			</second>
 		</item>
 		<item>
-			<first>add_ln703_216_fu_162</first>
+			<first>add_ln703_141_fu_162</first>
 			<second>
 				<count>1</count>
 				<item_version>0</item_version>
@@ -3348,7 +3348,7 @@
 			</second>
 		</item>
 		<item>
-			<first>add_ln703_217_fu_168</first>
+			<first>add_ln703_142_fu_168</first>
 			<second>
 				<count>1</count>
 				<item_version>0</item_version>
@@ -3356,7 +3356,7 @@
 			</second>
 		</item>
 		<item>
-			<first>add_ln703_218_fu_174</first>
+			<first>add_ln703_143_fu_174</first>
 			<second>
 				<count>1</count>
 				<item_version>0</item_version>

@@ -69,280 +69,13 @@ set sdaccel_dir [file join [pwd] .. kernel]
 set solution_dir "/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1"
 set debug_dir [file join $solution_dir .debug]
 set xo_hls_files_dir ""
-set hdl_module_list {regslice_core
-softmax_stable_array_array_ap_fixed_16_6_5_3_0_3u_softmax_config5_s_exp_table1
-softmax_stable_array_array_ap_fixed_16_6_5_3_0_3u_softmax_config5_s_invert_tabkb
-regslice_core
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-fifo_w16_d1_A
-start_for_relu_array_ap_fixed_128u_array_ap_fixed_16_6_5_3_0_128u_relu_configcud
-start_for_dense_array_ap_fixed_128u_array_ap_fixed_16_6_5_3_0_3u_config4_U0
-start_for_softmax_array_array_ap_fixed_16_6_5_3_0_3u_softmax_config5_U0
-regslice_core
-dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config2_s
-dense_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_128u_config2_s
-relu_array_ap_fixed_128u_array_ap_fixed_16_6_5_3_0_128u_relu_config3_s
-dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config4_s
-dense_array_ap_fixed_128u_array_ap_fixed_16_6_5_3_0_3u_config4_s
-softmax_stable_array_array_ap_fixed_16_6_5_3_0_3u_softmax_config5_s
-softmax_array_array_ap_fixed_16_6_5_3_0_3u_softmax_config5_s
+set hdl_module_list {myproject_mul_mul_17ns_18s_26_1_1
+softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1
+softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2
+dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s
+relu_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_relu_config3_s
+dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0
+softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s
 myproject
 }
 set kernel_xo ""
@@ -359,188 +92,6 @@ set BDFiles [sort_file_names [glob -nocomplain bd/*]]
 set ConstraintFiles [sort_file_names [glob -nocomplain constraints/*]]
 set MiscFiles [sort_file_names [glob -nocomplain misc/*]]
 set Interfaces {
-    dense_input_V_data_0_V {
-        type "axi4stream"
-        mode "slave"
-        port_prefix "dense_input_V_data_0_V"
-        has_tready "1"
-        ports {
-            TDATA 16
-        }
-        ctype {
-            TDATA {
-                Type "null"
-                Width "16"
-                Bits "16"
-            }
-            TVALID {
-                Type "bool"
-                Width "1"
-                Bits "1"
-            }
-            TREADY {
-                Type "bool"
-                Width "1"
-                Bits "1"
-            }
-        }
-    }
-    dense_input_V_data_1_V {
-        type "axi4stream"
-        mode "slave"
-        port_prefix "dense_input_V_data_1_V"
-        has_tready "1"
-        ports {
-            TDATA 16
-        }
-        ctype {
-            TDATA {
-                Type "null"
-                Width "16"
-                Bits "16"
-            }
-            TVALID {
-                Type "bool"
-                Width "1"
-                Bits "1"
-            }
-            TREADY {
-                Type "bool"
-                Width "1"
-                Bits "1"
-            }
-        }
-    }
-    dense_input_V_data_2_V {
-        type "axi4stream"
-        mode "slave"
-        port_prefix "dense_input_V_data_2_V"
-        has_tready "1"
-        ports {
-            TDATA 16
-        }
-        ctype {
-            TDATA {
-                Type "null"
-                Width "16"
-                Bits "16"
-            }
-            TVALID {
-                Type "bool"
-                Width "1"
-                Bits "1"
-            }
-            TREADY {
-                Type "bool"
-                Width "1"
-                Bits "1"
-            }
-        }
-    }
-    dense_input_V_data_3_V {
-        type "axi4stream"
-        mode "slave"
-        port_prefix "dense_input_V_data_3_V"
-        has_tready "1"
-        ports {
-            TDATA 16
-        }
-        ctype {
-            TDATA {
-                Type "null"
-                Width "16"
-                Bits "16"
-            }
-            TVALID {
-                Type "bool"
-                Width "1"
-                Bits "1"
-            }
-            TREADY {
-                Type "bool"
-                Width "1"
-                Bits "1"
-            }
-        }
-    }
-    layer5_out_V_data_0_V {
-        type "axi4stream"
-        mode "master"
-        port_prefix "layer5_out_V_data_0_V"
-        has_tready "1"
-        ports {
-            TDATA 16
-        }
-        ctype {
-            TDATA {
-                Type "null"
-                Width "16"
-                Bits "16"
-            }
-            TVALID {
-                Type "bool"
-                Width "1"
-                Bits "1"
-            }
-            TREADY {
-                Type "bool"
-                Width "1"
-                Bits "1"
-            }
-        }
-    }
-    layer5_out_V_data_1_V {
-        type "axi4stream"
-        mode "master"
-        port_prefix "layer5_out_V_data_1_V"
-        has_tready "1"
-        ports {
-            TDATA 16
-        }
-        ctype {
-            TDATA {
-                Type "null"
-                Width "16"
-                Bits "16"
-            }
-            TVALID {
-                Type "bool"
-                Width "1"
-                Bits "1"
-            }
-            TREADY {
-                Type "bool"
-                Width "1"
-                Bits "1"
-            }
-        }
-    }
-    layer5_out_V_data_2_V {
-        type "axi4stream"
-        mode "master"
-        port_prefix "layer5_out_V_data_2_V"
-        has_tready "1"
-        ports {
-            TDATA 16
-        }
-        ctype {
-            TDATA {
-                Type "null"
-                Width "16"
-                Bits "16"
-            }
-            TVALID {
-                Type "bool"
-                Width "1"
-                Bits "1"
-            }
-            TREADY {
-                Type "bool"
-                Width "1"
-                Bits "1"
-            }
-        }
-    }
     ap_clk {
         type "clock"
         ctype {
@@ -550,12 +101,12 @@ set Interfaces {
                 Bits "1"
             }
         }
-        buses "dense_input_V_data_0_V dense_input_V_data_1_V dense_input_V_data_2_V dense_input_V_data_3_V layer5_out_V_data_0_V layer5_out_V_data_1_V layer5_out_V_data_2_V"
-        reset "ap_rst_n"
+        buses ""
+        reset "ap_rst"
     }
-    ap_rst_n {
+    ap_rst {
         type "reset"
-        polarity "ACTIVE_LOW"
+        polarity "ACTIVE_HIGH"
         ctype {
             RST {
                 Type "bool"
@@ -566,7 +117,7 @@ set Interfaces {
     }
     ap_ctrl {
         type "ap_ctrl"
-        ctrl_ports "ap_start ap_done ap_ready ap_idle"
+        ctrl_ports "ap_start ap_done ap_idle ap_ready"
         ctype {
             start {
                 Type "bool"
@@ -578,15 +129,63 @@ set Interfaces {
                 Width "1"
                 Bits "1"
             }
+            idle {
+                Type "bool"
+                Width "1"
+                Bits "1"
+            }
             ready {
                 Type "bool"
                 Width "1"
                 Bits "1"
             }
-            idle {
-                Type "bool"
-                Width "1"
-                Bits "1"
+        }
+    }
+    dense_input_V {
+        type "data"
+        dir "in"
+        width "64"
+        ctype {
+            DATA {
+                Type "null"
+                Width "64"
+                Bits "64"
+            }
+        }
+    }
+    layer5_out_0_V {
+        type "data"
+        dir "out"
+        width "16"
+        ctype {
+            DATA {
+                Type "null"
+                Width "16"
+                Bits "16"
+            }
+        }
+    }
+    layer5_out_1_V {
+        type "data"
+        dir "out"
+        width "16"
+        ctype {
+            DATA {
+                Type "null"
+                Width "16"
+                Bits "16"
+            }
+        }
+    }
+    layer5_out_2_V {
+        type "data"
+        dir "out"
+        width "16"
+        ctype {
+            DATA {
+                Type "null"
+                Width "16"
+                Bits "16"
             }
         }
     }
@@ -2054,7 +1653,7 @@ if {![regexp -nocase {2014\.3.*} $vivado_ver match]} {
 ipx::create_xgui_files -logo_file misc/logo.png $core
 
 ## System Info
-set user_parameters_list {clk_period 25 machine 64 combinational 0 latency 23 II x}
+set user_parameters_list {clk_period 25 machine 64 combinational 0 latency 13 II 6}
 foreach {user_para value} $user_parameters_list {
     incr user_parameter_order
     set user_para_value [ipx::add_user_parameter $user_para $core]

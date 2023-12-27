@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vivado HLS Report for 'compute_global_pool_array_array_ap_fixed_16_6_5_3_0_8u_config6_s'" level="0">
-<item name = "Date">Tue Dec 19 17:51:06 2023
+<item name = "Date">Tue Dec 19 20:25:51 2023
 </item>
 <item name = "Version">2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)</item>
 <item name = "Project">myproject_prj</item>
@@ -77,13 +77,13 @@
 </item>
 <item name = "Expression"><table name="" hasTotal="1">
 <keys size="7">Variable Name, Operation, DSP48E, FF, LUT, Bitwidth P0, Bitwidth P1</keys>
-<column name="add_ln703_212_fu_138_p2">+, 0, 0, 23, 16, 16</column>
-<column name="add_ln703_213_fu_144_p2">+, 0, 0, 23, 16, 16</column>
-<column name="add_ln703_214_fu_150_p2">+, 0, 0, 23, 16, 16</column>
-<column name="add_ln703_215_fu_156_p2">+, 0, 0, 23, 16, 16</column>
-<column name="add_ln703_216_fu_162_p2">+, 0, 0, 23, 16, 16</column>
-<column name="add_ln703_217_fu_168_p2">+, 0, 0, 23, 16, 16</column>
-<column name="add_ln703_218_fu_174_p2">+, 0, 0, 23, 16, 16</column>
+<column name="add_ln703_137_fu_138_p2">+, 0, 0, 23, 16, 16</column>
+<column name="add_ln703_138_fu_144_p2">+, 0, 0, 23, 16, 16</column>
+<column name="add_ln703_139_fu_150_p2">+, 0, 0, 23, 16, 16</column>
+<column name="add_ln703_140_fu_156_p2">+, 0, 0, 23, 16, 16</column>
+<column name="add_ln703_141_fu_162_p2">+, 0, 0, 23, 16, 16</column>
+<column name="add_ln703_142_fu_168_p2">+, 0, 0, 23, 16, 16</column>
+<column name="add_ln703_143_fu_174_p2">+, 0, 0, 23, 16, 16</column>
 <column name="add_ln703_fu_132_p2">+, 0, 0, 23, 16, 16</column>
 </table>
 </item>

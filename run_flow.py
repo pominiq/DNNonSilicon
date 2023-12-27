@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 # TensorFlow and Keras imports
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # FATAL
 logging.getLogger('tensorflow').setLevel(logging.FATAL)
+print("Running tensorflow")
 import tensorflow as tf
 import tensorflow_model_optimization as tfmot
 from tensorflow_model_optimization.python.core.sparsity.keras import prune, pruning_callbacks, pruning_wrapper, pruning_schedule
@@ -27,6 +28,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 # HLS4ML imports
 import hls4ml # Engine for generating Verilog-files from ML models
 from hls4ml.model.profiling import numerical
+from hls4ml.converters.keras_to_hls import get_supported_keras_layers
 
 ## Openlane2 imports
 from openlane.flows import SequentialFlow, Flow
@@ -44,60 +46,9 @@ timestr = time.strftime("%Y%m%d-%H%M%S") #used for timestamping iterations
 os.environ['PATH'] += os.pathsep + '/tools/Xilinx/Vivado/2020.1/bin'
 
 
-## Openlane2 flow
-class Openlane2Flow(SequentialFlow):
-    Steps = [
-        Yosys.Synthesis,
-        Checker.YosysUnmappedCells,
-        Checker.YosysSynthChecks,
-        OpenROAD.CheckSDCFiles,
-        OpenROAD.Floorplan,
-        OpenROAD.CutRows,
-        OpenROAD.TapEndcapInsertion,
-        OpenROAD.IOPlacement,
-        OpenROAD.GlobalPlacement,
-        OpenROAD.RepairDesignPostGPL,
-        OpenROAD.DetailedPlacement,
-        OpenROAD.CTS,
-        OpenROAD.ResizerTimingPostCTS,
-        OpenROAD.GlobalRouting,
-        OpenROAD.RepairDesignPostGRT,
-        OpenROAD.GeneratePDN,
-        OpenROAD.RepairAntennas,
-        OpenROAD.DetailedRouting,
-        OpenROAD.CheckAntennas,
-        OpenROAD.FillInsertion,
-        OpenROAD.IRDropReport,
-        Magic.StreamOut,
-        Magic.DRC,
-        Magic.SpiceExtraction,
-        Netgen.LVS
-    ]
-
-## Main menu text for the terminal UI
-def main_menu_text(train, hls_model_comparison, build, openlane):
-    print("Welcome to text-based UI version of the flow")
-    print("_____________________________________________")
-    print("Using model and datasets from folder:")
-    print(subfolder_path)
-    print("_____________________________________________")
-    print("Scripts for the individual steps can be found in the various subfolders. There it is also possible to find the experimental PandaBambu version of the flow.")
-    print("The flow requires some specific dependencies, which can be found in the accompanying requirements.txt file for pip installs, and install.md for larger software suites like Vivado HLS and Openlane2.")
-    print("I take no credit for the technologies used to create this flow. I simply tried to compile various blocks for the novelty.")
-    print("_____________________________________________")
-    print("\nInstructions for this script:")
-    print("The flow consists of the following steps")
-    print("1. Importing NN model.")
-    print("2. Using HLS4ML to generate a HLS-compatible version of the imported NN model.")
-    print("3. Running the HLS4ML model through Vivado HLS.")
-    print("4. Sending the produced Verilog file to Openlane2 for layout creation.")
-
-    # Display overall flow step variables
-    print("\nRunning script with\n1. Train example model: \t\t{}\n2. Compare model with HLS generated: \t{}\n3. Build HLS model with Vivado: \t{}\n4. Start Openlane2: \t\t\t{}".format(train, 
-                                                                                                                                                hls_model_comparison, 
-                                                                                                                                                build,
-                                                                                                                                                openlane))
-
+###############################################################################################
+########################################### MODELS ############################################
+###############################################################################################
 # Downloads, trains and creates 
 # the example MNIST Convolutional Neural Network (CNN) model with almost no optimization
 def create_example_model_MNIST():
@@ -136,9 +87,7 @@ def create_example_model_MNIST():
 
 # Downloads, trains and creates 
 # the example MNIST YOLO Convolutional Neural Network (CNN) model with various optimizations for smaller architecture.
-def create_example_model_YOLO():
-
-    pruning = False
+def create_example_model_YOLO(pruning):
 
     # Tuple of NumPy arrays: (x_train, y_train), (x_test, y_test)
     (train_images, train_labels), (test_images, test_labels) = mnist.load_data()
@@ -158,35 +107,58 @@ def create_example_model_YOLO():
     model.add(layers.GlobalAveragePooling2D()) # For some reason this is not implemented in HLS4ML
     model.add(layers.Dense(10, dtype='float32', activation='softmax', use_bias=False))  # Ensure that the final layer has float32 dtype
 
+    model.compile(optimizer='adam',
+                  loss=tf.keras.losses.CategoricalCrossentropy(),
+                  metrics=['accuracy'])
+    
+    print(model.summary())
+    w = model.layers[0].weights[0].numpy()
+    print('Model:\t% of zeros = {}'.format(np.sum(w == 0) / np.size(w)))
+
+    ### PRUNING
     if pruning == True:
         pruning_schedule = tfmot.sparsity.keras.PolynomialDecay(initial_sparsity=0.0,
                                                                 final_sparsity=0.5,
                                                                 begin_step=2000,
                                                                 end_step=4000)
-        model = tfmot.sparsity.keras.prune_low_magnitude(model, 
+        pruned_model = tfmot.sparsity.keras.prune_low_magnitude(model, 
                                                         pruning_schedule=pruning_schedule)
         # Define the pruning callback
         callbacks = [
         tfmot.sparsity.keras.UpdatePruningStep()
         ]
+
+        pruned_model.compile(optimizer='adam',
+                  loss=tf.keras.losses.CategoricalCrossentropy(),
+                  metrics=['accuracy'])
+   
+        # Train the CNN model
+        pruned_model.fit(train_images, train_labels, epochs=5, callbacks=callbacks)
+        print(pruned_model.summary())
+        # Check how many weights were set to zero (ie. verify if pruning worked)
+        w = pruned_model.layers[0].weights[0].numpy()
+        print('Pruned:\t% of zeros = {}'.format(np.sum(w == 0) / np.size(w)))
+
+        # To preserve layer type (for compatibility with HLS4ML), the prune mask created
+        # by tfmot is effectively removed
+        model = replace_model_weights_with_prune_equivalent(model, pruned_model)
+
+        print(model.summary())
+        w = model.layers[0].weights[0].numpy()
+        print('Model:\t% of zeros = {}'.format(np.sum(w == 0) / np.size(w)))
+
     else:
         callbacks = []
 
-
-    # Compile model
-    model.compile(optimizer='adam',
-                loss=tf.keras.losses.CategoricalCrossentropy(),
-                metrics=['accuracy'])
+        model.compile(optimizer='adam',
+                  loss=tf.keras.losses.CategoricalCrossentropy(),
+                  metrics=['accuracy'])
     
-    # Train the CNN model
-    model.fit(train_images, train_labels, epochs=10, callbacks=callbacks)
-    print(model.summary())
+        # Train the CNN model
+        model.fit(train_images, train_labels, epochs=10, callbacks=callbacks)
+        print(model.summary())
 
-    if pruning == True:
-        # Check how many weights were set to zero (ie. verify if pruning worked)
-        w = model.layers[0].weights[0].numpy()
-        print('% of zeros = {}'.format(np.sum(w == 0) / np.size(w)))
-    
+
     # Evaluate and quantize to 16-bit. Save all the models.
     model_evaluation_and_generic_quantization(model, train_images, train_labels, test_images, test_labels)
 
@@ -194,7 +166,8 @@ def create_example_model_YOLO():
 
 # Downloads, trains and creates 
 # the example IRIS Single Layer Perceptron (SLP) model
-def create_example_model_IRIS():
+def create_example_model_IRIS(pruning):
+
     # Load Iris dataset
     iris = load_iris()
     # Features and labels
@@ -214,84 +187,58 @@ def create_example_model_IRIS():
     model.add(layers.Dense(3, activation='softmax'))
 
     model.compile(optimizer='adam',
-            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-            metrics=['accuracy'])
-
+        loss=tf.keras.losses.SparseCategoricalCrossentropy(),
+        metrics=['accuracy'])
+    
     # Train the SLP model
-    model.fit(train_images, train_labels, epochs=10)
+    model.fit(train_images, train_labels, epochs=50)
     print(model.summary())
+    score = model.evaluate(test_images, test_labels, verbose=0)
+    print("Model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(score[0],score[1]*100))
 
-    # Evaluate and quantize to 16-bit. Save all the models.
-    model_evaluation_and_generic_quantization(model, train_images, train_labels, test_images, test_labels)
-
-    return (model, test_images, test_labels)
-
-# Downloads, trains and creates 
-# the example IRIS Single Layer Perceptron (SLP) model with pruning
-def create_example_model_IRIS_pruned():
-
-    pruning = True
-
-    # Load Iris dataset
-    iris = load_iris()
-    # Features and labels
-    X = iris.data
-    y = iris.target
-    # Splitting the dataset into train and test sets
-    train_images, test_images, train_labels, test_labels = train_test_split(X, y, test_size=0.25, random_state=42)
-
-    # Scaling features
-    scaler = StandardScaler()
-    train_images = scaler.fit_transform(train_images)
-    test_images = scaler.transform(test_images.reshape(-1,4))
-
-    # Single layer perceptron
-    model = models.Sequential()
-    model.add(layers.Dense(128, activation='relu',input_shape=(4,), __name__='Dense')) # Single dense layer
-    model.add(layers.Dense(3, activation='softmax', __name__='Dense'))
-
+    ### PRUNING
     if pruning == True:
-        pruning_schedule = tfmot.sparsity.keras.PolynomialDecay(initial_sparsity=0.0,
-                                                                final_sparsity=0.5,
-                                                                begin_step=2000,
-                                                                end_step=4000)
-        model = tfmot.sparsity.keras.prune_low_magnitude(model, 
+        print("_________ With Pruning _________")
+        pruning_schedule = tfmot.sparsity.keras.ConstantSparsity(0.75,
+                                                                begin_step=0,
+                                                                frequency=1)
+        pruned_model = tfmot.sparsity.keras.prune_low_magnitude(model, 
                                                         pruning_schedule=pruning_schedule)
         # Define the pruning callback
         callbacks = [
         tfmot.sparsity.keras.UpdatePruningStep()
         ]
-    else:
-        callbacks = []
 
-
-    # Compile model
-    model.compile(optimizer='adam',
-                loss=tf.keras.losses.CategoricalCrossentropy(),
-                metrics=['accuracy'])
-    
-    # Train the CNN model
-    model.fit(train_images, train_labels, epochs=10, callbacks=callbacks)
-    print(model.summary())
-
-    if pruning == True:
+        pruned_model.compile(optimizer='adam',
+                  loss=tf.keras.losses.SparseCategoricalCrossentropy(),
+                  metrics=['accuracy'])
+   
+        # Train the SLP model
+        pruned_model.fit(train_images, train_labels, epochs=50, callbacks=callbacks)
+        print(pruned_model.summary())
         # Check how many weights were set to zero (ie. verify if pruning worked)
+        w = pruned_model.layers[0].weights[0].numpy()
+        print(w)
+        print('Pruned:\t% of zeros = {}'.format(np.sum(w == 0) / np.size(w)))
+        score = pruned_model.evaluate(test_images, test_labels, verbose=0)
+        print("Pruned model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(score[0],score[1]*100))
+
+
+        # To preserve layer type (for compatibility with HLS4ML), the prune mask created
+        # by tfmot is effectively removed
+        model = replace_model_weights_with_prune_equivalent(model, pruned_model)
+
+        print(model.summary())
         w = model.layers[0].weights[0].numpy()
-        print('% of zeros = {}'.format(np.sum(w == 0) / np.size(w)))
+        print('Model:\t% of zeros = {}'.format(np.sum(w == 0) / np.size(w)))
 
-    model.compile(optimizer='adam',
-            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-            metrics=['accuracy'])
-
-    # Train the SLP model
-    model.fit(train_images, train_labels, epochs=10)
-    print(model.summary())
+        score = model.evaluate(test_images, test_labels, verbose=0)
+        print("Post-save pruned model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(score[0],score[1]*100))
 
     # Evaluate and quantize to 16-bit. Save all the models.
     model_evaluation_and_generic_quantization(model, train_images, train_labels, test_images, test_labels)
 
     return (model, test_images, test_labels)
-
 
 # DOES NOT WORK
 # Downloads, trains and creates 
@@ -320,6 +267,25 @@ def create_example_model_IMDB():
     model_evaluation_and_generic_quantization(model, train_images, train_labels, test_images, test_labels)
 
     return (model, test_images, test_labels)
+
+###############################################################################################
+########################################## HELPERS ############################################
+###############################################################################################
+# Replace model weights with prune equivalent
+# Done to preserve type, ie. remove the 'mask' put on the layer types by Keras
+# If not done, HLS4ML cannot interprete which layers are which
+def replace_model_weights_with_prune_equivalent(model, pruned_model):
+    for i, layer in enumerate(model.layers):
+        layer_config = layer.get_config()
+        pruned_weights = pruned_model.layers[i].get_weights()
+
+        new_layer = type(layer).from_config(layer_config)
+        new_layer.build(input_shape=layer.input_shape)
+        new_layer.set_weights(pruned_weights)
+
+        model.layers[i] = new_layer
+    
+    return model
 
 # Loads keras model from folder
 def load_keras_model_from_json_file(modelname):
@@ -440,21 +406,21 @@ def model_evaluation_and_generic_quantization(model, train_images, train_labels,
     test_Vivado_unrolled_limit_withheld(model)
 
 # Compiles HLS4Ml model from imported TF model based on config parameters
-def config_and_compile_hls4ml_model_from_keras_model(model):
+def config_and_compile_hls4ml_model_from_keras_model(model,default_reuse_factor,clock_period):
     
     # Load configuration in HLS4ML tool on keras model
     config = hls4ml.utils.config_from_keras_model(model, 
                                                 granularity='model',
                                                 default_precision='ap_fixed<16,6>',
-                                                default_reuse_factor=8, #1,2,4,8,16,32,64,160,320. 
+                                                default_reuse_factor=default_reuse_factor, #1,2,4,8,16,32,64,160,320. 
                                                 # or for Conv2D layer: 1,2,3,4,6,9,12,18,36,72,144,288
-                                                default_strategy='Resource',
+                                                default_strategy='Latency',
                                                 )
 
     hls_model = hls4ml.converters.convert_from_keras_model(model,
                                                            hls_config=config,
-                                                           io_type='io_stream', # Set to io_stream for CNN
-                                                           clock_period=25,
+                                                           io_type='io_parallel', # Set to io_stream for CNN
+                                                           clock_period=clock_period,
                                                            output_dir='Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj',
                                                            part='xc7z020clg400-1',
                                                            backend='Vivado'
@@ -509,29 +475,92 @@ def hls_vs_tf_model_comparison(model, hls_model, test_images, test_labels)-> tup
 
     return metrics_tuple
 
+## Openlane2 flow
+class Openlane2Flow(SequentialFlow):
+    Steps = [
+        Yosys.Synthesis,
+        Checker.YosysUnmappedCells,
+        Checker.YosysSynthChecks,
+        OpenROAD.CheckSDCFiles,
+        OpenROAD.Floorplan,
+        OpenROAD.CutRows,
+        OpenROAD.TapEndcapInsertion,
+        OpenROAD.IOPlacement,
+        OpenROAD.GlobalPlacement,
+        OpenROAD.RepairDesignPostGPL,
+        OpenROAD.DetailedPlacement,
+        OpenROAD.CTS,
+        OpenROAD.ResizerTimingPostCTS,
+        OpenROAD.GlobalRouting,
+        OpenROAD.RepairDesignPostGRT,
+        OpenROAD.GeneratePDN,
+        OpenROAD.RepairAntennas,
+        OpenROAD.DetailedRouting,
+        OpenROAD.CheckAntennas,
+        OpenROAD.FillInsertion,
+        OpenROAD.IRDropReport,
+        Magic.StreamOut,
+        Magic.DRC,
+        Magic.SpiceExtraction,
+        Netgen.LVS
+    ]
+
+## Main menu text for the terminal UI
+def main_menu_text(train, hls_model_comparison, build, openlane):
+    print("Welcome to text-based UI version of the flow")
+    print("_____________________________________________")
+    print("Using model and datasets from folder:")
+    print(subfolder_path)
+    print("_____________________________________________")
+    print("Scripts for the individual steps can be found in the various subfolders. There it is also possible to find the experimental PandaBambu version of the flow.")
+    print("The flow requires some specific dependencies, which can be found in the accompanying requirements.txt file for pip installs, and install.md for larger software suites like Vivado HLS and Openlane2.")
+    print("I take no credit for the technologies used to create this flow. I simply tried to compile various blocks for the novelty.")
+    print("_____________________________________________")
+    print("\nInstructions for this script:")
+    print("The flow consists of the following steps")
+    print("1. Importing NN model.")
+    print("2. Using HLS4ML to generate a HLS-compatible version of the imported NN model.")
+    print("3. Running the HLS4ML model through Vivado HLS.")
+    print("4. Sending the produced Verilog file to Openlane2 for layout creation.")
+
+    # Display overall flow step variables
+    print("\nRunning script with\n1. Train example model: \t\t{}\n2. Compare model with HLS generated: \t{}\n3. Build HLS model with Vivado: \t{}\n4. Start Openlane2: \t\t\t{}".format(train, 
+                                                                                                                                                hls_model_comparison, 
+                                                                                                                                                build,
+                                                                                                                                                openlane))
+
+
+###############################################################################################
+############################################ MAIN #############################################
+###############################################################################################
 # Main function. Here the actual flow is run
-def main():
-    
+def main():    
     # model filename without extension. Requires calling .json-file and weights.h5-file the same
     # By default I have set it to the 16bit version as found in the subfolder directory
     modelname =             "model_16bit"
 
     #Flow step variables
     train =                 True
+    pruning =               True
+
     hls_model_comparison =  True
+    default_reuse_factor =  8
+    clock_period =          25
+
     build =                 True
     openlane =              False
 
     # List of example models
     MNIST =                 False   # generic CNN
-    IRIS =                  False    # Single-layer Dense
-    IRIS_pruned =           True    # SLP with pruning test
+    IRIS =                  True    # Single-layer Dense, with pruned 50%
     IMDB =                  False   # Simple RNN (DOES NOT WORK)
     YOLO =                  False   # small CNN with depth-wise Conv2D, GlobalAveragePooling, and pruned 50%
 
-
     # Main menu text
     main_menu_text(train, hls_model_comparison, build, openlane)
+
+    print("Supported Keras layers")
+    print(get_supported_keras_layers())
 
     # Step 1: Either train an example model or load model from a folder
     if train == True:
@@ -540,13 +569,11 @@ def main():
         if MNIST == True:
             create_example_model_MNIST()
         elif IRIS == True:
-            create_example_model_IRIS()
-        elif IRIS_pruned == True:
-            create_example_model_IRIS_pruned()
+            create_example_model_IRIS(pruning)
         elif IMDB == True:
             create_example_model_IMDB()
         elif YOLO == True:
-            create_example_model_YOLO()
+            create_example_model_YOLO(pruning)
 
 
     print("___________________________________\nLOADING MODEL FROM SUBFOLDER PATH\n___________________________________")
@@ -559,7 +586,7 @@ def main():
     if hls_model_comparison == True:
         print("___________________________________\nGENERATING HLS MODEL W/ COMPARISON\n___________________________________")
         # Compile HLS4ML model from loaded model
-        hls_model = config_and_compile_hls4ml_model_from_keras_model(model)
+        hls_model = config_and_compile_hls4ml_model_from_keras_model(model,default_reuse_factor,clock_period)
         # Output comparison
         hls_vs_tf_model_comparison(model, hls_model, test_images, test_labels)
     else:
@@ -605,7 +632,7 @@ def main():
                 "DESIGN_NAME": "myproject",
                 "VERILOG_FILES": "refg::$DESIGN_DIR/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/impl/verilog/*.v",
                 "CLOCK_PORT": 'ap_clk',
-                "CLOCK_PERIOD": 25,
+                "CLOCK_PERIOD": clock_period,
                 "RUN_HEURISTIC_DIODE_INSERTION": True,
                 #### Yosys Synthesis specific parameters ###
                 "USE_LIGHTER": False,

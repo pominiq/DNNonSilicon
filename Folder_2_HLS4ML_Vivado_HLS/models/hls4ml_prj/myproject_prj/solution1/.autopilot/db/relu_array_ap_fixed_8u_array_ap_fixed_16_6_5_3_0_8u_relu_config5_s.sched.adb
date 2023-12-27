@@ -700,7 +700,7 @@
 					<Obj>
 						<type>0</type>
 						<id>44</id>
-						<name>empty_37</name>
+						<name>empty_33</name>
 						<fileName>firmware/nnet_utils/nnet_activation_stream.h</fileName>
 						<fileDirectory>/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj</fileDirectory>
 						<lineNumber>44</lineNumber>

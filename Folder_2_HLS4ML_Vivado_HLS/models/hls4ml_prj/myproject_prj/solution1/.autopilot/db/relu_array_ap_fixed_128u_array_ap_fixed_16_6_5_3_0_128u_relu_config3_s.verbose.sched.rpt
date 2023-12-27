@@ -3,7 +3,7 @@
 ================================================================
 == Vivado HLS Report for 'relu_array_ap_fixed_128u_array_ap_fixed_16_6_5_3_0_128u_relu_config3_s'
 ================================================================
-* Date:           Tue Dec 19 18:12:40 2023
+* Date:           Wed Dec 27 14:27:43 2023
 
 * Version:        2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)
 * Project:        myproject_prj
@@ -736,8 +736,8 @@ Target clock period: 25ns, clock uncertainty: 3.12ns.
  <State 1>: 10.5ns
 The critical path consists of the following:
 	fifo read on port 'data_V_data_0_V' (firmware/nnet_utils/nnet_activation_stream.h:44) [516]  (3.63 ns)
-	'icmp' operation ('icmp_ln1494', firmware/nnet_utils/nnet_activation_stream.h:51) [645]  (2.43 ns)
-	'select' operation ('tmp.data[0].V', firmware/nnet_utils/nnet_activation_stream.h:51) [773]  (0.805 ns)
+	'icmp' operation ('icmp_ln1494_24', firmware/nnet_utils/nnet_activation_stream.h:51) [669]  (2.43 ns)
+	'select' operation ('tmp.data[24].V', firmware/nnet_utils/nnet_activation_stream.h:51) [797]  (0.805 ns)
 	fifo write on port 'res_V_data_0_V' (firmware/nnet_utils/nnet_activation_stream.h:57) [901]  (3.63 ns)
 
 

@@ -1,0 +1,951 @@
+#-----------------------------------------------------------
+# Vivado v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:35 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Wed Dec 27 14:58:19 2023
+# Process ID: 17783
+# Current directory: /home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj
+# Command line: vivado -mode batch -source vivado_synth.tcl
+# Log file: /home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/vivado.log
+# Journal file: /home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/vivado.jou
+#-----------------------------------------------------------
+source vivado_synth.tcl
+# set tcldir [file dirname [info script]]
+# source [file join $tcldir project.tcl]
+## variable project_name
+## set project_name "myproject"
+## variable backend
+## set backend "vivado"
+## variable part
+## set part "xc7z020clg400-1"
+## variable clock_period
+## set clock_period 25
+## variable clock_uncertainty
+## set clock_uncertainty 12.5%
+## variable version
+## set version "1.0.0"
+# add_files ${project_name}_prj/solution1/syn/vhdl
+# synth_design -top ${project_name} -part $part
+Command: synth_design -top myproject -part xc7z020clg400-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 17925
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 2088.629 ; gain = 0.000 ; free physical = 1412 ; free virtual = 5695
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'myproject' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/myproject.vhd:31]
+INFO: [Synth 8-3491] module 'dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s' declared at '/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s.vhd:12' bound to instance 'grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_71' of component 'dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/myproject.vhd:1154]
+INFO: [Synth 8-638] synthesizing module 'dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s.vhd:153]
+INFO: [Synth 8-256] done synthesizing module 'dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s' (1#1) [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s.vhd:153]
+INFO: [Synth 8-3491] module 'dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0' declared at '/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0.vhd:12' bound to instance 'grp_dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0_fu_77' of component 'dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/myproject.vhd:1293]
+INFO: [Synth 8-638] synthesizing module 'dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0.vhd:155]
+INFO: [Synth 8-256] done synthesizing module 'dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0' (2#1) [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0.vhd:155]
+INFO: [Synth 8-3491] module 'relu_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_relu_config3_s' declared at '/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/relu_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_relu_config3_s.vhd:12' bound to instance 'call_ret1_relu_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_relu_config3_s_fu_209' of component 'relu_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_relu_config3_s' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/myproject.vhd:1434]
+INFO: [Synth 8-638] synthesizing module 'relu_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_relu_config3_s' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/relu_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_relu_config3_s.vhd:274]
+INFO: [Synth 8-256] done synthesizing module 'relu_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_relu_config3_s' (3#1) [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/relu_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_relu_config3_s.vhd:274]
+INFO: [Synth 8-3491] module 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s' declared at '/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s.vhd:12' bound to instance 'grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341' of component 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/myproject.vhd:1694]
+INFO: [Synth 8-638] synthesizing module 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s.vhd:30]
+	Parameter DataWidth bound to: 17 - type: integer 
+	Parameter AddressRange bound to: 1024 - type: integer 
+	Parameter AddressWidth bound to: 10 - type: integer 
+INFO: [Synth 8-3491] module 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1' declared at '/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1.vhd:267' bound to instance 'exp_table1_U' of component 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s.vhd:216]
+INFO: [Synth 8-638] synthesizing module 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1.vhd:286]
+	Parameter DataWidth bound to: 17 - type: integer 
+	Parameter AddressRange bound to: 1024 - type: integer 
+	Parameter AddressWidth bound to: 10 - type: integer 
+INFO: [Synth 8-3491] module 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1_rom' declared at '/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1.vhd:9' bound to instance 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1_rom_U' of component 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1_rom' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1.vhd:304]
+INFO: [Synth 8-638] synthesizing module 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1_rom' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1.vhd:30]
+	Parameter DWIDTH bound to: 17 - type: integer 
+	Parameter AWIDTH bound to: 10 - type: integer 
+	Parameter MEM_SIZE bound to: 1024 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1_rom' (4#1) [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1.vhd:30]
+INFO: [Synth 8-256] done synthesizing module 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1' (5#1) [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1.vhd:286]
+	Parameter DataWidth bound to: 18 - type: integer 
+	Parameter AddressRange bound to: 1024 - type: integer 
+	Parameter AddressWidth bound to: 10 - type: integer 
+INFO: [Synth 8-3491] module 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2' declared at '/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2.vhd:181' bound to instance 'invert_table2_U' of component 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s.vhd:234]
+INFO: [Synth 8-638] synthesizing module 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2.vhd:194]
+	Parameter DataWidth bound to: 18 - type: integer 
+	Parameter AddressRange bound to: 1024 - type: integer 
+	Parameter AddressWidth bound to: 10 - type: integer 
+INFO: [Synth 8-3491] module 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2_rom' declared at '/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2.vhd:9' bound to instance 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2_rom_U' of component 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2_rom' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2.vhd:206]
+INFO: [Synth 8-638] synthesizing module 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2_rom' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2.vhd:24]
+	Parameter DWIDTH bound to: 18 - type: integer 
+	Parameter AWIDTH bound to: 10 - type: integer 
+	Parameter MEM_SIZE bound to: 1024 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2_rom' (6#1) [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2.vhd:24]
+INFO: [Synth 8-256] done synthesizing module 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2' (7#1) [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2.vhd:194]
+	Parameter ID bound to: 1 - type: integer 
+	Parameter NUM_STAGE bound to: 1 - type: integer 
+	Parameter din0_WIDTH bound to: 17 - type: integer 
+	Parameter din1_WIDTH bound to: 18 - type: integer 
+	Parameter dout_WIDTH bound to: 26 - type: integer 
+INFO: [Synth 8-3491] module 'myproject_mul_mul_17ns_18s_26_1_1' declared at '/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/myproject_mul_mul_17ns_18s_26_1_1.vhd:31' bound to instance 'myproject_mul_mul_17ns_18s_26_1_1_U258' of component 'myproject_mul_mul_17ns_18s_26_1_1' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s.vhd:246]
+INFO: [Synth 8-638] synthesizing module 'myproject_mul_mul_17ns_18s_26_1_1' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/myproject_mul_mul_17ns_18s_26_1_1.vhd:44]
+	Parameter ID bound to: 1 - type: integer 
+	Parameter NUM_STAGE bound to: 1 - type: integer 
+	Parameter din0_WIDTH bound to: 17 - type: integer 
+	Parameter din1_WIDTH bound to: 18 - type: integer 
+	Parameter dout_WIDTH bound to: 26 - type: integer 
+INFO: [Synth 8-3491] module 'myproject_mul_mul_17ns_18s_26_1_1_DSP48_0' declared at '/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/myproject_mul_mul_17ns_18s_26_1_1.vhd:6' bound to instance 'myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U' of component 'myproject_mul_mul_17ns_18s_26_1_1_DSP48_0' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/myproject_mul_mul_17ns_18s_26_1_1.vhd:55]
+INFO: [Synth 8-638] synthesizing module 'myproject_mul_mul_17ns_18s_26_1_1_DSP48_0' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/myproject_mul_mul_17ns_18s_26_1_1.vhd:14]
+INFO: [Synth 8-256] done synthesizing module 'myproject_mul_mul_17ns_18s_26_1_1_DSP48_0' (8#1) [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/myproject_mul_mul_17ns_18s_26_1_1.vhd:14]
+INFO: [Synth 8-256] done synthesizing module 'myproject_mul_mul_17ns_18s_26_1_1' (9#1) [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/myproject_mul_mul_17ns_18s_26_1_1.vhd:44]
+	Parameter ID bound to: 1 - type: integer 
+	Parameter NUM_STAGE bound to: 1 - type: integer 
+	Parameter din0_WIDTH bound to: 17 - type: integer 
+	Parameter din1_WIDTH bound to: 18 - type: integer 
+	Parameter dout_WIDTH bound to: 26 - type: integer 
+INFO: [Synth 8-3491] module 'myproject_mul_mul_17ns_18s_26_1_1' declared at '/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/myproject_mul_mul_17ns_18s_26_1_1.vhd:31' bound to instance 'myproject_mul_mul_17ns_18s_26_1_1_U259' of component 'myproject_mul_mul_17ns_18s_26_1_1' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s.vhd:258]
+	Parameter ID bound to: 1 - type: integer 
+	Parameter NUM_STAGE bound to: 1 - type: integer 
+	Parameter din0_WIDTH bound to: 17 - type: integer 
+	Parameter din1_WIDTH bound to: 18 - type: integer 
+	Parameter dout_WIDTH bound to: 26 - type: integer 
+INFO: [Synth 8-3491] module 'myproject_mul_mul_17ns_18s_26_1_1' declared at '/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/myproject_mul_mul_17ns_18s_26_1_1.vhd:31' bound to instance 'myproject_mul_mul_17ns_18s_26_1_1_U260' of component 'myproject_mul_mul_17ns_18s_26_1_1' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s.vhd:270]
+INFO: [Synth 8-256] done synthesizing module 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s' (10#1) [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s.vhd:30]
+INFO: [Synth 8-256] done synthesizing module 'myproject' (11#1) [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/myproject.vhd:31]
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:12 ; elapsed = 00:00:15 . Memory (MB): peak = 2088.629 ; gain = 0.000 ; free physical = 1338 ; free virtual = 5632
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:13 ; elapsed = 00:00:16 . Memory (MB): peak = 2088.629 ; gain = 0.000 ; free physical = 1342 ; free virtual = 5643
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7z020clg400-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:13 ; elapsed = 00:00:16 . Memory (MB): peak = 2094.656 ; gain = 6.027 ; free physical = 1342 ; free virtual = 5643
+---------------------------------------------------------------------------------
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+INFO: [Synth 8-4490] FSM extraction disabled for register 'ap_CS_fsm_reg' through user attribute
+INFO: [Synth 8-4490] FSM extraction disabled for register 'ap_CS_fsm_reg' through user attribute
+INFO: [Synth 8-4490] FSM extraction disabled for register 'ap_CS_fsm_reg' through user attribute
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:28 ; elapsed = 00:00:27 . Memory (MB): peak = 2094.656 ; gain = 6.027 ; free physical = 1084 ; free virtual = 5395
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   3 Input   25 Bit       Adders := 11    
+	   3 Input   24 Bit       Adders := 34    
+	   2 Input   24 Bit       Adders := 12    
+	   2 Input   23 Bit       Adders := 10    
+	   3 Input   23 Bit       Adders := 32    
+	   3 Input   22 Bit       Adders := 17    
+	   2 Input   22 Bit       Adders := 4     
+	   3 Input   21 Bit       Adders := 15    
+	   2 Input   21 Bit       Adders := 3     
+	   2 Input   20 Bit       Adders := 7     
+	   3 Input   20 Bit       Adders := 8     
+	   3 Input   19 Bit       Adders := 5     
+	   2 Input   18 Bit       Adders := 2     
+	   3 Input   17 Bit       Adders := 3     
+	   2 Input   17 Bit       Adders := 1     
+	   3 Input   16 Bit       Adders := 41    
+	   4 Input   16 Bit       Adders := 50    
+	   5 Input   16 Bit       Adders := 30    
+	   2 Input   16 Bit       Adders := 38    
+	   8 Input   16 Bit       Adders := 2     
+	  15 Input   16 Bit       Adders := 5     
+	  12 Input   16 Bit       Adders := 5     
+	   7 Input   16 Bit       Adders := 12    
+	  11 Input   16 Bit       Adders := 3     
+	   6 Input   16 Bit       Adders := 3     
+	   2 Input   15 Bit       Adders := 122   
+	   3 Input   15 Bit       Adders := 18    
+	   2 Input   14 Bit       Adders := 40    
+	   3 Input   14 Bit       Adders := 4     
+	   2 Input   13 Bit       Adders := 12    
+	   2 Input   12 Bit       Adders := 9     
+	   2 Input   11 Bit       Adders := 3     
+	   3 Input   11 Bit       Adders := 1     
+	   2 Input   10 Bit       Adders := 4     
+	   3 Input   10 Bit       Adders := 1     
+	   2 Input    9 Bit       Adders := 1     
+	   2 Input    8 Bit       Adders := 3     
+	   2 Input    7 Bit       Adders := 2     
++---XORs : 
+	   2 Input      1 Bit         XORs := 9     
++---Registers : 
+	               64 Bit    Registers := 1     
+	               24 Bit    Registers := 1     
+	               23 Bit    Registers := 1     
+	               22 Bit    Registers := 1     
+	               21 Bit    Registers := 1     
+	               17 Bit    Registers := 6     
+	               16 Bit    Registers := 434   
+	               15 Bit    Registers := 159   
+	               14 Bit    Registers := 74    
+	               13 Bit    Registers := 45    
+	               12 Bit    Registers := 16    
+	               11 Bit    Registers := 13    
+	               10 Bit    Registers := 8     
+	                9 Bit    Registers := 3     
+	                8 Bit    Registers := 2     
+	                7 Bit    Registers := 5     
+	                6 Bit    Registers := 2     
+	                1 Bit    Registers := 9     
++---ROMs : 
+	                    ROMs := 4     
++---Muxes : 
+	   2 Input   64 Bit        Muxes := 1     
+	   2 Input   17 Bit        Muxes := 2     
+	   2 Input   16 Bit        Muxes := 133   
+	   2 Input   15 Bit        Muxes := 128   
+	   3 Input   10 Bit        Muxes := 9     
+	   2 Input   10 Bit        Muxes := 25    
+	   5 Input   10 Bit        Muxes := 25    
+	   4 Input   10 Bit        Muxes := 19    
+	   6 Input   10 Bit        Muxes := 9     
+	   3 Input    9 Bit        Muxes := 11    
+	   5 Input    9 Bit        Muxes := 11    
+	   4 Input    9 Bit        Muxes := 9     
+	   2 Input    9 Bit        Muxes := 1     
+	   6 Input    9 Bit        Muxes := 2     
+	   2 Input    8 Bit        Muxes := 7     
+	   3 Input    8 Bit        Muxes := 5     
+	   4 Input    8 Bit        Muxes := 2     
+	   5 Input    8 Bit        Muxes := 2     
+	   2 Input    7 Bit        Muxes := 3     
+	   8 Input    7 Bit        Muxes := 1     
+	   2 Input    6 Bit        Muxes := 3     
+	   2 Input    5 Bit        Muxes := 2     
+	   2 Input    4 Bit        Muxes := 2     
+	   2 Input    3 Bit        Muxes := 3     
+	   2 Input    2 Bit        Muxes := 4     
+	   2 Input    1 Bit        Muxes := 6     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 220 (col length:60)
+BRAMs: 280 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+DSP Report: Generating DSP grp_fu_886_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_886_p2 is absorbed into DSP grp_fu_886_p2.
+DSP Report: Generating DSP grp_fu_830_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_830_p2 is absorbed into DSP grp_fu_830_p2.
+DSP Report: Generating DSP grp_fu_881_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_881_p2 is absorbed into DSP grp_fu_881_p2.
+DSP Report: Generating DSP grp_fu_879_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_879_p2 is absorbed into DSP grp_fu_879_p2.
+DSP Report: Generating DSP grp_fu_845_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_845_p2 is absorbed into DSP grp_fu_845_p2.
+DSP Report: Generating DSP grp_fu_880_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_880_p2 is absorbed into DSP grp_fu_880_p2.
+DSP Report: Generating DSP grp_fu_834_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_834_p2 is absorbed into DSP grp_fu_834_p2.
+DSP Report: Generating DSP grp_fu_848_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_848_p2 is absorbed into DSP grp_fu_848_p2.
+DSP Report: Generating DSP grp_fu_869_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_869_p2 is absorbed into DSP grp_fu_869_p2.
+DSP Report: Generating DSP grp_fu_877_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_877_p2 is absorbed into DSP grp_fu_877_p2.
+DSP Report: Generating DSP grp_fu_852_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_852_p2 is absorbed into DSP grp_fu_852_p2.
+DSP Report: Generating DSP grp_fu_890_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_890_p2 is absorbed into DSP grp_fu_890_p2.
+DSP Report: Generating DSP grp_fu_842_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_842_p2 is absorbed into DSP grp_fu_842_p2.
+DSP Report: Generating DSP grp_fu_838_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_838_p2 is absorbed into DSP grp_fu_838_p2.
+DSP Report: Generating DSP grp_fu_866_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_866_p2 is absorbed into DSP grp_fu_866_p2.
+DSP Report: Generating DSP grp_fu_871_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_871_p2 is absorbed into DSP grp_fu_871_p2.
+DSP Report: Generating DSP grp_fu_889_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_889_p2 is absorbed into DSP grp_fu_889_p2.
+DSP Report: Generating DSP grp_fu_854_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_854_p2 is absorbed into DSP grp_fu_854_p2.
+DSP Report: Generating DSP grp_fu_868_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_868_p2 is absorbed into DSP grp_fu_868_p2.
+DSP Report: Generating DSP grp_fu_839_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_839_p2 is absorbed into DSP grp_fu_839_p2.
+DSP Report: Generating DSP grp_fu_873_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_873_p2 is absorbed into DSP grp_fu_873_p2.
+DSP Report: Generating DSP grp_fu_853_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_853_p2 is absorbed into DSP grp_fu_853_p2.
+DSP Report: Generating DSP grp_fu_832_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_832_p2 is absorbed into DSP grp_fu_832_p2.
+DSP Report: Generating DSP grp_fu_893_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_893_p2 is absorbed into DSP grp_fu_893_p2.
+DSP Report: Generating DSP grp_fu_861_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_861_p2 is absorbed into DSP grp_fu_861_p2.
+DSP Report: Generating DSP grp_fu_887_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_887_p2 is absorbed into DSP grp_fu_887_p2.
+DSP Report: Generating DSP grp_fu_883_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_883_p2 is absorbed into DSP grp_fu_883_p2.
+DSP Report: Generating DSP grp_fu_892_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_892_p2 is absorbed into DSP grp_fu_892_p2.
+DSP Report: Generating DSP grp_fu_851_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_851_p2 is absorbed into DSP grp_fu_851_p2.
+DSP Report: Generating DSP grp_fu_849_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_849_p2 is absorbed into DSP grp_fu_849_p2.
+DSP Report: Generating DSP grp_fu_843_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_843_p2 is absorbed into DSP grp_fu_843_p2.
+DSP Report: Generating DSP grp_fu_831_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_831_p2 is absorbed into DSP grp_fu_831_p2.
+DSP Report: Generating DSP grp_fu_859_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_859_p2 is absorbed into DSP grp_fu_859_p2.
+DSP Report: Generating DSP grp_fu_882_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_882_p2 is absorbed into DSP grp_fu_882_p2.
+DSP Report: Generating DSP grp_fu_840_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_840_p2 is absorbed into DSP grp_fu_840_p2.
+DSP Report: Generating DSP grp_fu_836_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_836_p2 is absorbed into DSP grp_fu_836_p2.
+DSP Report: Generating DSP grp_fu_872_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_872_p2 is absorbed into DSP grp_fu_872_p2.
+DSP Report: Generating DSP grp_fu_865_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_865_p2 is absorbed into DSP grp_fu_865_p2.
+DSP Report: Generating DSP grp_fu_884_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_884_p2 is absorbed into DSP grp_fu_884_p2.
+DSP Report: Generating DSP grp_fu_860_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_860_p2 is absorbed into DSP grp_fu_860_p2.
+DSP Report: Generating DSP grp_fu_863_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_863_p2 is absorbed into DSP grp_fu_863_p2.
+DSP Report: Generating DSP grp_fu_867_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_867_p2 is absorbed into DSP grp_fu_867_p2.
+DSP Report: Generating DSP grp_fu_875_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_875_p2 is absorbed into DSP grp_fu_875_p2.
+DSP Report: Generating DSP grp_fu_878_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_878_p2 is absorbed into DSP grp_fu_878_p2.
+DSP Report: Generating DSP grp_fu_847_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_847_p2 is absorbed into DSP grp_fu_847_p2.
+DSP Report: Generating DSP grp_fu_837_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_837_p2 is absorbed into DSP grp_fu_837_p2.
+DSP Report: Generating DSP grp_fu_856_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_856_p2 is absorbed into DSP grp_fu_856_p2.
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_381_reg_47174_reg[0]' (FDE) to 'tmp_1_reg_47150_reg[6]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_381_reg_47174_reg[5]' (FDE) to 'trunc_ln708_337_reg_47169_reg[4]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_381_reg_47174_reg[1]' (FDE) to 'trunc_ln708_337_reg_47169_reg[0]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_381_reg_47174_reg[2]' (FDE) to 'trunc_ln708_337_reg_47169_reg[1]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_381_reg_47174_reg[3]' (FDE) to 'trunc_ln708_337_reg_47169_reg[2]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_381_reg_47174_reg[4]' (FDE) to 'trunc_ln708_337_reg_47169_reg[3]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_381_reg_47174_reg[6]' (FDE) to 'trunc_ln708_337_reg_47169_reg[5]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_381_reg_47174_reg[7]' (FDE) to 'trunc_ln708_337_reg_47169_reg[6]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_381_reg_47174_reg[8]' (FDE) to 'trunc_ln708_337_reg_47169_reg[7]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_381_reg_47174_reg[9]' (FDE) to 'trunc_ln708_337_reg_47169_reg[8]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_283_reg_46990_reg[4]' (FDE) to 'sext_ln1118_359_reg_46854_reg[14]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_283_reg_46990_reg[3]' (FDE) to 'sext_ln1118_359_reg_46854_reg[13]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_283_reg_46990_reg[1]' (FDE) to 'sext_ln1118_359_reg_46854_reg[11]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_283_reg_46990_reg[0]' (FDE) to 'sext_ln1118_359_reg_46854_reg[10]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_283_reg_46990_reg[2]' (FDE) to 'sext_ln1118_359_reg_46854_reg[12]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_283_reg_46990_reg[5]' (FDE) to 'sext_ln1118_359_reg_46854_reg[15]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_270_reg_46920_reg[0]' (FDE) to 'sext_ln1118_359_reg_46854_reg[9]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_270_reg_46920_reg[4]' (FDE) to 'sext_ln1118_359_reg_46854_reg[13]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_270_reg_46920_reg[3]' (FDE) to 'sext_ln1118_359_reg_46854_reg[12]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_270_reg_46920_reg[2]' (FDE) to 'sext_ln1118_359_reg_46854_reg[11]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_270_reg_46920_reg[1]' (FDE) to 'sext_ln1118_359_reg_46854_reg[10]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_270_reg_46920_reg[5]' (FDE) to 'sext_ln1118_359_reg_46854_reg[14]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_270_reg_46920_reg[6]' (FDE) to 'sext_ln1118_359_reg_46854_reg[15]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_359_reg_46854_reg[0]' (FDE) to 'sext_ln1118_355_reg_46825_reg[0]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_359_reg_46854_reg[1]' (FDE) to 'sext_ln1118_355_reg_46825_reg[1]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_359_reg_46854_reg[2]' (FDE) to 'sext_ln1118_355_reg_46825_reg[2]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_359_reg_46854_reg[3]' (FDE) to 'sext_ln1118_355_reg_46825_reg[3]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_359_reg_46854_reg[4]' (FDE) to 'sext_ln1118_355_reg_46825_reg[4]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_359_reg_46854_reg[5]' (FDE) to 'sext_ln1118_355_reg_46825_reg[5]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_359_reg_46854_reg[6]' (FDE) to 'sext_ln1118_355_reg_46825_reg[6]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_359_reg_46854_reg[7]' (FDE) to 'sext_ln1118_355_reg_46825_reg[7]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_359_reg_46854_reg[8]' (FDE) to 'sext_ln1118_355_reg_46825_reg[8]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_359_reg_46854_reg[9]' (FDE) to 'sext_ln1118_355_reg_46825_reg[9]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_359_reg_46854_reg[10]' (FDE) to 'sext_ln1118_355_reg_46825_reg[10]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_359_reg_46854_reg[11]' (FDE) to 'sext_ln1118_355_reg_46825_reg[11]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_359_reg_46854_reg[12]' (FDE) to 'sext_ln1118_355_reg_46825_reg[12]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_359_reg_46854_reg[13]' (FDE) to 'sext_ln1118_355_reg_46825_reg[13]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_359_reg_46854_reg[14]' (FDE) to 'sext_ln1118_355_reg_46825_reg[14]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_359_reg_46854_reg[15]' (FDE) to 'sext_ln1118_355_reg_46825_reg[15]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_489_reg_47220_reg[0]' (FDE) to 'tmp_3_reg_47202_reg[5]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_489_reg_47220_reg[1]' (FDE) to 'tmp_3_reg_47202_reg[6]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_489_reg_47220_reg[2]' (FDE) to 'tmp_3_reg_47202_reg[7]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_489_reg_47220_reg[3]' (FDE) to 'tmp_3_reg_47202_reg[8]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_489_reg_47220_reg[4]' (FDE) to 'tmp_3_reg_47202_reg[9]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_489_reg_47220_reg[5]' (FDE) to 'tmp_3_reg_47202_reg[10]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_489_reg_47220_reg[6]' (FDE) to 'tmp_3_reg_47202_reg[11]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_489_reg_47220_reg[7]' (FDE) to 'tmp_3_reg_47202_reg[12]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_489_reg_47220_reg[8]' (FDE) to 'tmp_3_reg_47202_reg[13]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_489_reg_47220_reg[9]' (FDE) to 'tmp_3_reg_47202_reg[14]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_489_reg_47220_reg[10]' (FDE) to 'tmp_3_reg_47202_reg[15]'
+INFO: [Synth 8-3886] merging instance 'sext_ln203_242_reg_48400_reg[12]' (FDE) to 'sext_ln203_242_reg_48400_reg[14]'
+INFO: [Synth 8-3886] merging instance 'sext_ln203_242_reg_48400_reg[13]' (FDE) to 'sext_ln203_242_reg_48400_reg[14]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[0]' (FDE) to 'sext_ln1118_356_reg_46831_reg[0]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[1]' (FDE) to 'sext_ln1118_356_reg_46831_reg[1]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[2]' (FDE) to 'sext_ln1118_356_reg_46831_reg[2]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[3]' (FDE) to 'sext_ln1118_356_reg_46831_reg[3]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[4]' (FDE) to 'sext_ln1118_356_reg_46831_reg[4]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[5]' (FDE) to 'sext_ln1118_356_reg_46831_reg[5]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[6]' (FDE) to 'sext_ln1118_356_reg_46831_reg[6]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[7]' (FDE) to 'sext_ln1118_356_reg_46831_reg[7]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[8]' (FDE) to 'sext_ln1118_356_reg_46831_reg[8]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[9]' (FDE) to 'sext_ln1118_356_reg_46831_reg[9]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[10]' (FDE) to 'sext_ln1118_356_reg_46831_reg[10]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[11]' (FDE) to 'sext_ln1118_356_reg_46831_reg[11]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[12]' (FDE) to 'sext_ln1118_356_reg_46831_reg[12]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[13]' (FDE) to 'sext_ln1118_356_reg_46831_reg[13]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[14]' (FDE) to 'sext_ln1118_356_reg_46831_reg[14]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[15]' (FDE) to 'sext_ln1118_355_reg_46825_reg[16]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[16]' (FDE) to 'sext_ln1118_355_reg_46825_reg[17]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[17]' (FDE) to 'sext_ln1118_355_reg_46825_reg[18]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[18]' (FDE) to 'sext_ln1118_355_reg_46825_reg[19]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[19]' (FDE) to 'sext_ln1118_355_reg_46825_reg[20]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[20]' (FDE) to 'sext_ln1118_355_reg_46825_reg[21]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_355_reg_46825_reg[21]' (FDE) to 'sext_ln1118_356_reg_46831_reg[15]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_337_reg_47169_reg[0]' (FDE) to 'tmp_1_reg_47150_reg[7]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_337_reg_47169_reg[1]' (FDE) to 'tmp_1_reg_47150_reg[8]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_337_reg_47169_reg[2]' (FDE) to 'tmp_1_reg_47150_reg[9]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_337_reg_47169_reg[3]' (FDE) to 'tmp_1_reg_47150_reg[10]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_337_reg_47169_reg[4]' (FDE) to 'tmp_1_reg_47150_reg[11]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_337_reg_47169_reg[5]' (FDE) to 'tmp_1_reg_47150_reg[12]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_337_reg_47169_reg[6]' (FDE) to 'tmp_1_reg_47150_reg[13]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_337_reg_47169_reg[7]' (FDE) to 'tmp_1_reg_47150_reg[14]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_337_reg_47169_reg[8]' (FDE) to 'tmp_1_reg_47150_reg[15]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_474_reg_47197_reg[9]' (FDE) to 'tmp_2_reg_47179_reg[14]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_474_reg_47197_reg[8]' (FDE) to 'tmp_2_reg_47179_reg[13]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_474_reg_47197_reg[7]' (FDE) to 'tmp_2_reg_47179_reg[12]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_474_reg_47197_reg[6]' (FDE) to 'tmp_2_reg_47179_reg[11]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_474_reg_47197_reg[5]' (FDE) to 'tmp_2_reg_47179_reg[10]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_474_reg_47197_reg[0]' (FDE) to 'tmp_2_reg_47179_reg[5]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_474_reg_47197_reg[1]' (FDE) to 'tmp_2_reg_47179_reg[6]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_474_reg_47197_reg[2]' (FDE) to 'tmp_2_reg_47179_reg[7]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_474_reg_47197_reg[3]' (FDE) to 'tmp_2_reg_47179_reg[8]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_474_reg_47197_reg[4]' (FDE) to 'tmp_2_reg_47179_reg[9]'
+INFO: [Synth 8-3886] merging instance 'trunc_ln708_474_reg_47197_reg[10]' (FDE) to 'tmp_2_reg_47179_reg[15]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_356_reg_46831_reg[15]' (FDE) to 'sext_ln1118_356_reg_46831_reg[16]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_356_reg_46831_reg[16]' (FDE) to 'sext_ln1118_356_reg_46831_reg[17]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_356_reg_46831_reg[17]' (FDE) to 'sext_ln1118_356_reg_46831_reg[18]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_356_reg_46831_reg[18]' (FDE) to 'sext_ln1118_356_reg_46831_reg[19]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_356_reg_46831_reg[19]' (FDE) to 'sext_ln1118_356_reg_46831_reg[20]'
+INFO: [Synth 8-3886] merging instance 'sext_ln1118_356_reg_46831_reg[20]' (FDE) to 'sext_ln1118_356_reg_46831_reg[21]'
+INFO: [Common 17-14] Message 'Synth 8-3886' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+INFO: [Common 17-14] Message 'Synth 8-3886' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+INFO: [Synth 8-4471] merging register 'sext_ln1118_358_reg_46844_reg[15:0]' into 'sext_ln1118_reg_46813_reg[15:0]' [/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/syn/vhdl/dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s.vhd:3210]
+DSP Report: Generating DSP grp_fu_855_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_855_p2 is absorbed into DSP grp_fu_855_p2.
+DSP Report: Generating DSP grp_fu_858_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_858_p2 is absorbed into DSP grp_fu_858_p2.
+DSP Report: Generating DSP grp_fu_864_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_864_p2 is absorbed into DSP grp_fu_864_p2.
+DSP Report: Generating DSP grp_fu_876_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_876_p2 is absorbed into DSP grp_fu_876_p2.
+DSP Report: Generating DSP grp_fu_835_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_835_p2 is absorbed into DSP grp_fu_835_p2.
+DSP Report: Generating DSP grp_fu_844_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_844_p2 is absorbed into DSP grp_fu_844_p2.
+DSP Report: Generating DSP grp_fu_874_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_874_p2 is absorbed into DSP grp_fu_874_p2.
+DSP Report: Generating DSP grp_fu_833_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_833_p2 is absorbed into DSP grp_fu_833_p2.
+DSP Report: Generating DSP grp_fu_885_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_885_p2 is absorbed into DSP grp_fu_885_p2.
+DSP Report: Generating DSP grp_fu_850_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_850_p2 is absorbed into DSP grp_fu_850_p2.
+DSP Report: Generating DSP grp_fu_891_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_891_p2 is absorbed into DSP grp_fu_891_p2.
+DSP Report: Generating DSP grp_fu_888_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_888_p2 is absorbed into DSP grp_fu_888_p2.
+DSP Report: Generating DSP grp_fu_846_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_846_p2 is absorbed into DSP grp_fu_846_p2.
+DSP Report: Generating DSP grp_fu_857_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_857_p2 is absorbed into DSP grp_fu_857_p2.
+DSP Report: Generating DSP grp_fu_841_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_841_p2 is absorbed into DSP grp_fu_841_p2.
+DSP Report: Generating DSP grp_fu_862_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_862_p2 is absorbed into DSP grp_fu_862_p2.
+DSP Report: Generating DSP grp_fu_870_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_870_p2 is absorbed into DSP grp_fu_870_p2.
+DSP Report: Generating DSP grp_fu_1578_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1578_p2 is absorbed into DSP grp_fu_1578_p2.
+DSP Report: Generating DSP grp_fu_1561_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1561_p2 is absorbed into DSP grp_fu_1561_p2.
+DSP Report: Generating DSP grp_fu_1571_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1571_p2 is absorbed into DSP grp_fu_1571_p2.
+DSP Report: Generating DSP grp_fu_1565_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1565_p2 is absorbed into DSP grp_fu_1565_p2.
+DSP Report: Generating DSP grp_fu_1567_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1567_p2 is absorbed into DSP grp_fu_1567_p2.
+DSP Report: Generating DSP grp_fu_1581_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1581_p2 is absorbed into DSP grp_fu_1581_p2.
+DSP Report: Generating DSP grp_fu_1564_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1564_p2 is absorbed into DSP grp_fu_1564_p2.
+DSP Report: Generating DSP grp_fu_1579_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1579_p2 is absorbed into DSP grp_fu_1579_p2.
+DSP Report: Generating DSP grp_fu_1584_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1584_p2 is absorbed into DSP grp_fu_1584_p2.
+DSP Report: Generating DSP grp_fu_1563_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1563_p2 is absorbed into DSP grp_fu_1563_p2.
+DSP Report: Generating DSP grp_fu_1554_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1554_p2 is absorbed into DSP grp_fu_1554_p2.
+DSP Report: Generating DSP grp_fu_1555_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1555_p2 is absorbed into DSP grp_fu_1555_p2.
+DSP Report: Generating DSP grp_fu_1594_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1594_p2 is absorbed into DSP grp_fu_1594_p2.
+DSP Report: Generating DSP grp_fu_1576_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1576_p2 is absorbed into DSP grp_fu_1576_p2.
+DSP Report: Generating DSP grp_fu_1556_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1556_p2 is absorbed into DSP grp_fu_1556_p2.
+DSP Report: Generating DSP grp_fu_1586_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1586_p2 is absorbed into DSP grp_fu_1586_p2.
+DSP Report: Generating DSP grp_fu_1582_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1582_p2 is absorbed into DSP grp_fu_1582_p2.
+DSP Report: Generating DSP grp_fu_1598_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1598_p2 is absorbed into DSP grp_fu_1598_p2.
+DSP Report: Generating DSP grp_fu_1589_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1589_p2 is absorbed into DSP grp_fu_1589_p2.
+DSP Report: Generating DSP grp_fu_1570_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1570_p2 is absorbed into DSP grp_fu_1570_p2.
+DSP Report: Generating DSP grp_fu_1566_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1566_p2 is absorbed into DSP grp_fu_1566_p2.
+DSP Report: Generating DSP grp_fu_1587_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1587_p2 is absorbed into DSP grp_fu_1587_p2.
+DSP Report: Generating DSP grp_fu_1590_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1590_p2 is absorbed into DSP grp_fu_1590_p2.
+DSP Report: Generating DSP grp_fu_1593_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1593_p2 is absorbed into DSP grp_fu_1593_p2.
+DSP Report: Generating DSP grp_fu_1559_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1559_p2 is absorbed into DSP grp_fu_1559_p2.
+DSP Report: Generating DSP grp_fu_1574_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1574_p2 is absorbed into DSP grp_fu_1574_p2.
+DSP Report: Generating DSP grp_fu_1591_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1591_p2 is absorbed into DSP grp_fu_1591_p2.
+DSP Report: Generating DSP grp_fu_1558_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1558_p2 is absorbed into DSP grp_fu_1558_p2.
+DSP Report: Generating DSP grp_fu_1595_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1595_p2 is absorbed into DSP grp_fu_1595_p2.
+DSP Report: Generating DSP grp_fu_1597_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1597_p2 is absorbed into DSP grp_fu_1597_p2.
+DSP Report: Generating DSP grp_fu_1583_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1583_p2 is absorbed into DSP grp_fu_1583_p2.
+DSP Report: Generating DSP grp_fu_1575_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1575_p2 is absorbed into DSP grp_fu_1575_p2.
+DSP Report: Generating DSP grp_fu_1552_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1552_p2 is absorbed into DSP grp_fu_1552_p2.
+DSP Report: Generating DSP grp_fu_1553_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1553_p2 is absorbed into DSP grp_fu_1553_p2.
+DSP Report: Generating DSP grp_fu_1588_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1588_p2 is absorbed into DSP grp_fu_1588_p2.
+DSP Report: Generating DSP grp_fu_1562_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1562_p2 is absorbed into DSP grp_fu_1562_p2.
+DSP Report: Generating DSP grp_fu_1557_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1557_p2 is absorbed into DSP grp_fu_1557_p2.
+DSP Report: Generating DSP grp_fu_1569_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1569_p2 is absorbed into DSP grp_fu_1569_p2.
+DSP Report: Generating DSP grp_fu_1599_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1599_p2 is absorbed into DSP grp_fu_1599_p2.
+DSP Report: Generating DSP grp_fu_1596_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1596_p2 is absorbed into DSP grp_fu_1596_p2.
+DSP Report: Generating DSP grp_fu_1585_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1585_p2 is absorbed into DSP grp_fu_1585_p2.
+DSP Report: Generating DSP grp_fu_1573_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1573_p2 is absorbed into DSP grp_fu_1573_p2.
+DSP Report: Generating DSP grp_fu_1560_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1560_p2 is absorbed into DSP grp_fu_1560_p2.
+DSP Report: Generating DSP grp_fu_1568_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1568_p2 is absorbed into DSP grp_fu_1568_p2.
+DSP Report: Generating DSP grp_fu_1592_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1592_p2 is absorbed into DSP grp_fu_1592_p2.
+DSP Report: Generating DSP grp_fu_1577_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1577_p2 is absorbed into DSP grp_fu_1577_p2.
+DSP Report: Generating DSP grp_fu_1572_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1572_p2 is absorbed into DSP grp_fu_1572_p2.
+DSP Report: Generating DSP grp_fu_1580_p2, operation Mode is: A*B.
+DSP Report: operator grp_fu_1580_p2 is absorbed into DSP grp_fu_1580_p2.
+DSP Report: Generating DSP grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/myproject_mul_mul_17ns_18s_26_1_1_U258/myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U/p_cvt, operation Mode is: A2*B.
+DSP Report: register grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/myproject_mul_mul_17ns_18s_26_1_1_U258/myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U/p_cvt is absorbed into DSP grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/myproject_mul_mul_17ns_18s_26_1_1_U258/myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U/p_cvt.
+DSP Report: operator grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/myproject_mul_mul_17ns_18s_26_1_1_U258/myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U/p_cvt is absorbed into DSP grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/myproject_mul_mul_17ns_18s_26_1_1_U258/myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U/p_cvt.
+DSP Report: Generating DSP grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/myproject_mul_mul_17ns_18s_26_1_1_U259/myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U/p_cvt, operation Mode is: A2*B.
+DSP Report: register grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/myproject_mul_mul_17ns_18s_26_1_1_U259/myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U/p_cvt is absorbed into DSP grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/myproject_mul_mul_17ns_18s_26_1_1_U259/myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U/p_cvt.
+DSP Report: operator grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/myproject_mul_mul_17ns_18s_26_1_1_U259/myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U/p_cvt is absorbed into DSP grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/myproject_mul_mul_17ns_18s_26_1_1_U259/myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U/p_cvt.
+DSP Report: Generating DSP grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/myproject_mul_mul_17ns_18s_26_1_1_U260/myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U/p_cvt, operation Mode is: A2*B.
+DSP Report: register grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/myproject_mul_mul_17ns_18s_26_1_1_U260/myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U/p_cvt is absorbed into DSP grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/myproject_mul_mul_17ns_18s_26_1_1_U260/myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U/p_cvt.
+DSP Report: operator grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/myproject_mul_mul_17ns_18s_26_1_1_U260/myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U/p_cvt is absorbed into DSP grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/myproject_mul_mul_17ns_18s_26_1_1_U260/myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U/p_cvt.
+INFO: [Synth 8-3333] propagating constant 1 across sequential element (\grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/ap_CS_fsm_reg[0] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_127_V_reg_2166_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_126_V_reg_2161_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_125_V_reg_2156_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_124_V_reg_2151_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_123_V_reg_2146_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_122_V_reg_2141_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_121_V_reg_2136_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_120_V_reg_2131_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_119_V_reg_2126_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_118_V_reg_2121_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_117_V_reg_2116_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_116_V_reg_2111_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_115_V_reg_2106_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_114_V_reg_2101_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_113_V_reg_2096_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_112_V_reg_2091_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_111_V_reg_2086_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_110_V_reg_2081_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_109_V_reg_2076_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_108_V_reg_2071_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_107_V_reg_2066_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_106_V_reg_2061_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_105_V_reg_2056_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_104_V_reg_2051_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_103_V_reg_2046_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_102_V_reg_2041_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_101_V_reg_2036_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_100_V_reg_2031_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_99_V_reg_2026_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_98_V_reg_2021_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_97_V_reg_2016_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_96_V_reg_2011_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_95_V_reg_2006_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_94_V_reg_2001_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_93_V_reg_1996_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_92_V_reg_1991_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_91_V_reg_1986_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_90_V_reg_1981_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_89_V_reg_1976_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_88_V_reg_1971_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_87_V_reg_1966_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_86_V_reg_1961_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_85_V_reg_1956_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_84_V_reg_1951_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_83_V_reg_1946_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_82_V_reg_1941_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_81_V_reg_1936_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_80_V_reg_1931_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_79_V_reg_1926_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_78_V_reg_1921_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_77_V_reg_1916_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_76_V_reg_1911_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_75_V_reg_1906_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_74_V_reg_1901_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_73_V_reg_1896_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_72_V_reg_1891_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_71_V_reg_1886_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_70_V_reg_1881_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_69_V_reg_1876_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_68_V_reg_1871_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_67_V_reg_1866_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_66_V_reg_1861_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_65_V_reg_1856_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_64_V_reg_1851_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_63_V_reg_1846_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_62_V_reg_1841_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_61_V_reg_1836_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_60_V_reg_1831_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_59_V_reg_1826_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_58_V_reg_1821_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_57_V_reg_1816_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_56_V_reg_1811_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_55_V_reg_1806_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_54_V_reg_1801_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_53_V_reg_1796_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_52_V_reg_1791_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_51_V_reg_1786_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_50_V_reg_1781_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_49_V_reg_1776_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_48_V_reg_1771_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_47_V_reg_1766_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_46_V_reg_1761_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_45_V_reg_1756_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_44_V_reg_1751_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_43_V_reg_1746_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_42_V_reg_1741_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_41_V_reg_1736_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_40_V_reg_1731_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_39_V_reg_1726_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_38_V_reg_1721_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_37_V_reg_1716_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_36_V_reg_1711_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_35_V_reg_1706_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_34_V_reg_1701_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_33_V_reg_1696_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_32_V_reg_1691_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_31_V_reg_1686_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_30_V_reg_1681_reg[15] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\layer3_out_29_V_reg_1676_reg[15] )
+INFO: [Common 17-14] Message 'Synth 8-3333' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+INFO: [Common 17-14] Message 'Synth 8-3333' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:52 ; elapsed = 00:02:07 . Memory (MB): peak = 2122.590 ; gain = 33.961 ; free physical = 633 ; free virtual = 2336
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+
+DSP: Preliminary Mapping	Report (see note below)
++----------------------------------------------------------------------------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name                                                                       | DSP Mapping | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++----------------------------------------------------------------------------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 8      | -      | -      | 24     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 8      | -      | -      | 24     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | A*B         | 16     | 9      | -      | -      | 25     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|myproject__GC0                                                                    | A2*B        | 18     | 18     | -      | -      | 36     | 1    | 0    | -    | -    | -     | 0    | 0    | 
+|myproject__GC0                                                                    | A2*B        | 18     | 18     | -      | -      | 36     | 1    | 0    | -    | -    | -     | 0    | 0    | 
+|myproject__GC0                                                                    | A2*B        | 18     | 18     | -      | -      | 36     | 1    | 0    | -    | -    | -     | 0    | 0    | 
++----------------------------------------------------------------------------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+Note: The table above is a preliminary report that shows the DSPs inferred at the current stage of the synthesis flow. Some DSP may be reimplemented as non DSP primitives later in the synthesis flow. Multiple instantiated DSPs are reported only once.
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:58 ; elapsed = 00:02:14 . Memory (MB): peak = 2122.590 ; gain = 33.961 ; free physical = 632 ; free virtual = 2352
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+INFO: [Synth 8-7052] The timing for the instance i_0/grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/exp_table1_U/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1_rom_U/q0_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance i_0/grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/exp_table1_U/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1_rom_U/q0_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance i_0/grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/exp_table1_U/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1_rom_U/q2_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance i_0/grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/invert_table2_U/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2_rom_U/q0_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:01:02 ; elapsed = 00:02:21 . Memory (MB): peak = 2130.594 ; gain = 41.965 ; free physical = 611 ; free virtual = 2355
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+INFO: [Synth 8-7052] The timing for the instance grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/exp_table1_U/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1_rom_U/q0_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/exp_table1_U/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1_rom_U/q0_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/exp_table1_U/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1_rom_U/q2_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341/invert_table2_U/softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2_rom_U/q0_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:01:13 ; elapsed = 00:02:32 . Memory (MB): peak = 2130.594 ; gain = 41.965 ; free physical = 598 ; free virtual = 2354
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:01:13 ; elapsed = 00:02:32 . Memory (MB): peak = 2130.594 ; gain = 41.965 ; free physical = 594 ; free virtual = 2356
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:14 ; elapsed = 00:02:34 . Memory (MB): peak = 2130.594 ; gain = 41.965 ; free physical = 601 ; free virtual = 2364
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:01:14 ; elapsed = 00:02:34 . Memory (MB): peak = 2130.594 ; gain = 41.965 ; free physical = 577 ; free virtual = 2348
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:01:15 ; elapsed = 00:02:34 . Memory (MB): peak = 2130.594 ; gain = 41.965 ; free physical = 604 ; free virtual = 2380
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:01:15 ; elapsed = 00:02:35 . Memory (MB): peak = 2130.594 ; gain = 41.965 ; free physical = 595 ; free virtual = 2367
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+---------+------+
+|      |Cell     |Count |
++------+---------+------+
+|1     |BUFG     |     1|
+|2     |CARRY4   |  3140|
+|3     |DSP48E1  |   115|
+|4     |LUT1     |  1174|
+|5     |LUT2     |  7576|
+|6     |LUT3     |  4022|
+|7     |LUT4     |  3818|
+|8     |LUT5     |  1997|
+|9     |LUT6     |  3367|
+|10    |MUXF7    |   396|
+|11    |RAMB18E1 |     3|
+|12    |FDRE     | 11177|
+|13    |FDSE     |     1|
+|14    |IBUF     |    68|
+|15    |OBUF     |    54|
++------+---------+------+
+
+Report Instance Areas: 
++------+----------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+------+
+|      |Instance                                                                                      |Module                                                                            |Cells |
++------+----------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+------+
+|1     |top                                                                                           |                                                                                  | 36909|
+|2     |  grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_71 |dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s | 19260|
+|3     |  grp_dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0_fu_77                        |dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0                        | 14070|
+|4     |  grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_341                    |softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s                     |   242|
+|5     |    exp_table1_U                                                                              |softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1          |    61|
+|6     |      softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1_rom_U          |softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1_rom      |    61|
+|7     |    invert_table2_U                                                                           |softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2       |     2|
+|8     |      softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2_rom_U       |softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2_rom   |     2|
+|9     |    myproject_mul_mul_17ns_18s_26_1_1_U258                                                    |myproject_mul_mul_17ns_18s_26_1_1                                                 |     1|
+|10    |      myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U                                             |myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_3                                       |     1|
+|11    |    myproject_mul_mul_17ns_18s_26_1_1_U259                                                    |myproject_mul_mul_17ns_18s_26_1_1_0                                               |     1|
+|12    |      myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U                                             |myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_2                                       |     1|
+|13    |    myproject_mul_mul_17ns_18s_26_1_1_U260                                                    |myproject_mul_mul_17ns_18s_26_1_1_1                                               |     1|
+|14    |      myproject_mul_mul_17ns_18s_26_1_1_DSP48_0_U                                             |myproject_mul_mul_17ns_18s_26_1_1_DSP48_0                                         |     1|
++------+----------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:01:15 ; elapsed = 00:02:35 . Memory (MB): peak = 2130.594 ; gain = 41.965 ; free physical = 595 ; free virtual = 2368
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 0 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:01:22 ; elapsed = 00:02:39 . Memory (MB): peak = 2130.594 ; gain = 41.965 ; free physical = 3523 ; free virtual = 5396
+Synthesis Optimization Complete : Time (s): cpu = 00:01:22 ; elapsed = 00:02:39 . Memory (MB): peak = 2130.594 ; gain = 41.965 ; free physical = 3521 ; free virtual = 5389
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00.32 ; elapsed = 00:00:00.33 . Memory (MB): peak = 2130.594 ; gain = 0.000 ; free physical = 3495 ; free virtual = 5367
+INFO: [Netlist 29-17] Analyzing 3654 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2214.680 ; gain = 0.000 ; free physical = 3398 ; free virtual = 5295
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Common 17-83] Releasing license: Synthesis
+262 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:01:31 ; elapsed = 00:02:49 . Memory (MB): peak = 2214.680 ; gain = 126.051 ; free physical = 3564 ; free virtual = 5461
+# report_utilization -file vivado_synth.rpt
+INFO: [Common 17-206] Exiting Vivado at Wed Dec 27 15:01:19 2023...

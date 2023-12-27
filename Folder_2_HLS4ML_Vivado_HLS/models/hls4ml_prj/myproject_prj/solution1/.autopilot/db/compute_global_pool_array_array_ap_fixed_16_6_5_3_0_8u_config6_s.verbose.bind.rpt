@@ -3,7 +3,7 @@
 ================================================================
 == Vivado HLS Report for 'compute_global_pool_array_array_ap_fixed_16_6_5_3_0_8u_config6_s'
 ================================================================
-* Date:           Tue Dec 19 17:43:21 2023
+* Date:           Tue Dec 19 20:17:55 2023
 
 * Version:        2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)
 * Project:        myproject_prj
@@ -96,21 +96,21 @@ ST_1 : Operation 15 [1/1] (0.00ns)   --->   "%in_elem_data_2_V_read_1 = call i16
 ST_1 : Operation 16 [1/1] (0.00ns)   --->   "%in_elem_data_1_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %in_elem_data_1_V_read)" [firmware/nnet_utils/nnet_pooling_stream.h:474]   --->   Operation 16 'read' 'in_elem_data_1_V_read_1' <Predicate = true> <Delay = 0.00>
 ST_1 : Operation 17 [1/1] (0.00ns)   --->   "%in_elem_data_0_V_read_1 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %in_elem_data_0_V_read)" [firmware/nnet_utils/nnet_pooling_stream.h:474]   --->   Operation 17 'read' 'in_elem_data_0_V_read_1' <Predicate = true> <Delay = 0.00>
 ST_1 : Operation 18 [1/1] (2.07ns)   --->   "%add_ln703 = add i16 %in_elem_data_0_V_read_1, %data_window_0_V_read_1" [firmware/nnet_utils/nnet_pooling_stream.h:469->firmware/nnet_utils/nnet_pooling_stream.h:487]   --->   Operation 18 'add' 'add_ln703' <Predicate = true> <Delay = 2.07> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 2.07> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
-ST_1 : Operation 19 [1/1] (2.07ns)   --->   "%add_ln703_212 = add i16 %in_elem_data_1_V_read_1, %data_window_1_V_read_1" [firmware/nnet_utils/nnet_pooling_stream.h:469->firmware/nnet_utils/nnet_pooling_stream.h:487]   --->   Operation 19 'add' 'add_ln703_212' <Predicate = true> <Delay = 2.07> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 2.07> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
-ST_1 : Operation 20 [1/1] (2.07ns)   --->   "%add_ln703_213 = add i16 %in_elem_data_2_V_read_1, %data_window_2_V_read_1" [firmware/nnet_utils/nnet_pooling_stream.h:469->firmware/nnet_utils/nnet_pooling_stream.h:487]   --->   Operation 20 'add' 'add_ln703_213' <Predicate = true> <Delay = 2.07> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 2.07> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
-ST_1 : Operation 21 [1/1] (2.07ns)   --->   "%add_ln703_214 = add i16 %in_elem_data_3_V_read_1, %data_window_3_V_read_1" [firmware/nnet_utils/nnet_pooling_stream.h:469->firmware/nnet_utils/nnet_pooling_stream.h:487]   --->   Operation 21 'add' 'add_ln703_214' <Predicate = true> <Delay = 2.07> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 2.07> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
-ST_1 : Operation 22 [1/1] (2.07ns)   --->   "%add_ln703_215 = add i16 %in_elem_data_4_V_read_1, %data_window_4_V_read_1" [firmware/nnet_utils/nnet_pooling_stream.h:469->firmware/nnet_utils/nnet_pooling_stream.h:487]   --->   Operation 22 'add' 'add_ln703_215' <Predicate = true> <Delay = 2.07> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 2.07> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
-ST_1 : Operation 23 [1/1] (2.07ns)   --->   "%add_ln703_216 = add i16 %in_elem_data_5_V_read_1, %data_window_5_V_read_1" [firmware/nnet_utils/nnet_pooling_stream.h:469->firmware/nnet_utils/nnet_pooling_stream.h:487]   --->   Operation 23 'add' 'add_ln703_216' <Predicate = true> <Delay = 2.07> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 2.07> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
-ST_1 : Operation 24 [1/1] (2.07ns)   --->   "%add_ln703_217 = add i16 %in_elem_data_6_V_read_1, %data_window_6_V_read_1" [firmware/nnet_utils/nnet_pooling_stream.h:469->firmware/nnet_utils/nnet_pooling_stream.h:487]   --->   Operation 24 'add' 'add_ln703_217' <Predicate = true> <Delay = 2.07> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 2.07> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
-ST_1 : Operation 25 [1/1] (2.07ns)   --->   "%add_ln703_218 = add i16 %in_elem_data_7_V_read_1, %data_window_7_V_read_1" [firmware/nnet_utils/nnet_pooling_stream.h:469->firmware/nnet_utils/nnet_pooling_stream.h:487]   --->   Operation 25 'add' 'add_ln703_218' <Predicate = true> <Delay = 2.07> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 2.07> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 19 [1/1] (2.07ns)   --->   "%add_ln703_137 = add i16 %in_elem_data_1_V_read_1, %data_window_1_V_read_1" [firmware/nnet_utils/nnet_pooling_stream.h:469->firmware/nnet_utils/nnet_pooling_stream.h:487]   --->   Operation 19 'add' 'add_ln703_137' <Predicate = true> <Delay = 2.07> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 2.07> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 20 [1/1] (2.07ns)   --->   "%add_ln703_138 = add i16 %in_elem_data_2_V_read_1, %data_window_2_V_read_1" [firmware/nnet_utils/nnet_pooling_stream.h:469->firmware/nnet_utils/nnet_pooling_stream.h:487]   --->   Operation 20 'add' 'add_ln703_138' <Predicate = true> <Delay = 2.07> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 2.07> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 21 [1/1] (2.07ns)   --->   "%add_ln703_139 = add i16 %in_elem_data_3_V_read_1, %data_window_3_V_read_1" [firmware/nnet_utils/nnet_pooling_stream.h:469->firmware/nnet_utils/nnet_pooling_stream.h:487]   --->   Operation 21 'add' 'add_ln703_139' <Predicate = true> <Delay = 2.07> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 2.07> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 22 [1/1] (2.07ns)   --->   "%add_ln703_140 = add i16 %in_elem_data_4_V_read_1, %data_window_4_V_read_1" [firmware/nnet_utils/nnet_pooling_stream.h:469->firmware/nnet_utils/nnet_pooling_stream.h:487]   --->   Operation 22 'add' 'add_ln703_140' <Predicate = true> <Delay = 2.07> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 2.07> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 23 [1/1] (2.07ns)   --->   "%add_ln703_141 = add i16 %in_elem_data_5_V_read_1, %data_window_5_V_read_1" [firmware/nnet_utils/nnet_pooling_stream.h:469->firmware/nnet_utils/nnet_pooling_stream.h:487]   --->   Operation 23 'add' 'add_ln703_141' <Predicate = true> <Delay = 2.07> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 2.07> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 24 [1/1] (2.07ns)   --->   "%add_ln703_142 = add i16 %in_elem_data_6_V_read_1, %data_window_6_V_read_1" [firmware/nnet_utils/nnet_pooling_stream.h:469->firmware/nnet_utils/nnet_pooling_stream.h:487]   --->   Operation 24 'add' 'add_ln703_142' <Predicate = true> <Delay = 2.07> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 2.07> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 25 [1/1] (2.07ns)   --->   "%add_ln703_143 = add i16 %in_elem_data_7_V_read_1, %data_window_7_V_read_1" [firmware/nnet_utils/nnet_pooling_stream.h:469->firmware/nnet_utils/nnet_pooling_stream.h:487]   --->   Operation 25 'add' 'add_ln703_143' <Predicate = true> <Delay = 2.07> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 2.07> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
 ST_1 : Operation 26 [1/1] (0.00ns)   --->   "%mrv = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } undef, i16 %add_ln703, 0" [firmware/nnet_utils/nnet_pooling_stream.h:490]   --->   Operation 26 'insertvalue' 'mrv' <Predicate = true> <Delay = 0.00>
-ST_1 : Operation 27 [1/1] (0.00ns)   --->   "%mrv_1 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv, i16 %add_ln703_212, 1" [firmware/nnet_utils/nnet_pooling_stream.h:490]   --->   Operation 27 'insertvalue' 'mrv_1' <Predicate = true> <Delay = 0.00>
-ST_1 : Operation 28 [1/1] (0.00ns)   --->   "%mrv_2 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_1, i16 %add_ln703_213, 2" [firmware/nnet_utils/nnet_pooling_stream.h:490]   --->   Operation 28 'insertvalue' 'mrv_2' <Predicate = true> <Delay = 0.00>
-ST_1 : Operation 29 [1/1] (0.00ns)   --->   "%mrv_3 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_2, i16 %add_ln703_214, 3" [firmware/nnet_utils/nnet_pooling_stream.h:490]   --->   Operation 29 'insertvalue' 'mrv_3' <Predicate = true> <Delay = 0.00>
-ST_1 : Operation 30 [1/1] (0.00ns)   --->   "%mrv_4 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_3, i16 %add_ln703_215, 4" [firmware/nnet_utils/nnet_pooling_stream.h:490]   --->   Operation 30 'insertvalue' 'mrv_4' <Predicate = true> <Delay = 0.00>
-ST_1 : Operation 31 [1/1] (0.00ns)   --->   "%mrv_5 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_4, i16 %add_ln703_216, 5" [firmware/nnet_utils/nnet_pooling_stream.h:490]   --->   Operation 31 'insertvalue' 'mrv_5' <Predicate = true> <Delay = 0.00>
-ST_1 : Operation 32 [1/1] (0.00ns)   --->   "%mrv_6 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_5, i16 %add_ln703_217, 6" [firmware/nnet_utils/nnet_pooling_stream.h:490]   --->   Operation 32 'insertvalue' 'mrv_6' <Predicate = true> <Delay = 0.00>
-ST_1 : Operation 33 [1/1] (0.00ns)   --->   "%mrv_7 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_6, i16 %add_ln703_218, 7" [firmware/nnet_utils/nnet_pooling_stream.h:490]   --->   Operation 33 'insertvalue' 'mrv_7' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 27 [1/1] (0.00ns)   --->   "%mrv_1 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv, i16 %add_ln703_137, 1" [firmware/nnet_utils/nnet_pooling_stream.h:490]   --->   Operation 27 'insertvalue' 'mrv_1' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 28 [1/1] (0.00ns)   --->   "%mrv_2 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_1, i16 %add_ln703_138, 2" [firmware/nnet_utils/nnet_pooling_stream.h:490]   --->   Operation 28 'insertvalue' 'mrv_2' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 29 [1/1] (0.00ns)   --->   "%mrv_3 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_2, i16 %add_ln703_139, 3" [firmware/nnet_utils/nnet_pooling_stream.h:490]   --->   Operation 29 'insertvalue' 'mrv_3' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 30 [1/1] (0.00ns)   --->   "%mrv_4 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_3, i16 %add_ln703_140, 4" [firmware/nnet_utils/nnet_pooling_stream.h:490]   --->   Operation 30 'insertvalue' 'mrv_4' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 31 [1/1] (0.00ns)   --->   "%mrv_5 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_4, i16 %add_ln703_141, 5" [firmware/nnet_utils/nnet_pooling_stream.h:490]   --->   Operation 31 'insertvalue' 'mrv_5' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 32 [1/1] (0.00ns)   --->   "%mrv_6 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_5, i16 %add_ln703_142, 6" [firmware/nnet_utils/nnet_pooling_stream.h:490]   --->   Operation 32 'insertvalue' 'mrv_6' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 33 [1/1] (0.00ns)   --->   "%mrv_7 = insertvalue { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_6, i16 %add_ln703_143, 7" [firmware/nnet_utils/nnet_pooling_stream.h:490]   --->   Operation 33 'insertvalue' 'mrv_7' <Predicate = true> <Delay = 0.00>
 ST_1 : Operation 34 [1/1] (0.00ns)   --->   "ret { i16, i16, i16, i16, i16, i16, i16, i16 } %mrv_7" [firmware/nnet_utils/nnet_pooling_stream.h:490]   --->   Operation 34 'ret' <Predicate = true> <Delay = 0.00>
 
 
@@ -164,13 +164,13 @@ in_elem_data_2_V_read_1 (read       ) [ 00]
 in_elem_data_1_V_read_1 (read       ) [ 00]
 in_elem_data_0_V_read_1 (read       ) [ 00]
 add_ln703               (add        ) [ 00]
-add_ln703_212           (add        ) [ 00]
-add_ln703_213           (add        ) [ 00]
-add_ln703_214           (add        ) [ 00]
-add_ln703_215           (add        ) [ 00]
-add_ln703_216           (add        ) [ 00]
-add_ln703_217           (add        ) [ 00]
-add_ln703_218           (add        ) [ 00]
+add_ln703_137           (add        ) [ 00]
+add_ln703_138           (add        ) [ 00]
+add_ln703_139           (add        ) [ 00]
+add_ln703_140           (add        ) [ 00]
+add_ln703_141           (add        ) [ 00]
+add_ln703_142           (add        ) [ 00]
+add_ln703_143           (add        ) [ 00]
 mrv                     (insertvalue) [ 00]
 mrv_1                   (insertvalue) [ 00]
 mrv_2                   (insertvalue) [ 00]
@@ -551,7 +551,7 @@ ret_ln490               (ret        ) [ 00]
 </bind>
 </comp>
 
-<comp id="138" class="1004" name="add_ln703_212_fu_138">
+<comp id="138" class="1004" name="add_ln703_137_fu_138">
 <pin_list>
 <pin id="139" dir="0" index="0" bw="16" slack="0"/>
 <pin id="140" dir="0" index="1" bw="16" slack="0"/>
@@ -559,11 +559,11 @@ ret_ln490               (ret        ) [ 00]
 </pin_list>
 <bind>
 <opcode="add(8) " fcode="add"/>
-<opset="add_ln703_212/1 "/>
+<opset="add_ln703_137/1 "/>
 </bind>
 </comp>
 
-<comp id="144" class="1004" name="add_ln703_213_fu_144">
+<comp id="144" class="1004" name="add_ln703_138_fu_144">
 <pin_list>
 <pin id="145" dir="0" index="0" bw="16" slack="0"/>
 <pin id="146" dir="0" index="1" bw="16" slack="0"/>
@@ -571,11 +571,11 @@ ret_ln490               (ret        ) [ 00]
 </pin_list>
 <bind>
 <opcode="add(8) " fcode="add"/>
-<opset="add_ln703_213/1 "/>
+<opset="add_ln703_138/1 "/>
 </bind>
 </comp>
 
-<comp id="150" class="1004" name="add_ln703_214_fu_150">
+<comp id="150" class="1004" name="add_ln703_139_fu_150">
 <pin_list>
 <pin id="151" dir="0" index="0" bw="16" slack="0"/>
 <pin id="152" dir="0" index="1" bw="16" slack="0"/>
@@ -583,11 +583,11 @@ ret_ln490               (ret        ) [ 00]
 </pin_list>
 <bind>
 <opcode="add(8) " fcode="add"/>
-<opset="add_ln703_214/1 "/>
+<opset="add_ln703_139/1 "/>
 </bind>
 </comp>
 
-<comp id="156" class="1004" name="add_ln703_215_fu_156">
+<comp id="156" class="1004" name="add_ln703_140_fu_156">
 <pin_list>
 <pin id="157" dir="0" index="0" bw="16" slack="0"/>
 <pin id="158" dir="0" index="1" bw="16" slack="0"/>
@@ -595,11 +595,11 @@ ret_ln490               (ret        ) [ 00]
 </pin_list>
 <bind>
 <opcode="add(8) " fcode="add"/>
-<opset="add_ln703_215/1 "/>
+<opset="add_ln703_140/1 "/>
 </bind>
 </comp>
 
-<comp id="162" class="1004" name="add_ln703_216_fu_162">
+<comp id="162" class="1004" name="add_ln703_141_fu_162">
 <pin_list>
 <pin id="163" dir="0" index="0" bw="16" slack="0"/>
 <pin id="164" dir="0" index="1" bw="16" slack="0"/>
@@ -607,11 +607,11 @@ ret_ln490               (ret        ) [ 00]
 </pin_list>
 <bind>
 <opcode="add(8) " fcode="add"/>
-<opset="add_ln703_216/1 "/>
+<opset="add_ln703_141/1 "/>
 </bind>
 </comp>
 
-<comp id="168" class="1004" name="add_ln703_217_fu_168">
+<comp id="168" class="1004" name="add_ln703_142_fu_168">
 <pin_list>
 <pin id="169" dir="0" index="0" bw="16" slack="0"/>
 <pin id="170" dir="0" index="1" bw="16" slack="0"/>
@@ -619,11 +619,11 @@ ret_ln490               (ret        ) [ 00]
 </pin_list>
 <bind>
 <opcode="add(8) " fcode="add"/>
-<opset="add_ln703_217/1 "/>
+<opset="add_ln703_142/1 "/>
 </bind>
 </comp>
 
-<comp id="174" class="1004" name="add_ln703_218_fu_174">
+<comp id="174" class="1004" name="add_ln703_143_fu_174">
 <pin_list>
 <pin id="175" dir="0" index="0" bw="16" slack="0"/>
 <pin id="176" dir="0" index="1" bw="16" slack="0"/>
@@ -631,7 +631,7 @@ ret_ln490               (ret        ) [ 00]
 </pin_list>
 <bind>
 <opcode="add(8) " fcode="add"/>
-<opset="add_ln703_218/1 "/>
+<opset="add_ln703_143/1 "/>
 </bind>
 </comp>
 
@@ -908,13 +908,13 @@ ret_ln490               (ret        ) [ 00]
 | Operation|           Functional Unit           |    FF   |   LUT   |
 |----------|-------------------------------------|---------|---------|
 |          |           add_ln703_fu_132          |    0    |    23   |
-|          |         add_ln703_212_fu_138        |    0    |    23   |
-|          |         add_ln703_213_fu_144        |    0    |    23   |
-|    add   |         add_ln703_214_fu_150        |    0    |    23   |
-|          |         add_ln703_215_fu_156        |    0    |    23   |
-|          |         add_ln703_216_fu_162        |    0    |    23   |
-|          |         add_ln703_217_fu_168        |    0    |    23   |
-|          |         add_ln703_218_fu_174        |    0    |    23   |
+|          |         add_ln703_137_fu_138        |    0    |    23   |
+|          |         add_ln703_138_fu_144        |    0    |    23   |
+|    add   |         add_ln703_139_fu_150        |    0    |    23   |
+|          |         add_ln703_140_fu_156        |    0    |    23   |
+|          |         add_ln703_141_fu_162        |    0    |    23   |
+|          |         add_ln703_142_fu_168        |    0    |    23   |
+|          |         add_ln703_143_fu_174        |    0    |    23   |
 |----------|-------------------------------------|---------|---------|
 |          |  data_window_7_V_read_1_read_fu_36  |    0    |    0    |
 |          |  data_window_6_V_read_1_read_fu_42  |    0    |    0    |

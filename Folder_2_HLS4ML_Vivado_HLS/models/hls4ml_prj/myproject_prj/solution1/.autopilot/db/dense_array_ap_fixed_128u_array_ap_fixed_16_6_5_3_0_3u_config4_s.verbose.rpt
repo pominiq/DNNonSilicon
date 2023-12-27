@@ -3,7 +3,7 @@
 ================================================================
 == Vivado HLS Report for 'dense_array_ap_fixed_128u_array_ap_fixed_16_6_5_3_0_3u_config4_s'
 ================================================================
-* Date:           Tue Dec 19 18:13:47 2023
+* Date:           Wed Dec 27 14:28:38 2023
 
 * Version:        2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)
 * Project:        myproject_prj
@@ -56,16 +56,16 @@
 |DSP              |        -|      -|       -|      -|    -|
 |Expression       |        -|      -|       0|      6|    -|
 |FIFO             |        -|      -|       -|      -|    -|
-|Instance         |        -|     48|    4910|  13383|    -|
+|Instance         |        -|     48|    4875|  12967|    -|
 |Memory           |        -|      -|       -|      -|    -|
 |Multiplexer      |        -|      -|       -|   1244|    -|
 |Register         |        -|      -|    2108|      -|    -|
 +-----------------+---------+-------+--------+-------+-----+
-|Total            |        0|     48|    7018|  14633|    0|
+|Total            |        0|     48|    6983|  14217|    0|
 +-----------------+---------+-------+--------+-------+-----+
 |Available        |      280|    220|  106400|  53200|    0|
 +-----------------+---------+-------+--------+-------+-----+
-|Utilization (%)  |        0|     21|       6|     27|    0|
+|Utilization (%)  |        0|     21|       6|     26|    0|
 +-----------------+---------+-------+--------+-------+-----+
 
 + Detail: 
@@ -73,9 +73,9 @@
     +-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------+-------+------+-------+-----+
     |                                   Instance                                  |                              Module                             | BRAM_18K| DSP48E|  FF  |  LUT  | URAM|
     +-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------+-------+------+-------+-----+
-    |grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config4_s_fu_2129  |dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config4_s  |        0|     48|  4910|  13383|    0|
+    |grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config4_s_fu_2129  |dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config4_s  |        0|     48|  4875|  12967|    0|
     +-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------+-------+------+-------+-----+
-    |Total                                                                        |                                                                 |        0|     48|  4910|  13383|    0|
+    |Total                                                                        |                                                                 |        0|     48|  4875|  12967|    0|
     +-----------------------------------------------------------------------------+-----------------------------------------------------------------+---------+-------+------+-------+-----+
 
     * DSP48E: 
@@ -971,8 +971,8 @@ ST_1 : Operation 136 [1/1] (0.00ns)   --->   "%data_125_V = extractvalue { i16, 
 ST_1 : Operation 137 [1/1] (0.00ns)   --->   "%data_126_V = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %empty, 126" [firmware/nnet_utils/nnet_dense_stream.h:40]   --->   Operation 137 'extractvalue' 'data_126_V' <Predicate = true> <Delay = 0.00>
 ST_1 : Operation 138 [1/1] (0.00ns)   --->   "%data_127_V = extractvalue { i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16, i16 } %empty, 127" [firmware/nnet_utils/nnet_dense_stream.h:40]   --->   Operation 138 'extractvalue' 'data_127_V' <Predicate = true> <Delay = 0.00>
 
-State 2 <SV = 1> <Delay = 21.0>
-ST_2 : Operation 139 [7/7] (21.0ns)   --->   "%call_ret = call fastcc { i16, i16, i16 } @"dense_wrapper<ap_fixed<16, 6, 5, 3, 0>, ap_fixed<16, 6, 5, 3, 0>, config4>"(i16 %data_0_V, i16 %data_1_V, i16 %data_2_V, i16 %data_3_V, i16 %data_4_V, i16 %data_5_V, i16 %data_6_V, i16 %data_7_V, i16 %data_8_V, i16 %data_9_V, i16 %data_10_V, i16 %data_11_V, i16 %data_12_V, i16 %data_13_V, i16 %data_14_V, i16 %data_15_V, i16 %data_16_V, i16 %data_17_V, i16 %data_18_V, i16 %data_19_V, i16 %data_20_V, i16 %data_21_V, i16 %data_22_V, i16 %data_23_V, i16 %data_24_V, i16 %data_25_V, i16 %data_26_V, i16 %data_27_V, i16 %data_28_V, i16 %data_29_V, i16 %data_30_V, i16 %data_31_V, i16 %data_32_V, i16 %data_33_V, i16 %data_34_V, i16 %data_35_V, i16 %data_36_V, i16 %data_37_V, i16 %data_38_V, i16 %data_39_V, i16 %data_40_V, i16 %data_41_V, i16 %data_42_V, i16 %data_43_V, i16 %data_44_V, i16 %data_45_V, i16 %data_46_V, i16 %data_47_V, i16 %data_48_V, i16 %data_49_V, i16 %data_50_V, i16 %data_51_V, i16 %data_52_V, i16 %data_53_V, i16 %data_54_V, i16 %data_55_V, i16 %data_56_V, i16 %data_57_V, i16 %data_58_V, i16 %data_59_V, i16 %data_60_V, i16 %data_61_V, i16 %data_62_V, i16 %data_63_V, i16 %data_64_V, i16 %data_65_V, i16 %data_66_V, i16 %data_67_V, i16 %data_68_V, i16 %data_69_V, i16 %data_70_V, i16 %data_71_V, i16 %data_72_V, i16 %data_73_V, i16 %data_74_V, i16 %data_75_V, i16 %data_76_V, i16 %data_77_V, i16 %data_78_V, i16 %data_79_V, i16 %data_80_V, i16 %data_81_V, i16 %data_82_V, i16 %data_83_V, i16 %data_84_V, i16 %data_85_V, i16 %data_86_V, i16 %data_87_V, i16 %data_88_V, i16 %data_89_V, i16 %data_90_V, i16 %data_91_V, i16 %data_92_V, i16 %data_93_V, i16 %data_94_V, i16 %data_95_V, i16 %data_96_V, i16 %data_97_V, i16 %data_98_V, i16 %data_99_V, i16 %data_100_V, i16 %data_101_V, i16 %data_102_V, i16 %data_103_V, i16 %data_104_V, i16 %data_105_V, i16 %data_106_V, i16 %data_107_V, i16 %data_108_V, i16 %data_109_V, i16 %data_110_V, i16 %data_111_V, i16 %data_112_V, i16 %data_113_V, i16 %data_114_V, i16 %data_115_V, i16 %data_116_V, i16 %data_117_V, i16 %data_118_V, i16 %data_119_V, i16 %data_120_V, i16 %data_121_V, i16 %data_122_V, i16 %data_123_V, i16 %data_124_V, i16 %data_125_V, i16 %data_126_V, i16 %data_127_V)" [firmware/nnet_utils/nnet_dense_stream.h:48]   --->   Operation 139 'call' 'call_ret' <Predicate = true> <Delay = 21.0> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+State 2 <SV = 1> <Delay = 21.1>
+ST_2 : Operation 139 [7/7] (21.1ns)   --->   "%call_ret = call fastcc { i16, i16, i16 } @"dense_wrapper<ap_fixed<16, 6, 5, 3, 0>, ap_fixed<16, 6, 5, 3, 0>, config4>"(i16 %data_0_V, i16 %data_1_V, i16 %data_2_V, i16 %data_3_V, i16 %data_4_V, i16 %data_5_V, i16 %data_6_V, i16 %data_7_V, i16 %data_8_V, i16 %data_9_V, i16 %data_10_V, i16 %data_11_V, i16 %data_12_V, i16 %data_13_V, i16 %data_14_V, i16 %data_15_V, i16 %data_16_V, i16 %data_17_V, i16 %data_18_V, i16 %data_19_V, i16 %data_20_V, i16 %data_21_V, i16 %data_22_V, i16 %data_23_V, i16 %data_24_V, i16 %data_25_V, i16 %data_26_V, i16 %data_27_V, i16 %data_28_V, i16 %data_29_V, i16 %data_30_V, i16 %data_31_V, i16 %data_32_V, i16 %data_33_V, i16 %data_34_V, i16 %data_35_V, i16 %data_36_V, i16 %data_37_V, i16 %data_38_V, i16 %data_39_V, i16 %data_40_V, i16 %data_41_V, i16 %data_42_V, i16 %data_43_V, i16 %data_44_V, i16 %data_45_V, i16 %data_46_V, i16 %data_47_V, i16 %data_48_V, i16 %data_49_V, i16 %data_50_V, i16 %data_51_V, i16 %data_52_V, i16 %data_53_V, i16 %data_54_V, i16 %data_55_V, i16 %data_56_V, i16 %data_57_V, i16 %data_58_V, i16 %data_59_V, i16 %data_60_V, i16 %data_61_V, i16 %data_62_V, i16 %data_63_V, i16 %data_64_V, i16 %data_65_V, i16 %data_66_V, i16 %data_67_V, i16 %data_68_V, i16 %data_69_V, i16 %data_70_V, i16 %data_71_V, i16 %data_72_V, i16 %data_73_V, i16 %data_74_V, i16 %data_75_V, i16 %data_76_V, i16 %data_77_V, i16 %data_78_V, i16 %data_79_V, i16 %data_80_V, i16 %data_81_V, i16 %data_82_V, i16 %data_83_V, i16 %data_84_V, i16 %data_85_V, i16 %data_86_V, i16 %data_87_V, i16 %data_88_V, i16 %data_89_V, i16 %data_90_V, i16 %data_91_V, i16 %data_92_V, i16 %data_93_V, i16 %data_94_V, i16 %data_95_V, i16 %data_96_V, i16 %data_97_V, i16 %data_98_V, i16 %data_99_V, i16 %data_100_V, i16 %data_101_V, i16 %data_102_V, i16 %data_103_V, i16 %data_104_V, i16 %data_105_V, i16 %data_106_V, i16 %data_107_V, i16 %data_108_V, i16 %data_109_V, i16 %data_110_V, i16 %data_111_V, i16 %data_112_V, i16 %data_113_V, i16 %data_114_V, i16 %data_115_V, i16 %data_116_V, i16 %data_117_V, i16 %data_118_V, i16 %data_119_V, i16 %data_120_V, i16 %data_121_V, i16 %data_122_V, i16 %data_123_V, i16 %data_124_V, i16 %data_125_V, i16 %data_126_V, i16 %data_127_V)" [firmware/nnet_utils/nnet_dense_stream.h:48]   --->   Operation 139 'call' 'call_ret' <Predicate = true> <Delay = 21.1> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
 
 State 3 <SV = 2> <Delay = 21.1>
 ST_3 : Operation 140 [6/7] (21.1ns)   --->   "%call_ret = call fastcc { i16, i16, i16 } @"dense_wrapper<ap_fixed<16, 6, 5, 3, 0>, ap_fixed<16, 6, 5, 3, 0>, config4>"(i16 %data_0_V, i16 %data_1_V, i16 %data_2_V, i16 %data_3_V, i16 %data_4_V, i16 %data_5_V, i16 %data_6_V, i16 %data_7_V, i16 %data_8_V, i16 %data_9_V, i16 %data_10_V, i16 %data_11_V, i16 %data_12_V, i16 %data_13_V, i16 %data_14_V, i16 %data_15_V, i16 %data_16_V, i16 %data_17_V, i16 %data_18_V, i16 %data_19_V, i16 %data_20_V, i16 %data_21_V, i16 %data_22_V, i16 %data_23_V, i16 %data_24_V, i16 %data_25_V, i16 %data_26_V, i16 %data_27_V, i16 %data_28_V, i16 %data_29_V, i16 %data_30_V, i16 %data_31_V, i16 %data_32_V, i16 %data_33_V, i16 %data_34_V, i16 %data_35_V, i16 %data_36_V, i16 %data_37_V, i16 %data_38_V, i16 %data_39_V, i16 %data_40_V, i16 %data_41_V, i16 %data_42_V, i16 %data_43_V, i16 %data_44_V, i16 %data_45_V, i16 %data_46_V, i16 %data_47_V, i16 %data_48_V, i16 %data_49_V, i16 %data_50_V, i16 %data_51_V, i16 %data_52_V, i16 %data_53_V, i16 %data_54_V, i16 %data_55_V, i16 %data_56_V, i16 %data_57_V, i16 %data_58_V, i16 %data_59_V, i16 %data_60_V, i16 %data_61_V, i16 %data_62_V, i16 %data_63_V, i16 %data_64_V, i16 %data_65_V, i16 %data_66_V, i16 %data_67_V, i16 %data_68_V, i16 %data_69_V, i16 %data_70_V, i16 %data_71_V, i16 %data_72_V, i16 %data_73_V, i16 %data_74_V, i16 %data_75_V, i16 %data_76_V, i16 %data_77_V, i16 %data_78_V, i16 %data_79_V, i16 %data_80_V, i16 %data_81_V, i16 %data_82_V, i16 %data_83_V, i16 %data_84_V, i16 %data_85_V, i16 %data_86_V, i16 %data_87_V, i16 %data_88_V, i16 %data_89_V, i16 %data_90_V, i16 %data_91_V, i16 %data_92_V, i16 %data_93_V, i16 %data_94_V, i16 %data_95_V, i16 %data_96_V, i16 %data_97_V, i16 %data_98_V, i16 %data_99_V, i16 %data_100_V, i16 %data_101_V, i16 %data_102_V, i16 %data_103_V, i16 %data_104_V, i16 %data_105_V, i16 %data_106_V, i16 %data_107_V, i16 %data_108_V, i16 %data_109_V, i16 %data_110_V, i16 %data_111_V, i16 %data_112_V, i16 %data_113_V, i16 %data_114_V, i16 %data_115_V, i16 %data_116_V, i16 %data_117_V, i16 %data_118_V, i16 %data_119_V, i16 %data_120_V, i16 %data_121_V, i16 %data_122_V, i16 %data_123_V, i16 %data_124_V, i16 %data_125_V, i16 %data_126_V, i16 %data_127_V)" [firmware/nnet_utils/nnet_dense_stream.h:48]   --->   Operation 140 'call' 'call_ret' <Predicate = true> <Delay = 21.1> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
@@ -1295,10 +1295,10 @@ data_9_V          (extractvalue ) [ 0010000000]
 data_10_V         (extractvalue ) [ 0010000000]
 data_11_V         (extractvalue ) [ 0010000000]
 data_12_V         (extractvalue ) [ 0010000000]
-data_13_V         (extractvalue ) [ 0011110000]
+data_13_V         (extractvalue ) [ 0010000000]
 data_14_V         (extractvalue ) [ 0010000000]
 data_15_V         (extractvalue ) [ 0010000000]
-data_16_V         (extractvalue ) [ 0011111000]
+data_16_V         (extractvalue ) [ 0010000000]
 data_17_V         (extractvalue ) [ 0010000000]
 data_18_V         (extractvalue ) [ 0010000000]
 data_19_V         (extractvalue ) [ 0010000000]
@@ -1309,15 +1309,15 @@ data_23_V         (extractvalue ) [ 0010000000]
 data_24_V         (extractvalue ) [ 0010000000]
 data_25_V         (extractvalue ) [ 0010000000]
 data_26_V         (extractvalue ) [ 0010000000]
-data_27_V         (extractvalue ) [ 0010000000]
-data_28_V         (extractvalue ) [ 0010000000]
+data_27_V         (extractvalue ) [ 0011000000]
+data_28_V         (extractvalue ) [ 0011000000]
 data_29_V         (extractvalue ) [ 0011000000]
 data_30_V         (extractvalue ) [ 0011000000]
 data_31_V         (extractvalue ) [ 0011000000]
-data_32_V         (extractvalue ) [ 0011000000]
+data_32_V         (extractvalue ) [ 0011111000]
 data_33_V         (extractvalue ) [ 0011000000]
 data_34_V         (extractvalue ) [ 0011000000]
-data_35_V         (extractvalue ) [ 0011111000]
+data_35_V         (extractvalue ) [ 0011000000]
 data_36_V         (extractvalue ) [ 0011000000]
 data_37_V         (extractvalue ) [ 0011000000]
 data_38_V         (extractvalue ) [ 0011000000]
@@ -1326,7 +1326,7 @@ data_40_V         (extractvalue ) [ 0011000000]
 data_41_V         (extractvalue ) [ 0011000000]
 data_42_V         (extractvalue ) [ 0011000000]
 data_43_V         (extractvalue ) [ 0011000000]
-data_44_V         (extractvalue ) [ 0011000000]
+data_44_V         (extractvalue ) [ 0011111000]
 data_45_V         (extractvalue ) [ 0011000000]
 data_46_V         (extractvalue ) [ 0011000000]
 data_47_V         (extractvalue ) [ 0011000000]
@@ -1335,25 +1335,25 @@ data_49_V         (extractvalue ) [ 0011000000]
 data_50_V         (extractvalue ) [ 0011000000]
 data_51_V         (extractvalue ) [ 0011000000]
 data_52_V         (extractvalue ) [ 0011000000]
-data_53_V         (extractvalue ) [ 0011000000]
+data_53_V         (extractvalue ) [ 0011111000]
 data_54_V         (extractvalue ) [ 0011000000]
 data_55_V         (extractvalue ) [ 0011000000]
-data_56_V         (extractvalue ) [ 0011000000]
-data_57_V         (extractvalue ) [ 0011000000]
-data_58_V         (extractvalue ) [ 0011000000]
-data_59_V         (extractvalue ) [ 0011000000]
+data_56_V         (extractvalue ) [ 0011100000]
+data_57_V         (extractvalue ) [ 0011100000]
+data_58_V         (extractvalue ) [ 0011100000]
+data_59_V         (extractvalue ) [ 0011100000]
 data_60_V         (extractvalue ) [ 0011100000]
 data_61_V         (extractvalue ) [ 0011100000]
-data_62_V         (extractvalue ) [ 0011111000]
+data_62_V         (extractvalue ) [ 0011100000]
 data_63_V         (extractvalue ) [ 0011100000]
 data_64_V         (extractvalue ) [ 0011100000]
 data_65_V         (extractvalue ) [ 0011100000]
 data_66_V         (extractvalue ) [ 0011100000]
 data_67_V         (extractvalue ) [ 0011100000]
-data_68_V         (extractvalue ) [ 0011100000]
-data_69_V         (extractvalue ) [ 0011100000]
-data_70_V         (extractvalue ) [ 0011100000]
-data_71_V         (extractvalue ) [ 0011100000]
+data_68_V         (extractvalue ) [ 0011111000]
+data_69_V         (extractvalue ) [ 0011111000]
+data_70_V         (extractvalue ) [ 0011111000]
+data_71_V         (extractvalue ) [ 0011111000]
 data_72_V         (extractvalue ) [ 0011100000]
 data_73_V         (extractvalue ) [ 0011100000]
 data_74_V         (extractvalue ) [ 0011100000]
@@ -1361,55 +1361,55 @@ data_75_V         (extractvalue ) [ 0011100000]
 data_76_V         (extractvalue ) [ 0011100000]
 data_77_V         (extractvalue ) [ 0011100000]
 data_78_V         (extractvalue ) [ 0011100000]
-data_79_V         (extractvalue ) [ 0011100000]
+data_79_V         (extractvalue ) [ 0011110000]
 data_80_V         (extractvalue ) [ 0011100000]
 data_81_V         (extractvalue ) [ 0011100000]
 data_82_V         (extractvalue ) [ 0011100000]
 data_83_V         (extractvalue ) [ 0011100000]
 data_84_V         (extractvalue ) [ 0011100000]
 data_85_V         (extractvalue ) [ 0011100000]
-data_86_V         (extractvalue ) [ 0011111100]
+data_86_V         (extractvalue ) [ 0011100000]
 data_87_V         (extractvalue ) [ 0011100000]
-data_88_V         (extractvalue ) [ 0011110000]
-data_89_V         (extractvalue ) [ 0011110000]
-data_90_V         (extractvalue ) [ 0011110000]
-data_91_V         (extractvalue ) [ 0011110000]
+data_88_V         (extractvalue ) [ 0011100000]
+data_89_V         (extractvalue ) [ 0011111100]
+data_90_V         (extractvalue ) [ 0011111100]
+data_91_V         (extractvalue ) [ 0011100000]
 data_92_V         (extractvalue ) [ 0011110000]
-data_93_V         (extractvalue ) [ 0011110000]
+data_93_V         (extractvalue ) [ 0011100000]
 data_94_V         (extractvalue ) [ 0011110000]
 data_95_V         (extractvalue ) [ 0011110000]
 data_96_V         (extractvalue ) [ 0011110000]
 data_97_V         (extractvalue ) [ 0011110000]
-data_98_V         (extractvalue ) [ 0011111100]
+data_98_V         (extractvalue ) [ 0011110000]
 data_99_V         (extractvalue ) [ 0011110000]
-data_100_V        (extractvalue ) [ 0011110000]
+data_100_V        (extractvalue ) [ 0011111100]
 data_101_V        (extractvalue ) [ 0011110000]
-data_102_V        (extractvalue ) [ 0011110000]
-data_103_V        (extractvalue ) [ 0011111100]
+data_102_V        (extractvalue ) [ 0011111100]
+data_103_V        (extractvalue ) [ 0011110000]
 data_104_V        (extractvalue ) [ 0011110000]
 data_105_V        (extractvalue ) [ 0011110000]
-data_106_V        (extractvalue ) [ 0011110000]
+data_106_V        (extractvalue ) [ 0011111100]
 data_107_V        (extractvalue ) [ 0011110000]
 data_108_V        (extractvalue ) [ 0011110000]
 data_109_V        (extractvalue ) [ 0011110000]
-data_110_V        (extractvalue ) [ 0011111100]
-data_111_V        (extractvalue ) [ 0011111100]
-data_112_V        (extractvalue ) [ 0011111000]
+data_110_V        (extractvalue ) [ 0011110000]
+data_111_V        (extractvalue ) [ 0011110000]
+data_112_V        (extractvalue ) [ 0011110000]
 data_113_V        (extractvalue ) [ 0011110000]
-data_114_V        (extractvalue ) [ 0011111000]
+data_114_V        (extractvalue ) [ 0011110000]
 data_115_V        (extractvalue ) [ 0011110000]
 data_116_V        (extractvalue ) [ 0011110000]
-data_117_V        (extractvalue ) [ 0011111000]
-data_118_V        (extractvalue ) [ 0011110000]
+data_117_V        (extractvalue ) [ 0011110000]
+data_118_V        (extractvalue ) [ 0011111100]
 data_119_V        (extractvalue ) [ 0011111100]
-data_120_V        (extractvalue ) [ 0011110000]
+data_120_V        (extractvalue ) [ 0011111100]
 data_121_V        (extractvalue ) [ 0011110000]
-data_122_V        (extractvalue ) [ 0011110000]
+data_122_V        (extractvalue ) [ 0011111100]
 data_123_V        (extractvalue ) [ 0011110000]
-data_124_V        (extractvalue ) [ 0011110000]
-data_125_V        (extractvalue ) [ 0011111100]
-data_126_V        (extractvalue ) [ 0011110000]
-data_127_V        (extractvalue ) [ 0011111100]
+data_124_V        (extractvalue ) [ 0011111110]
+data_125_V        (extractvalue ) [ 0011111110]
+data_126_V        (extractvalue ) [ 0011111110]
+data_127_V        (extractvalue ) [ 0011111110]
 call_ret          (call         ) [ 0000000000]
 res_0_V           (extractvalue ) [ 0000000001]
 res_1_V           (extractvalue ) [ 0000000001]
@@ -14171,7 +14171,7 @@ ret_ln64          (ret          ) [ 0000000000]
 |----------|-----------------------------------------------------------------------------|---------|---------|---------|---------|
 | Operation|                               Functional Unit                               |  DSP48E |  Delay  |    FF   |   LUT   |
 |----------|-----------------------------------------------------------------------------|---------|---------|---------|---------|
-|   call   | grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config4_s_fu_2129 |    48   | 184.654 |   3287  |  11508  |
+|   call   | grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config4_s_fu_2129 |    48   | 185.524 |   3252  |  11075  |
 |----------|-----------------------------------------------------------------------------|---------|---------|---------|---------|
 |   read   |                              empty_read_fu_1856                             |    0    |    0    |    0    |    0    |
 |----------|-----------------------------------------------------------------------------|---------|---------|---------|---------|
@@ -14309,7 +14309,7 @@ ret_ln64          (ret          ) [ 0000000000]
 |          |                               res_1_V_fu_2777                               |    0    |    0    |    0    |    0    |
 |          |                               res_2_V_fu_2781                               |    0    |    0    |    0    |    0    |
 |----------|-----------------------------------------------------------------------------|---------|---------|---------|---------|
-|   Total  |                                                                             |    48   | 184.654 |   3287  |  11508  |
+|   Total  |                                                                             |    48   | 185.524 |   3252  |  11075  |
 |----------|-----------------------------------------------------------------------------|---------|---------|---------|---------|
 
 Memories:
@@ -14467,10 +14467,10 @@ N/A
 +-----------+--------+--------+--------+--------+
 |           | DSP48E |  Delay |   FF   |   LUT  |
 +-----------+--------+--------+--------+--------+
-|  Function |   48   |   184  |  3287  |  11508 |
+|  Function |   48   |   185  |  3252  |  11075 |
 |   Memory  |    -   |    -   |    -   |    -   |
 |Multiplexer|    -   |    -   |    -   |    -   |
 |  Register |    -   |    -   |  2096  |    -   |
 +-----------+--------+--------+--------+--------+
-|   Total   |   48   |   184  |  5383  |  11508 |
+|   Total   |   48   |   185  |  5348  |  11075 |
 +-----------+--------+--------+--------+--------+

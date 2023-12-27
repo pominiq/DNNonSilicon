@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.1 (lin64) Build 2902540 Wed May 27 19:54:35 MDT 2020
-| Date         : Tue Dec 19 18:18:17 2023
+| Date         : Wed Dec 27 16:12:38 2023
 | Host         : laptop running 64-bit Ubuntu 22.04.3 LTS
 | Command      : report_utilization -file vivado_synth.rpt
 | Design       : myproject
@@ -27,18 +27,18 @@ Table of Contents
 1. Slice Logic
 --------------
 
-+-------------------------+-------+-------+-----------+-------+
-|        Site Type        |  Used | Fixed | Available | Util% |
-+-------------------------+-------+-------+-----------+-------+
-| Slice LUTs*             | 19233 |     0 |     53200 | 36.15 |
-|   LUT as Logic          | 19233 |     0 |     53200 | 36.15 |
-|   LUT as Memory         |     0 |     0 |     17400 |  0.00 |
-| Slice Registers         | 17948 |     0 |    106400 | 16.87 |
-|   Register as Flip Flop | 17948 |     0 |    106400 | 16.87 |
-|   Register as Latch     |     0 |     0 |    106400 |  0.00 |
-| F7 Muxes                |     0 |     0 |     26600 |  0.00 |
-| F8 Muxes                |     0 |     0 |     13300 |  0.00 |
-+-------------------------+-------+-------+-----------+-------+
++-------------------------+------+-------+-----------+-------+
+|        Site Type        | Used | Fixed | Available | Util% |
++-------------------------+------+-------+-----------+-------+
+| Slice LUTs*             | 2796 |     0 |     53200 |  5.26 |
+|   LUT as Logic          | 2796 |     0 |     53200 |  5.26 |
+|   LUT as Memory         |    0 |     0 |     17400 |  0.00 |
+| Slice Registers         | 2848 |     0 |    106400 |  2.68 |
+|   Register as Flip Flop | 2848 |     0 |    106400 |  2.68 |
+|   Register as Latch     |    0 |     0 |    106400 |  0.00 |
+| F7 Muxes                |    0 |     0 |     26600 |  0.00 |
+| F8 Muxes                |    0 |     0 |     13300 |  0.00 |
++-------------------------+------+-------+-----------+-------+
 * Warning! The Final LUT count, after physical optimizations and full implementation, is typically lower. Run opt_design after synthesis, if not already completed, for a more realistic count.
 
 
@@ -56,8 +56,8 @@ Table of Contents
 | 0     |          Yes |           - |            - |
 | 0     |          Yes |           - |          Set |
 | 0     |          Yes |           - |        Reset |
-| 548   |          Yes |         Set |            - |
-| 17400 |          Yes |       Reset |            - |
+| 3     |          Yes |         Set |            - |
+| 2845  |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
 
 
@@ -67,10 +67,10 @@ Table of Contents
 +-------------------+------+-------+-----------+-------+
 |     Site Type     | Used | Fixed | Available | Util% |
 +-------------------+------+-------+-----------+-------+
-| Block RAM Tile    |    1 |     0 |       140 |  0.71 |
+| Block RAM Tile    |  1.5 |     0 |       140 |  1.07 |
 |   RAMB36/FIFO*    |    0 |     0 |       140 |  0.00 |
-|   RAMB18          |    2 |     0 |       280 |  0.71 |
-|     RAMB18E1 only |    2 |       |           |       |
+|   RAMB18          |    3 |     0 |       280 |  1.07 |
+|     RAMB18E1 only |    3 |       |           |       |
 +-------------------+------+-------+-----------+-------+
 * Note: Each Block RAM Tile only has one FIFO logic available and therefore can accommodate only one FIFO36E1 or one FIFO18E1. However, if a FIFO18E1 occupies a Block RAM Tile, that tile can still accommodate a RAMB18E1
 
@@ -81,32 +81,32 @@ Table of Contents
 +----------------+------+-------+-----------+-------+
 |    Site Type   | Used | Fixed | Available | Util% |
 +----------------+------+-------+-----------+-------+
-| DSPs           |  113 |     0 |       220 | 51.36 |
-|   DSP48E1 only |  113 |       |           |       |
+| DSPs           |   31 |     0 |       220 | 14.09 |
+|   DSP48E1 only |   31 |       |           |       |
 +----------------+------+-------+-----------+-------+
 
 
 4. IO and GT Specific
 ---------------------
 
-+-----------------------------+------+-------+-----------+--------+
-|          Site Type          | Used | Fixed | Available |  Util% |
-+-----------------------------+------+-------+-----------+--------+
-| Bonded IOB                  |  132 |     0 |       125 | 105.60 |
-| Bonded IPADs                |    0 |     0 |         2 |   0.00 |
-| Bonded IOPADs               |    0 |     0 |       130 |   0.00 |
-| PHY_CONTROL                 |    0 |     0 |         4 |   0.00 |
-| PHASER_REF                  |    0 |     0 |         4 |   0.00 |
-| OUT_FIFO                    |    0 |     0 |        16 |   0.00 |
-| IN_FIFO                     |    0 |     0 |        16 |   0.00 |
-| IDELAYCTRL                  |    0 |     0 |         4 |   0.00 |
-| IBUFDS                      |    0 |     0 |       121 |   0.00 |
-| PHASER_OUT/PHASER_OUT_PHY   |    0 |     0 |        16 |   0.00 |
-| PHASER_IN/PHASER_IN_PHY     |    0 |     0 |        16 |   0.00 |
-| IDELAYE2/IDELAYE2_FINEDELAY |    0 |     0 |       200 |   0.00 |
-| ILOGIC                      |    0 |     0 |       125 |   0.00 |
-| OLOGIC                      |    0 |     0 |       125 |   0.00 |
-+-----------------------------+------+-------+-----------+--------+
++-----------------------------+------+-------+-----------+-------+
+|          Site Type          | Used | Fixed | Available | Util% |
++-----------------------------+------+-------+-----------+-------+
+| Bonded IOB                  |  122 |     0 |       125 | 97.60 |
+| Bonded IPADs                |    0 |     0 |         2 |  0.00 |
+| Bonded IOPADs               |    0 |     0 |       130 |  0.00 |
+| PHY_CONTROL                 |    0 |     0 |         4 |  0.00 |
+| PHASER_REF                  |    0 |     0 |         4 |  0.00 |
+| OUT_FIFO                    |    0 |     0 |        16 |  0.00 |
+| IN_FIFO                     |    0 |     0 |        16 |  0.00 |
+| IDELAYCTRL                  |    0 |     0 |         4 |  0.00 |
+| IBUFDS                      |    0 |     0 |       121 |  0.00 |
+| PHASER_OUT/PHASER_OUT_PHY   |    0 |     0 |        16 |  0.00 |
+| PHASER_IN/PHASER_IN_PHY     |    0 |     0 |        16 |  0.00 |
+| IDELAYE2/IDELAYE2_FINEDELAY |    0 |     0 |       200 |  0.00 |
+| ILOGIC                      |    0 |     0 |       125 |  0.00 |
+| OLOGIC                      |    0 |     0 |       125 |  0.00 |
++-----------------------------+------+-------+-----------+-------+
 
 
 5. Clocking
@@ -145,24 +145,24 @@ Table of Contents
 7. Primitives
 -------------
 
-+----------+-------+---------------------+
-| Ref Name |  Used | Functional Category |
-+----------+-------+---------------------+
-| FDRE     | 17400 |        Flop & Latch |
-| LUT2     |  9645 |                 LUT |
-| LUT3     |  4526 |                 LUT |
-| LUT4     |  3676 |                 LUT |
-| CARRY4   |  3660 |          CarryLogic |
-| LUT6     |  2675 |                 LUT |
-| LUT5     |  2282 |                 LUT |
-| LUT1     |  1263 |                 LUT |
-| FDSE     |   548 |        Flop & Latch |
-| DSP48E1  |   113 |    Block Arithmetic |
-| IBUF     |    74 |                  IO |
-| OBUF     |    58 |                  IO |
-| RAMB18E1 |     2 |        Block Memory |
-| BUFG     |     1 |               Clock |
-+----------+-------+---------------------+
++----------+------+---------------------+
+| Ref Name | Used | Functional Category |
++----------+------+---------------------+
+| FDRE     | 2845 |        Flop & Latch |
+| LUT2     | 1495 |                 LUT |
+| LUT6     |  603 |                 LUT |
+| LUT4     |  582 |                 LUT |
+| LUT3     |  536 |                 LUT |
+| CARRY4   |  512 |          CarryLogic |
+| LUT5     |  389 |                 LUT |
+| LUT1     |  210 |                 LUT |
+| IBUF     |   68 |                  IO |
+| OBUF     |   54 |                  IO |
+| DSP48E1  |   31 |    Block Arithmetic |
+| RAMB18E1 |    3 |        Block Memory |
+| FDSE     |    3 |        Flop & Latch |
+| BUFG     |    1 |               Clock |
++----------+------+---------------------+
 
 
 8. Black Boxes

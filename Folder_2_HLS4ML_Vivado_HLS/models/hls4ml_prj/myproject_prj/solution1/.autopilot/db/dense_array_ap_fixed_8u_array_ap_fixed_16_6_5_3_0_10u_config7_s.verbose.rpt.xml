@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vivado HLS Report for 'dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config7_s'" level="0">
-<item name = "Date">Tue Dec 19 17:51:57 2023
+<item name = "Date">Tue Dec 19 20:26:34 2023
 </item>
 <item name = "Version">2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)</item>
 <item name = "Project">myproject_prj</item>
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">25.00 ns, 19.097 ns, 3.12 ns</column>
+<column name="ap_clk">25.00 ns, 15.194 ns, 3.12 ns</column>
 </table>
 </item>
 </section>
@@ -24,14 +24,14 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="8">, min, max, min, max, min, max, Type</keys>
-<column name="">34, 34, 0.850 us, 0.850 us, 34, 34, none</column>
+<column name="">7, 7, 0.175 us, 0.175 us, 7, 7, none</column>
 </table>
 </item>
 <item name = "Detail">
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="0">
 <keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
-<column name="grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config7_s_fu_328">dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config7_s, 34, 34, 0.850 us, 0.850 us, 35, 35, function</column>
+<column name="grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config7_s_fu_331">dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config7_s, 7, 7, 0.175 us, 0.175 us, 8, 8, function</column>
 </table>
 </item>
 <item name = "Loop"><table name="" hasTotal="0">
@@ -50,19 +50,19 @@
 <column name="DSP">-, -, -, -, -</column>
 <column name="Expression">-, -, 0, 6, -</column>
 <column name="FIFO">-, -, -, -, -</column>
-<column name="Instance">-, 2, 1239, 2214, -</column>
+<column name="Instance">-, 5, 650, 1111, -</column>
 <column name="Memory">-, -, -, -, -</column>
-<column name="Multiplexer">-, -, -, 341, -</column>
-<column name="Register">-, -, 37, -, -</column>
+<column name="Multiplexer">-, -, -, 224, -</column>
+<column name="Register">-, -, 10, -, -</column>
 <specialColumn name="Available">280, 220, 106400, 53200, 0</specialColumn>
-<specialColumn name="Utilization (%)">0, ~0, 1, 4, 0</specialColumn>
+<specialColumn name="Utilization (%)">0, 2, ~0, 2, 0</specialColumn>
 </table>
 </item>
 <item name = "Detail">
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="1">
 <keys size="7">Instance, Module, BRAM_18K, DSP48E, FF, LUT, URAM</keys>
-<column name="grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config7_s_fu_328">dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config7_s, 0, 2, 1239, 2214, 0</column>
+<column name="grp_dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config7_s_fu_331">dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config7_s, 0, 5, 650, 1111, 0</column>
 </table>
 </item>
 <item name = "DSP48E"><table name="" hasTotal="0">
@@ -79,14 +79,14 @@
 </item>
 <item name = "Expression"><table name="" hasTotal="1">
 <keys size="7">Variable Name, Operation, DSP48E, FF, LUT, Bitwidth P0, Bitwidth P1</keys>
-<column name="io_acc_block_signal_op110">and, 0, 0, 2, 1, 1</column>
-<column name="io_acc_block_signal_op36">and, 0, 0, 2, 1, 1</column>
+<column name="io_acc_block_signal_op55">and, 0, 0, 2, 1, 1</column>
+<column name="io_acc_block_signal_op9">and, 0, 0, 2, 1, 1</column>
 <column name="ap_block_state1">or, 0, 0, 2, 1, 1</column>
 </table>
 </item>
 <item name = "Multiplexer"><table name="" hasTotal="1">
 <keys size="5">Name, LUT, Input Size, Bits, Total Bits</keys>
-<column name="ap_NS_fsm">161, 36, 1, 36</column>
+<column name="ap_NS_fsm">44, 9, 1, 9</column>
 <column name="ap_done">9, 2, 1, 2</column>
 <column name="data_stream_V_data_0_V_blk_n">9, 2, 1, 2</column>
 <column name="data_stream_V_data_1_V_blk_n">9, 2, 1, 2</column>
@@ -111,7 +111,7 @@
 </item>
 <item name = "Register"><table name="" hasTotal="1">
 <keys size="5">Name, FF, LUT, Bits, Const Bits</keys>
-<column name="ap_CS_fsm">35, 0, 35, 0</column>
+<column name="ap_CS_fsm">8, 0, 8, 0</column>
 <column name="ap_done_reg">1, 0, 1, 0</column>
 <column name="start_once_reg">1, 0, 1, 0</column>
 </table>

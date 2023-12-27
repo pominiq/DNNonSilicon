@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vivado HLS Report for 'dense_latency_ap_fixed_ap_fixed_config2_mult_0_0_0_0_0_0_0_0_0'" level="0">
-<item name = "Date">Tue Dec 19 17:43:14 2023
+<item name = "Date">Tue Dec 19 20:17:47 2023
 </item>
 <item name = "Version">2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)</item>
 <item name = "Project">myproject_prj</item>
@@ -24,7 +24,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="8">, min, max, min, max, min, max, Type</keys>
-<column name="">34, 34, 0.850 us, 0.850 us, 35, 35, function</column>
+<column name="">7, 7, 0.175 us, 0.175 us, 8, 8, function</column>
 </table>
 </item>
 <item name = "Detail">
