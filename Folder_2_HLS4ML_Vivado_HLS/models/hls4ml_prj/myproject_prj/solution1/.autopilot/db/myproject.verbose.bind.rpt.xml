@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vivado HLS Report for 'myproject'" level="0">
-<item name = "Date">Wed Dec 27 21:19:51 2023
+<item name = "Date">Sat Feb 24 16:03:24 2024
 </item>
 <item name = "Version">2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)</item>
 <item name = "Project">myproject_prj</item>
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">25.00 ns, 24.157 ns, 3.12 ns</column>
+<column name="ap_clk">25.00 ns, 21.192 ns, 3.12 ns</column>
 </table>
 </item>
 </section>
@@ -24,21 +24,17 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="8">, min, max, min, max, min, max, Type</keys>
-<column name="">4762, 4762, 0.119 ms, 0.119 ms, 4707, 4707, dataflow</column>
+<column name="">4, 4, 0.100 us, 0.100 us, 1, 1, function</column>
 </table>
 </item>
 <item name = "Detail">
 <section name = "" level="1">
 <item name = "Instance"><table name="" hasTotal="0">
 <keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
-<column name="grp_pooling2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_config4_s_fu_1270">pooling2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_config4_s, 679, 679, 16.975 us, 16.975 us, 679, 679, none</column>
-<column name="grp_dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s_fu_1410">dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s, 21, 21, 0.525 us, 0.525 us, 21, 21, none</column>
-<column name="grp_conv_2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_8u_config5_s_fu_1432">conv_2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_8u_config5_s, 542, 542, 13.550 us, 13.550 us, 542, 542, none</column>
-<column name="grp_softmax_array_array_ap_fixed_16_6_5_3_0_10u_softmax_config10_s_fu_1514">softmax_array_array_ap_fixed_16_6_5_3_0_10u_softmax_config10_s, 25, 25, 0.625 us, 0.625 us, 25, 25, none</column>
-<column name="grp_pooling2d_cl_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_8u_config7_s_fu_1552">pooling2d_cl_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_8u_config7_s, 18, 18, 0.450 us, 0.450 us, 18, 18, none</column>
-<column name="grp_conv_2d_cl_array_ap_fixed_1u_array_ap_fixed_16_6_5_3_0_4u_config2_s_fu_1628">conv_2d_cl_array_ap_fixed_1u_array_ap_fixed_16_6_5_3_0_4u_config2_s, 4706, 4706, 0.118 ms, 0.118 ms, 4706, 4706, none</column>
-<column name="grp_relu_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_8u_relu_config6_s_fu_1658">relu_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_8u_relu_config6_s, 18, 18, 0.450 us, 0.450 us, 18, 18, none</column>
-<column name="grp_relu_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_relu_config3_s_fu_1678">relu_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_relu_config3_s, 678, 678, 16.950 us, 16.950 us, 678, 678, none</column>
+<column name="call_ret_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_71">dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s, 0, 0, 0 ns, 0 ns, 1, 1, function</column>
+<column name="grp_dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0_fu_77">dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config4_0_0_0_0, 1, 1, 25.000 ns, 25.000 ns, 1, 1, function</column>
+<column name="call_ret1_relu_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_relu_config3_s_fu_139">relu_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_relu_config3_s, 0, 0, 0 ns, 0 ns, 1, 1, function</column>
+<column name="grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_201">softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s, 2, 2, 50.000 ns, 50.000 ns, 1, 1, function</column>
 </table>
 </item>
 <item name = "Loop"><table name="" hasTotal="0">

@@ -1,4 +1,3 @@
-
 # General imports
 import logging
 import os
@@ -15,7 +14,7 @@ import tensorflow as tf
 import tensorflow_model_optimization as tfmot
 from tensorflow_model_optimization.python.core.sparsity.keras import prune, pruning_callbacks, pruning_wrapper, pruning_schedule
 from keras.utils import to_categorical
-from keras.datasets import mnist, imdb
+from keras.datasets import mnist, imdb, cifar10
 from keras import layers, models, preprocessing
 from qkeras.utils import _add_supported_quantized_objects
 
@@ -67,7 +66,7 @@ def create_example_model_MNIST():
     model = models.Sequential()
     model.add(layers.Conv2D(4, (3, 3), activation='relu', input_shape=(28, 28, 1)))
     model.add(layers.MaxPooling2D((4, 4)))
-    model.add(layers.Conv2D(8, (3, 3), activation='tanh'))
+    model.add(layers.Conv2D(8, (3, 3), activation='relu'))
     model.add(layers.MaxPooling2D((2, 2)))
     model.add(layers.Flatten())
     model.add(layers.Dense(10, dtype='float32', activation='softmax'))  # Ensure that the final layer has float32 dtype
@@ -90,44 +89,56 @@ def create_example_model_MNIST():
 def create_example_model_YOLO(pruning):
 
     # Tuple of NumPy arrays: (x_train, y_train), (x_test, y_test)
-    (train_images, train_labels), (test_images, test_labels) = mnist.load_data()
-    # Reshape and normalize images
-    train_images = train_images.reshape((60000, 28, 28, 1))
-    train_images = train_images.astype('float16') / 255
-    test_images = test_images.reshape((10000, 28, 28, 1))
-    test_images = test_images.astype('float16') / 255
-    # One-hot encode labels (keep this as float32 for stability in the loss calculations)
-    train_labels = to_categorical(train_labels, dtype='float32')
-    test_labels = to_categorical(test_labels, dtype='float32')
+    (train_images, train_labels), (test_images, test_labels) = cifar10.load_data()
+    # Normalize pixel values to be between 0 and 1
+    train_images, test_images = train_images / 255.0, test_images / 255.0
+
+    class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer',
+                'dog', 'frog', 'horse', 'ship', 'truck']
+
+    plt.figure(figsize=(10,10))
+    for i in range(25):
+        plt.subplot(5,5,i+1)
+        plt.xticks([])
+        plt.yticks([])
+        plt.grid(False)
+        plt.imshow(train_images[i])
+        # The CIFAR labels happen to be arrays, 
+        # which is why you need the extra index
+        plt.xlabel(class_names[train_labels[i][0]])
+    plt.show()
 
     # Model architecture
     model = models.Sequential()
-    model.add(layers.Conv2D(4, (3, 3), activation='relu', input_shape=(28, 28, 1)))
-    model.add(layers.MaxPooling2D((4, 4)))
-    model.add(layers.Conv2D(8, (3, 3), activation='relu'))
-    model.add(layers.MaxPooling2D((2, 2)))
+    model.add(layers.Input(shape=(32, 32, 3)))
+    model.add(layers.SeparableConv2D(32, (3,3), activation='relu'))
+    model.add(layers.MaxPooling2D((2,2)))
+    model.add(layers.BatchNormalization())
+    model.add(layers.SeparableConv2D(64, (3,3), activation='relu'))
+    model.add(layers.MaxPooling2D(4,4))
+    model.add(layers.BatchNormalization())
+    model.add(layers.SeparableConv2D(64, (3, 3), activation='relu'))
     model.add(layers.Flatten())
-    #model.add(layers.Conv2D(8, (3, 3), activation='relu', input_shape=(28, 28, 1)))
-    #model.add(layers.GlobalAveragePooling2D())
-    #model.add(layers.DepthwiseConv2D((3, 3), activation='relu'))
-    #model.add(layers.GlobalAveragePooling2D())
-    #model.add(layers.Flatten())
-    model.add(layers.Dense(10, dtype='float32', activation='softmax'))  # Ensure that the final layer has float32 dtype
-
-    model.compile(optimizer='adam',
-                  loss=tf.keras.losses.CategoricalCrossentropy(),
-                  metrics=['accuracy'])
+    model.add(layers.Dense(32, activation='relu'))
+    model.add(layers.Dense(10, dtype='float32', activation='softmax'))
     
+    model.summary()
+    
+    model.compile(optimizer='adam',
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+              metrics=['accuracy'])
+
+    history = model.fit(train_images, train_labels, epochs=10, 
+                    validation_data=(test_images, test_labels))
+
     # Train the CNN model
-    model.fit(train_images, train_labels, epochs=10)
-    print(model.summary())
     score = model.evaluate(test_images, test_labels, verbose=0)
     print("Model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(score[0],score[1]*100))
 
     ### PRUNING
     if pruning == True:
         print("_________ With Pruning _________")
-        pruning_schedule = tfmot.sparsity.keras.ConstantSparsity(0.75,
+        pruning_schedule = tfmot.sparsity.keras.ConstantSparsity(0.50,
                                                                 begin_step=0,
                                                                 frequency=1)
         pruned_model = tfmot.sparsity.keras.prune_low_magnitude(model, 
@@ -138,19 +149,19 @@ def create_example_model_YOLO(pruning):
         ]
 
         pruned_model.compile(optimizer='adam',
-                  loss=tf.keras.losses.CategoricalCrossentropy(),
-                  metrics=['accuracy'])
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+              metrics=['accuracy'])
    
-        # Train the SLP model
-        pruned_model.fit(train_images, train_labels, epochs=10, callbacks=callbacks)
+        # Train the pruned model
+        pruned_model.fit(train_images, train_labels, epochs=10, 
+                    validation_data=(test_images, test_labels), callbacks=callbacks)
         print(pruned_model.summary())
-        # Check how many weights were set to zero (ie. verify if pruning worked)
+        # Check how many weights were set to zero (ie. verify if values were pruned)
         w = pruned_model.layers[0].weights[0].numpy()
         print(w)
         print('Pruned:\t% of zeros = {}'.format(np.sum(w == 0) / np.size(w)))
         score = pruned_model.evaluate(test_images, test_labels, verbose=0)
         print("Pruned model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(score[0],score[1]*100))
-
 
         # To preserve layer type (for compatibility with HLS4ML), the prune mask created
         # by tfmot is effectively removed
@@ -465,7 +476,6 @@ def config_and_compile_hls4ml_model_from_CNN_model(model,default_reuse_factor,cl
     
     return hls_model
 
-
 # Compares the HLS4ML bit-stream model with TF model
 def hls_vs_tf_model_comparison(model, hls_model, test_images, test_labels)-> tuple:
     
@@ -570,11 +580,11 @@ def main():
     modelname =             "model_16bit"
 
     #Flow step variables
-    train =                 False
+    train =                 True
     pruning =               True
 
     hls_model_comparison =  True
-    default_reuse_factor =  16
+    default_reuse_factor =  2
     clock_period =          25
 
     build =                 True
@@ -582,9 +592,9 @@ def main():
 
     # List of example models
     MNIST =                 False   # generic CNN
-    IRIS =                  False    # Single-layer Dense, with pruned 50%
+    IRIS =                  False    #S Single-layer Dense, with pruned 50%
     IMDB =                  False   # Simple RNN (DOES NOT WORK)
-    YOLO =                  True   # small CNN with depth-wise Conv2D, GlobalAveragePooling, and pruned 50%
+    YOLO =                  True   # small CNN with Separable Conv2D and pruned 50%
 
     # Main menu text
     main_menu_text(train, hls_model_comparison, build, openlane)

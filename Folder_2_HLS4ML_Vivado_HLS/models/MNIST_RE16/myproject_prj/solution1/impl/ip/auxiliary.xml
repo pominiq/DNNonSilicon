@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xd:acceleratorMap xmlns:xd="http://www.xilinx.com/xidane" xd:functionName="myproject" xd:componentRef="myproject" xd:initiationInterval="10247" xd:clockPeriod="25.000" xd:sequential="true" xd:hostMachine="64" xd:reset="control">
+  <xd:controlReg xd:name="control" xd:interfaceRef="ap_ctrl" xd:busTypeRef="acc_handshake" xd:type="acc_handshake"/>
+  <xd:arg xd:name="conv2d_input.data[0]" xd:originalName="conv2d_input" xd:direction="in" xd:interfaceRef="conv2d_input_V_data_0_V" xd:busTypeRef="axis" xd:dataWidth="16"/>
+  <xd:arg xd:name="layer10_out.data[0]" xd:originalName="layer10_out" xd:direction="out" xd:interfaceRef="layer10_out_V_data_0_V" xd:busTypeRef="axis" xd:dataWidth="16"/>
+  <xd:arg xd:name="layer10_out.data[1]" xd:originalName="layer10_out" xd:direction="out" xd:interfaceRef="layer10_out_V_data_1_V" xd:busTypeRef="axis" xd:dataWidth="16"/>
+  <xd:arg xd:name="layer10_out.data[2]" xd:originalName="layer10_out" xd:direction="out" xd:interfaceRef="layer10_out_V_data_2_V" xd:busTypeRef="axis" xd:dataWidth="16"/>
+  <xd:arg xd:name="layer10_out.data[3]" xd:originalName="layer10_out" xd:direction="out" xd:interfaceRef="layer10_out_V_data_3_V" xd:busTypeRef="axis" xd:dataWidth="16"/>
+  <xd:arg xd:name="layer10_out.data[4]" xd:originalName="layer10_out" xd:direction="out" xd:interfaceRef="layer10_out_V_data_4_V" xd:busTypeRef="axis" xd:dataWidth="16"/>
+  <xd:arg xd:name="layer10_out.data[5]" xd:originalName="layer10_out" xd:direction="out" xd:interfaceRef="layer10_out_V_data_5_V" xd:busTypeRef="axis" xd:dataWidth="16"/>
+  <xd:arg xd:name="layer10_out.data[6]" xd:originalName="layer10_out" xd:direction="out" xd:interfaceRef="layer10_out_V_data_6_V" xd:busTypeRef="axis" xd:dataWidth="16"/>
+  <xd:arg xd:name="layer10_out.data[7]" xd:originalName="layer10_out" xd:direction="out" xd:interfaceRef="layer10_out_V_data_7_V" xd:busTypeRef="axis" xd:dataWidth="16"/>
+  <xd:arg xd:name="layer10_out.data[8]" xd:originalName="layer10_out" xd:direction="out" xd:interfaceRef="layer10_out_V_data_8_V" xd:busTypeRef="axis" xd:dataWidth="16"/>
+  <xd:arg xd:name="layer10_out.data[9]" xd:originalName="layer10_out" xd:direction="out" xd:interfaceRef="layer10_out_V_data_9_V" xd:busTypeRef="axis" xd:dataWidth="16"/>
+  <xd:latencyEstimates xd:best-case="10246" xd:worst-case="10246" xd:average-case="10246"/>
+  <xd:resourceEstimates xd:LUT="32805" xd:FF="15738" xd:BRAM="14" xd:DSP="42"/>
+</xd:acceleratorMap>

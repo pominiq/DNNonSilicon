@@ -1,4 +1,225 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# Agenda feb 16 24
 
+Remember CAROLINE JOHNSON, has a master thesis and paper on HLS4ML
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# Agenda feb 14 24
+
+
+
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 30, 30, 32)        896       
+                                                                 
+ max_pooling2d (MaxPooling2  (None, 15, 15, 32)        0         
+ D)                                                              
+                                                                 
+ conv2d_1 (Conv2D)           (None, 13, 13, 64)        18496     
+                                                                 
+ max_pooling2d_1 (MaxPoolin  (None, 6, 6, 64)          0         
+ g2D)                                                            
+                                                                 
+ conv2d_2 (Conv2D)           (None, 4, 4, 64)          36928     
+                                                                 
+ flatten (Flatten)           (None, 1024)              0         
+                                                                 
+ dense (Dense)               (None, 64)                65600     
+                                                                 
+ dense_1 (Dense)             (None, 10)                650       
+                                                                 
+=================================================================
+Total params: 122570 (478.79 KB)
+Trainable params: 122570 (478.79 KB)
+Non-trainable params: 0 (0.00 Byte)
+Accuracy: 0.707099974155426
+
+
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ separable_conv2d (Separabl  (None, 30, 30, 32)        155       
+ eConv2D)                                                        
+                                                                 
+ max_pooling2d (MaxPooling2  (None, 7, 7, 32)          0         
+ D)                                                              
+                                                                 
+ batch_normalization (Batch  (None, 7, 7, 32)          128       
+ Normalization)                                                  
+                                                                 
+ separable_conv2d_1 (Separa  (None, 5, 5, 64)          2400      
+ bleConv2D)                                                      
+                                                                 
+ max_pooling2d_1 (MaxPoolin  (None, 2, 2, 64)          0         
+ g2D)                                                            
+                                                                 
+ batch_normalization_1 (Bat  (None, 2, 2, 64)          256       
+ chNormalization)                                                
+                                                                 
+ flatten (Flatten)           (None, 256)               0         
+                                                                 
+ dense (Dense)               (None, 10)                2570      
+                                                                 
+=================================================================
+Total params: 5509 (21.52 KB)
+Trainable params: 5317 (20.77 KB)
+Non-trainable params: 192 (768.00 Byte)
+Accuracy: 0.5701000094413757
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# Agenda feb 7 24
+
+
+
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ separable_conv2d (Separabl  (None, 26, 26, 4)         17        
+ eConv2D)                                                        
+                                                                 
+ batch_normalization (Batch  (None, 26, 26, 4)         16        
+ Normalization)                                                  
+                                                                 
+ activation (Activation)     (None, 26, 26, 4)         0         
+                                                                 
+ separable_conv2d_1 (Separa  (None, 24, 24, 8)         76        
+ bleConv2D)                                                      
+                                                                 
+ batch_normalization_1 (Bat  (None, 24, 24, 8)         32        
+ chNormalization)                                                
+                                                                 
+ activation_1 (Activation)   (None, 24, 24, 8)         0         
+                                                                 
+ max_pooling2d (MaxPooling2  (None, 12, 12, 8)         0         
+ D)                                                              
+                                                                 
+ flatten (Flatten)           (None, 1152)              0         
+                                                                 
+ dense (Dense)               (None, 10)                11530     
+                                                                 
+=================================================================
+Total params: 11671 (45.59 KB)
+Trainable params: 11647 (45.50 KB)
+Non-trainable params: 24 (96.00 Byte)
+_________________________________________________________________
+None
+Model evaluation         loss: 0.07      accuracy: 97.88%
+
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ separable_conv2d (Separabl  (None, 26, 26, 4)         17        
+ eConv2D)                                                        
+                                                                 
+ max_pooling2d (MaxPooling2  (None, 13, 13, 4)         0         
+ D)                                                              
+                                                                 
+ dropout (Dropout)           (None, 13, 13, 4)         0         
+                                                                 
+ flatten (Flatten)           (None, 676)               0         
+                                                                 
+ dense (Dense)               (None, 10)                6770      
+                                                                 
+=================================================================
+Total params: 6787 (26.51 KB)
+Trainable params: 6787 (26.51 KB)
+Non-trainable params: 0 (0.00 Byte)
+_____________________________________
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# Agenda jan 10 24
+
+The task list from the last date
+
+Some tasks
+
+    1. Create a flowchart for the flow with expected IO.
+    
+    2. Write the rest really.
+
+One new addition might be
+
+    0. Explore the historic perspective approach to Prior Works chapter
+    Note: Think it might be a great structure
+    
+    1. Create a table of clear specifications pre-project period as discussed with supervisors.
+
+# Summary of today:
+
+I believe I have created a great structure for the Prior Works chapter.
+
+To continue forward, I need to read 3 papers:
+
+VeriGOOD-ML:
+https://vlsicad.ucsd.edu/Publications/Conferences/387/c387.pdf
+
+SODA Synthesizer:
+https://woset-workshop.github.io/PDFs/2022/3-Tumeo-paper.pdf
+
+AI by AI:
+https://github.com/Baungarten-CINVESTAV/AI_by_AI
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# Agenda jan 8 24
+
+Created two pages for the Prior Work chapter. Looking pretty nice I think. The structure is fairly set.
+
+Some tasks
+
+    1. Create a flowchart for the flow with expected IO.
+    2. Write the rest really.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# Agenda jan 5 24
+
+I have finished most of introduction chapter. I am pretty happy with it
+
+Here is a todo for tomorrow (or some other date)
+
+    1. What should 'The open-source design space' chapter actually contain? Need to read up on this a bit more. 
+
+    MY BASIC IDEA 
+
+    Write from the standpoint of the Research Goals! If there is something in that is referred too. Use this space as an oppurtunity to talk about it!
+
+    Easy money
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# Agenda jan 4 24
+
+Okay, let us take a look at what has been accomplished:
+
+    1. Script is compiled into one, except for Openlane2 which runs in the dedicated nix-shell. hence:
+        TensorFlow -> HLS4ML -> Vivado HLS is in one script.
+
+    2. SLP model has succesfully been generated from start-to-finish, which means we have dense layers completely on-lock. 
+        Still some confusions surrounding Conv2D layers. Might have to try a single Conv2D layer and see what happens.
+    
+
+To do for today
+
+    1. Create Latex template
+    2. Fill it with some headlines
+    3. Some required reading on thesis structure
+    
+    
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+# Agenda dec 27 23
 
 RF = 8, io-stream, resource
 ================================================================

@@ -1,0 +1,380 @@
+
+
+================================================================
+== Vivado HLS Report for 'dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config2_mult_0_0_0_0_0'
+================================================================
+* Date:           Sat Feb 24 14:10:05 2024
+
+* Version:        2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)
+* Project:        myproject_prj
+* Solution:       solution1
+* Product family: virtexuplus
+* Target device:  xcu50-fsvh2104-2-e
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  | 25.00 ns | 4.075 ns |   3.12 ns  |
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+----------+----------+-----+-----+----------+
+    |  Latency (cycles) |  Latency (absolute) |  Interval | Pipeline |
+    |   min   |   max   |    min   |    max   | min | max |   Type   |
+    +---------+---------+----------+----------+-----+-----+----------+
+    |       10|       10| 0.250 us | 0.250 us |   11|   11| function |
+    +---------+---------+----------+----------+-----+-----+----------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        N/A
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 0
+ResetActiveHigh: 1
+IsCombinational: 0
+IsDatapathOnly: 0
+HasWiredReturn: 1
+HasMFsm: 2
+HasVarLatency: 0
+IsPipeline: 1
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
++ Individual pipeline summary: 
+  * Pipeline-0: initiation interval (II) = 11, depth = 11
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states : 11
+* Pipeline : 1
+  Pipeline-0 : II = 11, D = 11, States = { 1 2 3 4 5 6 7 8 9 10 11 }
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 2 
+2 --> 3 
+3 --> 4 
+4 --> 5 
+5 --> 6 
+6 --> 7 
+7 --> 8 
+8 --> 9 
+9 --> 10 
+10 --> 11 
+11 --> 
+
+* FSM state operations: 
+
+State 1 <SV = 0> <Delay = 1.94>
+ST_1 : Operation 12 [1/1] (0.00ns)   --->   "%data_0_V_read_2 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_0_V_read)" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 12 'read' 'data_0_V_read_2' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 13 [1/1] (0.00ns)   --->   "%sext_ln1116_cast = sext i16 %data_0_V_read_2 to i26" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 13 'sext' 'sext_ln1116_cast' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 14 [1/1] (1.94ns)   --->   "%mul_ln1118 = mul i26 %sext_ln1116_cast, -718" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 14 'mul' 'mul_ln1118' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 15 [1/1] (0.00ns)   --->   "%trunc_ln = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 15 'partselect' 'trunc_ln' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 16 [1/1] (1.94ns)   --->   "%mul_ln1118_283 = mul i26 %sext_ln1116_cast, -302" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 16 'mul' 'mul_ln1118_283' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 17 [1/1] (0.00ns)   --->   "%trunc_ln708_s = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_283, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 17 'partselect' 'trunc_ln708_s' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 18 [1/1] (1.94ns)   --->   "%mul_ln1118_284 = mul i26 %sext_ln1116_cast, 1036" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 18 'mul' 'mul_ln1118_284' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_1 : Operation 19 [1/1] (0.00ns)   --->   "%trunc_ln708_155 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_284, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 19 'partselect' 'trunc_ln708_155' <Predicate = true> <Delay = 0.00>
+
+State 2 <SV = 1> <Delay = 2.72>
+ST_2 : Operation 20 [1/1] (0.00ns)   --->   "%data_1_V_read_2 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_1_V_read)" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 20 'read' 'data_1_V_read_2' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 21 [1/1] (1.94ns)   --->   "%mul_ln1118_285 = mul i26 %sext_ln1116_cast, 1203" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 21 'mul' 'mul_ln1118_285' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 22 [1/1] (0.00ns)   --->   "%trunc_ln708_156 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_285, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 22 'partselect' 'trunc_ln708_156' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 23 [1/1] (0.00ns)   --->   "%sext_ln1116_76_cast8_cast51 = sext i16 %data_1_V_read_2 to i23" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 23 'sext' 'sext_ln1116_76_cast8_cast51' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 24 [1/1] (0.00ns)   --->   "%sext_ln1116_76_cast = sext i16 %data_1_V_read_2 to i26" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 24 'sext' 'sext_ln1116_76_cast' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 25 [1/1] (1.94ns)   --->   "%mul_ln1118_286 = mul i26 %sext_ln1116_76_cast, 730" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 25 'mul' 'mul_ln1118_286' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 26 [1/1] (0.00ns)   --->   "%trunc_ln708_157 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_286, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 26 'partselect' 'trunc_ln708_157' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 27 [1/1] (1.94ns)   --->   "%mul_ln1118_287 = mul i26 %sext_ln1116_76_cast, -1148" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 27 'mul' 'mul_ln1118_287' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 28 [1/1] (0.00ns)   --->   "%trunc_ln708_158 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_287, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 28 'partselect' 'trunc_ln708_158' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 29 [1/1] (0.00ns)   --->   "%shl_ln = call i22 @_ssdm_op_BitConcatenate.i22.i16.i6(i16 %data_1_V_read_2, i6 0)" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 29 'bitconcatenate' 'shl_ln' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 30 [1/1] (0.00ns)   --->   "%sext_ln1118 = sext i22 %shl_ln to i23" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 30 'sext' 'sext_ln1118' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 31 [1/1] (0.00ns) (grouped into TernaryAdder)   --->   "%sub_ln1118 = sub i23 0, %sext_ln1118" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 31 'sub' 'sub_ln1118' <Predicate = true> <Delay = 0.00> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_2 : Operation 32 [1/1] (0.69ns) (root node of TernaryAdder)   --->   "%sub_ln1118_34 = sub i23 %sub_ln1118, %sext_ln1116_76_cast8_cast51" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 32 'sub' 'sub_ln1118_34' <Predicate = true> <Delay = 0.69> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_2 : Operation 33 [1/1] (0.00ns)   --->   "%tmp = call i13 @_ssdm_op_PartSelect.i13.i23.i32.i32(i23 %sub_ln1118_34, i32 10, i32 22)" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 33 'partselect' 'tmp' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 34 [1/1] (0.78ns)   --->   "%add_ln703 = add i16 %trunc_ln, %trunc_ln708_157" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 34 'add' 'add_ln703' <Predicate = true> <Delay = 0.78> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 0.75> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 35 [1/1] (0.78ns)   --->   "%add_ln703_327 = add i16 %trunc_ln708_s, %trunc_ln708_158" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 35 'add' 'add_ln703_327' <Predicate = true> <Delay = 0.78> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 0.75> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+
+State 3 <SV = 2> <Delay = 2.72>
+ST_3 : Operation 36 [1/1] (0.00ns)   --->   "%data_2_V_read_2 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_2_V_read)" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 36 'read' 'data_2_V_read_2' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 37 [1/1] (1.94ns)   --->   "%mul_ln1118_288 = mul i26 %sext_ln1116_76_cast, -362" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 37 'mul' 'mul_ln1118_288' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_3 : Operation 38 [1/1] (0.00ns)   --->   "%trunc_ln708_159 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_288, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 38 'partselect' 'trunc_ln708_159' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 39 [1/1] (0.00ns)   --->   "%sext_ln1116_77_cast = sext i16 %data_2_V_read_2 to i26" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 39 'sext' 'sext_ln1116_77_cast' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 40 [1/1] (1.94ns)   --->   "%mul_ln1118_289 = mul i26 %sext_ln1116_77_cast, 1029" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 40 'mul' 'mul_ln1118_289' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_3 : Operation 41 [1/1] (0.00ns)   --->   "%trunc_ln708_160 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_289, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 41 'partselect' 'trunc_ln708_160' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 42 [1/1] (1.94ns)   --->   "%mul_ln1118_290 = mul i26 %sext_ln1116_77_cast, -968" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 42 'mul' 'mul_ln1118_290' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_3 : Operation 43 [1/1] (0.00ns)   --->   "%trunc_ln708_161 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_290, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 43 'partselect' 'trunc_ln708_161' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 44 [1/1] (0.78ns)   --->   "%add_ln703_345 = add i16 %trunc_ln708_156, %trunc_ln708_159" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 44 'add' 'add_ln703_345' <Predicate = true> <Delay = 0.78> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 0.75> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+
+State 4 <SV = 3> <Delay = 2.72>
+ST_4 : Operation 45 [1/1] (0.00ns)   --->   "%data_3_V_read_2 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_3_V_read)" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 45 'read' 'data_3_V_read_2' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 46 [1/1] (1.94ns)   --->   "%mul_ln1118_291 = mul i26 %sext_ln1116_77_cast, -967" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 46 'mul' 'mul_ln1118_291' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_4 : Operation 47 [1/1] (0.00ns)   --->   "%trunc_ln708_162 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_291, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 47 'partselect' 'trunc_ln708_162' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 48 [1/1] (1.94ns)   --->   "%mul_ln1118_292 = mul i26 %sext_ln1116_77_cast, -776" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 48 'mul' 'mul_ln1118_292' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_4 : Operation 49 [1/1] (0.00ns)   --->   "%trunc_ln708_163 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_292, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 49 'partselect' 'trunc_ln708_163' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 50 [1/1] (0.00ns)   --->   "%sext_ln1116_78_cast7 = sext i16 %data_3_V_read_2 to i26" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 50 'sext' 'sext_ln1116_78_cast7' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 51 [1/1] (0.00ns)   --->   "%shl_ln1118_s = call i21 @_ssdm_op_BitConcatenate.i21.i16.i5(i16 %data_3_V_read_2, i5 0)" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 51 'bitconcatenate' 'shl_ln1118_s' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 52 [1/1] (0.00ns)   --->   "%sext_ln1118_174 = sext i21 %shl_ln1118_s to i22" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 52 'sext' 'sext_ln1118_174' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 53 [1/1] (0.00ns)   --->   "%shl_ln1118_56 = call i17 @_ssdm_op_BitConcatenate.i17.i16.i1(i16 %data_3_V_read_2, i1 false)" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 53 'bitconcatenate' 'shl_ln1118_56' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 54 [1/1] (0.00ns)   --->   "%sext_ln1118_175 = sext i17 %shl_ln1118_56 to i22" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 54 'sext' 'sext_ln1118_175' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 55 [1/1] (0.81ns)   --->   "%sub_ln1118_35 = sub i22 %sext_ln1118_174, %sext_ln1118_175" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 55 'sub' 'sub_ln1118_35' <Predicate = true> <Delay = 0.81> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 0.75> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_4 : Operation 56 [1/1] (0.00ns)   --->   "%trunc_ln708_164 = call i12 @_ssdm_op_PartSelect.i12.i22.i32.i32(i22 %sub_ln1118_35, i32 10, i32 21)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 56 'partselect' 'trunc_ln708_164' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 57 [1/1] (1.94ns)   --->   "%mul_ln1118_293 = mul i26 %sext_ln1116_78_cast7, 502" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 57 'mul' 'mul_ln1118_293' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_4 : Operation 58 [1/1] (0.00ns)   --->   "%trunc_ln708_165 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_293, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 58 'partselect' 'trunc_ln708_165' <Predicate = true> <Delay = 0.00>
+ST_4 : Operation 59 [1/1] (0.78ns)   --->   "%add_ln703_336 = add i16 %trunc_ln708_155, %trunc_ln708_162" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 59 'add' 'add_ln703_336' <Predicate = true> <Delay = 0.78> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 0.75> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+
+State 5 <SV = 4> <Delay = 2.69>
+ST_5 : Operation 60 [1/1] (0.00ns)   --->   "%data_4_V_read_2 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_4_V_read)" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 60 'read' 'data_4_V_read_2' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 61 [1/1] (0.00ns)   --->   "%sext_ln1118_176 = sext i12 %trunc_ln708_164 to i13" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 61 'sext' 'sext_ln1118_176' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 62 [1/1] (1.94ns)   --->   "%mul_ln1118_294 = mul i26 %sext_ln1116_78_cast7, 905" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 62 'mul' 'mul_ln1118_294' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_5 : Operation 63 [1/1] (0.00ns)   --->   "%trunc_ln708_166 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_294, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 63 'partselect' 'trunc_ln708_166' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 64 [1/1] (1.94ns)   --->   "%mul_ln1118_295 = mul i26 %sext_ln1116_78_cast7, 466" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 64 'mul' 'mul_ln1118_295' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_5 : Operation 65 [1/1] (0.00ns)   --->   "%trunc_ln708_167 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_295, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 65 'partselect' 'trunc_ln708_167' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 66 [1/1] (0.00ns)   --->   "%sext_ln1116_79_cast = sext i16 %data_4_V_read_2 to i23" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 66 'sext' 'sext_ln1116_79_cast' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 67 [1/1] (1.94ns)   --->   "%mul_ln1118_296 = mul i23 %sext_ln1116_79_cast, 51" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 67 'mul' 'mul_ln1118_296' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_5 : Operation 68 [1/1] (0.00ns)   --->   "%trunc_ln708_168 = call i13 @_ssdm_op_PartSelect.i13.i23.i32.i32(i23 %mul_ln1118_296, i32 10, i32 22)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 68 'partselect' 'trunc_ln708_168' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 69 [1/1] (0.00ns)   --->   "%sext_ln1118_177 = sext i13 %trunc_ln708_168 to i14" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 69 'sext' 'sext_ln1118_177' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 70 [1/1] (0.00ns)   --->   "%shl_ln1118_57 = call i25 @_ssdm_op_BitConcatenate.i25.i16.i9(i16 %data_4_V_read_2, i9 0)" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 70 'bitconcatenate' 'shl_ln1118_57' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 71 [1/1] (0.00ns)   --->   "%sext_ln1118_179 = sext i25 %shl_ln1118_57 to i26" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 71 'sext' 'sext_ln1118_179' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 72 [1/1] (0.00ns)   --->   "%shl_ln1118_58 = call i20 @_ssdm_op_BitConcatenate.i20.i16.i4(i16 %data_4_V_read_2, i4 0)" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 72 'bitconcatenate' 'shl_ln1118_58' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 73 [1/1] (0.00ns)   --->   "%sext_ln1118_180 = sext i20 %shl_ln1118_58 to i26" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 73 'sext' 'sext_ln1118_180' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 74 [1/1] (0.83ns)   --->   "%add_ln1118 = add i26 %sext_ln1118_179, %sext_ln1118_180" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 74 'add' 'add_ln1118' <Predicate = true> <Delay = 0.83> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 0.75> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_5 : Operation 75 [1/1] (0.00ns)   --->   "%trunc_ln708_171 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %add_ln1118, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 75 'partselect' 'trunc_ln708_171' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 76 [1/1] (0.74ns)   --->   "%add_ln703_323 = add i13 %sext_ln1118_176, 3" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 76 'add' 'add_ln703_323' <Predicate = true> <Delay = 0.74> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 0.75> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_5 : Operation 77 [1/1] (0.00ns)   --->   "%sext_ln703 = sext i13 %add_ln703_323 to i14" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 77 'sext' 'sext_ln703' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 78 [1/1] (0.75ns)   --->   "%add_ln703_324 = add i14 %sext_ln703, %sext_ln1118_177" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 78 'add' 'add_ln703_324' <Predicate = true> <Delay = 0.75> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 0.75> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_5 : Operation 79 [1/1] (0.00ns) (grouped into TernaryAdder)   --->   "%add_ln703_346 = add i16 %trunc_ln708_167, %trunc_ln708_171" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 79 'add' 'add_ln703_346' <Predicate = true> <Delay = 0.00> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_5 : Operation 80 [1/1] (0.67ns) (root node of TernaryAdder)   --->   "%add_ln703_347 = add i16 %add_ln703_346, %trunc_ln708_163" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 80 'add' 'add_ln703_347' <Predicate = true> <Delay = 0.67> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+
+State 6 <SV = 5> <Delay = 2.63>
+ST_6 : Operation 81 [1/1] (0.00ns)   --->   "%data_5_V_read_2 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_5_V_read)" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 81 'read' 'data_5_V_read_2' <Predicate = true> <Delay = 0.00>
+ST_6 : Operation 82 [1/1] (0.00ns)   --->   "%sext_ln1118_173 = sext i13 %tmp to i15" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 82 'sext' 'sext_ln1118_173' <Predicate = true> <Delay = 0.00>
+ST_6 : Operation 83 [1/1] (0.00ns)   --->   "%sext_ln1116_79_cast6 = sext i16 %data_4_V_read_2 to i24" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 83 'sext' 'sext_ln1116_79_cast6' <Predicate = true> <Delay = 0.00>
+ST_6 : Operation 84 [1/1] (0.00ns)   --->   "%sext_ln1116_79_cast5 = sext i16 %data_4_V_read_2 to i26" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 84 'sext' 'sext_ln1116_79_cast5' <Predicate = true> <Delay = 0.00>
+ST_6 : Operation 85 [1/1] (1.94ns)   --->   "%mul_ln1118_297 = mul i26 %sext_ln1116_79_cast5, -629" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 85 'mul' 'mul_ln1118_297' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_6 : Operation 86 [1/1] (0.00ns)   --->   "%trunc_ln708_169 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_297, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 86 'partselect' 'trunc_ln708_169' <Predicate = true> <Delay = 0.00>
+ST_6 : Operation 87 [1/1] (1.94ns)   --->   "%mul_ln1118_298 = mul i24 %sext_ln1116_79_cast6, -93" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 87 'mul' 'mul_ln1118_298' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_6 : Operation 88 [1/1] (0.00ns)   --->   "%trunc_ln708_170 = call i14 @_ssdm_op_PartSelect.i14.i24.i32.i32(i24 %mul_ln1118_298, i32 10, i32 23)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 88 'partselect' 'trunc_ln708_170' <Predicate = true> <Delay = 0.00>
+ST_6 : Operation 89 [1/1] (0.00ns)   --->   "%sext_ln1118_178 = sext i14 %trunc_ln708_170 to i15" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 89 'sext' 'sext_ln1118_178' <Predicate = true> <Delay = 0.00>
+ST_6 : Operation 90 [1/1] (0.00ns)   --->   "%sext_ln1116_80_cast = sext i16 %data_5_V_read_2 to i26" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 90 'sext' 'sext_ln1116_80_cast' <Predicate = true> <Delay = 0.00>
+ST_6 : Operation 91 [1/1] (1.94ns)   --->   "%mul_ln1118_299 = mul i26 %sext_ln1116_80_cast, 543" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 91 'mul' 'mul_ln1118_299' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_6 : Operation 92 [1/1] (0.00ns)   --->   "%trunc_ln708_172 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_299, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 92 'partselect' 'trunc_ln708_172' <Predicate = true> <Delay = 0.00>
+ST_6 : Operation 93 [1/1] (0.00ns) (grouped into TernaryAdder)   --->   "%add_ln703_328 = add i16 %trunc_ln708_165, %trunc_ln708_169" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 93 'add' 'add_ln703_328' <Predicate = true> <Delay = 0.00> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_6 : Operation 94 [1/1] (0.67ns) (root node of TernaryAdder)   --->   "%add_ln703_329 = add i16 %add_ln703_328, %trunc_ln708_161" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 94 'add' 'add_ln703_329' <Predicate = true> <Delay = 0.67> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_6 : Operation 95 [1/1] (0.00ns) (grouped into TernaryAdder)   --->   "%add_ln703_341 = add i15 %sext_ln1118_178, -594" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 95 'add' 'add_ln703_341' <Predicate = true> <Delay = 0.00> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_6 : Operation 96 [1/1] (0.69ns) (root node of TernaryAdder)   --->   "%add_ln703_342 = add i15 %add_ln703_341, %sext_ln1118_173" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 96 'add' 'add_ln703_342' <Predicate = true> <Delay = 0.69> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+
+State 7 <SV = 6> <Delay = 2.69>
+ST_7 : Operation 97 [1/1] (0.00ns)   --->   "%data_6_V_read_2 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_6_V_read)" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 97 'read' 'data_6_V_read_2' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 98 [1/1] (0.00ns)   --->   "%sext_ln1116_80_cast4 = sext i16 %data_5_V_read_2 to i23" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 98 'sext' 'sext_ln1116_80_cast4' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 99 [1/1] (0.00ns)   --->   "%shl_ln1118_59 = call i19 @_ssdm_op_BitConcatenate.i19.i16.i3(i16 %data_5_V_read_2, i3 0)" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 99 'bitconcatenate' 'shl_ln1118_59' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 100 [1/1] (0.00ns)   --->   "%sext_ln1118_181 = sext i19 %shl_ln1118_59 to i20" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 100 'sext' 'sext_ln1118_181' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 101 [1/1] (0.00ns) (grouped into TernaryAdder)   --->   "%sub_ln1118_36 = sub i20 0, %sext_ln1118_181" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 101 'sub' 'sub_ln1118_36' <Predicate = true> <Delay = 0.00> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_7 : Operation 102 [1/1] (0.00ns)   --->   "%shl_ln1118_60 = call i17 @_ssdm_op_BitConcatenate.i17.i16.i1(i16 %data_5_V_read_2, i1 false)" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 102 'bitconcatenate' 'shl_ln1118_60' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 103 [1/1] (0.00ns)   --->   "%sext_ln1118_182 = sext i17 %shl_ln1118_60 to i20" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 103 'sext' 'sext_ln1118_182' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 104 [1/1] (0.68ns) (root node of TernaryAdder)   --->   "%sub_ln1118_37 = sub i20 %sub_ln1118_36, %sext_ln1118_182" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 104 'sub' 'sub_ln1118_37' <Predicate = true> <Delay = 0.68> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_7 : Operation 105 [1/1] (0.00ns)   --->   "%tmp_46 = call i10 @_ssdm_op_PartSelect.i10.i20.i32.i32(i20 %sub_ln1118_37, i32 10, i32 19)" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 105 'partselect' 'tmp_46' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 106 [1/1] (1.94ns)   --->   "%mul_ln1118_300 = mul i26 %sext_ln1116_80_cast, -484" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 106 'mul' 'mul_ln1118_300' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_7 : Operation 107 [1/1] (0.00ns)   --->   "%trunc_ln708_173 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_300, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 107 'partselect' 'trunc_ln708_173' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 108 [1/1] (1.94ns)   --->   "%mul_ln1118_301 = mul i23 %sext_ln1116_80_cast4, -57" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 108 'mul' 'mul_ln1118_301' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_7 : Operation 109 [1/1] (0.00ns)   --->   "%trunc_ln708_174 = call i13 @_ssdm_op_PartSelect.i13.i23.i32.i32(i23 %mul_ln1118_301, i32 10, i32 22)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 109 'partselect' 'trunc_ln708_174' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 110 [1/1] (0.00ns)   --->   "%p_cast43 = sext i13 %trunc_ln708_174 to i14" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 110 'sext' 'p_cast43' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 111 [1/1] (0.00ns)   --->   "%sext_ln1116_81_cast = sext i16 %data_6_V_read_2 to i26" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 111 'sext' 'sext_ln1116_81_cast' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 112 [1/1] (1.94ns)   --->   "%mul_ln1118_302 = mul i26 %sext_ln1116_81_cast, 1253" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 112 'mul' 'mul_ln1118_302' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_7 : Operation 113 [1/1] (0.00ns)   --->   "%trunc_ln708_175 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_302, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 113 'partselect' 'trunc_ln708_175' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 114 [1/1] (0.00ns)   --->   "%shl_ln1118_61 = call i20 @_ssdm_op_BitConcatenate.i20.i16.i4(i16 %data_6_V_read_2, i4 0)" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 114 'bitconcatenate' 'shl_ln1118_61' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 115 [1/1] (0.00ns)   --->   "%sext_ln1118_184 = sext i20 %shl_ln1118_61 to i21" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 115 'sext' 'sext_ln1118_184' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 116 [1/1] (0.00ns) (grouped into TernaryAdder)   --->   "%sub_ln1118_38 = sub i21 0, %sext_ln1118_184" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 116 'sub' 'sub_ln1118_38' <Predicate = true> <Delay = 0.00> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_7 : Operation 117 [1/1] (0.00ns)   --->   "%shl_ln1118_62 = call i18 @_ssdm_op_BitConcatenate.i18.i16.i2(i16 %data_6_V_read_2, i2 0)" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 117 'bitconcatenate' 'shl_ln1118_62' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 118 [1/1] (0.00ns)   --->   "%sext_ln1118_185 = sext i18 %shl_ln1118_62 to i21" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 118 'sext' 'sext_ln1118_185' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 119 [1/1] (0.69ns) (root node of TernaryAdder)   --->   "%sub_ln1118_39 = sub i21 %sub_ln1118_38, %sext_ln1118_185" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 119 'sub' 'sub_ln1118_39' <Predicate = true> <Delay = 0.69> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_7 : Operation 120 [1/1] (0.00ns)   --->   "%tmp_47 = call i11 @_ssdm_op_PartSelect.i11.i21.i32.i32(i21 %sub_ln1118_39, i32 10, i32 20)" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 120 'partselect' 'tmp_47' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 121 [1/1] (0.00ns)   --->   "%p_cast_cast = sext i11 %tmp_47 to i12" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 121 'sext' 'p_cast_cast' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 122 [1/1] (0.00ns) (grouped into TernaryAdder)   --->   "%add_ln703_319 = add i16 %trunc_ln708_172, %trunc_ln708_175" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 122 'add' 'add_ln703_319' <Predicate = true> <Delay = 0.00> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_7 : Operation 123 [1/1] (0.67ns) (root node of TernaryAdder)   --->   "%add_ln703_320 = add i16 %add_ln703_319, %trunc_ln708_160" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 123 'add' 'add_ln703_320' <Predicate = true> <Delay = 0.67> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_7 : Operation 124 [1/1] (0.73ns)   --->   "%add_ln703_350 = add i12 %p_cast_cast, -40" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 124 'add' 'add_ln703_350' <Predicate = true> <Delay = 0.73> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 0.75> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_7 : Operation 125 [1/1] (0.00ns)   --->   "%sext_ln703_71 = sext i12 %add_ln703_350 to i14" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 125 'sext' 'sext_ln703_71' <Predicate = true> <Delay = 0.00>
+ST_7 : Operation 126 [1/1] (0.75ns)   --->   "%add_ln703_351 = add i14 %sext_ln703_71, %p_cast43" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 126 'add' 'add_ln703_351' <Predicate = true> <Delay = 0.75> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 0.75> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+
+State 8 <SV = 7> <Delay = 2.61>
+ST_8 : Operation 127 [1/1] (0.00ns)   --->   "%data_7_V_read_2 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_7_V_read)" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 127 'read' 'data_7_V_read_2' <Predicate = true> <Delay = 0.00>
+ST_8 : Operation 128 [1/1] (1.94ns)   --->   "%mul_ln1118_303 = mul i26 %sext_ln1116_81_cast, 965" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 128 'mul' 'mul_ln1118_303' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_8 : Operation 129 [1/1] (0.00ns)   --->   "%trunc_ln708_176 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_303, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 129 'partselect' 'trunc_ln708_176' <Predicate = true> <Delay = 0.00>
+ST_8 : Operation 130 [1/1] (1.94ns)   --->   "%mul_ln1118_304 = mul i26 %sext_ln1116_81_cast, 929" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 130 'mul' 'mul_ln1118_304' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_8 : Operation 131 [1/1] (0.00ns)   --->   "%trunc_ln708_177 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_304, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 131 'partselect' 'trunc_ln708_177' <Predicate = true> <Delay = 0.00>
+ST_8 : Operation 132 [1/1] (0.00ns)   --->   "%sext_ln1116_82_cast = sext i16 %data_7_V_read_2 to i26" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 132 'sext' 'sext_ln1116_82_cast' <Predicate = true> <Delay = 0.00>
+ST_8 : Operation 133 [1/1] (1.94ns)   --->   "%mul_ln1118_305 = mul i26 %sext_ln1116_82_cast, 572" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 133 'mul' 'mul_ln1118_305' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_8 : Operation 134 [1/1] (0.00ns)   --->   "%trunc_ln708_178 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_305, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 134 'partselect' 'trunc_ln708_178' <Predicate = true> <Delay = 0.00>
+ST_8 : Operation 135 [1/1] (0.00ns) (grouped into TernaryAdder)   --->   "%add_ln703_337 = add i16 %trunc_ln708_173, %trunc_ln708_177" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 135 'add' 'add_ln703_337' <Predicate = true> <Delay = 0.00> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_8 : Operation 136 [1/1] (0.67ns) (root node of TernaryAdder)   --->   "%add_ln703_338 = add i16 %add_ln703_337, %trunc_ln708_166" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 136 'add' 'add_ln703_338' <Predicate = true> <Delay = 0.67> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+
+State 9 <SV = 8> <Delay = 1.94>
+ST_9 : Operation 137 [1/1] (0.00ns)   --->   "%sext_ln1116_82_cast1 = sext i16 %data_7_V_read_2 to i25" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 137 'sext' 'sext_ln1116_82_cast1' <Predicate = true> <Delay = 0.00>
+ST_9 : Operation 138 [1/1] (1.94ns)   --->   "%mul_ln1118_306 = mul i26 %sext_ln1116_82_cast, 956" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 138 'mul' 'mul_ln1118_306' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_9 : Operation 139 [1/1] (0.00ns)   --->   "%trunc_ln708_179 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_306, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 139 'partselect' 'trunc_ln708_179' <Predicate = true> <Delay = 0.00>
+ST_9 : Operation 140 [1/1] (1.94ns)   --->   "%mul_ln1118_307 = mul i26 %sext_ln1116_82_cast, -721" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 140 'mul' 'mul_ln1118_307' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_9 : Operation 141 [1/1] (0.00ns)   --->   "%trunc_ln708_180 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_307, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 141 'partselect' 'trunc_ln708_180' <Predicate = true> <Delay = 0.00>
+ST_9 : Operation 142 [1/1] (1.94ns)   --->   "%mul_ln1118_308 = mul i25 %sext_ln1116_82_cast1, 236" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 142 'mul' 'mul_ln1118_308' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_9 : Operation 143 [1/1] (0.00ns)   --->   "%trunc_ln708_181 = call i15 @_ssdm_op_PartSelect.i15.i25.i32.i32(i25 %mul_ln1118_308, i32 10, i32 24)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 143 'partselect' 'trunc_ln708_181' <Predicate = true> <Delay = 0.00>
+
+State 10 <SV = 9> <Delay = 4.07>
+ST_10 : Operation 144 [1/1] (0.00ns)   --->   "%data_8_V_read_2 = call i16 @_ssdm_op_Read.ap_auto.i16(i16 %data_8_V_read)" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 144 'read' 'data_8_V_read_2' <Predicate = true> <Delay = 0.00>
+ST_10 : Operation 145 [1/1] (0.00ns)   --->   "%sext_ln1118_183 = sext i10 %tmp_46 to i11" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 145 'sext' 'sext_ln1118_183' <Predicate = true> <Delay = 0.00>
+ST_10 : Operation 146 [1/1] (0.00ns)   --->   "%sext_ln1116_83_cast = sext i16 %data_8_V_read_2 to i26" [firmware/nnet_utils/nnet_dense_latency.h:13]   --->   Operation 146 'sext' 'sext_ln1116_83_cast' <Predicate = true> <Delay = 0.00>
+ST_10 : Operation 147 [1/1] (1.94ns)   --->   "%mul_ln1118_309 = mul i26 %sext_ln1116_83_cast, 553" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 147 'mul' 'mul_ln1118_309' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_10 : Operation 148 [1/1] (0.00ns)   --->   "%trunc_ln708_182 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_309, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 148 'partselect' 'trunc_ln708_182' <Predicate = true> <Delay = 0.00>
+ST_10 : Operation 149 [1/1] (1.94ns)   --->   "%mul_ln1118_310 = mul i26 %sext_ln1116_83_cast, 930" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 149 'mul' 'mul_ln1118_310' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_10 : Operation 150 [1/1] (0.00ns)   --->   "%trunc_ln708_183 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_310, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 150 'partselect' 'trunc_ln708_183' <Predicate = true> <Delay = 0.00>
+ST_10 : Operation 151 [1/1] (1.94ns)   --->   "%mul_ln1118_311 = mul i26 %sext_ln1116_83_cast, -339" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 151 'mul' 'mul_ln1118_311' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_10 : Operation 152 [1/1] (0.00ns)   --->   "%trunc_ln708_184 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_311, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 152 'partselect' 'trunc_ln708_184' <Predicate = true> <Delay = 0.00>
+ST_10 : Operation 153 [1/1] (0.00ns) (grouped into TernaryAdder)   --->   "%add_ln703_321 = add i16 %add_ln703_320, %add_ln703" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 153 'add' 'add_ln703_321' <Predicate = true> <Delay = 0.00> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_10 : Operation 154 [1/1] (0.00ns) (grouped into TernaryAdder)   --->   "%add_ln703_322 = add i16 %trunc_ln708_178, %trunc_ln708_182" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 154 'add' 'add_ln703_322' <Predicate = true> <Delay = 0.00> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_10 : Operation 155 [1/1] (0.00ns)   --->   "%sext_ln703_68 = sext i14 %add_ln703_324 to i16" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 155 'sext' 'sext_ln703_68' <Predicate = true> <Delay = 0.00>
+ST_10 : Operation 156 [1/1] (0.67ns) (root node of TernaryAdder)   --->   "%add_ln703_325 = add i16 %sext_ln703_68, %add_ln703_322" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 156 'add' 'add_ln703_325' <Predicate = true> <Delay = 0.67> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_10 : Operation 157 [1/1] (0.67ns) (root node of TernaryAdder)   --->   "%add_ln703_326 = add i16 %add_ln703_325, %add_ln703_321" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 157 'add' 'add_ln703_326' <Predicate = true> <Delay = 0.67> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_10 : Operation 158 [1/1] (0.00ns) (grouped into TernaryAdder)   --->   "%add_ln703_330 = add i16 %add_ln703_329, %add_ln703_327" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 158 'add' 'add_ln703_330' <Predicate = true> <Delay = 0.00> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_10 : Operation 159 [1/1] (0.00ns) (grouped into TernaryAdder)   --->   "%add_ln703_331 = add i16 %trunc_ln708_176, %trunc_ln708_179" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 159 'add' 'add_ln703_331' <Predicate = true> <Delay = 0.00> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_10 : Operation 160 [1/1] (0.72ns)   --->   "%add_ln703_332 = add i11 %sext_ln1118_183, -8" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 160 'add' 'add_ln703_332' <Predicate = true> <Delay = 0.72> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 0.75> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_10 : Operation 161 [1/1] (0.00ns)   --->   "%sext_ln703_69 = sext i11 %add_ln703_332 to i16" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 161 'sext' 'sext_ln703_69' <Predicate = true> <Delay = 0.00>
+ST_10 : Operation 162 [1/1] (0.78ns)   --->   "%add_ln703_333 = add i16 %sext_ln703_69, %trunc_ln708_183" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 162 'add' 'add_ln703_333' <Predicate = true> <Delay = 0.78> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 0.75> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_10 : Operation 163 [1/1] (0.67ns) (root node of TernaryAdder)   --->   "%add_ln703_334 = add i16 %add_ln703_333, %add_ln703_331" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 163 'add' 'add_ln703_334' <Predicate = true> <Delay = 0.67> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_10 : Operation 164 [1/1] (0.67ns) (root node of TernaryAdder)   --->   "%acc_1_V = add i16 %add_ln703_334, %add_ln703_330" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 164 'add' 'acc_1_V' <Predicate = true> <Delay = 0.67> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_10 : Operation 165 [1/1] (0.00ns) (grouped into TernaryAdder)   --->   "%add_ln703_339 = add i16 %add_ln703_338, %add_ln703_336" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 165 'add' 'add_ln703_339' <Predicate = true> <Delay = 0.00> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_10 : Operation 166 [1/1] (0.00ns) (grouped into TernaryAdder)   --->   "%add_ln703_340 = add i16 %trunc_ln708_180, %trunc_ln708_184" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 166 'add' 'add_ln703_340' <Predicate = true> <Delay = 0.00> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_10 : Operation 167 [1/1] (0.00ns)   --->   "%sext_ln703_70 = sext i15 %add_ln703_342 to i16" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 167 'sext' 'sext_ln703_70' <Predicate = true> <Delay = 0.00>
+ST_10 : Operation 168 [1/1] (0.67ns) (root node of TernaryAdder)   --->   "%add_ln703_343 = add i16 %sext_ln703_70, %add_ln703_340" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 168 'add' 'add_ln703_343' <Predicate = true> <Delay = 0.67> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_10 : Operation 169 [1/1] (0.67ns) (root node of TernaryAdder)   --->   "%acc_2_V = add i16 %add_ln703_343, %add_ln703_339" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 169 'add' 'acc_2_V' <Predicate = true> <Delay = 0.67> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+
+State 11 <SV = 10> <Delay = 3.29>
+ST_11 : Operation 170 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecPipeline(i32 16, i32 1, i32 1, i32 0, [1 x i8]* @p_str10) nounwind" [firmware/nnet_utils/nnet_dense_latency.h:26]   --->   Operation 170 'specpipeline' <Predicate = true> <Delay = 0.00>
+ST_11 : Operation 171 [1/1] (0.00ns)   --->   "call void (...)* @_ssdm_op_SpecResourceLimit(i32 3, [4 x i8]* @p_str24, [1 x i8]* @p_str10, [1 x i8]* @p_str10, [1 x i8]* @p_str10) nounwind" [firmware/nnet_utils/nnet_dense_latency.h:33]   --->   Operation 171 'specresourcelimit' <Predicate = true> <Delay = 0.00>
+ST_11 : Operation 172 [1/1] (0.00ns)   --->   "%sext_ln708_6 = sext i15 %trunc_ln708_181 to i16" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 172 'sext' 'sext_ln708_6' <Predicate = true> <Delay = 0.00>
+ST_11 : Operation 173 [1/1] (1.94ns)   --->   "%mul_ln1118_312 = mul i26 %sext_ln1116_83_cast, 1355" [firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 173 'mul' 'mul_ln1118_312' <Predicate = true> <Delay = 1.94> <Core = "Mul">   --->   Core 16 'Mul' <Latency = 0> <II = 1> <Delay = 1.94> <FuncUnit> <Opcode : 'mul'> <InPorts = 2> <OutPorts = 1>
+ST_11 : Operation 174 [1/1] (0.00ns)   --->   "%trunc_ln708_185 = call i16 @_ssdm_op_PartSelect.i16.i26.i32.i32(i26 %mul_ln1118_312, i32 10, i32 25)" [firmware/nnet_utils/nnet_dense_latency.h:42]   --->   Operation 174 'partselect' 'trunc_ln708_185' <Predicate = true> <Delay = 0.00>
+ST_11 : Operation 175 [1/1] (0.00ns) (grouped into TernaryAdder)   --->   "%add_ln703_348 = add i16 %add_ln703_347, %add_ln703_345" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 175 'add' 'add_ln703_348' <Predicate = true> <Delay = 0.00> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_11 : Operation 176 [1/1] (0.00ns) (grouped into TernaryAdder)   --->   "%add_ln703_349 = add i16 %trunc_ln708_185, %sext_ln708_6" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 176 'add' 'add_ln703_349' <Predicate = true> <Delay = 0.00> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_11 : Operation 177 [1/1] (0.00ns)   --->   "%sext_ln703_72 = sext i14 %add_ln703_351 to i16" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 177 'sext' 'sext_ln703_72' <Predicate = true> <Delay = 0.00>
+ST_11 : Operation 178 [1/1] (0.67ns) (root node of TernaryAdder)   --->   "%add_ln703_352 = add i16 %sext_ln703_72, %add_ln703_349" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 178 'add' 'add_ln703_352' <Predicate = true> <Delay = 0.67> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_11 : Operation 179 [1/1] (0.67ns) (root node of TernaryAdder)   --->   "%acc_3_V = add i16 %add_ln703_352, %add_ln703_348" [firmware/nnet_utils/nnet_dense_latency.h:58]   --->   Operation 179 'add' 'acc_3_V' <Predicate = true> <Delay = 0.67> <Core = "TAddSub">   --->   Core 83 'TAddSub' <Latency = 0> <II = 1> <Delay = 0.33> <IPBlock> <Opcode : 'add' 'sub'> <InPorts = 3> <OutPorts = 1> <Sync> <CReg>
+ST_11 : Operation 180 [1/1] (0.00ns)   --->   "%mrv = insertvalue { i16, i16, i16, i16 } undef, i16 %add_ln703_326, 0" [firmware/nnet_utils/nnet_dense_latency.h:68]   --->   Operation 180 'insertvalue' 'mrv' <Predicate = true> <Delay = 0.00>
+ST_11 : Operation 181 [1/1] (0.00ns)   --->   "%mrv_1 = insertvalue { i16, i16, i16, i16 } %mrv, i16 %acc_1_V, 1" [firmware/nnet_utils/nnet_dense_latency.h:68]   --->   Operation 181 'insertvalue' 'mrv_1' <Predicate = true> <Delay = 0.00>
+ST_11 : Operation 182 [1/1] (0.00ns)   --->   "%mrv_2 = insertvalue { i16, i16, i16, i16 } %mrv_1, i16 %acc_2_V, 2" [firmware/nnet_utils/nnet_dense_latency.h:68]   --->   Operation 182 'insertvalue' 'mrv_2' <Predicate = true> <Delay = 0.00>
+ST_11 : Operation 183 [1/1] (0.00ns)   --->   "%mrv_3 = insertvalue { i16, i16, i16, i16 } %mrv_2, i16 %acc_3_V, 3" [firmware/nnet_utils/nnet_dense_latency.h:68]   --->   Operation 183 'insertvalue' 'mrv_3' <Predicate = true> <Delay = 0.00>
+ST_11 : Operation 184 [1/1] (0.00ns)   --->   "ret { i16, i16, i16, i16 } %mrv_3" [firmware/nnet_utils/nnet_dense_latency.h:68]   --->   Operation 184 'ret' <Predicate = true> <Delay = 0.00>
+
+
+============================================================
++ Verbose Summary: Timing violations
+============================================================
+Target clock period: 25ns, clock uncertainty: 3.12ns.
+
+ <State 1>: 1.94ns
+The critical path consists of the following:
+	wire read on port 'data_0_V_read' (firmware/nnet_utils/nnet_dense_latency.h:13) [18]  (0 ns)
+	'mul' operation ('mul_ln1118', firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42) [22]  (1.94 ns)
+
+ <State 2>: 2.73ns
+The critical path consists of the following:
+	wire read on port 'data_1_V_read' (firmware/nnet_utils/nnet_dense_latency.h:13) [17]  (0 ns)
+	'mul' operation ('mul_ln1118_286', firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42) [32]  (1.94 ns)
+	'add' operation ('add_ln703', firmware/nnet_utils/nnet_dense_latency.h:58) [136]  (0.785 ns)
+
+ <State 3>: 2.73ns
+The critical path consists of the following:
+	'mul' operation ('mul_ln1118_288', firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42) [42]  (1.94 ns)
+	'add' operation ('add_ln703_345', firmware/nnet_utils/nnet_dense_latency.h:58) [167]  (0.785 ns)
+
+ <State 4>: 2.73ns
+The critical path consists of the following:
+	'mul' operation ('mul_ln1118_291', firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42) [49]  (1.94 ns)
+	'add' operation ('add_ln703_336', firmware/nnet_utils/nnet_dense_latency.h:58) [157]  (0.785 ns)
+
+ <State 5>: 2.69ns
+The critical path consists of the following:
+	wire read on port 'data_4_V_read' (firmware/nnet_utils/nnet_dense_latency.h:13) [14]  (0 ns)
+	'mul' operation ('mul_ln1118_296', firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42) [70]  (1.94 ns)
+	'add' operation ('add_ln703_324', firmware/nnet_utils/nnet_dense_latency.h:58) [143]  (0.755 ns)
+
+ <State 6>: 2.64ns
+The critical path consists of the following:
+	'mul' operation ('mul_ln1118_298', firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42) [75]  (1.94 ns)
+	'add' operation ('add_ln703_341', firmware/nnet_utils/nnet_dense_latency.h:58) [162]  (0 ns)
+	'add' operation ('add_ln703_342', firmware/nnet_utils/nnet_dense_latency.h:58) [163]  (0.695 ns)
+
+ <State 7>: 2.69ns
+The critical path consists of the following:
+	'mul' operation ('mul_ln1118_301', firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42) [98]  (1.94 ns)
+	'add' operation ('add_ln703_351', firmware/nnet_utils/nnet_dense_latency.h:58) [174]  (0.755 ns)
+
+ <State 8>: 2.62ns
+The critical path consists of the following:
+	'mul' operation ('mul_ln1118_304', firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42) [106]  (1.94 ns)
+	'add' operation ('add_ln703_337', firmware/nnet_utils/nnet_dense_latency.h:58) [158]  (0 ns)
+	'add' operation ('add_ln703_338', firmware/nnet_utils/nnet_dense_latency.h:58) [159]  (0.675 ns)
+
+ <State 9>: 1.94ns
+The critical path consists of the following:
+	'mul' operation ('mul_ln1118_308', firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42) [124]  (1.94 ns)
+
+ <State 10>: 4.08ns
+The critical path consists of the following:
+	wire read on port 'data_8_V_read' (firmware/nnet_utils/nnet_dense_latency.h:13) [10]  (0 ns)
+	'mul' operation ('mul_ln1118_310', firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42) [130]  (1.94 ns)
+	'add' operation ('add_ln703_333', firmware/nnet_utils/nnet_dense_latency.h:58) [154]  (0.785 ns)
+	'add' operation ('add_ln703_334', firmware/nnet_utils/nnet_dense_latency.h:58) [155]  (0.675 ns)
+	'add' operation ('acc[1].V', firmware/nnet_utils/nnet_dense_latency.h:58) [156]  (0.675 ns)
+
+ <State 11>: 3.29ns
+The critical path consists of the following:
+	'mul' operation ('mul_ln1118_312', firmware/nnet_utils/nnet_mult.h:73->firmware/nnet_utils/nnet_dense_latency.h:42) [134]  (1.94 ns)
+	'add' operation ('add_ln703_349', firmware/nnet_utils/nnet_dense_latency.h:58) [171]  (0 ns)
+	'add' operation ('add_ln703_352', firmware/nnet_utils/nnet_dense_latency.h:58) [176]  (0.675 ns)
+	'add' operation ('acc[3].V', firmware/nnet_utils/nnet_dense_latency.h:58) [177]  (0.675 ns)
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+N/A
+* FSMD analyzer results:
+  - Output states:
+ - Input state : 
+  - Chain level:
+	State 1
+	State 2
+	State 3
+	State 4
+	State 5
+	State 6
+	State 7
+	State 8
+	State 9
+	State 10
+	State 11
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+N/A
