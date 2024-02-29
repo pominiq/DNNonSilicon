@@ -1204,10 +1204,6 @@ Note: Har fixet yaml.dump problemet med følgende chat
 
 https://chat.openai.com/share/09846ae4-1046-4f36-be42-25a2d4518845
 
-        with open(model.config.get_output_dir() + '/' + config_filename, 'w') as file:
-            yaml_content = f"config: {model.config.config}\n"
-            file.write(yaml_content)
-
 Note: Mangler i HLS4ML
 
     - Visualisering (Tjek)

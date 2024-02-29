@@ -238,11 +238,11 @@
         },
         {
           "ModuleName": "relu_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_relu_config3_s",
-          "InstanceName": "call_ret1_relu_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_relu_config3_s_fu_139"
+          "InstanceName": "call_ret1_relu_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_relu_config3_s_fu_146"
         },
         {
           "ModuleName": "softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s",
-          "InstanceName": "grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_201"
+          "InstanceName": "grp_softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_fu_215"
         }
       ]
     },
@@ -296,12 +296,12 @@
         "Timing": {
           "Target": "25.00",
           "Uncertainty": "3.12",
-          "Estimate": "11.560"
+          "Estimate": "11.428"
         },
         "Area": {
-          "DSP48E": "78",
+          "DSP48E": "81",
           "FF": "0",
-          "LUT": "2397",
+          "LUT": "2328",
           "BRAM_18K": "0",
           "URAM": "0"
         }
@@ -322,7 +322,7 @@
         },
         "Area": {
           "FF": "0",
-          "LUT": "1624",
+          "LUT": "1820",
           "BRAM_18K": "0",
           "DSP48E": "0",
           "URAM": "0"
@@ -343,9 +343,9 @@
           "Estimate": "21.192"
         },
         "Area": {
-          "DSP48E": "71",
-          "FF": "161",
-          "LUT": "2072",
+          "DSP48E": "78",
+          "FF": "129",
+          "LUT": "2237",
           "BRAM_18K": "0",
           "URAM": "0"
         }
@@ -388,9 +388,9 @@
         },
         "Area": {
           "BRAM_18K": "3",
-          "DSP48E": "152",
-          "FF": "1214",
-          "LUT": "6495",
+          "DSP48E": "162",
+          "FF": "1294",
+          "LUT": "6787",
           "URAM": "0"
         }
       }
@@ -406,7 +406,7 @@
   },
   "GenData": {
     "DataVersion": "0.2",
-    "Time": "2024-02-24 16:03:35 CET",
+    "Time": "2024-02-29 16:01:26 CET",
     "ToolName": "vivado_hls",
     "ToolVersion": "2020.1"
   }

@@ -53,31 +53,29 @@ os.environ['PATH'] += os.pathsep + '/tools/Xilinx/Vivado/2020.1/bin'
 ###############################################################################################
 # Main function. Here the actual flow is run
 def main():    
-    # model filename without extension. Requires calling .json-file and weights.h5-file the same
-    # By default I have set it to the 16bit version as found in the subfolder directory
-
-    modelname =             "Depthwise_test_PR0_RF1"
+    # Used to load model from folder, or to save project with
+    modelname =             "Dummy_PR75_RF1"
 
     #Flow step variables
 
     #### Step 1
     train =                 True
-    pruning =               False
+    pruning =               True
 
     # List of example models
-    TEST =                  True        # For testing individual layers
-    DUMMY =                 False       # Used to test dense and activation layers
+    TEST =                  False        # For testing individual layers
+    DUMMY =                 True       # Used to test dense and activation layers
     MNIST =                 False       # Baseline CNN
-    YOLO =                  False       # Compatibility CNN with Separable Conv2D and pruning
+    CIFAR =                 False       # Compatibility CNN with Separable Conv2D and pruning
 
     #### Step 2
     hls_model_comparison =  True
     default_reuse_factor =  1           # Lowest is RF = 1
-    clock_period =          2.5         # in nanoseconds, 1 / 2.5e-9 = 400 MHz
+    clock_period =          25         # in nanoseconds, 1 / 2.5e-9 = 400 MHz
     
     #### Step 3
     backend =               'Vivado'
-    build =                 False
+    build =                 True
 
     #### Step 4
     # Not recommended
@@ -119,7 +117,7 @@ def main():
         test_images = scaler.transform(test_images.reshape(-1,4))
         
         if train == True:
-            model = create_example_model_IRIS(train_images, train_labels, test_images, test_labels)
+            model = create_example_model_IRIS(pruning, train_images, train_labels, test_images, test_labels)
 
     elif MNIST == True:
         # Tuple of NumPy arrays: (x_train, y_train), (x_test, y_test)
@@ -136,7 +134,7 @@ def main():
         if train == True:
             model = create_example_model_MNIST(train_images, train_labels, test_images, test_labels)
 
-    elif YOLO == True:
+    elif CIFAR == True:
         # Tuple of NumPy arrays: (x_train, y_train), (x_test, y_test)
         (train_images, train_labels), (test_images, test_labels) = cifar10.load_data()
         # Normalize pixel values to be between 0 and 1
@@ -145,7 +143,7 @@ def main():
         if train == True:
             print("___________________________________\nTRAINING MODELS\n___________________________________")
             # Create the desired example model
-            model = create_example_model_YOLO(modelname, train_images, train_labels, test_images, test_labels)
+            model = create_example_model_CIFAR(modelname, train_images, train_labels, test_images, test_labels)
 
     # Prune model
     if pruning == True and DUMMY == False:
@@ -158,10 +156,10 @@ def main():
     if hls_model_comparison == True:
         print("___________________________________\nGENERATING HLS MODEL W/ COMPARISON\n___________________________________")
         # Compile HLS4ML model from loaded model
-        if TEST == True or YOLO == True or MNIST == True:
+        if TEST == True or CIFAR == True or MNIST == True:
             hls_model = config_and_compile_hls4ml_model_from_CNN_model(model,default_reuse_factor,clock_period,backend)
-        else:
-            hls_model = config_and_compile_hls4ml_model_from_keras_model(model,default_reuse_factor,clock_period)
+        elif DUMMY == True:
+            hls_model = config_and_compile_hls4ml_model_from_keras_model(model,default_reuse_factor,clock_period,backend)
 
         # Output comparison
         hls_bitstream_results(hls_model, test_images, test_labels)
@@ -175,8 +173,8 @@ def main():
     if build == True:
         print("___________________________________\HLS ACTIVATED\n___________________________________")
 
-        hls_model.build(csim=False,
-                        synth=False,
+        hls_model.build(csim=True,
+                        synth=True,
                         vsynth=True,
                         export=True,
                         )
@@ -192,7 +190,6 @@ def main():
         run_openlane2(clock_period)
     else:
         print("___________________________________\nNO LAYOUT ATTEMPT\n___________________________________")
-
 
 
 ###############################################################################################
@@ -233,7 +230,7 @@ def create_a_layer(modelname):
 
 # Downloads, trains and creates 
 # the example IRIS dense and activation layer test
-def create_example_model_IRIS(train_images, train_labels, test_images, test_labels):
+def create_example_model_IRIS(pruning, train_images, train_labels, test_images, test_labels):
 
     model = models.Sequential()
     model.add(layers.Dense(128, activation='relu',input_shape=(4,)))
@@ -249,48 +246,50 @@ def create_example_model_IRIS(train_images, train_labels, test_images, test_labe
     score = model.evaluate(test_images, test_labels, verbose=0)
     print("Model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(score[0],score[1]*100))
 
-    print("_________ With Pruning _________")
-    pruning_schedule = tfmot.sparsity.keras.ConstantSparsity(0.75,
-                                                            begin_step=0,
-                                                            frequency=1)
-    pruned_model = tfmot.sparsity.keras.prune_low_magnitude(model, 
-                                                    pruning_schedule=pruning_schedule)
-    # Define the pruning callback
-    callbacks = [
-    tfmot.sparsity.keras.UpdatePruningStep()
-    ]
+    if pruning == True:
+        print("_________ With Pruning _________")
+        pruning_schedule = tfmot.sparsity.keras.ConstantSparsity(0.75,
+                                                                begin_step=0,
+                                                                frequency=1)
+        pruned_model = tfmot.sparsity.keras.prune_low_magnitude(model, 
+                                                        pruning_schedule=pruning_schedule)
+        # Define the pruning callback
+        callbacks = [
+        tfmot.sparsity.keras.UpdatePruningStep()
+        ]
 
-    pruned_model.compile(optimizer='adam',
-                loss=tf.keras.losses.SparseCategoricalCrossentropy(),
-                metrics=['accuracy'])
+        pruned_model.compile(optimizer='adam',
+                    loss=tf.keras.losses.SparseCategoricalCrossentropy(),
+                    metrics=['accuracy'])
 
-    # Train the SLP model
-    pruned_model.fit(train_images, train_labels, epochs=50, callbacks=callbacks)
-    print(pruned_model.summary())
-    
-    total_zeros = 0
-    total_params = 0
-    for layer in model.layers:
-        if isinstance(layer, layers.Dense) or isinstance(layer, layers.SeparableConv2D):
-            # Assuming weights are in the first element of the list
-            weights = layer.get_weights()[0] 
-            layer_zeros = np.sum(weights == 0)
-            total_zeros += layer_zeros
-            total_params += weights.size
-    
-    percentage = (total_zeros/total_params)*100
-    print("Total zeros: {}\t Total params: {}\t 0Percentage: {:.2f}%".format(total_zeros, total_params, percentage))
-    
-    score = pruned_model.evaluate(test_images, test_labels, verbose=0)
-    print("Pruned model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(score[0],score[1]*100))
+        # Train the SLP model
+        pruned_model.fit(train_images, train_labels, epochs=50, callbacks=callbacks)
+        print(pruned_model.summary())
+        
+        total_zeros = 0
+        total_params = 0
+        for layer in model.layers:
+            if isinstance(layer, layers.Dense) or isinstance(layer, layers.SeparableConv2D):
+                # Assuming weights are in the first element of the list
+                weights = layer.get_weights()[0] 
+                layer_zeros = np.sum(weights == 0)
+                total_zeros += layer_zeros
+                total_params += weights.size
 
-    # To preserve layer type (for compatibility with HLS4ML), the prune mask created
-    # by tfmot is effectively removed
-    model = replace_model_weights_with_prune_equivalent(model, pruned_model)
+        percentage = (total_zeros/total_params)*100
+        print("Total zeros: {}\t Total params: {}\t 0Percentage: {:.2f}%".format(total_zeros, total_params, percentage))
+        
+        score = pruned_model.evaluate(test_images, test_labels, verbose=0)
+        print("Pruned model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(score[0],score[1]*100))
+
+        # To preserve layer type (for compatibility with HLS4ML), the prune mask created
+        # by tfmot is effectively removed
+        model = replace_model_weights_with_prune_equivalent(model, pruned_model)
 
     return model
 
-# the example MNIST Convolutional Neural Network (CNN) model with almost no optimization
+# Baseline: 
+# The "AI by AI" MNIST CNN
 def create_example_model_MNIST(train_images,train_labels,test_images,test_labels):
 
     # Model architecture
@@ -330,8 +329,9 @@ def create_example_model_MNIST(train_images,train_labels,test_images,test_labels
 
     return model
 
-# the example MNIST YOLO Convolutional Neural Network (CNN) model with various optimizations for smaller architecture.
-def create_example_model_YOLO(modelname,train_images,train_labels,test_images,test_labels):
+# Compatibility model: 
+# Small separable convolution CNN
+def create_example_model_CIFAR(modelname,train_images,train_labels,test_images,test_labels):
 
     # Model architecture
     model = models.Sequential()
@@ -377,6 +377,8 @@ def create_example_model_YOLO(modelname,train_images,train_labels,test_images,te
 
     return model
 
+# MobileNet-inspired model:
+# Uses a more manual approach to Depthwise-Separable convolution from that paper
 def separable_conv_block(model, filters, kernel_size, strides, padding='same'):
     
     model.add(layers.DepthwiseConv2D(kernel_size=kernel_size, strides=strides, padding=padding))
@@ -386,7 +388,7 @@ def separable_conv_block(model, filters, kernel_size, strides, padding='same'):
     model.add(layers.BatchNormalization())
     model.add(layers.ReLU())
     return model
-  
+
 def create_example_model_MobileNet_SepConv2D(train_images, train_labels, test_images, test_labels):
     
     model = models.Sequential()
@@ -511,6 +513,7 @@ def pruning_routine(model,train_images, train_labels, test_images, test_labels):
 
     return model
 
+
 ## Openlane2 flow
 class Openlane2Flow(SequentialFlow):
     Steps = [
@@ -540,6 +543,7 @@ class Openlane2Flow(SequentialFlow):
         Magic.SpiceExtraction,
         Netgen.LVS
     ]
+
 
 if __name__ == "__main__":
     main()

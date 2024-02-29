@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vivado HLS Report for 'dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s'" level="0">
-<item name = "Date">Sat Feb 24 16:03:19 2024
+<item name = "Date">Thu Feb 29 16:01:08 2024
 </item>
 <item name = "Version">2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)</item>
 <item name = "Project">myproject_prj</item>
@@ -15,7 +15,7 @@
 <section name = "" level="1">
 <item name = "Summary"><table name="" hasTotal="0">
 <keys size="4">Clock, Target, Estimated, Uncertainty</keys>
-<column name="ap_clk">25.00 ns, 11.560 ns, 3.12 ns</column>
+<column name="ap_clk">25.00 ns, 11.428 ns, 3.12 ns</column>
 </table>
 </item>
 </section>

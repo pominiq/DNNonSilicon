@@ -3964,7 +3964,7 @@
                 </item>
               </inlineStackInfo>
               <originalName/>
-              <rtlName>myproject_mul_mul_17ns_18s_26_1_1_U118</rtlName>
+              <rtlName>myproject_mul_mul_17ns_18s_26_1_1_U132</rtlName>
               <coreName/>
             </Obj>
             <bitwidth>26</bitwidth>
@@ -4112,7 +4112,7 @@
                 </item>
               </inlineStackInfo>
               <originalName/>
-              <rtlName>myproject_mul_mul_17ns_18s_26_1_1_U119</rtlName>
+              <rtlName>myproject_mul_mul_17ns_18s_26_1_1_U133</rtlName>
               <coreName/>
             </Obj>
             <bitwidth>26</bitwidth>
@@ -4260,7 +4260,7 @@
                 </item>
               </inlineStackInfo>
               <originalName/>
-              <rtlName>myproject_mul_mul_17ns_18s_26_1_1_U120</rtlName>
+              <rtlName>myproject_mul_mul_17ns_18s_26_1_1_U134</rtlName>
               <coreName/>
             </Obj>
             <bitwidth>26</bitwidth>
@@ -7835,7 +7835,7 @@
         <count>3</count>
         <item_version>0</item_version>
         <item>
-          <first>myproject_mul_mul_17ns_18s_26_1_1_U118</first>
+          <first>myproject_mul_mul_17ns_18s_26_1_1_U132</first>
           <second>
             <count>1</count>
             <item_version>0</item_version>
@@ -7846,7 +7846,7 @@
           </second>
         </item>
         <item>
-          <first>myproject_mul_mul_17ns_18s_26_1_1_U119</first>
+          <first>myproject_mul_mul_17ns_18s_26_1_1_U133</first>
           <second>
             <count>1</count>
             <item_version>0</item_version>
@@ -7857,7 +7857,7 @@
           </second>
         </item>
         <item>
-          <first>myproject_mul_mul_17ns_18s_26_1_1_U120</first>
+          <first>myproject_mul_mul_17ns_18s_26_1_1_U134</first>
           <second>
             <count>1</count>
             <item_version>0</item_version>

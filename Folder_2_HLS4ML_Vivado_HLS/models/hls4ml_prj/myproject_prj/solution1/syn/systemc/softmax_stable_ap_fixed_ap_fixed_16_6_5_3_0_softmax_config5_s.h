@@ -44,9 +44,9 @@ struct softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s : public sc
 
     softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_exp_table1* exp_table1_U;
     softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s_invert_table2* invert_table2_U;
-    myproject_mul_mul_17ns_18s_26_1_1<1,1,17,18,26>* myproject_mul_mul_17ns_18s_26_1_1_U118;
-    myproject_mul_mul_17ns_18s_26_1_1<1,1,17,18,26>* myproject_mul_mul_17ns_18s_26_1_1_U119;
-    myproject_mul_mul_17ns_18s_26_1_1<1,1,17,18,26>* myproject_mul_mul_17ns_18s_26_1_1_U120;
+    myproject_mul_mul_17ns_18s_26_1_1<1,1,17,18,26>* myproject_mul_mul_17ns_18s_26_1_1_U132;
+    myproject_mul_mul_17ns_18s_26_1_1<1,1,17,18,26>* myproject_mul_mul_17ns_18s_26_1_1_U133;
+    myproject_mul_mul_17ns_18s_26_1_1<1,1,17,18,26>* myproject_mul_mul_17ns_18s_26_1_1_U134;
     sc_signal< sc_lv<1> > ap_CS_fsm;
     sc_signal< sc_logic > ap_CS_fsm_pp0_stage0;
     sc_signal< sc_logic > ap_enable_reg_pp0_iter0;

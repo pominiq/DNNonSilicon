@@ -9,5 +9,5 @@
   <xd:arg xd:name="layer5_out[1]" xd:originalName="layer5_out1" xd:direction="out" xd:interfaceRef="layer5_out_1_V" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="16" xd:firstOut="4" xd:arraySize="1"/>
   <xd:arg xd:name="layer5_out[2]" xd:originalName="layer5_out2" xd:direction="out" xd:interfaceRef="layer5_out_2_V" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="16" xd:firstOut="4" xd:arraySize="1"/>
   <xd:latencyEstimates xd:best-case="4" xd:worst-case="4" xd:average-case="4"/>
-  <xd:resourceEstimates xd:LUT="6495" xd:FF="1214" xd:BRAM="3" xd:DSP="152"/>
+  <xd:resourceEstimates xd:LUT="6787" xd:FF="1294" xd:BRAM="3" xd:DSP="162"/>
 </xd:acceleratorMap>

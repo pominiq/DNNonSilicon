@@ -137,7 +137,6 @@ def run_openlane2(clock_period):
     ## Starts the flow
     flow.start()
 
-
 ## Main menu text for the terminal UI
 def main_menu_text(train, hls_model_comparison, build, openlane):
     print("Welcome to text-based UI version of the flow")
@@ -217,7 +216,6 @@ def replace_model_weights_with_prune_equivalent(model, pruned_model):
 def load_keras_model_from_json_file(modelname):
 
     # During the project period, the standard was HDF5 objects but it has since become deprecated
-    """
     # load json and create model
     with open('{}/{}.json'.format(subfolder_path, modelname), 'r') as f:
         json_file = f.read()
@@ -225,8 +223,9 @@ def load_keras_model_from_json_file(modelname):
     # load the actual model from .json-file and .h5-file
     loaded_model = tf.keras.models.model_from_json(json_file)
     loaded_model.load_weights("{}/{}.weights.h5".format(subfolder_path, modelname))
-    """
-    loaded_model = models.load_model(modelname)
+
+    # For .keras format
+    #loaded_model = models.load_model(modelname)
 
     # evaluate loaded model on test data
     loaded_model.compile(optimizer='adam',
@@ -332,7 +331,7 @@ def model_evaluation_and_generic_quantization(model, modelname, train_images, tr
     test_Vivado_unrolled_limit_withheld(model)
 
 # Compiles HLS4Ml model from imported TF model based on config parameters
-def config_and_compile_hls4ml_model_from_keras_model(model,default_reuse_factor,clock_period):
+def config_and_compile_hls4ml_model_from_keras_model(model,default_reuse_factor,clock_period,backend):
     
     # Load configuration in HLS4ML tool on keras model
     config = hls4ml.utils.config_from_keras_model(model, 
@@ -349,7 +348,7 @@ def config_and_compile_hls4ml_model_from_keras_model(model,default_reuse_factor,
                                                            clock_period=clock_period,
                                                            output_dir='Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj',
                                                            part='xc7z020clg400-1',
-                                                           backend='Vivado'
+                                                           backend=backend
                                                            )
     
     print("___________________________________________________________________")
@@ -364,7 +363,7 @@ def config_and_compile_hls4ml_model_from_keras_model(model,default_reuse_factor,
     
     return hls_model
 
-# Compiles HLS4Ml model from imported TF model based on config parameters
+# Compiles HLS4Ml CNN model from imported TF model based on config parameters
 def config_and_compile_hls4ml_model_from_CNN_model(model,default_reuse_factor,clock_period,backend):
     
     # Load configuration in HLS4ML tool on keras model

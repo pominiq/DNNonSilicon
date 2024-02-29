@@ -49,18 +49,18 @@ softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s::softmax_stable_ap
     invert_table2_U->address0(invert_table2_address0);
     invert_table2_U->ce0(invert_table2_ce0);
     invert_table2_U->q0(invert_table2_q0);
-    myproject_mul_mul_17ns_18s_26_1_1_U118 = new myproject_mul_mul_17ns_18s_26_1_1<1,1,17,18,26>("myproject_mul_mul_17ns_18s_26_1_1_U118");
-    myproject_mul_mul_17ns_18s_26_1_1_U118->din0(mul_ln1118_fu_582_p0);
-    myproject_mul_mul_17ns_18s_26_1_1_U118->din1(mul_ln1118_fu_582_p1);
-    myproject_mul_mul_17ns_18s_26_1_1_U118->dout(mul_ln1118_fu_582_p2);
-    myproject_mul_mul_17ns_18s_26_1_1_U119 = new myproject_mul_mul_17ns_18s_26_1_1<1,1,17,18,26>("myproject_mul_mul_17ns_18s_26_1_1_U119");
-    myproject_mul_mul_17ns_18s_26_1_1_U119->din0(mul_ln1118_1_fu_589_p0);
-    myproject_mul_mul_17ns_18s_26_1_1_U119->din1(mul_ln1118_1_fu_589_p1);
-    myproject_mul_mul_17ns_18s_26_1_1_U119->dout(mul_ln1118_1_fu_589_p2);
-    myproject_mul_mul_17ns_18s_26_1_1_U120 = new myproject_mul_mul_17ns_18s_26_1_1<1,1,17,18,26>("myproject_mul_mul_17ns_18s_26_1_1_U120");
-    myproject_mul_mul_17ns_18s_26_1_1_U120->din0(mul_ln1118_2_fu_596_p0);
-    myproject_mul_mul_17ns_18s_26_1_1_U120->din1(mul_ln1118_2_fu_596_p1);
-    myproject_mul_mul_17ns_18s_26_1_1_U120->dout(mul_ln1118_2_fu_596_p2);
+    myproject_mul_mul_17ns_18s_26_1_1_U132 = new myproject_mul_mul_17ns_18s_26_1_1<1,1,17,18,26>("myproject_mul_mul_17ns_18s_26_1_1_U132");
+    myproject_mul_mul_17ns_18s_26_1_1_U132->din0(mul_ln1118_fu_582_p0);
+    myproject_mul_mul_17ns_18s_26_1_1_U132->din1(mul_ln1118_fu_582_p1);
+    myproject_mul_mul_17ns_18s_26_1_1_U132->dout(mul_ln1118_fu_582_p2);
+    myproject_mul_mul_17ns_18s_26_1_1_U133 = new myproject_mul_mul_17ns_18s_26_1_1<1,1,17,18,26>("myproject_mul_mul_17ns_18s_26_1_1_U133");
+    myproject_mul_mul_17ns_18s_26_1_1_U133->din0(mul_ln1118_1_fu_589_p0);
+    myproject_mul_mul_17ns_18s_26_1_1_U133->din1(mul_ln1118_1_fu_589_p1);
+    myproject_mul_mul_17ns_18s_26_1_1_U133->dout(mul_ln1118_1_fu_589_p2);
+    myproject_mul_mul_17ns_18s_26_1_1_U134 = new myproject_mul_mul_17ns_18s_26_1_1<1,1,17,18,26>("myproject_mul_mul_17ns_18s_26_1_1_U134");
+    myproject_mul_mul_17ns_18s_26_1_1_U134->din0(mul_ln1118_2_fu_596_p0);
+    myproject_mul_mul_17ns_18s_26_1_1_U134->din1(mul_ln1118_2_fu_596_p1);
+    myproject_mul_mul_17ns_18s_26_1_1_U134->dout(mul_ln1118_2_fu_596_p2);
 
     SC_METHOD(thread_ap_clk_no_reset_);
     dont_initialize();
@@ -663,9 +663,9 @@ softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s::~softmax_stable_a
 
     delete exp_table1_U;
     delete invert_table2_U;
-    delete myproject_mul_mul_17ns_18s_26_1_1_U118;
-    delete myproject_mul_mul_17ns_18s_26_1_1_U119;
-    delete myproject_mul_mul_17ns_18s_26_1_1_U120;
+    delete myproject_mul_mul_17ns_18s_26_1_1_U132;
+    delete myproject_mul_mul_17ns_18s_26_1_1_U133;
+    delete myproject_mul_mul_17ns_18s_26_1_1_U134;
 }
 
 void softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s::thread_ap_clk_no_reset_() {

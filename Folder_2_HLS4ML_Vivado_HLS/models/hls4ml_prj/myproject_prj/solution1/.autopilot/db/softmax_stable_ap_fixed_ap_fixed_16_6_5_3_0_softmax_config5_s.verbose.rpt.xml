@@ -1,7 +1,7 @@
 <profile>
 
 <section name = "Vivado HLS Report for 'softmax_stable_ap_fixed_ap_fixed_16_6_5_3_0_softmax_config5_s'" level="0">
-<item name = "Date">Sat Feb 24 16:03:30 2024
+<item name = "Date">Thu Feb 29 16:01:20 2024
 </item>
 <item name = "Version">2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)</item>
 <item name = "Project">myproject_prj</item>
@@ -65,9 +65,9 @@
 </item>
 <item name = "DSP48E"><table name="" hasTotal="0">
 <keys size="3">Instance, Module, Expression</keys>
-<column name="myproject_mul_mul_17ns_18s_26_1_1_U118">myproject_mul_mul_17ns_18s_26_1_1, i0 * i1</column>
-<column name="myproject_mul_mul_17ns_18s_26_1_1_U119">myproject_mul_mul_17ns_18s_26_1_1, i0 * i1</column>
-<column name="myproject_mul_mul_17ns_18s_26_1_1_U120">myproject_mul_mul_17ns_18s_26_1_1, i0 * i1</column>
+<column name="myproject_mul_mul_17ns_18s_26_1_1_U132">myproject_mul_mul_17ns_18s_26_1_1, i0 * i1</column>
+<column name="myproject_mul_mul_17ns_18s_26_1_1_U133">myproject_mul_mul_17ns_18s_26_1_1, i0 * i1</column>
+<column name="myproject_mul_mul_17ns_18s_26_1_1_U134">myproject_mul_mul_17ns_18s_26_1_1, i0 * i1</column>
 </table>
 </item>
 <item name = "Memory"><table name="" hasTotal="1">
