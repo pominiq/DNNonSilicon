@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xd:acceleratorMap xmlns:xd="http://www.xilinx.com/xidane" xd:functionName="myproject" xd:componentRef="myproject" xd:initiationInterval="12" xd:clockPeriod="25.000" xd:sequential="true" xd:hostMachine="64" xd:reset="control">
+  <xd:controlReg xd:name="control" xd:interfaceRef="ap_ctrl" xd:busTypeRef="acc_handshake" xd:type="acc_handshake"/>
+  <xd:arg xd:name="dense_input[0]" xd:originalName="dense_input0" xd:direction="in" xd:interfaceRef="dense_input_V" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="16" xd:dataPack="true" xd:bitMapping="15:0" xd:arraySize="1"/>
+  <xd:arg xd:name="dense_input[1]" xd:originalName="dense_input1" xd:direction="in" xd:interfaceRef="dense_input_V" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="16" xd:dataPack="true" xd:bitMapping="31:16" xd:arraySize="1"/>
+  <xd:arg xd:name="dense_input[2]" xd:originalName="dense_input2" xd:direction="in" xd:interfaceRef="dense_input_V" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="16" xd:dataPack="true" xd:bitMapping="47:32" xd:arraySize="1"/>
+  <xd:arg xd:name="dense_input[3]" xd:originalName="dense_input3" xd:direction="in" xd:interfaceRef="dense_input_V" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="16" xd:dataPack="true" xd:bitMapping="63:48" xd:arraySize="1"/>
+  <xd:arg xd:name="layer5_out_0_V" xd:originalName="layer5_out_0_V" xd:direction="out" xd:interfaceRef="layer5_out_0_V" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="16" xd:firstOut="25"/>
+  <xd:arg xd:name="layer5_out_1_V" xd:originalName="layer5_out_1_V" xd:direction="out" xd:interfaceRef="layer5_out_1_V" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="16" xd:firstOut="25"/>
+  <xd:arg xd:name="layer5_out_2_V" xd:originalName="layer5_out_2_V" xd:direction="out" xd:interfaceRef="layer5_out_2_V" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="16" xd:firstOut="25"/>
+  <xd:latencyEstimates xd:best-case="25" xd:worst-case="25" xd:average-case="25"/>
+  <xd:resourceEstimates xd:LUT="7025" xd:FF="3892" xd:BRAM="3" xd:DSP="17"/>
+</xd:acceleratorMap>
