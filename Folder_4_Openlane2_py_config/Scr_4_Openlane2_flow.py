@@ -21,16 +21,19 @@ path = "/home/pominiq/projectfolder/"
 os.chdir(path)
 
 from openlane.flows import SequentialFlow, Flow
-from openlane.steps import Verilator, Yosys, Misc, OpenROAD, Magic, Netgen, Checker
+from openlane.steps import Verilator, Yosys, Misc, OpenROAD, Odb, Magic, Netgen, Checker
 from openlane.steps.openroad import OpenGUI
 
-class Openlane2Flow(SequentialFlow):
-    Steps = [
+"""
         #Verilator.Lint,
         #Checker.LintTimingConstructs,
         #Checker.LintErrors,
         #Checker.LintWarnings,
-        Yosys.Synthesis,
+"""
+
+class Openlane2Flow(SequentialFlow):
+    Steps = [
+	Yosys.Synthesis,
         Checker.YosysUnmappedCells,
         Checker.YosysSynthChecks,
         OpenROAD.CheckSDCFiles,
@@ -39,17 +42,22 @@ class Openlane2Flow(SequentialFlow):
         OpenROAD.TapEndcapInsertion,
         OpenROAD.IOPlacement,
         OpenROAD.GlobalPlacement,
+        OpenROAD.GeneratePDN,
         OpenROAD.RepairDesignPostGPL,
         OpenROAD.DetailedPlacement,
         OpenROAD.CTS,
         OpenROAD.ResizerTimingPostCTS,
         OpenROAD.GlobalRouting,
+        OpenROAD.CheckAntennas,
         OpenROAD.RepairDesignPostGRT,
-        OpenROAD.GeneratePDN,
+        Odb.DiodesOnPorts,
+        Odb.HeuristicDiodeInsertion,
         OpenROAD.RepairAntennas,
         OpenROAD.DetailedRouting,
         OpenROAD.CheckAntennas,
         OpenROAD.FillInsertion,
+        OpenROAD.RCX,
+        OpenROAD.STAPostPNR,
         OpenROAD.IRDropReport,
         Magic.StreamOut,
         Magic.WriteLEF,
@@ -78,7 +86,7 @@ def main():
             {
                 "PDK": "sky130A",
                 "DESIGN_NAME": "myproject",
-                "VERILOG_FILES": "refg::$DESIGN_DIR/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1/impl/verilog/*.v",
+                "VERILOG_FILES": "refg::$DESIGN_DIR/Folder_2_HLS4ML_Vivado_HLS/models/Dummy_RF1_no_pruning/myproject_prj/solution1/impl/verilog/*.v",
                 "CLOCK_PORT": 'ap_clk',
                 "CLOCK_PERIOD": 25,
                 "RUN_HEURISTIC_DIODE_INSERTION": True,
@@ -112,13 +120,13 @@ def main():
                 "GRT_RESIZER_HOLD_SLACK_MARGIN": 0.2,
                 "MAGIC_DEF_LABELS": False,
                 "HEURISTIC_ANTENNA_THRESHOLD": 110,
-                "GRT_ANTENNA_ITERS": 5,
+                "GRT_ANTENNA_ITERS": 1,
                 "GRT_ADJUSTMENT": 0.2,
             },
             design_dir=".",
         )
         ## Starts the flow
         flow.start()
-
+        
 if __name__ == "__main__":
     main()

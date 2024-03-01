@@ -5,7 +5,7 @@ set backend "vivado"
 variable part
 set part "xc7z020clg400-1"
 variable clock_period
-set clock_period 25
+set clock_period 2.5
 variable clock_uncertainty
 set clock_uncertainty 12.5%
 variable version

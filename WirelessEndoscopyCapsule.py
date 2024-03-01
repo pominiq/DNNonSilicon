@@ -303,13 +303,13 @@ def test_Vivado_unrolled_limit_withheld(model):
 # Flow for evaluating and quantizing model.
 # Also saves both 32-bit and 16-bit version of the model.
 # Uses save_model_and_dataset(), quantize_weights_to_16bit_and_save_model(), and test_Vivado_unrolled_limit_withheld()
-def model_evaluation_and_generic_quantization(model, modelname, train_images, train_labels, test_images, test_labels, MNIST):
+def model_evaluation_and_generic_quantization(model, modelname, train_images, train_labels, test_images, test_labels, MNIST, MNIST2):
 
     print("___________2___________")
-    print("Saving model and dataset. Evaluating model")
+    print("Saving model and dataset. Evaluating saved model")
     save_model_and_dataset(model,modelname, train_images,train_labels,test_images,test_labels)
     
-    if MNIST == True:
+    if MNIST == True or MNIST2 == True:
         model.compile(optimizer='adam', loss=tf.keras.losses.CategoricalCrossentropy(), metrics=['accuracy'])
     else:
         model.compile(optimizer='adam', loss=tf.keras.losses.SparseCategoricalCrossentropy(), metrics=['accuracy'])
@@ -380,10 +380,9 @@ def config_and_compile_hls4ml_model_from_CNN_model(model,default_reuse_factor,cl
                                                            io_type='io_stream', # Set to io_stream for CNN
                                                            clock_period=clock_period,
                                                            output_dir='Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj',
-                                                           part='xcu50-fsvh2104-2-e',
+                                                           part='xc7z020clg400-1',
                                                            backend=backend
-                                                           )
-    
+                                                           )#xcu50-fsvh2104-2-e
     print("___________________________________________________________________")
     print("HLS4ML conversion succesful\n ")
     # .plot_model function saves model to .png

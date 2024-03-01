@@ -54,24 +54,25 @@ os.environ['PATH'] += os.pathsep + '/tools/Xilinx/Vivado/2020.1/bin'
 # Main function. Here the actual flow is run
 def main():    
     # Used to load model from folder, or to save project with
-    modelname =             "Dummy_PR75_RF1"
+    modelname =             "cifar_test_1"
 
     #Flow step variables
 
     #### Step 1
-    train =                 True
+    train =                 False
     pruning =               True
 
     # List of example models
     TEST =                  False        # For testing individual layers
-    DUMMY =                 True       # Used to test dense and activation layers
+    DUMMY =                 False       # Used to test dense and activation layers
     MNIST =                 False       # Baseline CNN
-    CIFAR =                 False       # Compatibility CNN with Separable Conv2D and pruning
+    MNIST2 =                False
+    CIFAR =                 True       # Compatibility CNN with Separable Conv2D and pruning
 
     #### Step 2
     hls_model_comparison =  True
-    default_reuse_factor =  1           # Lowest is RF = 1
-    clock_period =          25         # in nanoseconds, 1 / 2.5e-9 = 400 MHz
+    default_reuse_factor =  16           # Lowest is RF = 1
+    clock_period =          2.5         # in nanoseconds, 1 / 2.5e-9 = 400 MHz
     
     #### Step 3
     backend =               'Vivado'
@@ -134,6 +135,21 @@ def main():
         if train == True:
             model = create_example_model_MNIST(train_images, train_labels, test_images, test_labels)
 
+    elif MNIST2 == True:
+        # Tuple of NumPy arrays: (x_train, y_train), (x_test, y_test)
+        (train_images, train_labels), (test_images, test_labels) = mnist.load_data()
+        # Reshape and normalize images
+        train_images = train_images.reshape((60000, 28, 28, 1))
+        train_images = train_images.astype('float16') / 255
+        test_images = test_images.reshape((10000, 28, 28, 1))
+        test_images = test_images.astype('float16') / 255
+        # One-hot encode labels (keep this as float32 for stability in the loss calculations)
+        train_labels = to_categorical(train_labels, dtype='float32')
+        test_labels = to_categorical(test_labels, dtype='float32')
+
+        if train == True:
+            model = create_example_model_MNIST2(train_images, train_labels, test_images, test_labels)
+
     elif CIFAR == True:
         # Tuple of NumPy arrays: (x_train, y_train), (x_test, y_test)
         (train_images, train_labels), (test_images, test_labels) = cifar10.load_data()
@@ -150,7 +166,7 @@ def main():
         model = pruning_routine(model, train_images, train_labels, test_images, test_labels)
 
     # Evaluate and quantize to 16-bit. Save the models.
-    model_evaluation_and_generic_quantization(model, modelname, train_images, train_labels, test_images, test_labels, MNIST)
+    model_evaluation_and_generic_quantization(model, modelname, train_images, train_labels, test_images, test_labels, MNIST, MNIST2)
 
     # Step 2: Create HLS model and make comparisons
     if hls_model_comparison == True:
@@ -329,6 +345,47 @@ def create_example_model_MNIST(train_images,train_labels,test_images,test_labels
 
     return model
 
+# Baseline: 
+# The "AI by AI" MNIST CNN
+def create_example_model_MNIST2(train_images,train_labels,test_images,test_labels):
+
+    # Model architecture
+    model = models.Sequential()
+    model.add(layers.SeparableConv2D(4, (3, 3), activation='relu', input_shape=(28, 28, 1)))
+    model.add(layers.MaxPooling2D((4, 4)))
+    model.add(layers.SeparableConv2D(8, (3, 3), activation='relu'))
+    model.add(layers.MaxPooling2D((2, 2)))
+    model.add(layers.Flatten())
+    model.add(layers.Dense(10, dtype='float32', activation='softmax'))  # Ensure that the final layer has float32 dtype
+
+    model.compile(optimizer='adam',
+                loss=tf.keras.losses.CategoricalCrossentropy(),
+                metrics=['accuracy'])
+
+    # Train the CNN model
+    history = model.fit(train_images, train_labels, epochs=10, validation_data=(test_images, test_labels))
+    print(model.summary())
+
+    # Evaluate
+    score = model.evaluate(test_images, test_labels, verbose=0)
+    print("Model evaluation \t loss: {:.2f} \t accuracy: {:.2f}%".format(score[0],score[1]*100))
+
+    plt.figure(figsize=(8,5))
+    plt.plot(history.history['accuracy'], label='accuracy', color='blue')
+    plt.plot(history.history['val_accuracy'], label = 'val_accuracy',color='lightblue')
+    plt.text(len(history.history['accuracy']) - 1, history.history['accuracy'][-1], 
+             f'{history.history["accuracy"][-1]:.4f}', fontsize=14, color='blue', ha='center')
+    plt.text(len(history.history['val_accuracy']) - 1, history.history['val_accuracy'][-1], 
+             f'{history.history["val_accuracy"][-1]:.4f}', fontsize=14, color='lightblue', ha='center')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.ylim([0.5, 1])
+    plt.legend(loc='upper left')
+    plt.grid(True)
+    plt.show()
+
+    return model
+
 # Compatibility model: 
 # Small separable convolution CNN
 def create_example_model_CIFAR(modelname,train_images,train_labels,test_images,test_labels):
@@ -439,14 +496,14 @@ def create_example_model_MobileNet_SepConv2D(train_images, train_labels, test_im
 def pruning_routine(model,train_images, train_labels, test_images, test_labels):
     
     batch_size = 128
-    epochs = 1
+    epochs = 15
     validation_split = 0.1 # 10% of training set will be used for validation set. 
     num_images = train_images.shape[0] * (1 - validation_split)
     end_step = np.ceil(num_images / batch_size).astype(np.int32) * epochs
 
     print("_________ With Pruning _________")
-    pruning_schedule = tfmot.sparsity.keras.PolynomialDecay(initial_sparsity=0.5,
-                                                            final_sparsity=0.7,
+    pruning_schedule = tfmot.sparsity.keras.PolynomialDecay(initial_sparsity=0.0,
+                                                            final_sparsity=0.25,
                                                             begin_step=0,
                                                             end_step=end_step)
     pruned_model = tfmot.sparsity.keras.prune_low_magnitude(model, 

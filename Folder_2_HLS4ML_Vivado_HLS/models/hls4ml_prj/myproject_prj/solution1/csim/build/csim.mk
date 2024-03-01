@@ -6,6 +6,8 @@ CSIM_DESIGN = 1
 
 __SIM_FPO__ = 1
 
+__HLS_FPO_v6_1__ = 1
+
 __SIM_MATHHLS__ = 1
 
 __SIM_FFT__ = 1
@@ -44,6 +46,8 @@ IFLAG += -I "${AUTOPILOT_TECH}/generic/SystemC/AESL_comp"
 IFLAG += -I "${AUTOPILOT_TOOL}/auto_cc/include"
 IFLAG += -I "/usr/include/x86_64-linux-gnu"
 IFLAG += -D__SIM_FPO__
+
+IFLAG += -D__HLS_FPO_v6_1__
 
 IFLAG += -D__SIM_FFT__
 

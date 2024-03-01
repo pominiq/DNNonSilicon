@@ -2,7 +2,7 @@
 # Vivado(TM) HLS - High-Level Synthesis from C, C++ and SystemC v2020.1 (64-bit)
 # Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 # ==============================================================
-set ::env(LD_LIBRARY_PATH) $::env(LD_LIBRARY_PATH):/tools/Xilinx/Vivado/2020.1/lnx64/tools/fpo_v7_0
+set ::env(LD_LIBRARY_PATH) $::env(LD_LIBRARY_PATH):/tools/Xilinx/Vivado/2020.1/lnx64/tools/fpo_v6_1
 set ::env(LD_LIBRARY_PATH) $::env(LD_LIBRARY_PATH):/tools/Xilinx/Vivado/2020.1/lnx64/tools/fft_v9_1
 set ::env(LD_LIBRARY_PATH) $::env(LD_LIBRARY_PATH):/tools/Xilinx/Vivado/2020.1/lnx64/tools/fir_v7_0
 set ::env(LD_LIBRARY_PATH) $::env(LD_LIBRARY_PATH):/tools/Xilinx/Vivado/2020.1/lnx64/tools/dds_v6_0

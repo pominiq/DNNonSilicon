@@ -30929,16 +30929,35 @@ template <typename T, unsigned N, T (*func)(T)> class lookup_table {
 # 41 "/tools/Xilinx/Vivado/2020.1/lnx64/tools/gcc/lib/gcc/x86_64-unknown-linux-gnu/4.6.3/../../../../include/c++/4.6.3/cstdio" 3
 # 41 "/tools/Xilinx/Vivado/2020.1/lnx64/tools/gcc/lib/gcc/x86_64-unknown-linux-gnu/4.6.3/../../../../include/c++/4.6.3/cstdio" 3
 # 9 "firmware/defines.h" 2
-# 18 "firmware/defines.h"
-typedef ap_fixed<16,6> input_t;
+# 51 "firmware/defines.h"
+typedef nnet::array<ap_fixed<16,6>, 3*1> input_t;
 typedef ap_fixed<16,6> model_default_t;
-typedef ap_fixed<16,6> layer2_t;
-typedef ap_uint<1> layer2_index;
-typedef ap_fixed<16,6> layer3_t;
+typedef nnet::array<ap_fixed<16,6>, 32*1> layer2_t;
+typedef ap_uint<1> zero_bias2_t;
+typedef nnet::array<ap_fixed<16,6>, 3*1> separable_conv2d_dw_out_t;
+typedef nnet::array<ap_fixed<16,6>, 32*1> layer3_t;
+typedef ap_fixed<18,8> separable_conv2d_relu_table_t;
+typedef nnet::array<ap_fixed<16,6>, 32*1> layer4_t;
+typedef nnet::array<ap_fixed<16,6>, 32*1> layer5_t;
+typedef nnet::array<ap_fixed<16,6>, 64*1> layer6_t;
+typedef ap_uint<1> zero_bias6_t;
+typedef nnet::array<ap_fixed<16,6>, 32*1> separable_conv2d_1_dw_out_t;
+typedef nnet::array<ap_fixed<16,6>, 64*1> layer7_t;
+typedef ap_fixed<18,8> separable_conv2d_1_relu_table_t;
+typedef nnet::array<ap_fixed<16,6>, 64*1> layer8_t;
+typedef nnet::array<ap_fixed<16,6>, 64*1> layer9_t;
+typedef nnet::array<ap_fixed<16,6>, 64*1> layer10_t;
+typedef ap_uint<1> zero_bias10_t;
+typedef nnet::array<ap_fixed<16,6>, 64*1> separable_conv2d_2_dw_out_t;
+typedef nnet::array<ap_fixed<16,6>, 64*1> layer11_t;
+typedef ap_fixed<18,8> separable_conv2d_2_relu_table_t;
+typedef nnet::array<ap_fixed<16,6>, 32*1> layer13_t;
+typedef ap_uint<1> layer13_index;
+typedef nnet::array<ap_fixed<16,6>, 32*1> layer14_t;
 typedef ap_fixed<18,8> dense_relu_table_t;
-typedef ap_fixed<16,6> layer4_t;
-typedef ap_uint<1> layer4_index;
-typedef ap_fixed<16,6> result_t;
+typedef nnet::array<ap_fixed<16,6>, 10*1> layer15_t;
+typedef ap_uint<1> layer15_index;
+typedef nnet::array<ap_fixed<16,6>, 10*1> result_t;
 typedef ap_fixed<18,8> dense_1_softmax_table_t;
 typedef ap_fixed<18,8,AP_RND,AP_SAT> dense_1_softmax_exp_table_t;
 typedef ap_fixed<18,8,AP_RND,AP_SAT> dense_1_softmax_inv_table_t;
@@ -30946,8 +30965,8 @@ typedef ap_fixed<18,8,AP_RND,AP_SAT> dense_1_softmax_inv_table_t;
 
 
 void myproject(
-    input_t dense_input[4],
-    result_t layer5_out[3]
+    hls::stream<input_t> &input_1,
+    hls::stream<result_t> &layer16_out
 );
 # 4 "firmware/myproject.cpp" 2
 # 1 "firmware/parameters.h" 1
@@ -62207,6 +62226,12 @@ PReLUActLoop:
 
 }
 # 12 "firmware/parameters.h" 2
+# 1 "firmware/nnet_utils/nnet_batchnorm.h" 1
+
+
+
+
+
 # 1 "firmware/nnet_utils/nnet_dense.h" 1
 
 
@@ -62696,7 +62721,523 @@ void dense(data_T data[CONFIG_T::n_in], res_T res[CONFIG_T::n_out],
 }
 
 }
+# 7 "firmware/nnet_utils/nnet_batchnorm.h" 2
+
+
+namespace nnet {
+
+struct batchnorm_config {
+
+    typedef float bias_t;
+    typedef float scale_t;
+
+
+    static const unsigned n_in = 10;
+    static const unsigned n_filt = -1;
+    static const unsigned n_scale_bias = 10;
+
+
+    static const unsigned io_type = io_parallel;
+    static const unsigned reuse_factor = 1;
+    static const bool store_weights_in_bram = false;
+    static const unsigned n_zeros = 0;
+
+    template <class x_T, class y_T> using product = nnet::product::mult<x_T, y_T>;
+};
+
+template <class data_T, class res_T, typename CONFIG_T>
+void normalize(data_T data[CONFIG_T::n_in], res_T res[CONFIG_T::n_in],
+               typename CONFIG_T::scale_t scale[CONFIG_T::n_scale_bias],
+               typename CONFIG_T::bias_t bias[CONFIG_T::n_scale_bias]) {
+    data_T cache;
+
+
+#pragma HLS function_instantiate variable=&scale,&bias
+
+
+
+
+#pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+
+
+#pragma HLS ARRAY_PARTITION variable=&scale complete
+#pragma HLS ARRAY_PARTITION variable=&bias complete
+
+#pragma HLS ALLOCATION operation instances=mul limit=CONFIG_T::multiplier_limit
+
+
+Result:
+    for (int ires = 0; ires < CONFIG_T::n_in; ires++) {
+        if (CONFIG_T::n_filt == -1) {
+            res[ires] = CONFIG_T::template product<data_T, typename CONFIG_T::scale_t>::product(data[ires], scale[ires]) +
+                        bias[ires];
+        } else {
+            int norm_index = ires % CONFIG_T::n_filt;
+            res[ires] =
+                CONFIG_T::template product<data_T, typename CONFIG_T::scale_t>::product(data[ires], scale[norm_index]) +
+                bias[norm_index];
+        }
+    }
+}
+
+
+
+
+struct batchnorm_quantized_tanh_config {
+
+    static const unsigned n_in = 10;
+    static const unsigned n_filt = -1;
+    static const unsigned n_scale_bias = 10;
+
+
+    static const unsigned io_type = io_parallel;
+    static const unsigned reuse_factor = 1;
+    static const unsigned n_zeros = 0;
+};
+
+template <class data_T, typename CONFIG_T>
+void normalize_binary_tanh(data_T data[CONFIG_T::n_in], ap_uint<1> res[CONFIG_T::n_in],
+                           data_T threshold[CONFIG_T::n_scale_bias]) {
+#pragma HLS PIPELINE
+#pragma HLS ARRAY_PARTITION variable=&res complete
+
+ data_T datareg;
+    ap_uint<1> cache;
+    for (int ii = 0; ii < CONFIG_T::n_in; ii++) {
+        datareg = data[ii];
+        int norm_index = CONFIG_T::n_filt == -1 ? ii : ii % CONFIG_T::n_filt;
+        if (datareg >= threshold[norm_index])
+            cache = 1;
+        else
+            cache = 0;
+
+        res[ii] = cache;
+    }
+}
+
+template <class data_T, typename CONFIG_T>
+void normalize_ternary_tanh(data_T data[CONFIG_T::n_in], ap_int<2> res[CONFIG_T::n_in],
+                            data_T threshold_hi[CONFIG_T::n_scale_bias], data_T threshold_lo[CONFIG_T::n_scale_bias]) {
+#pragma HLS PIPELINE
+#pragma HLS ARRAY_PARTITION variable=&res complete
+
+ data_T datareg;
+    ap_int<2> cache;
+    for (int ii = 0; ii < CONFIG_T::n_in; ii++) {
+        datareg = data[ii];
+        int norm_index = CONFIG_T::n_filt == -1 ? ii : ii % CONFIG_T::n_filt;
+        if (datareg > threshold_hi[norm_index])
+            cache = 1;
+        else if (datareg <= threshold_lo[norm_index])
+            cache = -1;
+        else
+            cache = 0;
+
+        res[ii] = cache;
+    }
+}
+
+}
 # 13 "firmware/parameters.h" 2
+# 1 "firmware/nnet_utils/nnet_batchnorm_stream.h" 1
+
+
+
+
+
+
+
+
+namespace nnet {
+
+
+
+
+
+template <class data_T, class res_T, typename CONFIG_T>
+void normalize(hls::stream<data_T> &data, hls::stream<res_T> &res, typename CONFIG_T::scale_t scale[CONFIG_T::n_scale_bias],
+               typename CONFIG_T::bias_t bias[CONFIG_T::n_scale_bias]) {
+#pragma HLS ARRAY_PARTITION variable=&scale complete
+#pragma HLS ARRAY_PARTITION variable=&bias complete
+
+ constexpr unsigned ii = CONFIG_T::n_in / CONFIG_T::multiplier_limit;
+#pragma HLS ALLOCATION operation instances=mul limit=CONFIG_T::multiplier_limit
+
+BatchNormLoop:
+    for (int i = 0; i < CONFIG_T::n_in / data_T::size; i++) {
+#pragma HLS PIPELINE II=ii
+
+ data_T in_data = data.read();
+        res_T out_data;
+#pragma HLS DATA_PACK variable = &out_data
+
+ BatchNormpack:
+        for (int j = 0; j < data_T::size; j++) {
+#pragma HLS UNROLL
+ int norm_index;
+            if (CONFIG_T::n_filt == -1) {
+                norm_index = i * data_T::size + j;
+            } else {
+                norm_index = j % CONFIG_T::n_filt;
+            }
+            out_data[j] = CONFIG_T::template product<typename data_T::value_type, typename CONFIG_T::scale_t>::product(
+                              in_data[j], scale[norm_index]) +
+                          bias[norm_index];
+        }
+
+        res.write(out_data);
+    }
+}
+
+
+
+
+template <class data_T, typename CONFIG_T>
+void normalize_binary_tanh(hls::stream<data_T> &data, hls::stream<nnet::array<ap_uint<1>, CONFIG_T::n_scale_bias>> &res,
+                           typename data_T::value_type threshold[CONFIG_T::n_scale_bias]) {
+#pragma HLS ARRAY_PARTITION variable=&threshold complete
+
+BinaryNormLoop:
+    for (int i = 0; i < CONFIG_T::n_in / data_T::size; i++) {
+#pragma HLS PIPELINE
+
+ data_T in_data = data.read();
+        nnet::array<ap_uint<1>, CONFIG_T::n_scale_bias> out_data;
+#pragma HLS DATA_PACK variable = &out_data
+
+ BatchNormPack:
+        for (int j = 0; j < data_T::size; j++) {
+#pragma HLS UNROLL
+ int norm_index;
+            if (CONFIG_T::n_filt == -1) {
+                norm_index = i * data_T::size + j;
+            } else {
+                norm_index = j % CONFIG_T::n_filt;
+            }
+            out_data[j] = (in_data[j] >= threshold[norm_index]) ? 1 : 0;
+        }
+
+        res.write(out_data);
+    }
+}
+
+template <class data_T, typename CONFIG_T>
+void normalize_ternary_tanh(hls::stream<data_T> &data, hls::stream<nnet::array<ap_int<2>, CONFIG_T::n_scale_bias>> &res,
+                            typename data_T::value_type threshold_hi[CONFIG_T::n_scale_bias],
+                            typename data_T::value_type threshold_lo[CONFIG_T::n_scale_bias]) {
+#pragma HLS ARRAY_PARTITION variable=&threshold_hi complete
+#pragma HLS ARRAY_PARTITION variable=&threshold_lo complete
+
+TernaryNormLoop:
+    for (int i = 0; i < CONFIG_T::n_in / data_T::size; i++) {
+#pragma HLS PIPELINE
+
+ data_T in_data = data.read();
+        nnet::array<ap_int<2>, CONFIG_T::n_scale_bias> out_data;
+#pragma HLS DATA_PACK variable = &out_data
+
+ BatchNormPack:
+        for (int j = 0; j < data_T::size; j++) {
+#pragma HLS UNROLL
+
+ int norm_index;
+            if (CONFIG_T::n_filt == -1) {
+                norm_index = i * data_T::size + j;
+            } else {
+                norm_index = j % CONFIG_T::n_filt;
+            }
+
+            if (in_data[j] > threshold_hi[norm_index]) {
+                out_data[j] = 1;
+            } else if (in_data[j] <= threshold_lo[norm_index]) {
+                out_data[j] = -1;
+            } else {
+                out_data[j] = 0;
+            }
+        }
+
+        res.write(out_data);
+    }
+}
+
+}
+# 14 "firmware/parameters.h" 2
+# 1 "firmware/nnet_utils/nnet_conv2d.h" 1
+
+
+
+
+# 1 "firmware/nnet_utils/nnet_conv2d_latency.h" 1
+
+
+
+
+
+# 1 "/tools/Xilinx/Vivado/2020.1/lnx64/tools/gcc/lib/gcc/x86_64-unknown-linux-gnu/4.6.3/../../../../include/c++/4.6.3/cstdlib" 1 3
+# 41 "/tools/Xilinx/Vivado/2020.1/lnx64/tools/gcc/lib/gcc/x86_64-unknown-linux-gnu/4.6.3/../../../../include/c++/4.6.3/cstdlib" 3
+# 41 "/tools/Xilinx/Vivado/2020.1/lnx64/tools/gcc/lib/gcc/x86_64-unknown-linux-gnu/4.6.3/../../../../include/c++/4.6.3/cstdlib" 3
+# 7 "firmware/nnet_utils/nnet_conv2d_latency.h" 2
+
+namespace nnet {
+
+template <class data_T, class res_T, typename CONFIG_T>
+void conv_2d_latency_cl(
+    data_T data[CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_chan],
+    res_T res[CONFIG_T::out_height * CONFIG_T::out_width * CONFIG_T::n_filt],
+    typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+    constexpr unsigned mult_n_in = CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan;
+    constexpr unsigned mult_n_out = CONFIG_T::n_filt;
+
+    data_T data_buf[CONFIG_T::n_pixels][mult_n_in];
+#pragma HLS ARRAY_PARTITION variable=&data_buf complete dim=0
+
+ typename CONFIG_T::accum_t mult[mult_n_in * mult_n_out];
+#pragma HLS ARRAY_PARTITION variable=&mult complete
+
+ typename CONFIG_T::accum_t acc[mult_n_out];
+#pragma HLS ARRAY_PARTITION variable=&acc complete
+
+#pragma HLS ARRAY_PARTITION variable=&weights complete
+#pragma HLS ARRAY_PARTITION variable=&biases complete
+
+
+#pragma HLS ALLOCATION operation instances=mul limit=CONFIG_T::mult_config::multiplier_limit
+
+PartitionLoop:
+    for (int i_part = 0; i_part < CONFIG_T::n_partitions; i_part++) {
+#pragma HLS PIPELINE II=CONFIG_T::reuse_factor rewind
+
+ CONFIG_T::template fill_buffer<data_T, CONFIG_T>::fill_buffer(data, data_buf, i_part);
+
+    PixelLoop:
+        for (unsigned i_pxl = 0; i_pxl < CONFIG_T::n_pixels; i_pxl++) {
+#pragma HLS UNROLL
+
+ data_T cache;
+
+
+        Product1:
+            for (int i_in = 0; i_in < mult_n_in; i_in++) {
+#pragma HLS UNROLL
+ cache = data_buf[i_pxl][i_in];
+            Product2:
+                for (int i_out = 0; i_out < mult_n_out; i_out++) {
+#pragma HLS UNROLL
+ mult[i_in * mult_n_out + i_out] =
+                        CONFIG_T::mult_config::template product<data_T, typename CONFIG_T::mult_config::weight_t>::product(
+                            cache, weights[i_in * mult_n_out + i_out]);
+                }
+            }
+
+
+        ResetAccum:
+            for (int i_acc = 0; i_acc < mult_n_out; i_acc++) {
+#pragma HLS UNROLL
+ acc[i_acc] = (typename CONFIG_T::accum_t)biases[i_acc];
+            }
+
+
+        Accum1:
+            for (int i_in = 0; i_in < mult_n_in; i_in++) {
+#pragma HLS UNROLL
+ Accum2:
+                for (int i_out = 0; i_out < mult_n_out; i_out++) {
+#pragma HLS UNROLL
+ acc[i_out] += mult[i_in * mult_n_out + i_out];
+                }
+            }
+
+
+        Result:
+            for (int i_res = 0; i_res < mult_n_out; i_res++) {
+#pragma HLS UNROLL
+ *(res++) = cast<data_T, res_T, typename CONFIG_T::mult_config>(acc[i_res]);
+            }
+        }
+    }
+}
+
+}
+# 6 "firmware/nnet_utils/nnet_conv2d.h" 2
+# 1 "firmware/nnet_utils/nnet_conv2d_resource.h" 1
+
+
+
+
+
+
+namespace nnet {
+
+template <class data_T, class res_T, typename CONFIG_T>
+void conv_2d_resource_cl(
+    data_T data[CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_chan],
+    res_T res[CONFIG_T::out_height * CONFIG_T::out_width * CONFIG_T::n_filt],
+    typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+    constexpr unsigned mult_n_in = CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan;
+    constexpr unsigned mult_n_out = CONFIG_T::n_filt;
+    constexpr unsigned block_factor = ((mult_n_in * mult_n_out + CONFIG_T::reuse_factor - 1) / CONFIG_T::reuse_factor);
+
+    constexpr unsigned multscale = block_factor / mult_n_out;
+
+    (static_cast <bool> ((block_factor % mult_n_out == 0 || CONFIG_T::reuse_factor >= mult_n_in) && "The current Reuse Factor is not allowed") ? void (0) : __assert_fail ("(block_factor % mult_n_out == 0 || CONFIG_T::reuse_factor >= mult_n_in) && \"The current Reuse Factor is not allowed\"", "firmware/nnet_utils/nnet_conv2d_resource.h", 22, __extension__ __PRETTY_FUNCTION__));
+
+    (static_cast <bool> ((CONFIG_T::reuse_factor <= CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan) && "This function is correct only for RF <= FILT_HEIGHT * FILT_WIDTH * N_CHAN") ? void (0) : __assert_fail ("(CONFIG_T::reuse_factor <= CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan) && \"This function is correct only for RF <= FILT_HEIGHT * FILT_WIDTH * N_CHAN\"", "firmware/nnet_utils/nnet_conv2d_resource.h", 24, __extension__ __PRETTY_FUNCTION__));
+
+
+    data_T data_buf[CONFIG_T::n_pixels][mult_n_in];
+#pragma HLS ARRAY_PARTITION variable=&data_buf complete dim=0
+
+#pragma HLS ARRAY_RESHAPE variable=&weights block factor=block_factor
+#pragma HLS ARRAY_PARTITION variable=&biases complete
+
+ typename CONFIG_T::accum_t acc[CONFIG_T::n_pixels][mult_n_out];
+#pragma HLS ARRAY_PARTITION variable=&acc complete dim=0
+
+PartitionLoop:
+    for (unsigned i_part = 0; i_part < CONFIG_T::n_partitions; i_part++) {
+
+
+        CONFIG_T::template fill_buffer<data_T, CONFIG_T>::fill_buffer(data, data_buf, i_part);
+
+    PixelInitAccumLoop:
+        for (unsigned i_pxl = 0; i_pxl < CONFIG_T::n_pixels; i_pxl++) {
+#pragma HLS UNROLL
+
+ InitAccumLoop:
+            for (unsigned i_acc = 0; i_acc < mult_n_out; i_acc++) {
+#pragma HLS UNROLL
+ acc[i_pxl][i_acc] = (typename CONFIG_T::accum_t)biases[i_acc];
+            }
+        }
+
+    ReuseLoop:
+        for (unsigned i_rf = 0; i_rf < CONFIG_T::reuse_factor; i_rf++) {
+#pragma HLS PIPELINE II=1 rewind
+
+ unsigned i_w = i_rf;
+            unsigned i_in = i_rf;
+            unsigned i_out = 0;
+            unsigned i_acc = 0;
+
+        MultLoop:
+            for (unsigned i_blk = 0; i_blk < block_factor; i_blk++) {
+#pragma HLS UNROLL
+
+ PixelMultLoop:
+                for (unsigned i_pxl = 0; i_pxl < CONFIG_T::n_pixels; i_pxl++) {
+#pragma HLS UNROLL
+
+ acc[i_pxl][i_out] += static_cast<typename CONFIG_T::accum_t>(
+                        CONFIG_T::mult_config::template product<data_T, typename CONFIG_T::mult_config::weight_t>::product(
+                            data_buf[i_pxl][i_in], weights[i_w]));
+                }
+
+
+                i_w += CONFIG_T::reuse_factor;
+
+                i_in += CONFIG_T::reuse_factor;
+                if (i_in >= mult_n_in) {
+                    i_in = i_rf;
+                }
+
+                if (i_acc + 1 >= multscale) {
+                    i_acc = 0;
+                    i_out++;
+                } else {
+                    i_acc++;
+                }
+            }
+        }
+
+    PixelResultLoop:
+        for (unsigned i_pxl = 0; i_pxl < CONFIG_T::n_pixels; i_pxl++) {
+#pragma HLS UNROLL
+
+ ResultLoop:
+            for (unsigned i_res = 0; i_res < mult_n_out; i_res++) {
+#pragma HLS UNROLL
+ *(res++) = cast<data_T, res_T, typename CONFIG_T::mult_config>(acc[i_pxl][i_res]);
+            }
+        }
+    }
+}
+
+}
+# 7 "firmware/nnet_utils/nnet_conv2d.h" 2
+# 1 "/tools/Xilinx/Vivado/2020.1/lnx64/tools/gcc/lib/gcc/x86_64-unknown-linux-gnu/4.6.3/../../../../include/c++/4.6.3/cstdlib" 1 3
+# 41 "/tools/Xilinx/Vivado/2020.1/lnx64/tools/gcc/lib/gcc/x86_64-unknown-linux-gnu/4.6.3/../../../../include/c++/4.6.3/cstdlib" 3
+# 41 "/tools/Xilinx/Vivado/2020.1/lnx64/tools/gcc/lib/gcc/x86_64-unknown-linux-gnu/4.6.3/../../../../include/c++/4.6.3/cstdlib" 3
+# 8 "firmware/nnet_utils/nnet_conv2d.h" 2
+
+namespace nnet {
+
+struct conv2d_config {
+
+    typedef float bias_t;
+    typedef float weight_t;
+    typedef float accum_t;
+
+
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const unsigned in_height = 10;
+    static const unsigned in_width = 10;
+    static const unsigned n_chan = 1;
+    static const unsigned filt_height = 1;
+    static const unsigned filt_width = 1;
+    static const unsigned kernel_size = filt_height * filt_width;
+    static const unsigned n_filt = 1;
+    static const unsigned stride_height = 1;
+    static const unsigned stride_width = 1;
+    static const unsigned out_height = 10;
+    static const unsigned out_width = 10;
+    static const unsigned dilation_height = 1;
+    static const unsigned dilation_width = 1;
+
+    static const unsigned reuse_factor = 1;
+    static const bool store_weights_in_bram = false;
+    static const unsigned n_zeros = 0;
+};
+
+template <class data_T, class res_T, typename CONFIG_T>
+void conv_2d_cl(
+    data_T data[CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_chan],
+    res_T res[CONFIG_T::out_height * CONFIG_T::out_width * CONFIG_T::n_filt],
+    typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+#pragma HLS INLINE region
+
+ if (CONFIG_T::strategy == nnet::latency) {
+        conv_2d_latency_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+    } else {
+        conv_2d_resource_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pointwise_conv_2d_cl(data_T data[CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_chan],
+                          res_T res[CONFIG_T::out_height * CONFIG_T::out_width * CONFIG_T::n_filt],
+                          typename CONFIG_T::weight_t weights[CONFIG_T::n_chan * CONFIG_T::n_filt],
+                          typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+    (static_cast <bool> (CONFIG_T::filt_width == 1) ? void (0) : __assert_fail ("CONFIG_T::filt_width == 1", "firmware/nnet_utils/nnet_conv2d.h", 61, __extension__ __PRETTY_FUNCTION__));
+
+#pragma HLS INLINE region
+
+
+ if (CONFIG_T::strategy == nnet::latency) {
+        conv_2d_latency_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+    } else {
+        conv_2d_resource_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+    }
+}
+
+}
+# 15 "firmware/parameters.h" 2
+
 # 1 "firmware/nnet_utils/nnet_dense_compressed.h" 1
 
 
@@ -62786,7 +63327,7 @@ ResultLoop:
 }
 
 }
-# 14 "firmware/parameters.h" 2
+# 17 "firmware/parameters.h" 2
 # 1 "firmware/nnet_utils/nnet_dense_stream.h" 1
 
 
@@ -62855,80 +63396,3487 @@ ResWrite:
 }
 
 }
-# 15 "firmware/parameters.h" 2
-
-
-# 1 "firmware/weights/w2.h" 1
-# 12 "firmware/weights/w2.h"
-model_default_t w2[512] = {-0.0000000000, 0.0000000000, 0.1939697266, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.1940917969, 0.2268066406, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.2418212891, 0.0000000000, -0.2778320312, -0.1999511719, -0.0000000000, -0.0000000000, -0.2983398438, 0.0000000000, -0.0000000000, -0.0000000000, -0.3686523438, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.3354492188, -0.0000000000, 0.2128906250, -0.0000000000, -0.2746582031, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.2614746094, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.2147216797, -0.0000000000, -0.0000000000, -0.0000000000, -0.2495117188, -0.0000000000, -0.3093261719, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.2045898438, 0.0000000000, -0.0000000000, -0.2467041016, -0.0950927734, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.3745117188, 0.0000000000, 0.0000000000, 0.2218017578, 0.0000000000, 0.3039550781, 0.3500976562, -0.3688964844, -0.0000000000, 0.2988281250, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.2729492188, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.2707519531, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.2036132812, -0.0979614258, -0.2641601562, -0.0000000000, -0.0462951660, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.2607421875, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.3608398438, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.2453613281, 0.2381591797, 0.0000000000, 0.0000000000, -0.2961425781, 0.0000000000, 0.0000000000, 0.2011718750, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.2883300781, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.2836914062, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.2817382812, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.2690429688, -0.0000000000, 0.0000000000, 0.2775878906, -0.0000000000, -0.0000000000, 0.0000000000, -0.2858886719, -0.0000000000, -0.0000000000, 0.0000000000, 0.2189941406, -0.0000000000, 0.0000000000, -0.0000000000, -0.2919921875, -0.0000000000, -0.2342529297, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.2083740234, -0.0000000000, -0.0000000000, -0.0000000000, 0.2014160156, 0.0000000000, 0.0000000000, 0.0000000000, -0.2016601562, -0.3642578125, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.1925048828, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.3513183594, -0.0000000000, 0.0000000000, 0.0000000000, 0.2078857422, 0.3447265625, -0.3771972656, -0.0000000000, -0.0000000000, 0.0000000000, -0.2020263672, -0.0000000000, -0.2001953125, -0.0000000000, -0.0000000000, 0.4404296875, 0.0000000000, 0.0000000000, -0.1422119141, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.2086181641, -0.0000000000, 0.0000000000, 0.3342285156, -0.0000000000, -0.0000000000, 0.4113769531, -0.3559570312, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.2324218750, -0.0000000000, 0.0000000000, 0.3425292969, 0.0000000000, 0.2269287109, 0.0000000000, 0.1861572266, 0.0000000000, 0.0000000000, -0.0000000000, -0.4020996094, -0.0000000000, 0.3320312500, 0.2387695312, -0.2408447266, -0.0000000000, 0.0000000000, 0.0000000000, 0.3569335938, -0.0000000000, -0.0000000000, -0.2214355469, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.2766113281, 0.3332519531, -0.0000000000, -0.3481445312, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.2000732422, 0.4067382812, -0.2017822266, -0.0000000000, 0.0000000000, -0.4621582031, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.3789062500, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.2600097656, 0.0000000000, 0.3579101562, 0.0000000000, -0.0000000000, -0.3586425781, -0.0000000000, 0.0000000000, 0.4631347656, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.3925781250, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.3198242188, 0.3295898438, 0.3444824219, 0.2216796875, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.4047851562, 0.0000000000, -0.0000000000, 0.3505859375, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.2183837891, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.3605957031, -0.0000000000, -0.0000000000, 0.0000000000, -0.2384033203, 0.0000000000, 0.0000000000, -0.3859863281, -0.3356933594, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.3996582031, -0.0000000000, -0.2695312500, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.2827148438, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.4348144531, 0.0000000000, -0.0000000000, -0.2963867188, 0.4421386719, 0.0000000000, 0.4619140625, -0.3703613281, -0.0000000000, -0.1943359375, -0.0000000000, 0.3857421875, 0.3642578125, 0.0000000000, -0.0000000000, 0.3898925781, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.3125000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.4726562500, -0.0000000000, -0.0000000000, 0.4384765625, -0.0000000000, -0.3898925781, -0.0000000000, -0.0000000000, -0.3862304688, 0.0000000000, 0.3659667969, 0.3190917969, -0.0000000000, -0.0000000000, 0.0000000000, -0.2536621094, 0.3579101562, 0.0000000000, -0.0000000000, 0.2006835938, 0.0000000000, 0.0000000000, 0.4426269531, -0.0000000000, -0.3266601562, -0.0000000000, -0.2292480469, 0.0000000000, -0.0000000000, 0.0000000000, -0.1970214844, -0.0000000000, -0.0000000000, -0.0000000000, 0.4143066406, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.3645019531, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.1979980469, 0.1989746094, -0.0000000000, 0.3544921875, -0.0000000000, 0.4440917969, -0.0000000000};
 # 18 "firmware/parameters.h" 2
-# 1 "firmware/weights/b2.h" 1
-# 12 "firmware/weights/b2.h"
-model_default_t b2[128] = {0.0704956055, -0.0519104004, 0.1503906250, 0.1557617188, -0.0033817291, -0.0753784180, -0.0225982666, -0.0298309326, 0.3115234375, 0.1481933594, 0.0275878906, -0.0692138672, -0.0000876188, 0.0398864746, 0.0354919434, 0.2834472656, -0.0499877930, 0.2219238281, -0.0116882324, -0.0409240723, -0.0755615234, 0.2224121094, 0.2609863281, 0.1508789062, 0.0732421875, 0.1864013672, 0.1560058594, 0.0401916504, -0.0465393066, 0.0975952148, 0.0898437500, 0.2412109375, 0.1520996094, 0.1437988281, 0.1155395508, -0.0335388184, 0.1551513672, 0.2673339844, -0.0395507812, -0.0351257324, -0.0851440430, 0.2846679688, -0.0028247833, 0.0361022949, -0.0103988647, 0.1882324219, 0.2423095703, -0.0729980469, -0.0864257812, 0.2517089844, 0.2863769531, 0.1331787109, -0.0327148438, -0.1177368164, 0.0415649414, 0.0864257812, 0.0792846680, 0.0577392578, -0.0105590820, -0.0419006348, -0.0273437500, 0.0988159180, -0.1124267578, 0.1878662109, 0.0538330078, 0.2342529297, -0.0644531250, 0.0497131348, 0.3032226562, 0.0438842773, -0.0646972656, 0.2795410156, -0.1010742188, 0.1208496094, 0.1641845703, 0.1088867188, 0.0716552734, 0.1033935547, -0.0231018066, -0.0263366699, 0.1023559570, 0.2102050781, 0.2600097656, 0.2500000000, -0.0739135742, 0.1314697266, -0.0641479492, 0.2377929688, 0.3117675781, 0.1708984375, -0.0369873047, 0.1347656250, 0.1264648438, 0.1779785156, 0.2324218750, 0.0232391357, 0.0608520508, 0.2985839844, -0.0196075439, -0.1057128906, -0.0573730469, -0.0622558594, 0.0736694336, 0.1751708984, 0.1033935547, -0.0277557373, 0.1260986328, -0.0498046875, 0.2073974609, -0.0558471680, 0.2159423828, -0.0357055664, 0.1671142578, 0.1700439453, -0.0903930664, -0.0621337891, 0.1890869141, -0.0590209961, 0.1741943359, 0.0664062500, -0.0425720215, 0.2556152344, -0.0377807617, 0.2087402344, 0.2783203125, -0.0878906250, -0.1213378906, 0.2083740234};
+# 1 "firmware/nnet_utils/nnet_pooling.h" 1
+
+
+
+
+
+
+namespace nnet {
+
+
+template <typename T, int N> T max(T x[N]) {
+    T y = x[0];
+    for (int i = 1; i < N; i++) {
+        y = x[i] > y ? x[i] : y;
+    }
+    return y;
+}
+
+template <int W, int N> ap_int<W> avg(ap_int<W> (&x)[N]) {
+
+    ap_int<W + ceillog2(N)> tmp = 0;
+    for (int i = 0; i < N; i++) {
+        tmp += x[i];
+    }
+    tmp /= N;
+
+    ap_int<W> y = tmp;
+    return tmp;
+}
+
+template <int W, int I, int N> ap_fixed<W, I> avg(ap_fixed<W, I> (&x)[N]) {
+
+    ap_fixed<W + ceillog2(N), I + ceillog2(N)> tmp = 0;
+    for (int i = 0; i < N; i++) {
+        tmp += x[i];
+    }
+    tmp /= N;
+
+    ap_fixed<W, I> y = tmp;
+    return y;
+}
+
+
+template <typename T, int N> T avg(T (&x)[N]) {
+    T y = 0;
+    for (int i = 0; i < N; i++) {
+        y += x[i];
+    }
+    y /= N;
+    return y;
+}
+
+
+enum Pool_Op { Max, Average };
+template <typename T, int N, Pool_Op op> T pool_op(T (&x)[N]) {
+    switch (op) {
+    case Max:
+        return max<T, N>(x);
+    case Average:
+        return avg(x);
+
+    }
+}
+
+template <typename T, Pool_Op op> T pad_val() {
+
+
+
+
+
+
+
+    switch (op) {
+    case Max: {
+        T x = 0;
+        x[x.width - 1] = 1;
+        return x;
+        break;
+    }
+    case Average:
+        return 0;
+    }
+}
+
+struct pooling1d_config {
+
+    static const unsigned n_in = 10;
+    static const unsigned pool_width = 2;
+    static const unsigned stride_width = 2;
+    static const unsigned n_out = (n_in - pool_width) / stride_width + 1;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const bool count_pad = false;
+
+    static const Pool_Op pool_op = Max;
+};
+
+template <typename CONFIG_T> constexpr int pool_op_limit_1d() {
+    return CONFIG_T::n_in * CONFIG_T::n_filt / CONFIG_T::reuse_factor;
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling1d_cl(data_T data[CONFIG_T::n_in * CONFIG_T::n_filt], res_T res[CONFIG_T::n_out * CONFIG_T::n_filt]) {
+#pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+
+
+ const int limit = pool_op_limit_1d<CONFIG_T>();
+#pragma HLS ALLOCATION function instances=CONFIG_T::pool_op limit=limit
+
+ unsigned padded_width = CONFIG_T::n_in + CONFIG_T::pad_left + CONFIG_T::pad_right;
+    if (CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) {
+        padded_width -= padded_width - (padded_width / CONFIG_T::stride_width * CONFIG_T::stride_width);
+    }
+
+    for (int ff = 0; ff < CONFIG_T::n_filt; ff++) {
+
+        for (int ii = 0; ii < padded_width; ii += CONFIG_T::stride_width) {
+            data_T pool[CONFIG_T::pool_width];
+#pragma HLS ARRAY_PARTITION variable=&pool complete dim=0
+
+ unsigned img_overlap = 0;
+
+            for (int jj = 0; jj < CONFIG_T::stride_width; jj++) {
+                if (ii + jj < CONFIG_T::pad_left || ii + jj >= (padded_width - CONFIG_T::pad_right)) {
+
+                    pool[jj] = pad_val<data_T, CONFIG_T::pool_op>();
+                    if (CONFIG_T::count_pad)
+                        img_overlap++;
+                } else {
+                    pool[jj] = data[(ii + jj - CONFIG_T::pad_left) * CONFIG_T::n_filt + ff];
+                    img_overlap++;
+                }
+            }
+
+
+
+            res[(ii / CONFIG_T::stride_width) * CONFIG_T::n_filt + ff] =
+                pool_op<data_T, CONFIG_T::pool_width, CONFIG_T::pool_op>(pool);
+
+            if (CONFIG_T::pool_op == Average) {
+                data_T rescale = static_cast<data_T>(CONFIG_T::pool_width) / img_overlap;
+                res[(ii / CONFIG_T::stride_width) * CONFIG_T::n_filt + ff] *= rescale;
+            }
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void global_pooling1d_cl(data_T data[CONFIG_T::n_in * CONFIG_T::n_filt], res_T res[CONFIG_T::n_filt]) {
+#pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+
+ (static_cast <bool> (CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_pooling.h", 151, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pool_width == CONFIG_T::stride_width) ? void (0) : __assert_fail ("CONFIG_T::pool_width == CONFIG_T::stride_width", "firmware/nnet_utils/nnet_pooling.h", 152, __extension__ __PRETTY_FUNCTION__));
+
+
+    const int limit = pool_op_limit_1d<CONFIG_T>();
+#pragma HLS ALLOCATION function instances=CONFIG_T::pool_op limit=limit
+
+ for (int ff = 0; ff < CONFIG_T::n_filt; ff++) {
+        data_T pool[CONFIG_T::n_in];
+#pragma HLS ARRAY_PARTITION variable=&pool complete dim=0
+ for (int jj = 0; jj < CONFIG_T::n_in; jj++) {
+            pool[jj] = data[jj * CONFIG_T::n_filt + ff];
+        }
+
+        res[ff] = pool_op<data_T, CONFIG_T::n_in, CONFIG_T::pool_op>(pool);
+    }
+}
+
+struct pooling2d_config {
+
+    static const unsigned in_height = 10;
+    static const unsigned in_width = 10;
+    static const unsigned n_filt = 4;
+    static const unsigned stride_height = 2;
+    static const unsigned stride_width = 2;
+    static const unsigned pool_height = 2;
+    static const unsigned pool_width = 2;
+    static const unsigned out_height = (in_height - pool_height) / stride_height + 1;
+    static const unsigned out_width = (in_width - pool_width) / stride_width + 1;
+
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const bool count_pad = false;
+
+    static const Pool_Op pool_op = Max;
+
+    static const unsigned reuse_factor = 1;
+
+
+    typedef float accum_t;
+};
+
+template <typename CONFIG_T> constexpr int pool_op_limit() {
+    return (CONFIG_T::out_height * CONFIG_T::out_width) * CONFIG_T::n_filt / CONFIG_T::reuse_factor;
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling2d_cl(data_T data[CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_filt],
+                  res_T res[CONFIG_T::out_height * CONFIG_T::out_width * CONFIG_T::n_filt]) {
+#pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+
+
+ const int limit = pool_op_limit<CONFIG_T>();
+#pragma HLS ALLOCATION function instances=CONFIG_T::pool_op limit=limit
+
+ unsigned padded_height = CONFIG_T::in_height + CONFIG_T::pad_top + CONFIG_T::pad_bottom;
+    unsigned padded_width = CONFIG_T::in_width + CONFIG_T::pad_left + CONFIG_T::pad_right;
+    if (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) {
+        padded_height -= padded_height - (padded_height / CONFIG_T::stride_height * CONFIG_T::stride_height);
+        padded_width -= padded_width - (padded_width / CONFIG_T::stride_width * CONFIG_T::stride_width);
+    }
+
+    for (int ff = 0; ff < CONFIG_T::n_filt; ff++) {
+
+        for (int ii = 0; ii < padded_height; ii += CONFIG_T::stride_height) {
+
+            for (int jj = 0; jj < padded_width; jj += CONFIG_T::stride_width) {
+                data_T pool[CONFIG_T::pool_height * CONFIG_T::pool_width];
+#pragma HLS ARRAY_PARTITION variable=&pool complete dim=0
+
+ unsigned img_overlap = 0;
+
+                for (int kk = 0; kk < CONFIG_T::stride_height; kk++) {
+
+                    for (int ll = 0; ll < CONFIG_T::stride_width; ll++) {
+                        if (ii + kk < CONFIG_T::pad_top || ii + kk >= (padded_height - CONFIG_T::pad_bottom) ||
+                            jj + ll < CONFIG_T::pad_left || jj + ll >= (padded_width - CONFIG_T::pad_right)) {
+
+                            pool[kk * CONFIG_T::stride_width + ll] = pad_val<data_T, CONFIG_T::pool_op>();
+                            if (CONFIG_T::count_pad)
+                                img_overlap++;
+                        } else {
+                            pool[kk * CONFIG_T::stride_width + ll] =
+                                data[(ii + kk - CONFIG_T::pad_top) * CONFIG_T::in_width * CONFIG_T::n_filt +
+                                     (jj + ll - CONFIG_T::pad_left) * CONFIG_T::n_filt + ff];
+                            img_overlap++;
+                        }
+                    }
+                }
+
+
+
+                res[(ii / CONFIG_T::stride_height) * CONFIG_T::out_width * CONFIG_T::n_filt +
+                    (jj / CONFIG_T::stride_width) * CONFIG_T::n_filt + ff] =
+                    pool_op<data_T, CONFIG_T::pool_height * CONFIG_T::pool_width, CONFIG_T::pool_op>(pool);
+
+                if (CONFIG_T::pool_op == Average) {
+                    data_T rescale =
+                        static_cast<data_T>(CONFIG_T::pool_height) * static_cast<data_T>(CONFIG_T::pool_width) / img_overlap;
+                    res[(ii / CONFIG_T::stride_height) * CONFIG_T::out_width * CONFIG_T::n_filt +
+                        (jj / CONFIG_T::stride_width) * CONFIG_T::n_filt + ff] *= rescale;
+                }
+            }
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling2d_cf(data_T data[CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_filt],
+                  res_T res[CONFIG_T::out_height * CONFIG_T::out_width * CONFIG_T::n_filt]) {
+#pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+
+
+ const int limit = pool_op_limit<CONFIG_T>();
+#pragma HLS ALLOCATION function instances=CONFIG_T::pool_op limit=limit
+
+ unsigned padded_height = CONFIG_T::in_height + CONFIG_T::pad_top + CONFIG_T::pad_bottom;
+    unsigned padded_width = CONFIG_T::in_width + CONFIG_T::pad_left + CONFIG_T::pad_right;
+    if (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) {
+        padded_height -= padded_height - (padded_height / CONFIG_T::stride_height * CONFIG_T::stride_height);
+        padded_width -= padded_width - (padded_width / CONFIG_T::stride_width * CONFIG_T::stride_width);
+    }
+
+    for (int ff = 0; ff < CONFIG_T::n_filt; ff++) {
+
+        for (int ii = 0; ii < padded_height; ii += CONFIG_T::stride_height) {
+
+            for (int jj = 0; jj < padded_width; jj += CONFIG_T::stride_width) {
+                data_T pool[CONFIG_T::pool_height * CONFIG_T::pool_width];
+#pragma HLS ARRAY_PARTITION variable=&pool complete dim=0
+
+ unsigned img_overlap = 0;
+
+                for (int kk = 0; kk < CONFIG_T::stride_height; kk++) {
+
+                    for (int ll = 0; ll < CONFIG_T::stride_width; ll++) {
+                        if (ii + kk < CONFIG_T::pad_top || ii + kk >= (padded_height - CONFIG_T::pad_bottom) ||
+                            jj + ll < CONFIG_T::pad_left || jj + ll >= (padded_width - CONFIG_T::pad_right)) {
+
+                            pool[kk * CONFIG_T::stride_width + ll] = pad_val<data_T, CONFIG_T::pool_op>();
+                            if (CONFIG_T::count_pad)
+                                img_overlap++;
+                        } else {
+                            pool[kk * CONFIG_T::stride_width + ll] =
+                                data[(ii + kk - CONFIG_T::pad_top) * CONFIG_T::in_width +
+                                     ff * CONFIG_T::in_width * CONFIG_T::in_height + ll + jj - CONFIG_T::pad_left];
+                            img_overlap++;
+                        }
+                    }
+                }
+
+
+
+                res[(ii / CONFIG_T::stride_height) * CONFIG_T::out_width + (jj / CONFIG_T::stride_width) +
+                    ff * CONFIG_T::out_height * CONFIG_T::out_width] =
+                    pool_op<data_T, CONFIG_T::pool_height * CONFIG_T::pool_width, CONFIG_T::pool_op>(pool);
+
+                if (CONFIG_T::pool_op == Average) {
+                    data_T rescale =
+                        static_cast<data_T>(CONFIG_T::pool_height) * static_cast<data_T>(CONFIG_T::pool_width) / img_overlap;
+                    res[(ii / CONFIG_T::stride_height) * CONFIG_T::out_width + (jj / CONFIG_T::stride_width) +
+                        ff * CONFIG_T::out_height * CONFIG_T::out_width] *= rescale;
+                }
+            }
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void global_pooling2d_cl(data_T data[CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_filt],
+                         res_T res[CONFIG_T::n_filt]) {
+    (static_cast <bool> (CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_pooling.h", 324, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0", "firmware/nnet_utils/nnet_pooling.h", 325, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pool_width == CONFIG_T::stride_width) ? void (0) : __assert_fail ("CONFIG_T::pool_width == CONFIG_T::stride_width", "firmware/nnet_utils/nnet_pooling.h", 326, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pool_height == CONFIG_T::stride_height) ? void (0) : __assert_fail ("CONFIG_T::pool_height == CONFIG_T::stride_height", "firmware/nnet_utils/nnet_pooling.h", 327, __extension__ __PRETTY_FUNCTION__));
+
+#pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+
+ const int limit = pool_op_limit<CONFIG_T>();
+#pragma HLS ALLOCATION instances=pool_op limit=limit function
+
+FiltLoop:
+    for (int filt = 0; filt < CONFIG_T::n_filt; filt++) {
+        data_T pool[CONFIG_T::in_height * CONFIG_T::in_width];
+
+    InputLoop:
+        for (int i = 0; i < CONFIG_T::in_height * CONFIG_T::in_width; i++) {
+            pool[i] = data[i * CONFIG_T::n_filt + filt];
+        }
+
+        res[filt] = static_cast<res_T>(pool_op<data_T, CONFIG_T::in_height * CONFIG_T::in_width, CONFIG_T::pool_op>(pool));
+    }
+}
+
+}
 # 19 "firmware/parameters.h" 2
-# 1 "firmware/weights/w4.h" 1
-# 12 "firmware/weights/w4.h"
-model_default_t w4[384] = {0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.3374023438, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.4184570312, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.4726562500, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.2805175781, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.3725585938, -0.0000000000, -0.0000000000, 0.3469238281, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.4301757812, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.3603515625, 0.4086914062, 0.3881835938, -0.0000000000, -0.4204101562, 0.3681640625, 0.0000000000, -0.4116210938, -0.4064941406, -0.0000000000, 0.3439941406, 0.4199218750, -0.0000000000, -0.0000000000, 0.3217773438, -0.0000000000, -0.3188476562, -0.0000000000, 0.2668457031, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.2841796875, 0.0000000000, -0.0000000000, -0.3261718750, 0.0000000000, 0.0000000000, 0.3374023438, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.3327636719, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.4121093750, 0.0000000000, -0.0000000000, -0.5068359375, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.2658691406, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.3767089844, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.2631835938, 0.0000000000, 0.2375488281, 0.0000000000, 0.0000000000, -0.0000000000, 0.3493652344, -0.0000000000, -0.4282226562, -0.0000000000, 0.3315429688, 0.0000000000, -0.0000000000, -0.3786621094, 0.4418945312, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.4296875000, 0.0000000000, 0.0000000000, -0.4077148438, -0.4243164062, -0.0000000000, 0.3771972656, -0.0000000000, 0.0000000000, 0.2749023438, -0.0000000000, -0.4533691406, 0.0000000000, 0.3691406250, -0.3935546875, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.3605957031, -0.3764648438, 0.0000000000, -0.0000000000, -0.4919433594, 0.0000000000, -0.0000000000, -0.2442626953, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.4077148438, 0.0000000000, 0.0000000000, -0.0000000000, -0.3066406250, 0.3789062500, -0.0000000000, -0.0000000000, -0.3830566406, 0.3613281250, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.4946289062, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.2158203125, -0.0000000000, -0.4228515625, 0.3369140625, 0.0000000000, -0.0000000000, -0.0000000000, 0.3964843750, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.2656250000, 0.0000000000, -0.0000000000, -0.0000000000, 0.3618164062, 0.0000000000, -0.3854980469, -0.0000000000, 0.0000000000, -0.3916015625, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.4040527344, -0.0000000000, -0.0000000000, -0.3183593750, 0.0000000000, 0.0000000000, -0.4172363281, -0.0000000000, 0.0000000000, -0.3974609375, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.4492187500, 0.0000000000, 0.0000000000, -0.4291992188, -0.4404296875, 0.0000000000, 0.0000000000, -0.3061523438, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.2414550781, 0.0000000000, -0.0000000000, -0.4340820312, 0.0000000000, 0.0000000000, -0.3522949219, -0.0000000000, 0.0000000000, 0.3671875000, -0.0000000000, -0.0000000000, 0.0000000000, -0.3703613281, -0.0000000000, -0.4074707031, 0.0000000000, -0.2164306641, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.4362792969, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.2980957031, -0.0000000000, 0.3986816406, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.4541015625, -0.0000000000, 0.3420410156, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.3125000000, -0.4445800781, -0.0000000000, -0.0000000000, 0.0000000000, 0.2927246094, 0.0000000000, -0.4125976562, 0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.2988281250, -0.0000000000, 0.3095703125, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.4038085938, -0.4689941406, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.2937011719, 0.2050781250, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.1602783203, -0.4135742188, -0.0000000000, -0.0000000000, 0.0000000000, 0.3413085938, -0.0000000000, -0.0000000000, -0.4775390625, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, -0.3916015625, 0.0000000000, -0.0000000000, 0.0000000000, -0.3249511719};
+# 1 "firmware/nnet_utils/nnet_pooling_stream.h" 1
+
+
+
+# 1 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/ap_shift_reg.h" 1
+# 83 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/ap_shift_reg.h"
+template<typename __SHIFT_T__, unsigned int __SHIFT_DEPTH__ = 32>
+class ap_shift_reg
+{
+  public:
+
+    inline __attribute__((always_inline)) ap_shift_reg() { }
+    inline __attribute__((always_inline)) ap_shift_reg(const char* name) { }
+
+  private:
+
+    ap_shift_reg(const ap_shift_reg< __SHIFT_T__, __SHIFT_DEPTH__ >& shreg)
+    {
+        for (unsigned i = 0; i < __SHIFT_DEPTH__; ++i)
+            Array[i] = shreg.Array[i];
+    }
+
+    ap_shift_reg& operator = (const ap_shift_reg< __SHIFT_T__,
+        __SHIFT_DEPTH__ >& shreg)
+    {
+        for (unsigned i = 0; i < __SHIFT_DEPTH__; ++i)
+            Array[i] = shreg.Array[i];
+        return *this;
+    }
+
+  public:
+
+    inline __attribute__((always_inline)) __SHIFT_T__ shift(__SHIFT_T__ DataIn,
+        unsigned int Addr = __SHIFT_DEPTH__ - 1, bool Enable = true)
+    {
+
+        __SHIFT_T__ DataOut;
+        _ssdm_op_MemShiftRead(&Array[Addr], &DataOut, &DataIn, Enable);
+        return DataOut;
+
+
+
+
+
+
+    }
+
+
+    inline __attribute__((always_inline)) __SHIFT_T__ read(unsigned int Addr = __SHIFT_DEPTH__ - 1) const
+    {
+
+        __SHIFT_T__ DataOut;
+        __SHIFT_T__ DataIn;
+        _ssdm_op_MemShiftRead(&Array[Addr], &DataOut, &DataIn, false);
+        return DataOut;
+
+
+
+    }
+
+  protected:
+    __SHIFT_T__ Array[__SHIFT_DEPTH__] ;
+};
+# 5 "firmware/nnet_utils/nnet_pooling_stream.h" 2
+
+
+# 1 "firmware/nnet_utils/nnet_conv_stream.h" 1
+
+
+
+
+
+
+
+
+namespace nnet {
+
+enum class conv_implementation { linebuffer = 0, encoded = 1 };
+
+
+
+
+template <unsigned K, unsigned S, unsigned W> unsigned scale_index_K_gte_S(const unsigned idx) {
+#pragma HLS INLINE
+
+ if (idx < K - S) {
+        return idx;
+    }
+
+    constexpr unsigned nW = ((W - K) / S) * S + K;
+    constexpr unsigned sW = (((K + S - 1) / S) - 1) * S + K;
+    if (idx >= nW) {
+        return sW;
+    }
+
+    const unsigned r = nW - idx;
+    if (r <= K - S) {
+        return sW - r;
+    }
+
+    return K - S + (idx - (K - S)) % S;
+}
+
+template <unsigned K, unsigned S, unsigned W> unsigned scale_index_K_lt_S(const unsigned idx) {
+#pragma HLS INLINE
+
+ if (idx < S - K) {
+        return idx;
+    }
+
+    constexpr unsigned nW = ((W - K) / S) * S + K;
+    constexpr unsigned sW = (((S + K - 1) / K) - 1) * S + K;
+    if (idx >= nW) {
+        return sW;
+    }
+
+    const unsigned r = nW - idx;
+    if (r <= S - K) {
+        return sW - r;
+    }
+
+    return S - K + (idx - (S - K)) % S;
+}
+
+template <unsigned K, unsigned S, unsigned W> class scale_index_regular {
+  public:
+    static unsigned scale_index(const unsigned idx) {
+#pragma HLS INLINE
+
+ if (K >= S) {
+            return scale_index_K_gte_S<K, S, W>(idx);
+        } else {
+            return scale_index_K_lt_S<K, S, W>(idx);
+        }
+    }
+};
+
+template <unsigned K, unsigned S, unsigned W> class scale_index_unscaled {
+  public:
+    static unsigned scale_index(const unsigned idx) {
+#pragma HLS INLINE
+ return idx;
+    }
+};
+
+template <class data_T, class res_T, typename CONFIG_T>
+void mult_buffer(hls::stream<typename data_T::value_type> data_window[CONFIG_T::kernel_size * CONFIG_T::n_chan],
+                 res_T &res_pack, hls::stream<res_T> &res_stream, unsigned &outputs_ready,
+                 typename CONFIG_T::weight_t weights[CONFIG_T::kernel_size * CONFIG_T::n_chan * CONFIG_T::n_filt],
+                 typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+#pragma HLS INLINE
+
+ typename data_T::value_type data[CONFIG_T::kernel_size * CONFIG_T::n_chan];
+#pragma HLS ARRAY_PARTITION variable = &data complete
+ typename res_T::value_type res[CONFIG_T::n_filt];
+#pragma HLS ARRAY_PARTITION variable = &res complete
+
+InitData:
+    for (int id = 0; id < CONFIG_T::kernel_size * CONFIG_T::n_chan; id++) {
+#pragma HLS UNROLL
+ data[id] = data_window[id].read();
+    }
+
+#pragma HLS INLINE recursive
+ if (CONFIG_T::strategy == nnet::latency) {
+        dense_latency<typename data_T::value_type, typename res_T::value_type, typename CONFIG_T::mult_config>(
+            data, res, weights, biases);
+    } else {
+        dense_resource<typename data_T::value_type, typename res_T::value_type, typename CONFIG_T::mult_config>(
+            data, res, weights, biases);
+    }
+
+CastLoop:
+    for (unsigned jj = 0; jj < CONFIG_T::n_filt; jj++) {
+#pragma HLS UNROLL
+ if (res_T::size / CONFIG_T::n_filt == 1) {
+            res_pack[jj] = res[jj];
+        } else {
+            res_pack[outputs_ready * CONFIG_T::n_filt + jj] = res[jj];
+        }
+    }
+
+    if (res_T::size / CONFIG_T::n_filt == 1) {
+        res_stream.write(res_pack);
+    } else {
+        if (outputs_ready == (res_T::size / CONFIG_T::n_filt) - 1) {
+            res_stream.write(res_pack);
+            outputs_ready = 0;
+        } else {
+            outputs_ready++;
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_output_encoded(const data_T &in_elem,
+                            hls::stream<typename data_T::value_type> data_window[CONFIG_T::kernel_size * CONFIG_T::n_chan],
+                            hls::stream<res_T> &res, res_T &res_pack, unsigned &outputs_ready,
+                            typename CONFIG_T::weight_t weights[CONFIG_T::kernel_size * CONFIG_T::n_chan * CONFIG_T::n_filt],
+                            typename CONFIG_T::bias_t biases[CONFIG_T::n_filt], ap_uint<CONFIG_T::kernel_size> *pixel_idx) {
+#pragma HLS INLINE
+
+MultLoop:
+    for (unsigned p = 0; p < data_T::size / CONFIG_T::n_chan; p++) {
+#pragma HLS PIPELINE II = CONFIG_T::reuse_factor
+ CopyDataFilt:
+        for (unsigned f = 0; f < CONFIG_T::kernel_size; f++) {
+#pragma HLS UNROLL
+ CopyDataChan:
+            for (unsigned c = 0; c < CONFIG_T::n_chan; c++) {
+#pragma HLS UNROLL
+ if (pixel_idx[p][f])
+                    data_window[f * CONFIG_T::n_chan + c].write(in_elem[p * CONFIG_T::n_chan + c]);
+            }
+        }
+        if (pixel_idx[p][CONFIG_T::kernel_size - 1]) {
+            mult_buffer<data_T, res_T, CONFIG_T>(data_window, res_pack, res, outputs_ready, weights, biases);
+        }
+    }
+}
+
+
+
+
+template <class data_T, typename CONFIG_T>
+void kernel_shift_1d(const data_T &in_elem,
+                     typename data_T::value_type kernel_window[CONFIG_T::filt_width * CONFIG_T::n_chan]) {
+#pragma HLS inline
+
+
+ static const int filt_width = CONFIG_T::filt_width - 1;
+_ssdm_SpecConstant(&filt_width);
+# 164 "firmware/nnet_utils/nnet_conv_stream.h"
+
+KernelShiftWidth:
+    for (int i_iw = 0; i_iw < filt_width; i_iw++) {
+#pragma HLS PIPELINE II = 1
+ KernelShiftChannel:
+        for (unsigned i_ic = 0; i_ic < CONFIG_T::n_chan; i_ic++) {
+#pragma HLS UNROLL
+
+ kernel_window[i_iw * CONFIG_T::n_chan + i_ic] = kernel_window[(i_iw + 1) * CONFIG_T::n_chan + i_ic];
+        }
+    }
+
+
+    static const int lastheight = (CONFIG_T::filt_width - 1) * CONFIG_T::n_chan;
+_ssdm_SpecConstant(&lastheight);
+# 177 "firmware/nnet_utils/nnet_conv_stream.h"
+
+KernelPushChannel:
+    for (int i_ic = 0; i_ic < CONFIG_T::n_chan; i_ic++) {
+#pragma HLS UNROLL
+ kernel_window[lastheight + i_ic] = in_elem[i_ic];
+    }
+}
+
+template <class data_T, typename CONFIG_T>
+void kernel_shift_2d(
+    typename data_T::value_type shift_buffer[CONFIG_T::filt_height][CONFIG_T::n_chan],
+    typename data_T::value_type kernel_window[CONFIG_T::filt_width * CONFIG_T::filt_height * CONFIG_T::n_chan]) {
+#pragma HLS inline
+
+
+ static const int filt_width = CONFIG_T::filt_width - 1;
+_ssdm_SpecConstant(&filt_width);
+# 192 "firmware/nnet_utils/nnet_conv_stream.h"
+
+KernelShiftWidth:
+    for (int i_iw = 0; i_iw < filt_width; i_iw++) {
+#pragma HLS PIPELINE II = 1
+ KernelShiftHeight:
+        for (unsigned i_ih = 0; i_ih < CONFIG_T::filt_height; i_ih++) {
+        KernelShiftChannel:
+            for (unsigned i_ic = 0; i_ic < CONFIG_T::n_chan; i_ic++) {
+
+                kernel_window[i_ih * CONFIG_T::filt_width * CONFIG_T::n_chan + i_iw * CONFIG_T::n_chan + i_ic] =
+                    kernel_window[i_ih * CONFIG_T::filt_width * CONFIG_T::n_chan + (i_iw + 1) * CONFIG_T::n_chan + i_ic];
+            }
+        }
+    }
+
+
+    static const int lastheight = (CONFIG_T::filt_width - 1) * CONFIG_T::n_chan;
+_ssdm_SpecConstant(&lastheight);
+# 208 "firmware/nnet_utils/nnet_conv_stream.h"
+
+KernelPushHeight:
+    for (int i_ih = 0; i_ih < CONFIG_T::filt_height; i_ih++) {
+#pragma HLS UNROLL
+ KernelPushChannel:
+        for (int i_ic = 0; i_ic < CONFIG_T::n_chan; i_ic++) {
+            kernel_window[lastheight + i_ih * CONFIG_T::filt_width * CONFIG_T::n_chan + i_ic] = shift_buffer[i_ih][i_ic];
+        }
+    }
+}
+
+template <class data_T, typename CONFIG_T>
+void shift_line_buffer(
+    const data_T &in_elem,
+    ap_shift_reg<typename data_T::value_type, CONFIG_T::in_width> line_buffer[(CONFIG_T::filt_height - 1 > 1 ? CONFIG_T::filt_height - 1 : 1)]
+                                                                             [CONFIG_T::n_chan],
+    typename data_T::value_type kernel_window[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan]) {
+
+#pragma HLS PIPELINE
+
+
+ typename data_T::value_type shift_buffer[CONFIG_T::filt_height][CONFIG_T::n_chan];
+#pragma HLS ARRAY_PARTITION variable = &shift_buffer complete dim = 0
+
+UpdateBuffer:
+    for (int i_ic = 0; i_ic < CONFIG_T::n_chan; i_ic++) {
+#pragma HLS UNROLL
+
+
+ shift_buffer[CONFIG_T::filt_height - 1][i_ic] = in_elem[i_ic];
+    }
+
+LineBufferDataIn:
+    for (int i_ic = 0; i_ic < CONFIG_T::n_chan; i_ic++) {
+
+    LineBufferShift:
+        for (unsigned i_ih = 1; i_ih < CONFIG_T::filt_height; i_ih++) {
+#pragma HLS UNROLL
+ typename data_T::value_type pop_elem = line_buffer[i_ih - 1][i_ic].shift(
+                shift_buffer[CONFIG_T::filt_height - i_ih][i_ic]);
+            shift_buffer[CONFIG_T::filt_height - i_ih - 1][i_ic] =
+                pop_elem;
+        }
+    }
+    kernel_shift_2d<data_T, CONFIG_T>(shift_buffer, kernel_window);
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_output_buffer_2d(
+    const data_T &in_elem,
+    ap_shift_reg<typename data_T::value_type, CONFIG_T::in_width> line_buffer[(CONFIG_T::filt_height - 1 > 1 ? CONFIG_T::filt_height - 1 : 1)]
+                                                                             [CONFIG_T::n_chan],
+    hls::stream<res_T> &res_stream,
+    typename CONFIG_T::weight_t weights[CONFIG_T::kernel_size * CONFIG_T::n_chan * CONFIG_T::n_filt],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+#pragma HLS INLINE OFF
+
+
+ const static int lShiftX = CONFIG_T::filt_width - 1;
+_ssdm_SpecConstant(&lShiftX);
+# 266 "firmware/nnet_utils/nnet_conv_stream.h"
+
+    const static int lShiftY = CONFIG_T::filt_height - 1;
+_ssdm_SpecConstant(&lShiftY);
+# 267 "firmware/nnet_utils/nnet_conv_stream.h"
+
+
+
+    static int pX = 0;
+    static int pY = 0;
+
+    static int sX = 0;
+    static int sY = 0;
+
+    static typename data_T::value_type kernel_data[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan];
+#pragma HLS ARRAY_PARTITION variable = &kernel_data complete
+
+ typename res_T::value_type res_out[CONFIG_T::n_filt];
+#pragma HLS ARRAY_PARTITION variable = &res_out complete dim = 0
+
+ res_T res_pack;
+#pragma HLS DATA_PACK variable = &res_pack
+
+
+ nnet::shift_line_buffer<data_T, CONFIG_T>(in_elem, line_buffer, kernel_data);
+
+
+    if ((sX - lShiftX) == 0 && (sY - lShiftY) == 0 && pY > lShiftY - 1 && pX > lShiftX - 1) {
+
+
+
+        if (CONFIG_T::strategy == nnet::latency) {
+            dense_latency<typename data_T::value_type, typename res_T::value_type, typename CONFIG_T::mult_config>(
+                kernel_data, res_out, weights, biases);
+        } else {
+            dense_resource<typename data_T::value_type, typename res_T::value_type, typename CONFIG_T::mult_config>(
+                kernel_data, res_out, weights, biases);
+        }
+
+
+    CastLoop:
+        for (unsigned i_ic = 0; i_ic < CONFIG_T::n_filt; i_ic++) {
+#pragma HLS UNROLL
+ res_pack[i_ic] = res_out[i_ic];
+        }
+
+
+        res_stream.write(res_pack);
+    }
+
+
+    if (pX + 1 == CONFIG_T::in_width)
+    {
+        pX = 0;
+        sX = 0;
+        if (pY + 1 == CONFIG_T::in_height) {
+            pY = 0;
+            sY = 0;
+        } else {
+            pY = pY + 1;
+
+            sY = ((sY - lShiftY) == 0) ? sY - CONFIG_T::stride_height + 1 : sY + 1;
+        }
+    } else {
+        pX = pX + 1;
+
+        sX = ((sX - lShiftX) == 0) ? sX - CONFIG_T::stride_width + 1 : sX + 1;
+    }
+}
+
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_output_buffer_1d(
+    const data_T &in_elem, hls::stream<res_T> &res_stream,
+    typename CONFIG_T::weight_t weights[CONFIG_T::kernel_size * CONFIG_T::n_chan * CONFIG_T::n_filt],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+#pragma HLS INLINE
+
+
+ const static int lShiftX = CONFIG_T::filt_width - 1;
+_ssdm_SpecConstant(&lShiftX);
+# 341 "firmware/nnet_utils/nnet_conv_stream.h"
+
+
+
+    static int pX = 0;
+    static int sX = 0;
+
+    static typename data_T::value_type kernel_data[CONFIG_T::filt_width * CONFIG_T::n_chan];
+#pragma HLS ARRAY_PARTITION variable = &kernel_data complete
+
+ typename res_T::value_type res_out[CONFIG_T::n_filt];
+#pragma HLS ARRAY_PARTITION variable = &res_out complete dim = 0
+
+ res_T res_pack;
+#pragma HLS DATA_PACK variable = &res_pack
+
+
+ nnet::kernel_shift_1d<data_T, CONFIG_T>(in_elem, kernel_data);
+
+
+    if ((sX - lShiftX) == 0 && pX > lShiftX - 1) {
+
+
+#pragma HLS INLINE recursive
+ if (CONFIG_T::strategy == nnet::latency) {
+            dense_latency<typename data_T::value_type, typename res_T::value_type, typename CONFIG_T::mult_config>(
+                kernel_data, res_out, weights, biases);
+        } else {
+            dense_resource<typename data_T::value_type, typename res_T::value_type, typename CONFIG_T::mult_config>(
+                kernel_data, res_out, weights, biases);
+        }
+
+
+    CastLoop:
+        for (unsigned i_ic = 0; i_ic < CONFIG_T::n_filt; i_ic++) {
+#pragma HLS UNROLL
+ res_pack[i_ic] = res_out[i_ic];
+        }
+
+
+        res_stream.write(res_pack);
+    }
+
+
+    if (pX + 1 == CONFIG_T::in_width)
+    {
+        pX = 0;
+        sX = 0;
+    } else {
+        pX = pX + 1;
+
+        sX = ((sX - lShiftX) == 0) ? sX - CONFIG_T::stride_width + 1 : sX + 1;
+    }
+}
+
+}
+# 8 "firmware/nnet_utils/nnet_pooling_stream.h" 2
+
+# 1 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h" 1
+# 36 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+# 1 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/hls_half.h" 1
+# 3274 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/hls_half.h"
+extern half half_nan(const char *tagp);
+
+
+
+
+
+extern half half_atan(half t);
+extern half half_atan2(half y, half x);
+extern half half_copysign(half x, half y);
+
+extern half half_fabs(half x);
+
+extern half half_abs(half x);
+extern half half_fma(half x, half y, half z);
+extern half half_mad(half x, half y, half z);
+extern half half_frexp (half x, int* exp);
+extern half half_ldexp (half x, int exp);
+extern half half_fmax(half x, half y);
+
+extern half half_fmin(half x, half y);
+
+extern half half_asin(half t_in);
+extern half half_acos(half t_in);
+extern half half_sin(half t_in);
+extern half half_cos(half t_in);
+extern void half_sincos(half x, half *sin, half *cos);
+extern half half_sinh(half t_in);
+extern half half_cosh(half t_in);
+extern half half_sinpi(half t_in);
+extern half half_cospi(half t_in);
+extern half half_recip(half x);
+extern half half_sqrt(half x);
+extern half half_rsqrt(half x);
+extern half half_cbrt(half x);
+extern half half_hypot(half x, half y);
+extern half half_log(half x);
+extern half half_log10(half x);
+extern half half_log2(half x);
+extern half half_logb(half x);
+extern half half_log1p(half x);
+extern int half_ilogb(half x);
+extern half half_exp(half x);
+extern half half_exp10(half x);
+extern half half_exp2(half x);
+extern half half_expm1(half x);
+extern half half_pow(half x, half y);
+extern half half_powr(half x, half y);
+extern half half_pown(half x, int y);
+extern half half_rootn(half x, int y);
+extern half half_floor(half x);
+
+extern half half_ceil(half x);
+
+extern half half_trunc(half x);
+
+extern half half_round(half x);
+
+extern half half_nearbyint(half x);
+extern half half_rint(half x);
+extern long int half_lrint(half x);
+extern long long int half_llrint(half x);
+extern long int half_lround(half x);
+extern long long int half_llround(half x);
+extern half half_modf(half x, half *intpart);
+
+extern half half_fract(half x, half *intpart);
+extern half half_nextafter(half x, half y);
+extern half half_fmod(half x, half y);
+extern half half_remainder(half x, half y);
+extern half half_remquo(half x, half y, int* quo);
+extern half half_divide(half x, half y);
+# 37 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h" 2
+# 68 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+namespace hls {
+
+    template<typename T>
+    class numeric_limits {
+    public:
+        static T max() { return std::numeric_limits<T>::max(); }
+        static T min() { return std::numeric_limits<T>::min(); }
+        static T epsilon() { return std::numeric_limits<T>::epsilon(); }
+    };
+
+    template <int W, int I, ap_q_mode Q, ap_o_mode O>
+    class numeric_limits<ap_fixed<W,I,Q,O> > {
+    public:
+        static ap_fixed<W,I,Q,O> max() {
+            ap_int<W> m = ::hls::numeric_limits<ap_int<W> >::max();
+            ap_fixed<W,I,Q,O> x;
+            x(W-1,0) = m(W-1,0);
+            return x;
+        }
+        static ap_fixed<W,I,Q,O> min() {
+            ap_int<W> m = ::hls::numeric_limits<ap_int<W> >::min();
+            ap_fixed<W,I,Q,O> x;
+            x(W-1,0) = m(W-1,0);
+            return x;
+        }
+        static ap_fixed<W,I,Q,O> epsilon() {
+          ap_fixed<W,I,Q,O> x = 0;
+          x[0] = 1;
+
+          return x;
+        }
+    };
+
+    template <int W, int I, ap_q_mode Q, ap_o_mode O>
+    class numeric_limits<ap_ufixed<W,I,Q,O> > {
+    public:
+        static ap_ufixed<W,I,Q,O> max() {
+            ap_uint<W> m = ::hls::numeric_limits<ap_uint<W> >::max();
+            ap_ufixed<W,I,Q,O> x;
+            x(W-1,0) = m(W-1,0);
+            return x;
+        }
+        static ap_ufixed<W,I,Q,O> min() { return 0; }
+        static ap_ufixed<W,I,Q,O> epsilon() {
+          ap_ufixed<W,I,Q,O> x = 0;
+          x[0] = 1;
+          return x;
+        }
+    };
+
+    template <int W>
+    class numeric_limits<ap_int<W> > {
+    public:
+        static ap_int<W> max() { ap_int<W> m = min(); return ~m; }
+        static ap_int<W> min() { ap_int<W> m = 0; m[W-1] = 1; return m; }
+        static ap_int<W> epsilon() {
+          ap_int<W> x = 0;
+          x[0] = 1;
+          return x;
+        }
+    };
+
+    template <int W>
+    class numeric_limits<ap_uint<W> > {
+    public:
+        static ap_uint<W> max() { ap_uint<W> zero = 0; return ~zero; }
+        static ap_uint<W> min() { return 0; }
+        static ap_uint<W> epsilon() {
+          ap_uint<W> x = 0;
+          x[0] = 1;
+          return x;
+        }
+    };
+}
+
+
+namespace hlstmp {
+
+    template<typename T>
+    class numeric_limits {
+    public:
+        static T max() { return std::numeric_limits<T>::max(); }
+        static T min() { return std::numeric_limits<T>::min(); }
+        static T epsilon() { return std::numeric_limits<T>::epsilon(); }
+    };
+
+    template <int W, int I, ap_q_mode Q, ap_o_mode O>
+    class numeric_limits<ap_fixed<W,I,Q,O> > {
+    public:
+        static ap_fixed<W,I,Q,O> max() {
+            ap_int<W> m = ::hlstmp::numeric_limits<ap_int<W> >::max();
+            ap_fixed<W,I,Q,O> x;
+            x(W-1,0) = m(W-1,0);
+            return x;
+        }
+        static ap_fixed<W,I,Q,O> min() {
+            ap_int<W> m = ::hlstmp::numeric_limits<ap_int<W> >::min();
+            ap_fixed<W,I,Q,O> x;
+            x(W-1,0) = m(W-1,0);
+            return x;
+        }
+        static ap_fixed<W,I,Q,O> epsilon() {
+          ap_fixed<W,I,Q,O> x = 0;
+          x[0] = 1;
+
+          return x;
+        }
+    };
+
+    template <int W, int I, ap_q_mode Q, ap_o_mode O>
+    class numeric_limits<ap_ufixed<W,I,Q,O> > {
+    public:
+        static ap_ufixed<W,I,Q,O> max() {
+            ap_uint<W> m = ::hlstmp::numeric_limits<ap_uint<W> >::max();
+            ap_ufixed<W,I,Q,O> x;
+            x(W-1,0) = m(W-1,0);
+            return x;
+        }
+        static ap_ufixed<W,I,Q,O> min() { return 0; }
+        static ap_ufixed<W,I,Q,O> epsilon() {
+          ap_ufixed<W,I,Q,O> x = 0;
+          x[0] = 1;
+          return x;
+        }
+    };
+
+    template <int W>
+    class numeric_limits<ap_int<W> > {
+    public:
+        static ap_int<W> max() { ap_int<W> m = min(); return ~m; }
+        static ap_int<W> min() { ap_int<W> m = 0; m[W-1] = 1; return m; }
+        static ap_int<W> epsilon() {
+          ap_int<W> x = 0;
+          x[0] = 1;
+          return x;
+        }
+    };
+
+    template <int W>
+    class numeric_limits<ap_uint<W> > {
+    public:
+        static ap_uint<W> max() { ap_uint<W> zero = 0; return ~zero; }
+        static ap_uint<W> min() { return 0; }
+        static ap_uint<W> epsilon() {
+          ap_uint<W> x = 0;
+          x[0] = 1;
+          return x;
+        }
+    };
+}
+
+
+static inline
+const
+uint32_t pow2(uint32_t e)
+{
+    switch(e) {
+        case 0: return 1; break;
+        case 1: return 2; break;
+        case 2: return 4; break;
+        case 3: return 8; break;
+        case 4: return 16; break;
+        case 5: return 32; break;
+        case 6: return 64; break;
+        case 7: return 128; break;
+        case 8: return 256; break;
+        case 9: return 512; break;
+        case 10: return 1024; break;
+        case 11: return 2048; break;
+        default: return 0;
+    }
+}
+
+template<class T>
+T reg(T in)
+{
+
+_ssdm_InlineSelf(2, "");
+_ssdm_op_SpecInterface(0, "ap_none", 1, 1, "", 0, 0, "", "", "", 0, 0, 0, 0, "", "");
+
+    return in;
+}
+# 264 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+static inline
+float to_float(float v)
+{
+    return v;
+}
+
+template<int _W, int _I>
+float to_float(ap_fixed<_W, _I> v)
+{
+    return v.to_float();
+}
+# 283 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+template <typename T>
+class fp_struct
+{
+};
+
+union single_cast {
+    float f;
+    uint32_t i;
+};
+
+template <>
+class fp_struct<float>
+{
+public:
+    const static int EXP_INFNAN = 255;
+    const static int EXP_BIAS = 127;
+    const static int EXP_BITS = 8;
+    const static int SIG_BITS = 23;
+    const static int BITS = 32;
+
+    fp_struct() {
+    }
+    fp_struct(float f) {
+
+
+        union single_cast dc;
+        dc.f = f;
+        ap_uint<32> data = dc.i;
+
+
+
+
+
+        sign[0] = data[31];
+        exp(7,0)= data(30,23);
+        sig(22,0)= data(22,0);
+    }
+    fp_struct(ap_uint<32> data) {
+        sign[0] = data[31];
+        exp(7,0)= data(30,23);
+        sig(22,0)= data(22,0);
+    }
+    fp_struct(uint32_t i) {
+        ap_uint<32> data = i;
+        sign[0] = data[31];
+        exp(7,0)= data(30,23);
+        sig(22,0)= data(22,0);
+    }
+    inline ap_uint<32> data() const {
+        ap_uint<32> t;
+        t[31] = sign[0];
+        t(30,23) = exp(7,0);
+        t(22,0) = sig(22,0);
+        return t;
+    }
+    inline int expv() const {
+        return exp-127;
+    }
+    inline int32_t to_int() const {
+        return data().to_int();
+    }
+    inline float to_float() const {
+
+
+        union single_cast ret;
+        ret.i = data().to_uint();
+        return ret.f;
+
+
+
+
+
+
+
+    }
+    inline void set_mantissa(ap_ufixed<1+SIG_BITS,1> mantissa) {
+        ap_ufixed<SIG_BITS,0> significand = mantissa;
+        sig = significand(SIG_BITS-1,0);
+    }
+    inline ap_ufixed<1+SIG_BITS,1> mantissa() const {
+        ap_ufixed<1+SIG_BITS,1> y = 0;
+        y(y.wl()-1,0) = sig(SIG_BITS-1,0);
+        y[y.wl()-1] = 1;
+        return y;
+    }
+    inline float to_ieee() const {
+        return to_float();
+    }
+    inline int __signbit() const {
+        return sign.to_int();
+    }
+
+    static float infinity() {
+        fp_struct<float> x;
+        x.sign = 0;
+        x.exp = -1;
+        x.sig = 0;
+        return x.to_ieee();
+    }
+
+    static float minus_infinity() {
+        fp_struct<float> x;
+        x.sign = 1;
+        x.exp = -1;
+        x.sig = 0;
+        return x.to_ieee();
+    }
+
+    typedef uint32_t inttype;
+    typedef ap_uint<32> data_type;
+    ap_uint<1> sign;
+    ap_uint<EXP_BITS> exp;
+    ap_uint<SIG_BITS> sig;
+};
+# 413 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+static inline
+void
+castSingle(
+    float din,
+    fp_struct<float> &dout)
+{
+    fp_struct<float> t(din);
+    dout = t;
+}
+
+static inline
+float
+castSingle(
+    fp_struct<float> din)
+{
+    return din.to_float();
+}
+
+static inline
+void
+dumpSingle(
+    float da,
+    fp_struct<float> ds)
+{
+# 447 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+}
+
+
+
+
+
+
+
+union double_cast {
+    double d;
+    uint64_t i;
+};
+
+template <>
+class fp_struct<double>
+{
+public:
+    const static int EXP_INFNAN = 2047;
+    const static int EXP_BIAS = 1023;
+    const static int EXP_BITS = 11;
+    const static int SIG_BITS = 52;
+    const static int BITS = 64;
+
+    fp_struct() {
+    }
+    fp_struct(double f) {
+        union double_cast dc;
+        dc.d = f;
+        ap_uint<64> data = dc.i;
+        sign[0] = data[63];
+        exp(10,0) = data(62,52);
+        sig(51,0) = data(51,0);
+    }
+    fp_struct(ap_uint<64> data) {
+        sign[0] = data[63];
+        exp(10,0) = data(62,52);
+        sig(51,0) = data(51,0);
+    }
+    fp_struct(uint64_t i) {
+        ap_uint<64> data = i;
+        sign[0] = data[EXP_BITS+SIG_BITS+1-1];
+        exp(EXP_BITS-1,0) = data(EXP_BITS-1+SIG_BITS,SIG_BITS);
+        sig(SIG_BITS-1,0) = data(SIG_BITS-1,0);
+    }
+    inline ap_uint<64> data() const {
+        ap_uint<64> t;
+        t[EXP_BITS+SIG_BITS+1-1] = sign[0];
+        t(EXP_BITS-1+SIG_BITS,SIG_BITS) = exp(EXP_BITS-1,0);
+        t(SIG_BITS-1,0) = sig(SIG_BITS-1,0);
+        return t;
+    }
+    inline int64_t to_int() const {
+        return data().to_int64();
+    }
+    inline int expv() const {
+        return exp-1023;
+    }
+    inline ap_uint<20> sig_msb() const {
+        return sig(51,32);
+    }
+    inline ap_uint<32> sig_lsb() const {
+        return sig(31,0);
+    }
+    inline double to_double() const {
+        union double_cast ret;
+        ret.i = data().to_uint64();
+        return ret.d;
+    }
+    inline void set_mantissa(ap_ufixed<1+SIG_BITS,1> mantissa) {
+        ap_ufixed<SIG_BITS,0> significand = mantissa;
+        sig = significand(SIG_BITS-1,0);
+    }
+    inline ap_ufixed<1+SIG_BITS,1> mantissa() const {
+        ap_ufixed<1+SIG_BITS,1> y = 0;
+        y(y.wl()-1,0) = sig(SIG_BITS-1,0);
+        y[y.wl()-1] = 1;
+        return y;
+    }
+    inline double to_ieee() const {
+        return to_double();
+    }
+    inline int __signbit() const {
+        return sign.to_int();
+    }
+
+    static double infinity() {
+        fp_struct<double> x;
+        x.sign = 0;
+        x.exp = -1;
+        x.sig = 0;
+        return x.to_ieee();
+    }
+
+    static double minus_infinity() {
+        fp_struct<double> x;
+        x.sign = 1;
+        x.exp = -1;
+        x.sig = 0;
+        return x.to_ieee();
+    }
+
+    typedef uint64_t inttype;
+    typedef ap_uint<64> data_type;
+    ap_uint<1> sign;
+    ap_uint<EXP_BITS> exp;
+    ap_uint<SIG_BITS> sig;
+};
+# 566 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+static inline
+void
+castDouble(
+    double din,
+    fp_struct<double> &dout)
+{
+    fp_struct<double> t(din);
+    dout = t;
+}
+
+static inline
+double
+castDouble(
+    fp_struct<double> din)
+{
+    return din.to_double();
+}
+
+static inline
+void
+dumpDouble(
+    double da,
+    fp_struct<double> ds)
+{
+# 600 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+}
+# 610 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+union half_cast {
+    half d;
+    uint16_t i;
+};
+
+
+template <>
+class fp_struct<half>
+{
+public:
+    const static int EXP_INFNAN = 31;
+    const static int EXP_BIAS = 15;
+    const static int EXP_BITS = 5;
+    const static int SIG_BITS = 10;
+    const static int BITS = 16;
+
+    fp_struct() {
+    }
+    fp_struct(half f) {
+
+        union half_cast dc;
+        dc.d = f;
+        ap_uint<16> data = dc.i;
+
+
+
+        sign[0] = data[EXP_BITS+SIG_BITS+1-1];
+        exp(EXP_BITS-1,0) = data(EXP_BITS-1+SIG_BITS,SIG_BITS);
+        sig(SIG_BITS-1,0) = data(SIG_BITS-1,0);
+    }
+    fp_struct(ap_uint<16> data) {
+        sign[0] = data[EXP_BITS+SIG_BITS+1-1];
+        exp(EXP_BITS-1,0) = data(EXP_BITS-1+SIG_BITS,SIG_BITS);
+        sig(SIG_BITS-1,0) = data(SIG_BITS-1,0);
+    }
+    fp_struct(uint16_t i) {
+        ap_uint<16> data = i;
+        sign[0] = data[EXP_BITS+SIG_BITS+1-1];
+        exp(EXP_BITS-1,0) = data(EXP_BITS-1+SIG_BITS,SIG_BITS);
+        sig(SIG_BITS-1,0) = data(SIG_BITS-1,0);
+    }
+    inline ap_uint<16> data() const {
+        ap_uint<16> t;
+        t[EXP_BITS+SIG_BITS+1-1] = sign[0];
+        t(EXP_BITS-1+SIG_BITS,SIG_BITS) = exp(EXP_BITS-1,0);
+        t(SIG_BITS-1,0) = sig(SIG_BITS-1,0);
+        return t;
+    }
+    inline int expv() const {
+        return exp-EXP_BIAS;
+    }
+    inline int16_t to_int() const {
+        return uint16_t(data().to_int());
+    }
+    inline half to_half() const {
+
+        union half_cast ret;
+        ret.i = data().to_uint64();
+        return ret.d;
+
+
+
+
+
+    }
+    inline void set_mantissa(ap_ufixed<1+SIG_BITS,1> mantissa) {
+        ap_ufixed<SIG_BITS,0> significand = mantissa;
+        sig = significand(SIG_BITS-1,0);
+    }
+    inline ap_ufixed<1+SIG_BITS,1> mantissa() const {
+        ap_ufixed<1+SIG_BITS,1> y = 0;
+        y(y.wl()-1,0) = sig(SIG_BITS-1,0);
+        y[y.wl()-1] = 1;
+        return y;
+    }
+    inline half to_ieee() const {
+        return to_half();
+    }
+    inline int __signbit() const {
+        return sign.to_int();
+    }
+
+    static half infinity() {
+        fp_struct<half> x;
+        x.sign = 0;
+        x.exp = -1;
+        x.sig = 0;
+        return x.to_ieee();
+    }
+
+    static half minus_infinity() {
+        fp_struct<half> x;
+        x.sign = 1;
+        x.exp = -1;
+        x.sig = 0;
+        return x.to_ieee();
+    }
+
+    typedef uint16_t inttype;
+    typedef ap_uint<16> data_type;
+    ap_uint<1> sign;
+    ap_uint<EXP_BITS> exp;
+    ap_uint<SIG_BITS> sig;
+};
+# 726 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+static inline
+void
+castHalf(
+    half din,
+    fp_struct<half> &dout)
+{
+    fp_struct<half> t(din);
+    dout = t;
+}
+
+static inline
+half
+castHalf(
+    fp_struct<half> din)
+{
+    return din.to_half();
+}
+
+static inline
+void
+dumpHalf(
+    half da,
+    fp_struct<half> ds)
+{
+# 760 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+}
+# 775 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+template < unsigned int _Base, unsigned int _Num >
+class Power
+{
+public:
+    static const unsigned int Value = _Base * Power< _Base, _Num - 1 >::Value;
+};
+
+template < unsigned int _Base >
+class Power< _Base, 0 >
+{
+public:
+    static const unsigned int Value = 1;
+};
+# 797 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+template < unsigned int _Num, unsigned int _I=_Num/2>
+class BitWidth
+{
+public:
+    static const unsigned int Value = 1 + BitWidth<_Num,_I/2>::Value;
+};
+
+template <unsigned int _Num>
+class BitWidth<_Num, 0>
+{
+public:
+    static const unsigned int Value = 1;
+};
+# 819 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+template < unsigned int _Num, unsigned int _I=_Num/2>
+class UnsignedBitWidth
+{
+public:
+    static const unsigned int Value = 1 + UnsignedBitWidth<_Num,_I/2>::Value;
+};
+
+template <unsigned int _Num>
+class UnsignedBitWidth<_Num, 0>
+{
+public:
+    static const unsigned int Value = 0;
+};
+# 840 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+template < typename T >
+class Type_BitWidth
+{
+public:
+    static const unsigned int Value = 8*sizeof(T);
+};
+
+template <int W >
+class Type_BitWidth< ap_uint<W> >
+{
+public:
+    static const unsigned int Value = W;
+};
+
+template < int W >
+class Type_BitWidth< ap_int<W> >
+{
+public:
+    static const unsigned int Value = W;
+};
+
+template < int W, int I >
+class Type_BitWidth< ap_ufixed<W, I> >
+{
+public:
+    static const unsigned int Value = W;
+};
+
+template < int W, int I >
+class Type_BitWidth< ap_fixed<W, I> >
+{
+public:
+    static const unsigned int Value = W;
+};
+# 888 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+template <typename _T, int _Num, int _I=_Num-1>
+class Table : public Table<_T, _Num, _I-1>
+{
+public:
+    typedef typename _T::TableType TableType;
+    static const typename _T::TableType dummy;
+    static const int size = _Num;
+
+};
+
+template <typename _T, int _Num>
+class Table<_T, _Num, 0>
+{
+public:
+    static const typename _T::TableType dummy;
+    static typename _T::TableType array[_Num];
+};
+# 915 "/tools/Xilinx/Vivado/2020.1/common/technology/autopilot/utils/x_hls_utils.h"
+template <typename _T, int _Num, int _I>
+const typename _T::TableType Table<_T, _Num, _I>::dummy
+    = Table<_T, _Num, 0>::array[_I] = _T::apply(_I,_Num) + 0*Table<_T, _Num, _I-1>::dummy;
+
+template <typename _T, int _Num>
+const typename _T::TableType Table<_T, _Num, 0>::dummy
+    = Table<_T, _Num, 0>::array[0] = _T::apply(0,_Num);
+
+
+
+
+template <typename _T, int _Num>
+typename _T::TableType Table<_T, _Num, 0>::array[_Num];
+
+
+
+template <class T>
+struct is_fptype { static const bool value = false; };
+template <> struct is_fptype<float> { static const bool value = true; };
+template <> struct is_fptype<double> { static const bool value = true; };
+template <> struct is_fptype<half> { static const bool value = true; };
+
+template <class T>
+struct is_integraltype { static const bool value = false; };
+template <> struct is_integraltype<int> { static const bool value = true; };
+template <> struct is_integraltype<unsigned int> { static const bool value = true; };
+template <> struct is_integraltype<char> { static const bool value = true; };
+template <> struct is_integraltype<signed char> { static const bool value = true; };
+template <> struct is_integraltype<unsigned char> { static const bool value = true; };
+template <> struct is_integraltype<short> { static const bool value = true; };
+template <> struct is_integraltype<unsigned short> { static const bool value = true; };
+template <> struct is_integraltype<long> { static const bool value = true; };
+template <> struct is_integraltype<unsigned long> { static const bool value = true; };
+template <> struct is_integraltype<long long> { static const bool value = true; };
+template <> struct is_integraltype<unsigned long long> { static const bool value = true; };
+template <int W> struct is_integraltype<ap_int<W> > { static const bool value = true; };
+template <int W> struct is_integraltype<ap_uint<W> > { static const bool value = true; };
+
+template <class T>
+struct is_fixedtype { static const bool value = false; };
+template <int W, int I, ap_q_mode Q, ap_o_mode O> struct is_fixedtype<ap_fixed<W,I,Q,O> > { static const bool value = true; };
+template <int W, int I, ap_q_mode Q, ap_o_mode O> struct is_fixedtype<ap_ufixed<W,I,Q,O> > { static const bool value = true; };
+
+namespace hls {
+    template<bool B, class T = void>
+    struct enable_if {};
+
+    template<class T>
+    struct enable_if<true, T> { typedef T type; };
+    template<typename T, T _v>
+    struct integral_constant
+    {
+        static const T value = _v;
+        typedef T value_type;
+        typedef integral_constant<T,_v> type;
+        operator value_type() { return value; }
+    };
+
+    typedef integral_constant<bool, true> true_type;
+    typedef integral_constant<bool, false> false_type;
+
+    template<typename T1, typename T2>
+    struct is_same;
+
+    template<typename T1, typename T2>
+    struct is_same : public false_type { };
+
+    template<typename T1>
+    struct is_same<T1,T1> : public true_type { };
+
+    template<typename T>
+    struct is_arithmetic : public integral_constant<bool, (is_integraltype<T>::value || is_fptype<T>::value)> { };
+}
+
+template<typename T1, typename T2>
+struct enable_or { static const bool value = T1::value || T2::value; };
+
+template<typename T1, typename T2>
+struct enable_and { static const bool value = T1::value && T2::value; };
+
+
+
+template<typename T, bool = is_integraltype<T>::value>
+struct __promote { typedef double type; };
+
+template<typename T>
+struct __promote<T, false> { };
+
+template<>
+struct __promote<double> { typedef double type; };
+
+template<>
+struct __promote<float> { typedef float type; };
+
+template<>
+struct __promote<half> { typedef half type; };
+# 10 "firmware/nnet_utils/nnet_pooling_stream.h" 2
+
+namespace nnet {
+
+
+
+
+
+template <class T, int N, class CONFIG_T> T reduce_pool(T x[N]) {
+#pragma HLS INLINE
+ if (CONFIG_T::pool_op == Max) {
+        Op_max<T> op_max;
+        return reduce<T, N, Op_max<T>>(x, op_max);
+    } else {
+        Op_add<T> op_add;
+        T sum = reduce<T, N, Op_add<T>>(x, op_add);
+        return sum / N;
+    }
+}
+
+template <unsigned TABLE_SIZE, unsigned POOL_SIZE> void init_pool_table(unsigned table[TABLE_SIZE]) {
+    for (unsigned ii = 0; ii < TABLE_SIZE; ii++) {
+        table[ii] = ii % POOL_SIZE;
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_pool_encoded_2d(
+    const unsigned h_idx, const unsigned w_idx, const data_T &in_elem,
+    hls::stream<typename data_T::value_type> data_window[CONFIG_T::pool_height * CONFIG_T::pool_width * CONFIG_T::n_filt],
+    hls::stream<res_T> &res, res_T &res_pack, unsigned &outputs_ready) {
+
+    constexpr unsigned nH =
+        ((CONFIG_T::in_height - CONFIG_T::pool_height) / CONFIG_T::stride_height) * CONFIG_T::stride_height +
+        CONFIG_T::pool_height;
+
+    constexpr unsigned sH =
+        (((CONFIG_T::pool_height + CONFIG_T::stride_height - 1) / CONFIG_T::stride_height) - 1) * CONFIG_T::stride_height + CONFIG_T::pool_height;
+
+    constexpr unsigned nW = ((CONFIG_T::in_width - CONFIG_T::pool_width) / CONFIG_T::stride_width) * CONFIG_T::stride_width +
+                            CONFIG_T::pool_width;
+
+    constexpr unsigned sW =
+        (((CONFIG_T::pool_width + CONFIG_T::stride_width - 1) / CONFIG_T::stride_width) - 1) * CONFIG_T::stride_width + CONFIG_T::pool_width;
+
+
+    bool initialized = false;
+    unsigned pool_table_height[CONFIG_T::in_height];
+    unsigned pool_table_width[CONFIG_T::in_width];
+
+
+
+
+
+    if (!initialized) {
+        init_pool_table<CONFIG_T::in_height, CONFIG_T::pool_height>(pool_table_height);
+        init_pool_table<CONFIG_T::in_width, CONFIG_T::pool_width>(pool_table_width);
+        initialized = true;
+    }
+
+#pragma HLS INLINE
+
+ if (data_T::size / CONFIG_T::n_filt > 1) {
+#pragma HLS ARRAY_PARTITION variable=&pool_table_height complete
+#pragma HLS ARRAY_PARTITION variable=&pool_table_width complete
+ }
+
+    typename CONFIG_T::accum_t pool_window[CONFIG_T::pool_height * CONFIG_T::pool_width];
+#pragma HLS ARRAY_PARTITION variable=&pool_window complete
+
+ const unsigned sh_idx = pool_table_height[h_idx] * CONFIG_T::pool_width;
+    const unsigned wp_idx = w_idx * (data_T::size / CONFIG_T::n_filt);
+
+PixelLoop:
+    for (unsigned p = 0; p < data_T::size / CONFIG_T::n_filt; p++) {
+#pragma HLS PIPELINE
+
+ ap_uint<CONFIG_T::pool_height *CONFIG_T::pool_width> filt_mask = 0;
+        if ((h_idx < nH) && (wp_idx + p < nW)) {
+            filt_mask = sh_idx + pool_table_width[wp_idx + p] + 1;
+        }
+
+    CopyDataFilt:
+        for (unsigned c = 0; c < CONFIG_T::n_filt; c++) {
+            if (filt_mask > 0)
+                data_window[c * CONFIG_T::pool_height * CONFIG_T::pool_width + filt_mask.to_uint() - 1].write(
+                    in_elem[p * CONFIG_T::n_filt + c]);
+        }
+
+        if (filt_mask == CONFIG_T::pool_height * CONFIG_T::pool_width) {
+        FiltLoop:
+            for (unsigned c = 0; c < CONFIG_T::n_filt; c++) {
+            PoolLoop:
+                for (unsigned f = 0; f < CONFIG_T::pool_height * CONFIG_T::pool_width; f++) {
+                    pool_window[f] = data_window[c * CONFIG_T::pool_height * CONFIG_T::pool_width + f].read();
+                }
+                if (res_T::size / CONFIG_T::n_filt ==
+                    1) {
+                    res_pack[c] =
+                        reduce_pool<typename CONFIG_T::accum_t, CONFIG_T::pool_height * CONFIG_T::pool_width, CONFIG_T>(
+                            pool_window);
+                } else {
+                    res_pack[outputs_ready * CONFIG_T::n_filt + c] =
+                        reduce_pool<typename CONFIG_T::accum_t, CONFIG_T::pool_height * CONFIG_T::pool_width, CONFIG_T>(
+                            pool_window);
+                }
+            }
+            if (res_T::size / CONFIG_T::n_filt ==
+                1) {
+                res.write(res_pack);
+            } else {
+                if (outputs_ready == (res_T::size / CONFIG_T::n_filt) - 1) {
+                    res.write(res_pack);
+                    outputs_ready = 0;
+                } else {
+                    outputs_ready++;
+                }
+            }
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling2d_encoded_cl(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+    (static_cast <bool> (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_pooling_stream.h", 133, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pool_height == CONFIG_T::stride_height && CONFIG_T::pool_width == CONFIG_T::stride_width) ? void (0) : __assert_fail ("CONFIG_T::pool_height == CONFIG_T::stride_height && CONFIG_T::pool_width == CONFIG_T::stride_width", "firmware/nnet_utils/nnet_pooling_stream.h", 134, __extension__ __PRETTY_FUNCTION__));
+
+    res_T res_pack;
+#pragma HLS DATA_PACK variable = &res_pack
+ unsigned outputs_ready = 0;
+
+    hls::stream<typename data_T::value_type> data_window[CONFIG_T::pool_height * CONFIG_T::pool_width * CONFIG_T::n_filt];
+    constexpr int win_depth = CONFIG_T::pool_height * CONFIG_T::out_width;
+    for (unsigned i_out = 0; i_out < CONFIG_T::pool_height * CONFIG_T::pool_width * CONFIG_T::n_filt; i_out++) {
+#pragma HLS STREAM variable=&data_window[i_out] depth=win_depth
+ }
+
+    constexpr int pack_factor = data_T::size / CONFIG_T::n_filt;
+
+ReadInputHeight:
+    for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
+    ReadInputWidth:
+        for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width / (pack_factor); i_iw++) {
+#pragma HLS LOOP_FLATTEN
+ if (res_T::size / CONFIG_T::n_filt == 1) {
+#pragma HLS PIPELINE II=pack_factor
+ }
+            compute_pool_encoded_2d<data_T, res_T, CONFIG_T>(i_ih, i_iw, data.read(), data_window, res, res_pack,
+                                                             outputs_ready);
+        }
+    }
+}
+
+
+
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_pool_buffer_2d(const data_T &in_elem,
+                            ap_shift_reg<typename data_T::value_type, CONFIG_T::in_width>
+                                line_buffer[(CONFIG_T::pool_height - 1 > 1 ? CONFIG_T::pool_height - 1 : 1)][CONFIG_T::n_filt],
+                            hls::stream<res_T> &res) {
+#pragma HLS INLINE
+ const static int lShiftX = CONFIG_T::pool_width - 1;
+_ssdm_SpecConstant(&lShiftX);
+# 171 "firmware/nnet_utils/nnet_pooling_stream.h"
+
+    const static int lShiftY = CONFIG_T::pool_height - 1;
+_ssdm_SpecConstant(&lShiftY);
+# 172 "firmware/nnet_utils/nnet_pooling_stream.h"
+
+    static int pX = 0;
+    static int pY = 0;
+    static int sX = 0;
+    static int sY = 0;
+
+    typename CONFIG_T::accum_t pool_window[CONFIG_T::pool_height * CONFIG_T::pool_width];
+#pragma HLS ARRAY_PARTITION variable=&pool_window complete
+
+ static typename data_T::value_type kernel_data[CONFIG_T::pool_height * CONFIG_T::pool_width * CONFIG_T::n_filt];
+#pragma HLS ARRAY_PARTITION variable = &kernel_data complete dim = 0
+
+ res_T res_pack;
+#pragma HLS DATA_PACK variable = &res_pack
+
+
+ nnet::shift_line_buffer<data_T, CONFIG_T>(in_elem, line_buffer, kernel_data);
+
+
+    if ((sX - lShiftX) == 0 && (sY - lShiftY) == 0 && pY > lShiftY - 1 && pX > lShiftX - 1) {
+    FiltLoop:
+        for (unsigned i_ic = 0; i_ic < CONFIG_T::n_filt; i_ic++) {
+#pragma HLS PIPELINE
+
+
+ PoolLoop:
+            for (unsigned i_ihw = 0; i_ihw < CONFIG_T::pool_height * CONFIG_T::pool_width; i_ihw++) {
+                pool_window[i_ihw] = kernel_data[i_ihw * CONFIG_T::n_filt + i_ic];
+            }
+
+
+            res_pack[i_ic] =
+                reduce_pool<typename CONFIG_T::accum_t, CONFIG_T::pool_height * CONFIG_T::pool_width, CONFIG_T>(pool_window);
+        }
+
+
+        res.write(res_pack);
+    }
+
+
+    if (pX + 1 == CONFIG_T::in_width)
+    {
+        pX = 0;
+        sX = 0;
+        if (pY + 1 == CONFIG_T::in_height) {
+            pY = 0;
+            sY = 0;
+        } else {
+            pY = pY + 1;
+
+            sY = ((sY - lShiftY) == 0) ? sY - CONFIG_T::stride_height + 1 : sY + 1;
+        }
+    } else {
+        pX = pX + 1;
+
+        sX = ((sX - lShiftX) == 0) ? sX - CONFIG_T::stride_width + 1 : sX + 1;
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling2d_buffer_cl(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+    (static_cast <bool> (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_pooling_stream.h", 233, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pool_height == CONFIG_T::stride_height && CONFIG_T::pool_width == CONFIG_T::stride_width) ? void (0) : __assert_fail ("CONFIG_T::pool_height == CONFIG_T::stride_height && CONFIG_T::pool_width == CONFIG_T::stride_width", "firmware/nnet_utils/nnet_pooling_stream.h", 234, __extension__ __PRETTY_FUNCTION__));
+
+    static ap_shift_reg<typename data_T::value_type, CONFIG_T::in_width> line_buffer[(CONFIG_T::pool_height - 1 > 1 ? CONFIG_T::pool_height - 1 : 1)]
+                                                                                    [CONFIG_T::n_filt];
+#pragma HLS ARRAY_PARTITION variable = &line_buffer complete dim = 2
+
+ReadInputHeight:
+    for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
+    ReadInputWidth:
+        for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width; i_iw++) {
+#pragma HLS LOOP_FLATTEN
+#pragma HLS PIPELINE
+
+ compute_pool_buffer_2d<data_T, res_T, CONFIG_T>(data.read(), line_buffer, res);
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling2d_cl(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+#pragma HLS inline recursive
+ switch (CONFIG_T::implementation) {
+    case conv_implementation::linebuffer:
+        pooling2d_buffer_cl<data_T, res_T, CONFIG_T>(data, res);
+        break;
+    case conv_implementation::encoded:
+        pooling2d_encoded_cl<data_T, res_T, CONFIG_T>(data, res);
+        break;
+    }
+}
+
+
+
+
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_pool_encoded_1d(const unsigned w_idx, const data_T &in_elem,
+                             hls::stream<typename data_T::value_type> data_window[CONFIG_T::pool_width * CONFIG_T::n_filt],
+                             hls::stream<res_T> &res, res_T &res_pack, unsigned &outputs_ready) {
+
+    constexpr unsigned nW =
+        ((CONFIG_T::n_in - CONFIG_T::pool_width) / CONFIG_T::stride_width) * CONFIG_T::stride_width + CONFIG_T::pool_width;
+
+    constexpr unsigned sW =
+        (((CONFIG_T::pool_width + CONFIG_T::stride_width - 1) / CONFIG_T::stride_width) - 1) * CONFIG_T::stride_width + CONFIG_T::pool_width;
+
+
+    bool initialized = false;
+    unsigned pool_table_width[CONFIG_T::n_in];
+
+
+
+
+    if (!initialized) {
+        init_pool_table<CONFIG_T::n_in, CONFIG_T::pool_width>(pool_table_width);
+        initialized = true;
+    }
+
+#pragma HLS INLINE
+
+ if (data_T::size / CONFIG_T::n_filt > 1) {
+#pragma HLS ARRAY_PARTITION variable=&pool_table_width complete
+ }
+
+    typename CONFIG_T::accum_t pool_window[CONFIG_T::pool_width];
+#pragma HLS ARRAY_PARTITION variable=&pool_window complete
+
+ const unsigned wp_idx = w_idx * (data_T::size / CONFIG_T::n_filt);
+
+PixelLoop:
+    for (unsigned p = 0; p < data_T::size / CONFIG_T::n_filt; p++) {
+#pragma HLS PIPELINE
+
+ ap_uint<CONFIG_T::pool_width> filt_mask = 0;
+        if (wp_idx + p < nW) {
+            filt_mask = pool_table_width[wp_idx + p] + 1;
+        }
+
+    CopyDataFilt:
+        for (unsigned c = 0; c < CONFIG_T::n_filt; c++) {
+            if (filt_mask > 0)
+                data_window[c * CONFIG_T::pool_width + filt_mask.to_uint() - 1].write(in_elem[p * CONFIG_T::n_filt + c]);
+        }
+
+        if (filt_mask == CONFIG_T::pool_width) {
+        FiltLoop:
+            for (unsigned c = 0; c < CONFIG_T::n_filt; c++) {
+            PoolLoop:
+                for (unsigned f = 0; f < CONFIG_T::pool_width; f++) {
+                    pool_window[f] = data_window[c * CONFIG_T::pool_width + f].read();
+                }
+                if (res_T::size / CONFIG_T::n_filt ==
+                    1) {
+                    res_pack[c] = reduce_pool<typename CONFIG_T::accum_t, CONFIG_T::pool_width, CONFIG_T>(pool_window);
+                } else {
+                    res_pack[outputs_ready * CONFIG_T::n_filt + c] =
+                        reduce_pool<typename CONFIG_T::accum_t, CONFIG_T::pool_width, CONFIG_T>(pool_window);
+                }
+            }
+            if (res_T::size / CONFIG_T::n_filt ==
+                1) {
+                res.write(res_pack);
+            } else {
+                if (outputs_ready == (res_T::size / CONFIG_T::n_filt) - 1) {
+                    res.write(res_pack);
+                    outputs_ready = 0;
+                } else {
+                    outputs_ready++;
+                }
+            }
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling1d_encoded_cl(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+    (static_cast <bool> (CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_pooling_stream.h", 350, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pool_width == CONFIG_T::stride_width) ? void (0) : __assert_fail ("CONFIG_T::pool_width == CONFIG_T::stride_width", "firmware/nnet_utils/nnet_pooling_stream.h", 351, __extension__ __PRETTY_FUNCTION__));
+
+    res_T res_pack;
+#pragma HLS DATA_PACK variable = &res_pack
+ unsigned outputs_ready = 0;
+
+    hls::stream<typename data_T::value_type> data_window[CONFIG_T::pool_width * CONFIG_T::n_filt];
+    constexpr int win_depth = CONFIG_T::n_out;
+    for (unsigned i_out = 0; i_out < CONFIG_T::pool_width * CONFIG_T::n_filt; i_out++) {
+#pragma HLS STREAM variable=&data_window[i_out] depth=win_depth
+ }
+
+    constexpr int pack_factor = data_T::size / CONFIG_T::n_filt;
+
+ReadInputWidth:
+    for (unsigned i_iw = 0; i_iw < CONFIG_T::n_in / (pack_factor); i_iw++) {
+#pragma HLS LOOP_FLATTEN
+ if (res_T::size / CONFIG_T::n_filt == 1) {
+#pragma HLS PIPELINE II=pack_factor
+ }
+        compute_pool_encoded_1d<data_T, res_T, CONFIG_T>(i_iw, data.read(), data_window, res, res_pack, outputs_ready);
+    }
+}
+
+
+
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_pool_buffer_1d(const data_T &in_elem, hls::stream<res_T> &res) {
+#pragma HLS INLINE
+ const static int lShiftX = CONFIG_T::pool_width - 1;
+_ssdm_SpecConstant(&lShiftX);
+# 381 "firmware/nnet_utils/nnet_pooling_stream.h"
+
+
+    static int pX = 0;
+    static int sX = 0;
+
+    typename CONFIG_T::accum_t pool_window[CONFIG_T::pool_width];
+#pragma HLS ARRAY_PARTITION variable=&pool_window complete
+
+ static typename data_T::value_type kernel_data[CONFIG_T::pool_width * CONFIG_T::n_filt];
+#pragma HLS ARRAY_PARTITION variable = &kernel_data complete dim = 0
+
+ res_T res_pack;
+#pragma HLS DATA_PACK variable = &res_pack
+
+
+
+ nnet::kernel_shift_1d<data_T, CONFIG_T>(in_elem, kernel_data);
+
+
+    if ((sX - lShiftX) == 0 && pX > lShiftX - 1) {
+    FiltLoop:
+        for (unsigned i_ic = 0; i_ic < CONFIG_T::n_filt; i_ic++) {
+#pragma HLS PIPELINE
+
+
+ PoolLoop:
+            for (unsigned i_iw = 0; i_iw < CONFIG_T::pool_width; i_iw++) {
+                pool_window[i_iw] = kernel_data[i_iw * CONFIG_T::n_filt + i_ic];
+            }
+
+
+            res_pack[i_ic] = reduce_pool<typename CONFIG_T::accum_t, CONFIG_T::pool_width, CONFIG_T>(pool_window);
+        }
+
+
+        res.write(res_pack);
+    }
+
+
+    if (pX + 1 == CONFIG_T::n_in)
+    {
+        pX = 0;
+        sX = 0;
+    } else {
+        pX = pX + 1;
+
+        sX = ((sX - lShiftX) == 0) ? sX - CONFIG_T::stride_width + 1 : sX + 1;
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling1d_buffer_cl(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+    (static_cast <bool> (CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_pooling_stream.h", 433, __extension__ __PRETTY_FUNCTION__));
+
+ReadInputWidth:
+    for (unsigned i_iw = 0; i_iw < CONFIG_T::n_in; i_iw++) {
+#pragma HLS LOOP_FLATTEN
+#pragma HLS PIPELINE
+ compute_pool_buffer_1d<data_T, res_T, CONFIG_T>(data.read(), res);
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pooling1d_cl(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+#pragma HLS inline recursive
+ switch (CONFIG_T::implementation) {
+    case conv_implementation::linebuffer:
+        pooling1d_buffer_cl<data_T, res_T, CONFIG_T>(data, res);
+        break;
+    case conv_implementation::encoded:
+        pooling1d_encoded_cl<data_T, res_T, CONFIG_T>(data, res);
+        break;
+    }
+}
+
+
+
+
+
+template <class T, int N, class CONFIG_T> T reduce_global_pool(T x, T y[N]) {
+#pragma HLS INLINE
+ if (CONFIG_T::pool_op == Max) {
+        Op_max<T> op_max;
+        T y_max = reduce<T, N, Op_max<T>>(y, op_max);
+        return (x > y_max) ? x : y_max;
+    } else {
+        Op_add<T> op_add;
+        T y_sum = reduce<T, N, Op_add<T>>(y, op_add);
+        return x + y_sum;
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_global_pool(const data_T &in_elem, typename CONFIG_T::accum_t data_window[CONFIG_T::n_filt]) {
+PoolFilt:
+    for (unsigned c = 0; c < CONFIG_T::n_filt; c++) {
+#pragma HLS UNROLL
+
+ typename CONFIG_T::accum_t data_pack[data_T::size / CONFIG_T::n_filt];
+#pragma HLS ARRAY_PARTITION variable=&data_pack complete dim=0
+
+ PixelLoop:
+        for (unsigned p = 0; p < data_T::size / CONFIG_T::n_filt; p++) {
+#pragma HLS UNROLL
+ data_pack[p] = in_elem[p * CONFIG_T::n_filt + c];
+        }
+        data_window[c] = reduce_global_pool<typename CONFIG_T::accum_t, data_T::size / CONFIG_T::n_filt, CONFIG_T>(
+            data_window[c], data_pack);
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void global_pooling2d_cl(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+    (static_cast <bool> (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_pooling_stream.h", 494, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pool_height == CONFIG_T::stride_height && CONFIG_T::pool_width == CONFIG_T::stride_width) ? void (0) : __assert_fail ("CONFIG_T::pool_height == CONFIG_T::stride_height && CONFIG_T::pool_width == CONFIG_T::stride_width", "firmware/nnet_utils/nnet_pooling_stream.h", 495, __extension__ __PRETTY_FUNCTION__));
+
+    typename CONFIG_T::accum_t data_window[CONFIG_T::n_filt];
+#pragma HLS ARRAY_PARTITION variable=&data_window complete
+
+ typename CONFIG_T::accum_t init = 0;
+    if (CONFIG_T::pool_op == Max) {
+        init = hls::numeric_limits<typename CONFIG_T::accum_t>::min();
+    }
+
+PoolInitLoop:
+    for (unsigned i_init = 0; i_init < CONFIG_T::n_filt; i_init++) {
+#pragma HLS UNROLL
+ data_window[i_init] = init;
+    }
+
+ReadInputHeight:
+    for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
+    ReadInputWidth:
+        for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width / (data_T::size / CONFIG_T::n_filt); i_iw++) {
+#pragma HLS LOOP_FLATTEN
+ compute_global_pool<data_T, res_T, CONFIG_T>(data.read(), data_window);
+        }
+    }
+
+    if (CONFIG_T::pool_op == Max) {
+    MaxPoolRes:
+        for (unsigned i_res = 0; i_res < CONFIG_T::n_filt / res_T::size; i_res++) {
+#pragma HLS PIPELINE
+
+ res_T res_pack;
+#pragma HLS DATA_PACK variable = &res_pack
+ MaxPoolPack:
+            for (unsigned i_pack = 0; i_pack < res_T::size; i_pack++) {
+#pragma HLS UNROLL
+ res_pack[i_pack] = data_window[i_pack];
+            }
+            res.write(res_pack);
+        }
+    } else {
+    AvgPoolRes:
+        for (unsigned i_res = 0; i_res < CONFIG_T::n_filt / res_T::size; i_res++) {
+#pragma HLS PIPELINE
+
+ res_T res_pack;
+#pragma HLS DATA_PACK variable = &res_pack
+ AvgPoolPack:
+            for (unsigned i_pack = 0; i_pack < res_T::size; i_pack++) {
+#pragma HLS UNROLL
+ res_pack[i_pack] = data_window[i_pack] / (CONFIG_T::in_height * CONFIG_T::in_width);
+            }
+            res.write(res_pack);
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void global_pooling1d_cl(hls::stream<data_T> &data, hls::stream<res_T> &res) {
+    (static_cast <bool> (CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_pooling_stream.h", 553, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::pool_width == CONFIG_T::stride_width) ? void (0) : __assert_fail ("CONFIG_T::pool_width == CONFIG_T::stride_width", "firmware/nnet_utils/nnet_pooling_stream.h", 554, __extension__ __PRETTY_FUNCTION__));
+
+    typename CONFIG_T::accum_t data_window[CONFIG_T::n_filt];
+#pragma HLS ARRAY_PARTITION variable=&data_window complete
+
+ typename CONFIG_T::accum_t init = 0;
+    if (CONFIG_T::pool_op == Max) {
+        init = hls::numeric_limits<typename CONFIG_T::accum_t>::min();
+    }
+
+PoolInitLoop:
+    for (unsigned i_init = 0; i_init < CONFIG_T::n_filt; i_init++) {
+#pragma HLS UNROLL
+ data_window[i_init] = init;
+    }
+
+ReadInput:
+    for (unsigned i_iw = 0; i_iw < CONFIG_T::n_in / (data_T::size / CONFIG_T::n_filt); i_iw++) {
+#pragma HLS LOOP_FLATTEN
+ compute_global_pool<data_T, res_T, CONFIG_T>(data.read(), data_window);
+    }
+
+    if (CONFIG_T::pool_op == Max) {
+    MaxPoolRes:
+        for (unsigned i_res = 0; i_res < CONFIG_T::n_filt / res_T::size; i_res++) {
+#pragma HLS PIPELINE
+
+ res_T res_pack;
+#pragma HLS DATA_PACK variable = &res_pack
+ MaxPoolPack:
+            for (unsigned i_pack = 0; i_pack < res_T::size; i_pack++) {
+#pragma HLS UNROLL
+ res_pack[i_pack] = data_window[i_pack];
+            }
+            res.write(res_pack);
+        }
+    } else {
+    AvgPoolRes:
+        for (unsigned i_res = 0; i_res < CONFIG_T::n_filt / res_T::size; i_res++) {
+#pragma HLS PIPELINE
+
+ res_T res_pack;
+#pragma HLS DATA_PACK variable = &res_pack
+ AvgPoolPack:
+            for (unsigned i_pack = 0; i_pack < res_T::size; i_pack++) {
+#pragma HLS UNROLL
+ res_pack[i_pack] = data_window[i_pack] / CONFIG_T::n_in;
+            }
+            res.write(res_pack);
+        }
+    }
+}
+
+}
 # 20 "firmware/parameters.h" 2
-# 1 "firmware/weights/b4.h" 1
-# 12 "firmware/weights/b4.h"
-model_default_t b4[3] = {-0.0731201172, 0.1373291016, -0.1117553711};
+# 1 "firmware/nnet_utils/nnet_sepconv2d_stream.h" 1
+
+
+
+
+
+# 1 "firmware/nnet_utils/nnet_conv2d_stream.h" 1
+
+
+
+
+
+
+
+
+namespace nnet {
+
+template <class data_T, typename CONFIG_T>
+void compute_scaled_indices_2d(const unsigned h_idx, const unsigned w_idx,
+                               ap_uint<CONFIG_T::filt_height * CONFIG_T::filt_width> *pixel_idx) {
+    const unsigned sh_idx = CONFIG_T::template scale_index_height<CONFIG_T::filt_height, CONFIG_T::stride_height,
+                                                                  CONFIG_T::in_height>::scale_index(h_idx);
+    unsigned wp_idx = w_idx * (data_T::size / CONFIG_T::n_chan);
+
+ComputeIndex:
+    for (unsigned p = 0; p < data_T::size / CONFIG_T::n_chan; p++) {
+#pragma HLS UNROLL
+
+ unsigned sw_idx = CONFIG_T::template scale_index_width<CONFIG_T::filt_width, CONFIG_T::stride_width,
+                                                               CONFIG_T::in_width>::scale_index(wp_idx + p);
+        pixel_idx[p] = CONFIG_T::pixels[sh_idx * CONFIG_T::min_width + sw_idx];
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void conv_2d_encoded_cl(
+    hls::stream<data_T> &data, hls::stream<res_T> &res,
+    typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+    (static_cast <bool> (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_conv2d_stream.h", 33, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::filt_height == CONFIG_T::filt_width) ? void (0) : __assert_fail ("CONFIG_T::filt_height == CONFIG_T::filt_width", "firmware/nnet_utils/nnet_conv2d_stream.h", 34, __extension__ __PRETTY_FUNCTION__));
+
+    hls::stream<typename data_T::value_type> data_window[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan];
+    const int win_depth = CONFIG_T::filt_height * CONFIG_T::out_width;
+    for (unsigned i_out = 0; i_out < CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan; i_out++) {
+#pragma HLS STREAM variable=&data_window[i_out] depth=win_depth
+ }
+
+#pragma HLS ARRAY_PARTITION variable=&CONFIG_T::pixels complete
+
+ res_T res_pack;
+#pragma HLS DATA_PACK variable = &res_pack
+ unsigned outputs_ready = 0;
+
+    ap_uint<CONFIG_T::filt_height * CONFIG_T::filt_width> pixel_idx[data_T::size / CONFIG_T::n_chan];
+#pragma HLS ARRAY_PARTITION variable=&pixel_idx complete
+
+ReadInputHeight:
+    for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
+    ReadInputWidth:
+        for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width / (data_T::size / CONFIG_T::n_chan); i_iw++) {
+#pragma HLS LOOP_FLATTEN
+ if (CONFIG_T::strategy == nnet::latency && data_T::size / CONFIG_T::n_chan == 1) {
+#pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+ }
+            compute_scaled_indices_2d<data_T, CONFIG_T>(i_ih, i_iw, pixel_idx);
+            compute_output_encoded<data_T, res_T, CONFIG_T>(data.read(), data_window, res, res_pack, outputs_ready, weights,
+                                                            biases, pixel_idx);
+        }
+    }
+}
+
+
+template <class data_T, class res_T, typename CONFIG_T>
+void conv_2d_buffer_cl(
+    hls::stream<data_T> &data, hls::stream<res_T> &res,
+    typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+    (static_cast <bool> (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_conv2d_stream.h", 72, __extension__ __PRETTY_FUNCTION__));
+
+    static ap_shift_reg<typename data_T::value_type, CONFIG_T::in_width> line_buffer[(CONFIG_T::filt_height - 1 > 1 ? CONFIG_T::filt_height - 1 : 1)]
+                                                                                    [CONFIG_T::n_chan];
+#pragma HLS ARRAY_PARTITION variable = &line_buffer complete dim = 2
+
+ReadInputHeight:
+    for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
+    ReadInputWidth:
+        for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width; i_iw++) {
+#pragma HLS LOOP_FLATTEN
+ if (CONFIG_T::strategy == nnet::latency) {
+#pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+ }
+            if (CONFIG_T::filt_height > 1) {
+                compute_output_buffer_2d<data_T, res_T, CONFIG_T>(data.read(), line_buffer, res, weights, biases);
+            } else {
+                compute_output_buffer_1d<data_T, res_T, CONFIG_T>(data.read(), res, weights, biases);
+            }
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void conv_2d_cl(
+    hls::stream<data_T> &data, hls::stream<res_T> &res,
+    typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan * CONFIG_T::n_filt],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+#pragma HLS inline recursive
+ switch (CONFIG_T::implementation) {
+    case conv_implementation::linebuffer:
+        conv_2d_buffer_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+        break;
+    case conv_implementation::encoded:
+        conv_2d_encoded_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+        break;
+    }
+}
+
+}
+# 7 "firmware/nnet_utils/nnet_sepconv2d_stream.h" 2
+# 1 "firmware/nnet_utils/nnet_sepconv_stream.h" 1
+
+
+
+
+
+
+
+namespace nnet {
+
+template <class data_T, class res_T, typename CONFIG_T>
+void depthwise_product(data_T data[CONFIG_T::kernel_size * CONFIG_T::n_chan], res_T res[CONFIG_T::n_chan],
+                       typename CONFIG_T::weight_t weights[CONFIG_T::kernel_size * CONFIG_T::n_chan],
+                       typename CONFIG_T::bias_t biases[CONFIG_T::n_chan]) {
+#pragma HLS INLINE
+
+ typename CONFIG_T::accum_t mult[CONFIG_T::kernel_size * CONFIG_T::n_chan];
+    typename CONFIG_T::accum_t acc[CONFIG_T::n_chan];
+
+
+#pragma HLS function_instantiate variable=&weights
+
+#pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+
+#pragma HLS ARRAY_PARTITION variable=&mult complete
+
+#pragma HLS ALLOCATION operation instances=mul limit=CONFIG_T::multiplier_limit
+
+
+Product:
+    for (int ii = 0; ii < CONFIG_T::kernel_size * CONFIG_T::n_chan; ii++) {
+#pragma HLS UNROLL
+ mult[ii] = CONFIG_T::mult_config::template product<data_T, typename CONFIG_T::mult_config::weight_t>::product(
+            data[ii], weights[ii]);
+    }
+
+
+ResetAccum:
+    for (int iacc = 0; iacc < CONFIG_T::n_chan; iacc++) {
+#pragma HLS UNROLL
+ acc[iacc] = (typename CONFIG_T::accum_t)biases[iacc];
+    }
+
+
+Accum1:
+    for (int ii = 0; ii < CONFIG_T::kernel_size; ii++) {
+    Accum2:
+        for (int jj = 0; jj < CONFIG_T::n_chan; jj++) {
+            int index = ii * CONFIG_T::n_chan + jj;
+            acc[jj] += mult[index];
+        }
+    }
+
+
+Result:
+    for (int ires = 0; ires < CONFIG_T::n_chan; ires++) {
+#pragma HLS UNROLL
+ res[ires] = cast<data_T, res_T, typename CONFIG_T::mult_config>(acc[ires]);
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void depthwise_mult_buffer(hls::stream<typename data_T::value_type> data_window[CONFIG_T::kernel_size * CONFIG_T::n_chan],
+                           res_T &res_pack, hls::stream<res_T> &res_stream, unsigned &outputs_ready,
+                           typename CONFIG_T::weight_t weights[CONFIG_T::kernel_size * CONFIG_T::n_chan],
+                           typename CONFIG_T::bias_t biases[CONFIG_T::n_chan]) {
+#pragma HLS INLINE
+
+ typename data_T::value_type data[CONFIG_T::kernel_size * CONFIG_T::n_chan];
+#pragma HLS ARRAY_PARTITION variable=&data complete
+ typename res_T::value_type res[CONFIG_T::n_chan];
+#pragma HLS ARRAY_PARTITION variable=&res complete
+
+InitData:
+    for (int id = 0; id < CONFIG_T::kernel_size * CONFIG_T::n_chan; id++) {
+#pragma HLS UNROLL
+ data[id] = data_window[id].read();
+    }
+
+#pragma HLS INLINE recursive
+ if (CONFIG_T::strategy == nnet::latency) {
+        depthwise_product<typename data_T::value_type, typename res_T::value_type, CONFIG_T>(data, res, weights, biases);
+    } else {
+        (static_cast <bool> ("Resource strategy for DepthwiseConv2D is not supported." && false) ? void (0) : __assert_fail ("\"Resource strategy for DepthwiseConv2D is not supported.\" && false", "firmware/nnet_utils/nnet_sepconv_stream.h", 83, __extension__ __PRETTY_FUNCTION__));
+    }
+
+CastLoop:
+    for (unsigned jj = 0; jj < CONFIG_T::n_chan; jj++) {
+#pragma HLS UNROLL
+ if (res_T::size / CONFIG_T::n_chan == 1) {
+            res_pack[jj] = res[jj];
+        } else {
+            res_pack[outputs_ready * CONFIG_T::n_chan + jj] = res[jj];
+        }
+    }
+
+    if (res_T::size / CONFIG_T::n_chan == 1) {
+        res_stream.write(res_pack);
+    } else {
+        if (outputs_ready == (res_T::size / CONFIG_T::n_chan) - 1) {
+            res_stream.write(res_pack);
+            outputs_ready = 0;
+        } else {
+            outputs_ready++;
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_depthwise_output_encoded(
+    const data_T &in_elem, hls::stream<typename data_T::value_type> data_window[CONFIG_T::kernel_size * CONFIG_T::n_chan],
+    hls::stream<res_T> &res, res_T &res_pack, unsigned &outputs_ready,
+    typename CONFIG_T::weight_t weights[CONFIG_T::kernel_size * CONFIG_T::n_chan],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_chan], ap_uint<CONFIG_T::kernel_size> *pixel_idx) {
+#pragma HLS INLINE
+
+MultLoop:
+    for (unsigned p = 0; p < data_T::size / CONFIG_T::n_chan; p++) {
+#pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+ CopyDataFilt:
+        for (unsigned f = 0; f < CONFIG_T::kernel_size; f++) {
+#pragma HLS UNROLL
+ CopyDataChan:
+            for (unsigned c = 0; c < CONFIG_T::n_chan; c++) {
+#pragma HLS UNROLL
+ if (pixel_idx[p][f])
+                    data_window[f * CONFIG_T::n_chan + c].write(in_elem[p * CONFIG_T::n_chan + c]);
+            }
+        }
+        if (pixel_idx[p][CONFIG_T::kernel_size - 1]) {
+            depthwise_mult_buffer<data_T, res_T, CONFIG_T>(data_window, res_pack, res, outputs_ready, weights, biases);
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pointwise_mult_buffer(const data_T &data_pack, hls::stream<res_T> &res_stream,
+                           typename CONFIG_T::weight_t weights[CONFIG_T::n_chan * CONFIG_T::n_filt],
+                           typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+#pragma HLS INLINE
+
+ typename data_T::value_type data[CONFIG_T::n_chan];
+#pragma HLS ARRAY_PARTITION variable=&data complete
+
+ typename res_T::value_type res[CONFIG_T::n_filt];
+#pragma HLS ARRAY_PARTITION variable=&res complete
+
+ res_T res_pack;
+#pragma HLS DATA_PACK variable = &res_pack
+
+InitData:
+    for (int id = 0; id < CONFIG_T::n_chan; id++) {
+#pragma HLS UNROLL
+ data[id] = data_pack[id];
+    }
+
+#pragma HLS INLINE recursive
+ if (CONFIG_T::strategy == nnet::latency) {
+        dense_latency<typename data_T::value_type, typename res_T::value_type, typename CONFIG_T::mult_config>(
+            data, res, weights, biases);
+    } else {
+        dense_resource<typename data_T::value_type, typename res_T::value_type, typename CONFIG_T::mult_config>(
+            data, res, weights, biases);
+    }
+
+CastLoop:
+    for (unsigned jj = 0; jj < CONFIG_T::n_filt; jj++) {
+#pragma HLS UNROLL
+ res_pack[jj] = res[jj];
+    }
+
+    res_stream.write(res_pack);
+}
+
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_depthwise_output_buffer_1d(const data_T &in_elem, hls::stream<res_T> &res_stream,
+                                        typename CONFIG_T::weight_t weights[CONFIG_T::kernel_size * CONFIG_T::n_chan],
+                                        typename CONFIG_T::bias_t biases[CONFIG_T::n_chan]) {
+#pragma HLS INLINE
+
+
+ const static int lShiftX = CONFIG_T::filt_width - 1;
+_ssdm_SpecConstant(&lShiftX);
+# 182 "firmware/nnet_utils/nnet_sepconv_stream.h"
+
+
+
+    static int pX = 0;
+    static int sX = 0;
+
+    static typename data_T::value_type kernel_data[CONFIG_T::filt_width * CONFIG_T::n_chan];
+#pragma HLS ARRAY_PARTITION variable=&kernel_data complete
+
+ typename res_T::value_type res_out[CONFIG_T::n_chan];
+#pragma HLS ARRAY_PARTITION variable=&res_out complete dim = 0
+
+ res_T res_pack;
+#pragma HLS DATA_PACK variable = &res_pack
+
+
+ nnet::kernel_shift_1d<data_T, CONFIG_T>(in_elem, kernel_data);
+
+
+    if ((sX - lShiftX) == 0 && pX > lShiftX - 1) {
+
+#pragma HLS INLINE recursive
+ if (CONFIG_T::strategy == nnet::latency) {
+            depthwise_product<typename data_T::value_type, typename res_T::value_type, CONFIG_T>(kernel_data, res_out,
+                                                                                                 weights, biases);
+        } else {
+            (static_cast <bool> ("Resource strategy for DepthwiseConv1D is not supported." && false) ? void (0) : __assert_fail ("\"Resource strategy for DepthwiseConv1D is not supported.\" && false", "firmware/nnet_utils/nnet_sepconv_stream.h", 208, __extension__ __PRETTY_FUNCTION__));
+        }
+
+
+    CastLoop:
+        for (unsigned i_ic = 0; i_ic < CONFIG_T::n_filt; i_ic++) {
+#pragma HLS UNROLL
+ res_pack[i_ic] = res_out[i_ic];
+        }
+
+
+        res_stream.write(res_pack);
+    }
+
+
+    if (pX + 1 == CONFIG_T::in_width)
+    {
+        pX = 0;
+        sX = 0;
+    } else {
+        pX = pX + 1;
+        sX = ((sX - lShiftX) == 0) ? sX - CONFIG_T::stride_width + 1 : sX + 1;
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void compute_depthwise_output_buffer_2d(const data_T &in_elem,
+                                        ap_shift_reg<typename data_T::value_type, CONFIG_T::in_width>
+                                            line_buffer[(CONFIG_T::filt_height - 1 > 1 ? CONFIG_T::filt_height - 1 : 1)][CONFIG_T::n_chan],
+                                        hls::stream<res_T> &res_stream,
+                                        typename CONFIG_T::weight_t weights[CONFIG_T::kernel_size * CONFIG_T::n_chan],
+                                        typename CONFIG_T::bias_t biases[CONFIG_T::n_chan]) {
+#pragma HLS INLINE
+
+
+ const static int lShiftX = CONFIG_T::filt_width - 1;
+_ssdm_SpecConstant(&lShiftX);
+# 243 "firmware/nnet_utils/nnet_sepconv_stream.h"
+
+    const static int lShiftY = CONFIG_T::filt_height - 1;
+_ssdm_SpecConstant(&lShiftY);
+# 244 "firmware/nnet_utils/nnet_sepconv_stream.h"
+
+
+
+    static int pX = 0;
+    static int pY = 0;
+
+    static int sX = 0;
+    static int sY = 0;
+
+    static typename data_T::value_type kernel_data[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan];
+#pragma HLS ARRAY_PARTITION variable=&kernel_data complete
+
+ typename res_T::value_type res_out[CONFIG_T::n_chan];
+#pragma HLS ARRAY_PARTITION variable=&res_out complete dim = 0
+
+ res_T res_pack;
+#pragma HLS DATA_PACK variable = &res_pack
+
+
+ nnet::shift_line_buffer<data_T, CONFIG_T>(in_elem, line_buffer, kernel_data);
+
+
+    if ((sX - lShiftX) == 0 && (sY - lShiftY) == 0 && pY > lShiftY - 1 && pX > lShiftX - 1) {
+
+#pragma HLS INLINE recursive
+ if (CONFIG_T::strategy == nnet::latency) {
+            depthwise_product<typename data_T::value_type, typename res_T::value_type, CONFIG_T>(kernel_data, res_out,
+                                                                                                 weights, biases);
+        } else {
+            (static_cast <bool> ("Resource strategy for DepthwiseConv2D is not supported." && false) ? void (0) : __assert_fail ("\"Resource strategy for DepthwiseConv2D is not supported.\" && false", "firmware/nnet_utils/nnet_sepconv_stream.h", 273, __extension__ __PRETTY_FUNCTION__));
+        }
+
+
+    CastLoop:
+        for (unsigned i_ic = 0; i_ic < CONFIG_T::n_filt; i_ic++) {
+#pragma HLS UNROLL
+ res_pack[i_ic] = res_out[i_ic];
+        }
+
+
+        res_stream.write(res_pack);
+    }
+
+
+    if (pX + 1 == CONFIG_T::in_width)
+    {
+        pX = 0;
+        sX = 0;
+        if (pY + 1 == CONFIG_T::in_height) {
+            pY = 0;
+            sY = 0;
+        } else {
+            pY = pY + 1;
+            sY = ((sY - lShiftY) == 0) ? sY - CONFIG_T::stride_height + 1 : sY + 1;
+        }
+    } else {
+        pX = pX + 1;
+        sX = ((sX - lShiftX) == 0) ? sX - CONFIG_T::stride_width + 1 : sX + 1;
+    }
+}
+
+}
+# 8 "firmware/nnet_utils/nnet_sepconv2d_stream.h" 2
+
+
+namespace nnet {
+
+template <class data_T, class res_T, typename CONFIG_T>
+void depthwise_conv_2d_encoded_cl(
+    hls::stream<data_T> &data, hls::stream<res_T> &res,
+    typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_chan]) {
+    (static_cast <bool> (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_sepconv2d_stream.h", 17, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::filt_height == CONFIG_T::filt_width) ? void (0) : __assert_fail ("CONFIG_T::filt_height == CONFIG_T::filt_width", "firmware/nnet_utils/nnet_sepconv2d_stream.h", 18, __extension__ __PRETTY_FUNCTION__));
+
+    hls::stream<typename data_T::value_type> data_window[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan];
+    const int win_depth = CONFIG_T::filt_height * CONFIG_T::out_width;
+    for (unsigned i_out = 0; i_out < CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan; i_out++) {
+#pragma HLS STREAM variable=&data_window[i_out] depth=win_depth
+ }
+
+#pragma HLS ARRAY_PARTITION variable=&CONFIG_T::pixels complete
+
+ res_T res_pack;
+#pragma HLS DATA_PACK variable = &res_pack
+ unsigned outputs_ready = 0;
+
+    ap_uint<CONFIG_T::filt_height * CONFIG_T::filt_width> pixel_idx[data_T::size / CONFIG_T::n_chan];
+#pragma HLS ARRAY_PARTITION variable=&pixel_idx complete
+
+ReadInputHeight:
+    for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
+    ReadInputWidth:
+        for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width / (data_T::size / CONFIG_T::n_chan); i_iw++) {
+#pragma HLS LOOP_FLATTEN
+ if (CONFIG_T::strategy == nnet::latency && data_T::size / CONFIG_T::n_chan == 1) {
+#pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+ }
+            compute_scaled_indices_2d<data_T, CONFIG_T>(i_ih, i_iw, pixel_idx);
+            compute_depthwise_output_encoded<data_T, res_T, CONFIG_T>(data.read(), data_window, res, res_pack, outputs_ready,
+                                                                      weights, biases, pixel_idx);
+        }
+    }
+}
+
+
+template <class data_T, class res_T, typename CONFIG_T>
+void depthwise_conv_2d_buffer_cl(
+    hls::stream<data_T> &data, hls::stream<res_T> &res,
+    typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_chan]) {
+    (static_cast <bool> (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_sepconv2d_stream.h", 56, __extension__ __PRETTY_FUNCTION__));
+
+    static ap_shift_reg<typename data_T::value_type, CONFIG_T::in_width> line_buffer[CONFIG_T::filt_height - 1]
+                                                                                    [CONFIG_T::n_chan];
+#pragma HLS ARRAY_PARTITION variable = &line_buffer complete dim = 2
+
+ReadInputHeight:
+    for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
+    ReadInputWidth:
+        for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width; i_iw++) {
+#pragma HLS LOOP_FLATTEN
+ if (CONFIG_T::strategy == nnet::latency) {
+#pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+ }
+            if (CONFIG_T::filt_height > 1) {
+                compute_depthwise_output_buffer_2d<data_T, res_T, CONFIG_T>(data.read(), line_buffer, res, weights, biases);
+            } else {
+                compute_depthwise_output_buffer_1d<data_T, res_T, CONFIG_T>(data.read(), res, weights, biases);
+            }
+        }
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void depthwise_conv_2d_cl(
+    hls::stream<data_T> &data, hls::stream<res_T> &res,
+    typename CONFIG_T::weight_t weights[CONFIG_T::filt_height * CONFIG_T::filt_width * CONFIG_T::n_chan],
+    typename CONFIG_T::bias_t biases[CONFIG_T::n_chan]) {
+#pragma HLS inline recursive
+ switch (CONFIG_T::implementation) {
+    case conv_implementation::linebuffer:
+        depthwise_conv_2d_buffer_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+        break;
+    case conv_implementation::encoded:
+        depthwise_conv_2d_encoded_cl<data_T, res_T, CONFIG_T>(data, res, weights, biases);
+        break;
+    }
+}
+
+template <class data_T, class res_T, typename CONFIG_T>
+void pointwise_conv_2d_cl(hls::stream<data_T> &data, hls::stream<res_T> &res,
+                          typename CONFIG_T::weight_t weights[CONFIG_T::n_chan * CONFIG_T::n_filt],
+                          typename CONFIG_T::bias_t biases[CONFIG_T::n_filt]) {
+    (static_cast <bool> (CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0) ? void (0) : __assert_fail ("CONFIG_T::pad_top == 0 && CONFIG_T::pad_bottom == 0 && CONFIG_T::pad_left == 0 && CONFIG_T::pad_right == 0", "firmware/nnet_utils/nnet_sepconv2d_stream.h", 99, __extension__ __PRETTY_FUNCTION__));
+    (static_cast <bool> (CONFIG_T::filt_height == 1 && CONFIG_T::filt_width == 1) ? void (0) : __assert_fail ("CONFIG_T::filt_height == 1 && CONFIG_T::filt_width == 1", "firmware/nnet_utils/nnet_sepconv2d_stream.h", 100, __extension__ __PRETTY_FUNCTION__));
+
+#pragma HLS ARRAY_PARTITION variable=&weights complete
+#pragma HLS ARRAY_PARTITION variable=&biases complete
+
+ReadInputHeight:
+    for (unsigned i_ih = 0; i_ih < CONFIG_T::in_height; i_ih++) {
+    ReadInputWidth:
+        for (unsigned i_iw = 0; i_iw < CONFIG_T::in_width / (data_T::size / CONFIG_T::n_chan); i_iw++) {
+            if (CONFIG_T::strategy == nnet::latency && data_T::size / CONFIG_T::n_chan == 1) {
+#pragma HLS PIPELINE II=CONFIG_T::reuse_factor
+ }
+            if (i_ih % CONFIG_T::stride_height == 0 && i_iw % CONFIG_T::stride_width == 0) {
+                pointwise_mult_buffer<data_T, res_T, CONFIG_T>(data.read(), res, weights, biases);
+            } else {
+                data.read();
+            }
+        }
+    }
+}
+
+template <class data_T, class dw_res_T, class res_T, typename CONFIG_T>
+void separable_conv_2d_cl(hls::stream<data_T> &data, hls::stream<res_T> &res,
+                          typename CONFIG_T::depthwise_config::weight_t
+                              depthwise_weights[CONFIG_T::depthwise_config::filt_height *
+                                                CONFIG_T::depthwise_config::filt_width * CONFIG_T::depthwise_config::n_chan],
+                          typename CONFIG_T::pointwise_config::weight_t
+                              pointwise_weights[CONFIG_T::pointwise_config::n_chan * CONFIG_T::pointwise_config::n_filt],
+                          typename CONFIG_T::depthwise_config::bias_t depthwise_biases[CONFIG_T::depthwise_config::n_chan],
+                          typename CONFIG_T::pointwise_config::bias_t pointwise_biases[CONFIG_T::pointwise_config::n_filt]) {
+#pragma HLS DATAFLOW
+
+ hls::stream<dw_res_T> depthwise_res;
+    unsigned res_depth = CONFIG_T::depthwise_config::out_height * CONFIG_T::depthwise_config::out_width;
+#pragma HLS STREAM variable=&depthwise_res depth=res_depth
+
+ depthwise_conv_2d_cl<data_T, dw_res_T, typename CONFIG_T::depthwise_config>(data, depthwise_res, depthwise_weights,
+                                                                                depthwise_biases);
+    pointwise_conv_2d_cl<dw_res_T, res_T, typename CONFIG_T::pointwise_config>(depthwise_res, res, pointwise_weights,
+                                                                               pointwise_biases);
+}
+
+}
 # 21 "firmware/parameters.h" 2
 
 
+# 1 "firmware/weights/d2.h" 1
+# 12 "firmware/weights/d2.h"
+model_default_t d2[27] = {0.1538085938, -0.0856933594, 0.4108886719, -0.7392578125, 0.1160888672, -0.4416503906, -0.1954345703, -0.0127563477, -0.3593750000, 0.1325683594, 0.3784179688, 0.3017578125, 0.4138183594, -0.3693847656, 0.1204223633, 0.4272460938, -0.0800170898, 0.2366943359, -0.2011718750, 0.4221191406, 0.3952636719, 0.3913574219, -0.7690429688, 0.0756835938, -0.0949096680, 0.2052001953, 0.1339111328};
+# 24 "firmware/parameters.h" 2
+# 1 "firmware/weights/p2.h" 1
+# 12 "firmware/weights/p2.h"
+model_default_t p2[96] = {0.5361328125, 0.0000000000, 0.8872070312, -0.0000000000, 0.5390625000, -0.8095703125, 0.0000000000, -0.5263671875, -0.5087890625, 0.0000000000, 0.0943603516, -0.0000000000, -0.0978393555, -0.1773681641, 0.5454101562, 0.6054687500, -0.0460510254, -0.0498962402, 0.0867309570, -0.0000000000, 0.0426025391, 0.1275634766, 0.2443847656, -0.0214385986, 0.0000000000, -0.6118164062, -0.7548828125, -0.1287841797, 0.5156250000, 0.4533691406, 0.0000000000, -0.5581054688, 0.5795898438, 0.5278320312, 0.0872192383, 0.0000000000, 0.2005615234, -0.0000000000, 0.3100585938, -0.3569335938, -0.4226074219, -0.5898437500, -0.8515625000, 0.0000000000, -0.1528320312, -0.1379394531, 0.2070312500, -0.1182861328, 0.8212890625, 0.7880859375, -0.0594787598, -0.0401916504, 0.5390625000, -0.1494140625, -0.2609863281, 0.6176757812, -0.2176513672, -0.0000000000, -0.0475769043, 0.0246582031, 0.1253662109, -0.0792236328, 0.0000000000, 0.0892333984, 0.0000000000, 0.1049804688, -0.0481567383, -0.0000000000, -0.1575927734, 0.1152954102, -0.5546875000, 0.1591796875, 0.0000000000, -0.1166381836, -0.0000000000, 0.0000000000, 0.1364746094, 0.3835449219, -0.0000000000, 0.0000000000, 0.0654296875, 0.0961303711, 0.1101684570, -0.1568603516, 0.0512084961, -0.7885742188, -0.3427734375, 0.0000000000, 0.0000000000, 0.0000000000, -0.1122436523, 0.4150390625, -0.0776367188, 0.6000976562, -0.0000000000, -0.1132202148};
+# 25 "firmware/parameters.h" 2
+# 1 "firmware/weights/z2.h" 1
+# 12 "firmware/weights/z2.h"
+zero_bias2_t z2[3] = {0, 0, 0};
+# 26 "firmware/parameters.h" 2
+# 1 "firmware/weights/b2.h" 1
+# 12 "firmware/weights/b2.h"
+model_default_t b2[32] = {0.0237731934, 0.0629272461, -0.0521545410, -0.0033569336, -0.0160522461, 0.0272369385, 0.0817260742, 0.0154418945, 0.0379943848, 0.0119781494, -0.0182952881, -0.0458984375, 0.0672607422, 0.0690307617, -0.0800781250, -0.0029544830, 0.0229797363, -0.0751953125, 0.0669555664, 0.1140747070, 0.0591125488, -0.0307769775, 0.0053138733, 0.0731811523, 0.0780639648, 0.1341552734, 0.1058349609, 0.2226562500, 0.1258544922, 0.2327880859, -0.0384216309, -0.0271148682};
+# 27 "firmware/parameters.h" 2
+# 1 "firmware/weights/s5.h" 1
+# 12 "firmware/weights/s5.h"
+model_default_t s5[32] = {16.8330059052, 23.2134323120, 10.8972787857, 34.1859474182, 22.3788681030, 17.5233840942, 19.9388561249, 20.3098735809, 19.1589870453, 21.3153247833, 10.7347478867, 30.4801540375, 27.3412513733, 12.5566177368, 17.4817523956, 12.1093149185, 17.8564548492, 25.5323429108, 19.0949020386, 24.9895305634, 22.5820312500, 29.7915992737, 21.7943210602, 16.8927612305, 31.1485328674, 14.7124948502, 14.1950817108, 13.1206560135, 17.2236900330, 7.1320447922, 27.0368537903, 26.3115653992};
+# 28 "firmware/parameters.h" 2
+# 1 "firmware/weights/b5.h" 1
+# 12 "firmware/weights/b5.h"
+model_default_t b5[32] = {-1.1188303232, -1.7291955948, -0.9146721363, 0.1617431641, -0.4567069709, -0.4526288509, -0.1326747537, -1.0123771429, -0.5538241267, -0.9981716871, -1.2183481455, 0.0265502930, -3.3356037140, -2.5726866722, -0.1267005205, -1.5528904200, -0.2856762409, -0.0232166201, -2.6679878235, -1.5577108860, -1.1727545261, 0.1354807168, 0.0550571084, -0.4489781260, -3.2333357334, -1.0877642632, -0.3831323981, -4.9633245468, -2.9434633255, -4.0247001648, 0.1446533203, 0.0567635074};
+# 29 "firmware/parameters.h" 2
+# 1 "firmware/weights/d6.h" 1
+# 12 "firmware/weights/d6.h"
+model_default_t d6[288] = {0.0500183105, -0.1193847656, -0.2425537109, 0.1217651367, 0.0047149658, -0.1628417969, 0.0881958008, 0.2722167969, -0.3828125000, -0.0204620361, 0.0374755859, -0.0260009766, 0.1470947266, 0.1026611328, 0.0326538086, 0.1890869141, 0.1077270508, -0.0616760254, -0.1633300781, -0.1076660156, -0.2143554688, -0.3742675781, 0.1853027344, -0.1088256836, -0.2829589844, 0.0961914062, -0.0285034180, 0.2880859375, 0.1284179688, -0.2636718750, -0.1680908203, -0.1286621094, -0.0729980469, -0.0875244141, -0.2963867188, 0.2761230469, -0.2329101562, 0.2770996094, -0.2312011719, -0.0433959961, -0.0521545410, 0.0869140625, -0.0203552246, -0.2521972656, -0.0263977051, 0.4467773438, 0.1312255859, 0.1376953125, 0.2095947266, 0.0332336426, 0.1124877930, 0.0303649902, -0.1177368164, -0.1386718750, 0.1976318359, -0.0267028809, -0.2761230469, 0.1612548828, 0.1735839844, -0.0522460938, -0.1448974609, 0.1226806641, -0.2130126953, -0.1127929688, -0.0057945251, -0.2968750000, -0.1997070312, -0.0367431641, 0.2193603516, -0.1094970703, 0.1997070312, 0.0496826172, -0.2360839844, 0.1019897461, -0.4233398438, -0.0534362793, -0.2448730469, 0.3256835938, -0.1163940430, 0.0507507324, 0.0061759949, -0.1697998047, -0.0588989258, 0.0645751953, -0.2924804688, 0.0067367554, 0.0755004883, 0.2504882812, 0.1292724609, 0.1862792969, 0.1729736328, -0.2355957031, -0.1829833984, -0.0352478027, -0.1763916016, -0.0976562500, 0.2705078125, -0.0653686523, -0.2482910156, 0.0875854492, -0.0217742920, 0.0393676758, 0.1107177734, -0.0218353271, -0.1911621094, 0.0510253906, -0.0838012695, 0.0668334961, 0.2893066406, 0.2297363281, 0.0679321289, -0.1678466797, 0.1579589844, -0.2414550781, -0.0793457031, -0.0351867676, -0.1267089844, -0.0462341309, -0.0102767944, -0.2646484375, -0.2824707031, 0.2478027344, -0.0760498047, 0.3818359375, 0.2177734375, -0.0559082031, -0.0262756348, 0.0034751892, 0.2061767578, 0.1413574219, -0.1280517578, 0.2563476562, 0.0681152344, 0.3256835938, 0.0913085938, -0.1909179688, -0.0030422211, -0.0306396484, -0.1810302734, 0.1843261719, -0.2283935547, -0.1529541016, 0.0144042969, -0.3017578125, 0.3395996094, 0.0206756592, -0.1252441406, 0.3750000000, -0.0228271484, -0.0491027832, -0.0272369385, 0.0088882446, -0.1527099609, 0.4013671875, -0.0577392578, 0.0149612427, -0.0130462646, -0.3906250000, -0.0803833008, -0.2265625000, -0.0466308594, 0.1258544922, -0.0652465820, -0.1065063477, 0.1875000000, -0.2727050781, 0.2429199219, -0.2243652344, -0.0613708496, -0.1975097656, -0.1392822266, -0.0277557373, -0.0879516602, 0.0558471680, 0.3039550781, -0.1634521484, 0.1862792969, -0.4362792969, -0.1341552734, -0.1429443359, -0.5737304688, -0.1937255859, 0.2479248047, 0.1912841797, 0.1068115234, 0.2658691406, 0.1060791016, -0.3540039062, -0.1998291016, 0.2976074219, -0.1246337891, -0.1635742188, 0.1285400391, 0.1677246094, -0.0271911621, 0.0186157227, 0.1243286133, 0.2648925781, -0.0595703125, -0.2026367188, 0.0131301880, -0.1674804688, -0.0610656738, 0.0910644531, 0.0820312500, 0.1048583984, 0.1801757812, -0.2578125000, -0.3688964844, -0.1527099609, 0.3459472656, -0.3181152344, -0.1406250000, -0.1813964844, 0.1102905273, -0.3762207031, -0.0125198364, -0.0416259766, 0.0315551758, 0.1079101562, 0.0531921387, 0.4084472656, -0.0510253906, -0.1250000000, 0.3684082031, 0.5161132812, -0.0340270996, 0.1794433594, 0.3078613281, -0.0765991211, 0.1663818359, -0.1319580078, -0.2293701172, -0.4938964844, -0.0932617188, 0.1489257812, 0.5073242188, -0.1771240234, 0.0268707275, -0.2514648438, -0.0393371582, -0.2391357422, 0.2836914062, -0.0909423828, -0.0910644531, -0.1861572266, 0.1514892578, -0.1065673828, 0.1193237305, 0.0983886719, -0.5053710938, -0.2036132812, 0.1783447266, -0.2342529297, 0.0177917480, -0.0878295898, 0.3984375000, 0.2983398438, 0.0810546875, 0.1308593750, 0.0825195312, 0.0985107422, 0.2145996094, -0.3725585938, -0.1824951172, -0.4438476562, 0.0401000977, 0.0151138306, -0.0435180664, -0.2020263672, 0.2381591797, -0.1633300781, 0.0215911865, -0.1530761719, -0.0955810547, -0.3713378906, -0.1253662109, -0.0256042480, 0.0472412109, -0.1079711914, 0.3798828125, -0.0787353516, -0.0160827637, -0.1879882812, -0.3107910156, -0.0225982666, -0.1684570312, -0.2817382812};
+# 30 "firmware/parameters.h" 2
+# 1 "firmware/weights/p6.h" 1
+# 12 "firmware/weights/p6.h"
+model_default_t p6[2048] = {0.0946044922, 0.0000000000, 0.2044677734, -0.0528259277, 0.1160278320, -0.3923339844, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.0597534180, -0.4584960938, -0.3757324219, 0.2340087891, -0.1877441406, -0.1416015625, 0.2155761719, 0.1988525391, -0.0000000000, -0.0000000000, -0.2917480469, -0.0000000000, 0.2320556641, 0.0712280273, 0.2553710938, 0.1065063477, -0.0000000000, 0.0000000000, -0.3041992188, 0.0597839355, -0.2834472656, -0.4233398438, 0.0000000000, 0.6171875000, -0.0000000000, -0.4438476562, -0.0852050781, 0.2286376953, 0.2250976562, -0.1518554688, 0.1339111328, 0.0000000000, -0.0000000000, -0.2678222656, 0.1579589844, 0.1336669922, -0.1306152344, -0.0000000000, 0.2709960938, -0.0653686523, 0.0591430664, 0.0000000000, -0.2359619141, 0.1033935547, -0.0419921875, -0.2467041016, 0.1280517578, 0.4443359375, 0.3112792969, -0.1943359375, 0.1914062500, 0.0000000000, 0.0000000000, 0.1083374023, 0.0842285156, -0.0000000000, 0.2082519531, -0.3212890625, -0.2211914062, -0.0000000000, -0.2012939453, 0.1673583984, -0.1647949219, 0.3164062500, 0.1291503906, 0.3212890625, 0.4602050781, 0.0000000000, -0.0763549805, 0.0000000000, -0.4138183594, -0.3979492188, 0.1091308594, 0.0469055176, 0.0490112305, -0.0834350586, -0.0000000000, 0.4125976562, 0.2636718750, 0.1185913086, 0.0565490723, -0.1826171875, 0.2347412109, -0.0000000000, -0.4121093750, -0.0548400879, 0.0276031494, -0.0838012695, -0.4853515625, -0.0773315430, -0.0368652344, -0.1385498047, 0.3210449219, -0.1414794922, 0.0000000000, 0.1663818359, 0.1250000000, -0.0980224609, 0.0822143555, -0.0777587891, -0.1057128906, 0.3391113281, -0.3781738281, -0.5415039062, 0.0000000000, 0.3173828125, 0.1188354492, 0.1444091797, -0.0772705078, -0.0000000000, -0.0916748047, 0.1195678711, -0.0480346680, 0.3149414062, -0.1981201172, -0.1335449219, -0.3090820312, -0.1254882812, 0.0000000000, 0.0411682129, 0.2272949219, 0.0649414062, 0.0594787598, 0.6030273438, 0.2597656250, 0.2770996094, 0.0000000000, -0.3449707031, -0.0832519531, 0.0000000000, -0.1944580078, 0.2648925781, -0.0487670898, 0.2905273438, 0.3435058594, 0.3464355469, -0.0705566406, 0.0248260498, 0.3183593750, 0.2025146484, 0.3403320312, 0.2702636719, 0.1613769531, -0.3310546875, -0.3957519531, -0.0764770508, 0.4282226562, 0.0000000000, -0.2169189453, 0.2108154297, -0.3027343750, -0.1932373047, -0.0847167969, 0.0000000000, 0.2514648438, 0.3654785156, -0.0055656433, 0.2761230469, -0.0316467285, -0.1564941406, 0.0000000000, -0.2136230469, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0535583496, -0.0000000000, -0.0000000000, -0.0000000000, -0.1638183594, 0.0650634766, 0.0789794922, -0.0000000000, -0.0863647461, 0.1400146484, 0.1900634766, -0.0709228516, 0.0000000000, 0.1177978516, 0.4116210938, 0.0341796875, 0.2226562500, -0.0647583008, -0.1668701172, 0.0000000000, -0.4138183594, -0.3435058594, -0.0000000000, -0.4216308594, 0.0000000000, 0.1805419922, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.6118164062, -0.0550537109, 0.0958251953, 0.3471679688, 0.3332519531, -0.2161865234, 0.2536621094, -0.3322753906, -0.0733642578, 0.0000000000, -0.0967407227, -0.0000000000, -0.4768066406, -0.1964111328, 0.3725585938, 0.0353393555, -0.3225097656, -0.3161621094, 0.2336425781, -0.4709472656, 0.0000000000, -0.1022949219, 0.0000000000, 0.0000000000, -0.1191406250, -0.2133789062, 0.0000000000, -0.2033691406, -0.0515747070, -0.3120117188, 0.0446777344, -0.3991699219, -0.0000000000, 0.2868652344, -0.3596191406, 0.2440185547, -0.0000000000, 0.4223632812, -0.3723144531, -0.0924682617, -0.1876220703, -0.0000000000, 0.1319580078, 0.0000000000, -0.1271972656, 0.1147460938, 0.0000000000, -0.4199218750, 0.0486755371, -0.0582885742, 0.1143188477, -0.0000000000, 0.0000000000, 0.1459960938, -0.0606079102, 0.0312500000, -0.0624694824, -0.0000000000, 0.3056640625, -0.3625488281, 0.0646972656, -0.0000000000, -0.2519531250, 0.2016601562, -0.2749023438, 0.0859375000, -0.0780029297, -0.4904785156, 0.0000000000, -0.0500183105, 0.0000000000, 0.0453491211, -0.1494140625, -0.1815185547, 0.1239624023, -0.3354492188, -0.0525817871, 0.3764648438, -0.0421447754, -0.0919189453, 0.4272460938, 0.1774902344, 0.0619506836, -0.0000000000, 0.2183837891, 0.0000000000, -0.2683105469, -0.1357421875, -0.2624511719, 0.1987304688, -0.0950317383, 0.3464355469, 0.5703125000, -0.1456298828, -0.3789062500, -0.0938110352, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.1584472656, 0.1462402344, -0.1097412109, -0.0000000000, 0.0000000000, -0.0000000000, -0.2160644531, -0.0000000000, -0.1923828125, 0.0664672852, 0.3063964844, 0.1745605469, 0.0571289062, -0.0496215820, 0.1939697266, 0.0169830322, 0.0882568359, 0.3891601562, 0.2983398438, 0.2221679688, 0.0000000000, 0.0000000000, -0.3105468750, -0.1787109375, 0.0798339844, -0.2834472656, 0.0150909424, 0.0000000000, -0.0000000000, -0.1043090820, -0.4184570312, -0.5107421875, -0.2841796875, -0.0000000000, -0.9624023438, 0.0559997559, -0.0000000000, -0.0000000000, 0.1223754883, -0.0687255859, 0.0000000000, -0.2871093750, -0.1715087891, -0.1865234375, -0.0908203125, -0.3347167969, 0.0000000000, 0.0000000000, 0.3828125000, 0.1274414062, -0.1290283203, 0.0401611328, -0.2128906250, -0.0000000000, 0.2053222656, 0.1141357422, -0.0644531250, -0.2181396484, -0.0758056641, -0.3767089844, 0.2966308594, 0.1789550781, 0.0000000000, -0.1353759766, 0.0000000000, -0.0968627930, -0.0521545410, -0.4104003906, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.3559570312, 0.0739135742, -0.5205078125, 0.0000000000, -0.1271972656, 0.0629882812, -0.0576782227, 0.1478271484, 0.1046752930, 0.0727539062, -0.1309814453, -0.1112060547, 0.0699462891, 0.0483398438, -0.5786132812, -0.0760498047, -0.1773681641, -0.1314697266, 0.0000000000, 0.2333984375, 0.0851440430, -0.4912109375, -0.3837890625, 0.0000000000, -0.0582580566, 0.0000000000, -0.0000000000, -0.0000000000, 0.4821777344, 0.2130126953, 0.0000000000, -0.3029785156, 0.0512390137, -0.2055664062, -0.3518066406, 0.0000000000, 0.0000000000, -0.1324462891, 0.2193603516, 0.0000000000, 0.0000000000, 0.0755004883, 0.0000000000, -0.1031494141, -0.1048583984, 0.4050292969, 0.4602050781, -0.2861328125, 0.5610351562, -0.0846557617, 0.0569458008, 0.1965332031, -0.3195800781, 0.5493164062, -0.0993652344, -0.0000000000, 0.0497436523, -0.0398864746, 0.0000000000, -0.2464599609, -0.0312500000, 0.1054687500, -0.4548339844, -0.1516113281, -0.0000000000, 0.1514892578, -0.0734863281, 0.0000000000, 0.5332031250, -0.0490722656, 0.0000000000, 0.1171264648, -0.2702636719, 0.5634765625, 0.0000000000, -0.0000000000, 0.1793212891, -0.0000000000, -0.0751953125, 0.4062500000, 0.0446472168, -0.0771484375, 0.1905517578, -0.0000000000, 0.0497741699, -0.0000000000, 0.0661621094, 0.4489746094, 0.3215332031, -0.0891723633, -0.2095947266, -0.1668701172, 0.0384826660, 0.0000000000, 0.0000000000, 0.3083496094, 0.0418701172, -0.0570678711, 0.0499877930, -0.0000000000, 0.2783203125, -0.0582275391, -0.0600891113, -0.0000000000, 0.4375000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.3264160156, -0.4763183594, 0.1884765625, 0.0000000000, -0.0000000000, 0.0000000000, -0.4252929688, 0.4724121094, 0.1362304688, 0.1323242188, -0.2154541016, -0.0000000000, -0.0000000000, -0.0000000000, 0.0761108398, -0.0000000000, -0.1362304688, 0.0000000000, -0.0000000000, -0.0720214844, -0.0704345703, -0.4597167969, 0.3295898438, 0.0000000000, -0.4096679688, 0.1115112305, 0.0208282471, 0.1916503906, 0.1787109375, 0.3791503906, -0.1032714844, -0.1237182617, -0.0620117188, -0.0520324707, 0.2081298828, 0.2442626953, -0.0839843750, -0.1865234375, 0.3359375000, -0.1183471680, -0.1729736328, 0.5034179688, -0.2724609375, 0.0000000000, -0.0097427368, -0.0000000000, 0.3608398438, 0.1102294922, 0.0000000000, 0.2639160156, -0.0000000000, -0.1871337891, 0.4616699219, -0.0000000000, 0.1975097656, 0.0054283142, -0.0958862305, -0.0513000488, 0.1267089844, 0.4733886719, -0.1271972656, 0.1004028320, 0.3737792969, 0.2445068359, 0.1708984375, -0.3044433594, 0.0000000000, -0.0371093750, -0.2858886719, 0.0688476562, 0.0000000000, 0.4333496094, 0.1893310547, 0.1706542969, 0.1264648438, -0.0734863281, -0.0000000000, 0.1881103516, -0.2758789062, -0.0802612305, 0.0968627930, -0.0971679688, 0.1940917969, -0.2709960938, -0.1439208984, -0.0000000000, 0.0435791016, -0.2614746094, 0.0491638184, 0.1103515625, 0.3325195312, -0.0948486328, 0.2624511719, 0.0000000000, 0.1448974609, 0.0000000000, 0.0482482910, -0.0000000000, 0.4091796875, 0.6069335938, -0.0000000000, 0.0593566895, -0.1186523438, 0.2017822266, 0.2541503906, -0.0783081055, -0.0000000000, 0.0000000000, -0.1381835938, 0.3986816406, -0.0138854980, -0.3698730469, -0.2045898438, 0.0000000000, 0.2067871094, 0.0919799805, 0.0359802246, 0.2744140625, -0.3371582031, 0.0000000000, -0.0422363281, 0.5942382812, -0.0460815430, 0.0556945801, -0.1608886719, 0.4291992188, -0.0000000000, 0.1962890625, -0.1828613281, 0.1262207031, 0.0000000000, 0.1115112305, -0.0567321777, 0.2186279297, 0.3312988281, 0.0000000000, 0.6718750000, 0.0000000000, -0.1177368164, -0.2353515625, -0.1455078125, -0.1590576172, 0.2595214844, -0.0000000000, 0.2851562500, 0.1074829102, 0.2607421875, 0.4353027344, -0.1197509766, 0.3037109375, 0.0533142090, -0.0201110840, -0.0000000000, 0.1324462891, -0.2680664062, -0.3449707031, 0.1530761719, -0.1715087891, 0.3752441406, 0.1218872070, 0.0000000000, 0.0737304688, -0.4020996094, -0.2114257812, 0.0000000000, 0.2993164062, -0.2607421875, -0.0000000000, 0.3095703125, 0.2512207031, -0.2222900391, 0.1035156250, -0.0000000000, 0.3681640625, 0.0972290039, 0.1323242188, 0.1013183594, 0.0000000000, 0.1322021484, -0.0000000000, -0.1308593750, 0.2504882812, -0.0740356445, 0.3090820312, 0.1271972656, 0.2337646484, -0.2152099609, -0.0494384766, -0.0756835938, 0.4089355469, -0.0665283203, 0.2272949219, -0.0000000000, 0.3417968750, 0.0000000000, -0.0000000000, 0.0359191895, 0.2980957031, -0.0000000000, -0.1286621094, -0.0000000000, 0.0000000000, 0.3935546875, -0.1300048828, -0.1212158203, -0.0000000000, 0.0946655273, 0.0363769531, -0.3291015625, -0.4753417969, -0.4208984375, 0.3659667969, 0.0153656006, 0.0614013672, 0.0402526855, 0.0000000000, -0.0000000000, 0.4992675781, 0.0000000000, -0.2041015625, 0.0734863281, -0.0000000000, 0.0000000000, 0.0000000000, 0.1411132812, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0486755371, -0.0000000000, 0.1901855469, -0.1109619141, -0.2437744141, 0.2912597656, 0.0000000000, -0.1566162109, -0.3310546875, -0.0565185547, 0.0000000000, -0.3786621094, -0.0659790039, 0.0571289062, 0.0500488281, 0.0000000000, 0.0000000000, 0.0000000000, -0.3691406250, -0.0303497314, -0.0958862305, 0.0000000000, -0.6811523438, -0.4694824219, 0.0000000000, -0.0994873047, 0.1791992188, 0.0000000000, -0.1595458984, -0.0547485352, -0.0000000000, -0.2861328125, -0.0442810059, 0.0494079590, 0.2536621094, -0.0000000000, 0.2175292969, -0.3139648438, -0.0327758789, -0.2150878906, -0.0690307617, 0.0000000000, -0.0313720703, 0.5024414062, -0.4711914062, 0.1622314453, 0.3845214844, -0.2629394531, -0.0000000000, -0.1289062500, 0.0000000000, 0.0000000000, 0.4855957031, -0.0985717773, 0.2805175781, 0.0796508789, -0.0000000000, 0.1319580078, -0.5161132812, -0.1776123047, 0.1025390625, -0.4089355469, -0.0000000000, -0.1022949219, -0.2875976562, -0.2441406250, -0.1111450195, 0.0440673828, -0.0423583984, 0.0556335449, 0.7285156250, -0.2274169922, 0.0000000000, 0.0000000000, 0.0593872070, -0.2403564453, -0.2956542969, -0.1149902344, 0.0000000000, -0.2822265625, 0.0000000000, 0.3200683594, -0.0788574219, -0.2729492188, -0.0661010742, 0.0000000000, -0.3330078125, -0.1252441406, -0.0000000000, -0.2524414062, 0.1690673828, -0.4531250000, -0.2022705078, -0.1697998047, 0.2025146484, 0.0000000000, -0.0415039062, 0.1848144531, -0.0000000000, 0.0000000000, -0.0628051758, -0.0257720947, 0.1789550781, -0.1241455078, 0.6606445312, -0.0000000000, -0.0725708008, 0.0123596191, -0.5693359375, -0.3415527344, 0.2604980469, -0.3652343750, 0.3576660156, -0.0376586914, -0.1582031250, -0.2995605469, -0.0000000000, 0.2856445312, -0.1966552734, 0.0874023438, -0.4252929688, 0.1459960938, 0.2807617188, 0.4123535156, -0.0000000000, -0.1417236328, -0.1789550781, 0.8237304688, 0.0675048828, 0.1139526367, 0.0256805420, -0.0459289551, -0.0361022949, -0.0657348633, -0.0000000000, -0.1724853516, -0.0323791504, 0.0722656250, -0.0411987305, 0.7817382812, -0.1639404297, -0.3166503906, 0.1089477539, -0.6328125000, -0.0574035645, 0.0000000000, 0.0000000000, 0.1878662109, 0.1168212891, -0.0963134766, 0.1660156250, -0.0000000000, -0.1236572266, -0.0791015625, 0.0126571655, 0.2856445312, -0.1146240234, 0.1568603516, -0.4848632812, -0.0403747559, 0.0000000000, -0.4558105469, -0.1531982422, -0.1574707031, -0.1367187500, 0.0000000000, -0.3750000000, 0.0978393555, -0.0544433594, -0.2612304688, 0.1163940430, 0.0184326172, 0.2712402344, -0.1704101562, -0.0000000000, -0.1622314453, -0.0894775391, -0.0000000000, -0.3247070312, -0.0000000000, -0.1453857422, -0.4650878906, 0.2344970703, 0.0000000000, 0.0513000488, 0.0000000000, -0.1004028320, 0.1273193359, -0.0594177246, 0.0000000000, -0.1833496094, -0.0906372070, 0.0000000000, 0.0000000000, -0.0775146484, -0.1795654297, -0.2685546875, -0.1406250000, -0.0000000000, -0.5595703125, 0.1254882812, 0.0000000000, 0.1201782227, 0.1367187500, -0.0952758789, -0.1864013672, -0.0524902344, 0.0750732422, 0.0947265625, -0.0670776367, -0.0332031250, -0.6127929688, -0.0545654297, -0.5214843750, -0.1700439453, -0.0000000000, -0.1102905273, -0.4040527344, 0.0822753906, -0.0620117188, -0.0000000000, -0.1519775391, -0.1983642578, -0.6308593750, -0.1624755859, -0.0000000000, -0.2922363281, -0.1013793945, -0.1875000000, -0.4426269531, -0.0874633789, -0.0682983398, -0.0716552734, -0.4516601562, -0.0862426758, 0.1757812500, -0.0893554688, -0.0000000000, -0.0000000000, 0.0000000000, -0.2010498047, 0.1699218750, 0.2158203125, 0.6079101562, 0.0000000000, -0.0357055664, 0.0000000000, 0.2071533203, -0.0310668945, 0.0850219727, 0.0471801758, -0.0924072266, 0.5366210938, -0.1473388672, -0.0698852539, -0.1524658203, 0.1279296875, -0.1072998047, -0.1651611328, -0.0553283691, 0.0164947510, -0.0665283203, 0.0000000000, -0.0000000000, 0.0733642578, 0.0000000000, 0.0000000000, 0.1650390625, -0.3449707031, 0.0254058838, -0.1201171875, -0.0000000000, -0.0675659180, -0.1616210938, 0.6245117188, -0.1544189453, -0.1639404297, -0.2548828125, -0.0000000000, 0.5117187500, 0.0000000000, 0.0000000000, -0.0000000000, 0.2269287109, 0.0706787109, -0.0220794678, -0.0000000000, 0.0787353516, 0.0000000000, -0.0825195312, -0.0872802734, -0.1666259766, -0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.1826171875, 0.3120117188, -0.0332031250, 0.0000000000, 0.1134033203, -0.1240844727, 0.0000000000, 0.2369384766, 0.0000000000, -0.2587890625, 0.0996704102, 0.0502319336, -0.0993041992, -0.0498046875, 0.1094970703, -0.1679687500, 0.0000000000, -0.0000000000, -0.0000000000, -0.2261962891, -0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, 0.0458374023, 0.1271972656, -0.4929199219, 0.0000000000, 0.0000000000, -0.0819702148, 0.0505676270, 0.3708496094, 0.1217651367, 0.2082519531, -0.4941406250, -0.1569824219, 0.0947265625, 0.0000000000, 0.1680908203, -0.5097656250, -0.3300781250, 0.0451660156, 0.0494995117, -0.0653686523, 0.1921386719, 0.3825683594, 0.1353759766, -0.0000000000, 0.0859985352, 0.1715087891, -0.1347656250, -0.2778320312, -0.0000000000, 0.1745605469, -0.3325195312, 0.0109405518, 0.2548828125, -0.2443847656, 0.1387939453, 0.1539306641, -0.1468505859, -0.0502624512, -0.2319335938, 0.4147949219, -0.3024902344, -0.0000000000, -0.7192382812, -0.0212707520, -0.0689086914, -0.1033325195, -0.2242431641, 0.2310791016, -0.1893310547, 0.3457031250, 0.2091064453, 0.0963745117, 0.0000000000, -0.1069946289, 0.0000000000, -0.0567016602, 0.5122070312, 0.3000488281, 0.0434265137, -0.0654907227, 0.3032226562, 0.0000000000, 0.0825805664, -0.0000000000, 0.2083740234, 0.2519531250, -0.0000000000, 0.2998046875, 0.1776123047, 0.3293457031, 0.0000000000, 0.0726318359, 0.4626464844, 0.0525512695, 0.5415039062, -0.0000000000, 0.1531982422, 0.3588867188, 0.1066284180, 0.6171875000, -0.0000000000, 0.3901367188, -0.0000000000, -0.0297241211, 0.0000000000, -0.1118164062, 0.2039794922, 0.1436767578, 0.2624511719, 0.1082153320, 0.1929931641, 0.1391601562, 0.1099853516, 0.0000000000, 0.0201873779, 0.4592285156, 0.2427978516, 0.4101562500, 0.1478271484, 0.2044677734, 0.4821777344, 0.0989990234, 0.2995605469, -0.0000000000, -0.0000000000, -0.1396484375, 0.2712402344, 0.0592346191, 0.0729370117, 0.0681152344, -0.1102905273, -0.1225585938, 0.0000000000, 0.0000000000, -0.0593566895, 0.2137451172, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.0710449219, -0.3884277344, 0.1128540039, 0.0000000000, 0.2174072266, -0.2059326172, -0.0970458984, -0.1188964844, 0.0596313477, 0.1328125000, 0.2380371094, 0.1761474609, 0.0000000000, 0.1909179688, -0.2685546875, -0.0000000000, -0.0971069336, -0.0846557617, 0.1423339844, -0.1585693359, 0.0987548828, -0.2727050781, 0.0000000000, -0.0939331055, -0.0000000000, -0.3564453125, 0.0534667969, -0.2443847656, -0.0000000000, 0.0000000000, 0.0000000000, -0.0839843750, 0.2402343750, -0.0000000000, 0.0000000000, -0.0000000000, -0.2097167969, 0.3132324219, 0.0886230469, 0.1148681641, -0.1507568359, 0.1396484375, 0.2136230469, -0.0533752441, -0.5463867188, -0.3061523438, -0.1350097656, -0.5966796875, -0.0687866211, -0.0991210938, -0.3784179688, -0.0000000000, 0.0000000000, 0.0000000000, 0.2768554688, 0.0000000000, 0.4453125000, -0.1560058594, -0.0904541016, 0.1357421875, 0.1663818359, -0.5590820312, -0.0473632812, 0.2191162109, 0.0572204590, -0.3078613281, -0.0000000000, -0.1384277344, -0.0458374023, 0.0912475586, 0.0963134766, 0.1513671875, 0.1629638672, 0.0526428223, 0.0000000000, 0.1608886719, -0.2407226562, 0.0292053223, 0.4699707031, 0.1354980469, -0.0790405273, 0.2305908203, 0.1492919922, -0.6010742188, 0.0395812988, 0.4626464844, 0.5166015625, 0.0000000000, -0.3989257812, -0.0000000000, 0.0852050781, -0.0000000000, 0.0000000000, 0.4035644531, -0.6191406250, 0.2741699219, 0.1224975586, -0.0792236328, -0.0892333984, 0.2410888672, -0.0360107422, 0.0000000000, -0.0952758789, 0.0841674805, 0.1043701172, 0.1663818359, 0.3464355469, 0.0480041504, 0.0494995117, 0.1672363281, 0.2888183594, -0.0870971680, -0.1789550781, 0.4821777344, -0.2617187500, -0.0000000000, 0.0000000000, -0.0000000000, -0.4619140625, 0.0000000000, -0.0000000000, 0.1461181641, -0.3417968750, 0.1463623047, 0.0000000000, -0.1290283203, 0.0291442871, 0.3183593750, -0.4379882812, -0.0337219238, 0.2492675781, 0.0000000000, -0.1429443359, -0.1625976562, -0.0899658203, 0.1625976562, 0.3273925781, -0.4252929688, 0.1961669922, -0.2785644531, -0.2822265625, -0.2456054688, 0.0637207031, -0.0952148438, -0.0000000000, -0.0000000000, 0.1400146484, -0.0000000000, -0.0534667969, 0.2963867188, -0.0000000000, -0.1017456055, 0.3098144531, -0.1094970703, -0.0000000000, 0.0933837891, 0.3217773438, 0.0000000000, -0.1904296875, -0.3190917969, -0.3415527344, 0.1351318359, -0.6142578125, -0.0303497314, -0.3557128906, 0.0000000000, 0.0000000000, -0.6459960938, -0.0000000000, -0.0000000000, -0.1242675781, 0.3046875000, -0.5986328125, 0.0639648438, -0.1072998047, 0.2419433594, 0.0595397949, 0.0793457031, -0.3027343750, -0.0809936523, 0.1375732422, 0.0572509766, 0.0667114258, 0.3103027344, -0.0000000000, -0.2310791016, 0.6528320312, 0.1983642578, 0.0000000000, -0.0000000000, -0.1689453125, 0.0000000000, 0.0000000000, -0.0000000000, -0.0889282227, 0.0000000000, 0.5366210938, 0.0000000000, -0.1756591797, -0.2042236328, 0.0867919922, 0.1696777344, -0.3215332031, 0.0000000000, 0.2147216797, -0.2362060547, -0.1535644531, 0.0686645508, -0.2031250000, -0.0958862305, 0.5092773438, 0.2546386719, 0.0000000000, -0.0000000000, -0.0745239258, 0.0911254883, 0.0812377930, 0.1058349609, -0.0547485352, -0.0000000000, 0.0067329407, 0.1072387695, 0.0000000000, -0.0000000000, -0.0000000000, -0.1568603516, -0.1783447266, 0.2834472656, -0.0292816162, 0.1027832031, 0.0000000000, 0.3674316406, 0.0334472656, -0.1350097656, -0.1458740234, -0.0542602539, 0.3024902344, 0.6098632812, -0.1434326172, 0.0000000000, 0.5834960938, 0.0805664062, 0.4670410156, -0.1579589844, -0.0390014648, 0.6450195312, 0.1135864258, 0.1561279297, -0.0000000000, 0.4189453125, -0.0000000000, 0.0943603516, 0.2458496094, -0.0000000000, -0.0254974365, 0.1034545898, -0.1848144531, 0.0779418945, -0.2766113281, -0.3769531250, -0.0568237305, -0.1375732422, 0.0958251953, 0.0000000000, -0.0000000000, 0.0761718750, -0.5087890625, 0.1130371094, 0.2651367188, -0.5458984375, 0.0549316406, -0.2622070312, 0.1729736328, -0.2043457031, -0.2479248047, -0.3015136719, -0.3896484375, 0.0000000000, 0.5585937500, 0.0000000000, -0.1865234375, 0.1181030273, 0.0600280762, 0.2093505859, -0.0000000000, -0.0000000000, 0.0507812500, 0.2592773438, -0.2412109375, -0.3771972656, -0.2033691406, 0.0000000000, 0.0000000000, -0.0476379395, 0.0000000000, 0.1308593750, 0.0000000000, 0.0000000000, -0.0000000000, -0.0702514648, 0.1954345703, -0.4255371094, -0.0000000000, 0.1079711914, 0.0606079102, -0.2066650391, -0.1106567383, 0.0000000000, 0.0000000000, -0.0000000000, 0.1185913086, -0.2780761719, 0.0981445312, -0.1071777344, -0.7084960938, 0.0000000000, 0.0685424805, 0.0733642578, -0.0000000000, 0.0000000000, -0.0000000000, -0.3295898438, -0.2493896484, -0.0000000000, 0.4086914062, -0.0000000000, -0.0617065430, 0.0538940430, -0.5332031250, 0.0477294922, 0.3410644531, 0.2761230469, -0.1187133789, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, 0.1182861328, 0.0000000000, -0.1843261719, 0.0676269531, 0.4733886719, -0.2293701172, -0.0314636230, -0.2171630859, -0.0000000000, -0.1457519531, -0.1876220703, -0.2819824219, -0.1983642578, -0.0000000000, -0.3425292969, 0.5288085938, -0.0000000000, -0.0908203125, -0.0425415039, 0.0000000000, 0.1290283203, 0.0663452148, 0.0518493652, -0.1530761719, 0.1301269531, 0.0000000000, 0.0000000000, -0.1795654297, 0.0000000000, 0.3735351562, 0.2546386719, -0.0000000000, 0.0522766113, -0.2089843750, 0.2951660156, -0.2366943359, -0.0000000000, 0.0000000000, 0.0946655273, -0.0313110352, 0.0000000000, 0.1723632812, 0.1638183594, -0.2912597656, 0.3608398438, 0.0000000000, -0.0000000000, 0.1396484375, 0.0280761719, 0.1054687500, -0.2496337891, 0.0806274414, -0.0000000000, 0.1369628906, 0.1235351562, -0.0475769043, -0.1051025391, -0.0588378906, 0.0000000000, 0.0777587891, -0.0000000000, -0.2578125000, -0.0947875977, 0.8071289062, 0.0830078125, -0.2919921875, -0.0000000000, 0.5537109375, 0.2327880859, -0.0900878906, -0.3601074219, 0.0000000000, 0.4108886719, 0.1093750000, -0.1049804688, 0.0633544922, -0.1600341797, -0.0466003418, -0.0000000000, -0.0000000000, -0.0000000000, -0.0856933594, 0.0791625977, -0.1884765625, 0.0000000000, -0.0607604980, -0.3029785156, 0.4626464844, 0.2034912109, 0.0770263672, 0.1297607422, -0.1274414062, -0.4299316406, 0.0896606445, -0.0888671875, -0.2644042969, 0.0739135742, 0.3593750000, 0.1506347656, 0.1058959961, 0.2210693359, 0.3205566406, 0.4187011719, -0.4382324219, -0.0530700684, -0.6308593750, 0.0693359375, -0.3647460938, 0.3684082031, -0.0712890625, -0.1278076172, 0.2095947266, 0.0000000000, 0.0517272949, -0.2431640625, -0.0266723633, 0.0000000000, 0.0728759766, 0.0000000000, -0.1392822266, -0.0000000000, -0.0534057617, 0.0000000000, 0.1044921875, 0.0000000000, 0.1071777344, -0.3752441406, -0.0819702148, -0.1893310547, 0.0968017578, 0.0715332031, 0.0942382812, 0.0576477051, 0.1877441406, 0.0466003418, 0.1455078125, -0.3146972656, -0.0000000000, -0.0000000000, 0.2131347656, -0.0857543945, -0.5112304688, -0.0499877930, -0.3500976562, -0.0000000000, -0.3044433594, 0.1977539062, -0.1218261719, 0.0000000000, -0.0684814453, 0.3071289062, -0.0000000000, 0.3222656250, 0.0709838867, -0.0245513916, 0.4333496094, 0.3083496094, -0.1569824219, 0.0000000000, 0.0688476562, 0.0637817383, -0.0236511230, 0.0000000000, -0.0437927246, -0.0000000000, -0.3945312500, 0.0000000000, -0.4387207031, 0.2907714844, 0.0000000000, 0.0000000000, -0.3256835938, -0.0368041992, 0.0000000000, -0.4316406250, -0.0000000000, -0.0000000000, -0.4772949219, 0.3093261719, 0.3166503906, 0.0000000000, -0.0000000000, -0.1820068359, -0.1302490234, -0.2003173828, -0.2043457031, -0.2504882812, -0.6420898438, 0.1038208008, -0.0555419922, -0.3964843750, 0.0000000000, 0.2897949219, 0.0000000000, -0.2211914062, 0.0335388184, 0.0684204102, 0.1307373047, 0.2435302734, 0.2259521484, 0.1375732422, 0.0867309570, -0.0189208984, -0.2958984375, 0.1572265625, 0.1645507812, -0.0886230469, -0.0000000000, -0.0000000000, 0.1982421875, 0.0844726562, -0.1812744141, 0.0368347168, -0.1416015625, 0.2590332031, 0.0999755859, 0.0000000000, 0.0875244141, 0.2457275391, 0.0483093262, 0.1140136719, 0.1218872070, 0.1007080078, 0.2033691406, -0.0000000000, 0.1303710938, 0.1997070312, 0.0000000000, -0.3479003906, -0.1466064453, -0.0711669922, -0.0000000000, 0.0958251953, 0.0343322754, 0.0000000000, -0.0069198608, -0.1268310547, 0.1403808594, -0.0553894043, 0.0000000000, -0.1728515625, -0.2119140625, -0.4418945312, 0.0829467773, -0.0000000000, 0.0524291992, -0.0787963867, -0.0502929688, 0.1900634766, -0.2878417969, 0.0000000000, -0.0000000000, 0.4296875000, -0.2265625000, 0.3186035156, -0.3701171875, 0.0000000000, 0.0730590820, 0.0858154297, -0.0000000000, -0.3601074219, -0.1280517578, 0.5332031250, 0.2270507812, -0.0867919922, 0.0702514648, -0.0000000000, -0.0682983398, -0.0718383789, -0.0376892090, -0.0000000000, -0.0852050781, -0.1230468750, 0.1133422852, -0.2150878906, 0.0000000000, 0.3146972656, -0.0000000000, 0.4487304688, -0.2344970703, -0.1392822266, 0.0288848877, -0.0739135742, -0.0000000000, 0.3610839844, 0.3747558594, 0.5947265625, 0.1636962891, -0.0000000000, 0.0000000000, 0.0000000000, -0.5278320312, 0.1414794922, -0.4384765625, -0.2327880859, -0.0000000000, 0.0000000000, 0.2958984375, -0.1325683594, -0.0993652344, 0.2778320312, 0.3015136719, -0.0722045898, 0.0666503906, -0.1203002930, -0.0000000000, 0.1306152344, -0.0721435547, 0.1606445312, 0.1295166016, -0.5512695312, -0.0000000000, 0.0000000000, -0.1837158203, -0.1507568359, -0.3173828125, -0.3579101562, -0.0000000000, 0.0000000000, -0.0000000000, 0.1552734375, 0.0000000000, 0.0856323242, 0.1490478516, 0.1806640625, 0.1224365234, 0.1690673828, -0.0000000000, -0.1580810547, 0.7456054688, -0.2015380859, 0.1855468750, -0.0998535156, -0.0000000000, 0.1988525391, -0.2033691406, -0.0000000000, -0.0000000000, 0.5659179688, 0.2030029297, 0.0634155273, -0.0737304688, 0.0000000000, -0.1375732422, -0.1611328125, -0.0941772461, -0.0000000000, -0.1505126953, -0.0357055664, 0.2553710938, -0.2517089844, 0.2205810547, 0.1229248047, -0.0684204102, 0.0886840820, 0.2687988281, -0.1280517578, -0.2548828125, -0.0715332031, 0.0681762695, -0.0000000000, -0.0000000000, -0.7529296875, 0.1370849609, 0.0000000000, -0.0705566406, 0.1276855469, -0.0203552246, 0.7675781250, 0.0000000000, -0.1762695312, 0.0000000000, 0.1665039062, -0.1362304688, 0.5029296875, -0.0000000000, -0.0000000000, 0.1439208984, 0.0380249023, -0.0500793457, -0.0587768555, -0.0000000000, -0.0000000000, 0.0592041016, -0.0000000000, -0.0000000000, 0.5297851562, 0.0000000000, -0.1470947266, -0.0000000000, 0.3015136719, -0.0000000000, 0.0000000000, 0.0000000000, 0.0479125977, 0.1091308594, -0.0294494629, 0.1158447266, -0.0000000000, 0.0201263428, 0.0000000000, -0.1839599609, 0.1370849609, 0.5795898438, -0.5830078125, 0.3388671875, -0.0850219727, 0.0848388672, 0.3061523438, -0.1198730469, 0.1008911133, -0.0000000000, -0.0000000000, 0.3247070312, -0.0000000000, 0.0000000000, -0.0994873047, -0.4179687500, 0.1286621094, 0.2875976562, 0.0000000000, 0.2393798828, 0.0588378906, -0.0000000000, -0.5307617188, 0.0681762695, -0.5708007812, 0.3325195312, 0.1939697266, -0.0000000000, 0.0000000000, -0.3850097656, -0.4609375000, -0.1791992188, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.4123535156, 0.0000000000, 0.0535583496, -0.3251953125, 0.0000000000, -0.5708007812, -0.2922363281, 0.1252441406, 0.0347290039, 0.3371582031, -0.0000000000, 0.0945434570, 0.0000000000, -0.0296325684, 0.4213867188, -0.0000000000, -0.0000000000, 0.0770874023, 0.0000000000, 0.0304565430, 0.0847778320, -0.3715820312, 0.0000000000, -0.0000000000, -0.1770019531, -0.2335205078, -0.8217773438, -0.0000000000, 0.1927490234, 0.0546264648, 0.2805175781, 0.0000000000, -0.1942138672, 0.0000000000, -0.7739257812, 0.3100585938, -0.6074218750, 0.0000000000, -0.0000000000, -0.0634155273, 0.0834350586, 0.1954345703, 0.0000000000, -0.6884765625, 0.0661010742, 0.1118164062, -0.5722656250, 0.4365234375, 0.0000000000, -0.2873535156, -0.1940917969, -0.1119384766, 0.0000000000, 0.1020507812, 0.3723144531, -0.0328063965, 0.3686523438, 0.2634277344, 0.2912597656, 0.4143066406, 0.0000000000, 0.4152832031, 0.3217773438, 0.0106735229, 0.1106567383, 0.2685546875, 0.1002197266, 0.0152359009, 0.2047119141, -0.0587158203, -0.0510559082, 0.1696777344, 0.1463623047, 0.1633300781, 0.0000000000, 0.1424560547, -0.0627441406, 0.1117553711, 0.0988159180, 0.4392089844, 0.0973510742, -0.0000000000, 0.0673217773, 0.5244140625, 0.1044311523, -0.0000000000, 0.0681152344, 0.3259277344, -0.0872192383, -0.7294921875, -0.3098144531, 0.1536865234, 0.3649902344, 0.0000000000, 0.1308593750, 0.1151123047, -0.1539306641, 0.1925048828, 0.0621032715, 0.0805053711, 0.0000000000, -0.1084594727, 0.0000000000, -0.0000000000, -0.0000000000, -0.0856933594, 0.1530761719, -0.1055297852, 0.2673339844, -0.1651611328, 0.2475585938, 0.0000000000, -0.0000000000};
+# 31 "firmware/parameters.h" 2
+# 1 "firmware/weights/z6.h" 1
+# 12 "firmware/weights/z6.h"
+zero_bias6_t z6[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+# 32 "firmware/parameters.h" 2
+# 1 "firmware/weights/b6.h" 1
+# 12 "firmware/weights/b6.h"
+model_default_t b6[64] = {0.0561218262, 0.2504882812, -0.1122436523, 0.4902343750, -0.2963867188, -0.2202148438, 0.1614990234, -0.1777343750, 0.6489257812, 0.1194458008, 0.0690307617, -0.2313232422, -0.1046142578, 0.1368408203, 0.2086181641, 0.2283935547, 0.9350585938, -0.1540527344, 0.4150390625, -0.0022087097, 0.5297851562, 0.1256103516, -0.3063964844, -0.1776123047, -0.3391113281, -0.0013999939, 0.2408447266, -0.0500793457, -0.2156982422, -0.2424316406, 0.0895385742, -0.1218872070, -0.0245819092, -0.1741943359, 0.3625488281, 0.0002906322, 0.0797729492, 0.1252441406, -0.1480712891, 0.1892089844, 0.0410156250, 0.7695312500, -0.3386230469, -0.3044433594, -0.0007028580, -0.0631713867, -0.0534973145, 0.3647460938, -0.1531982422, 0.8066406250, -0.2817382812, 0.8349609375, -0.2768554688, -0.0035419464, 0.2022705078, -0.2456054688, -0.3496093750, -0.3027343750, 0.5468750000, -0.1656494141, -0.1781005859, 0.6508789062, -0.3139648438, 0.0988769531};
+# 33 "firmware/parameters.h" 2
+# 1 "firmware/weights/s9.h" 1
+# 12 "firmware/weights/s9.h"
+model_default_t s9[64] = {2.4481303692, 1.7395358086, 4.7444543839, 2.4365851879, 2.0978217125, 3.2319977283, 2.7967913151, 4.0530591011, 2.0899512768, 2.4272322655, 1.7340664864, 3.4925954342, 6.5079331398, 3.0835144520, 2.1057009697, 2.0840060711, 3.3680071831, 4.4336581230, 2.8517794609, 2.6996815205, 2.5221276283, 2.7553412914, 2.6450998783, 3.3487136364, 3.4064805508, 3.0035603046, 1.5887701511, 3.3314890862, 7.2842183113, 2.8945369720, 2.6252143383, 3.6849477291, 2.6176071167, 4.3210201263, 2.0523567200, 4.4908342361, 2.6844415665, 3.8036887646, 3.6768789291, 1.7628090382, 3.2306833267, 1.8647702932, 3.3989114761, 2.3567695618, 2.4443914890, 3.1087579727, 2.3860697746, 1.9409021139, 2.6322839260, 1.7522109747, 8.2584066391, 2.8868739605, 2.6688821316, 2.9749450684, 3.2035419941, 4.2789053917, 3.3651096821, 3.8571906090, 2.0219888687, 3.5242600441, 2.6036379337, 2.6859900951, 2.5980525017, 3.0470380783};
+# 34 "firmware/parameters.h" 2
+# 1 "firmware/weights/b9.h" 1
+# 12 "firmware/weights/b9.h"
+model_default_t b9[64] = {-1.6034960747, -2.1616108418, -1.1748915911, -2.8901104927, -1.0254700184, -0.9926589727, -1.8165524006, -0.8200539351, -2.7439975739, -2.3934409618, -1.6078983545, -1.0012979507, -0.9196162820, -2.0112130642, -1.8683044910, -2.3910281658, -4.6835064888, -0.8596707582, -3.0512986183, -1.6768614054, -3.3604137897, -1.8522952795, -1.0468088388, -1.0023310184, -0.7708877921, -1.6395782232, -2.0936536789, -1.5025504827, -0.6829455495, -1.1669248343, -1.6144359112, -1.3853724003, -1.3347491026, -0.9984849691, -2.3673050404, -1.2764209509, -1.7169904709, -1.8643954992, -1.2074147463, -1.8859813213, -1.3456654549, -3.3294231892, -0.6638934612, -1.1800720692, -1.3737708330, -1.3287022114, -1.6230610609, -2.2097694874, -1.0215277672, -3.0189802647, -0.8085035086, -4.1801061630, -1.0243000984, -1.8792380095, -2.2391998768, -0.6720653176, -0.7111064792, -0.8927872777, -3.2297241688, -1.1398336887, -0.8143303394, -3.4438831806, -0.8180918097, -1.2270023823};
+# 35 "firmware/parameters.h" 2
+# 1 "firmware/weights/d10.h" 1
+# 12 "firmware/weights/d10.h"
+model_default_t d10[576] = {-0.3671875000, 0.0788574219, -0.0129241943, 0.1076049805, -0.0886230469, -0.0868530273, 0.5673828125, -0.2680664062, -0.2626953125, 0.3737792969, 0.3151855469, 0.1416015625, -0.1340332031, 0.0773925781, 0.4475097656, -0.0307159424, 0.2032470703, -0.1661376953, -0.0298919678, 0.0169067383, 0.1408691406, 0.0231475830, 0.0668945312, 0.2082519531, -0.0969848633, -0.2897949219, 0.0459899902, 0.1773681641, 0.1038818359, -0.0473632812, -0.0394592285, 0.1005249023, -0.5219726562, -0.1195068359, -0.4724121094, 0.1167602539, 0.2318115234, 0.0579223633, -0.1329345703, 0.0300140381, -0.2045898438, -0.0284271240, 0.0792236328, -0.1959228516, 0.0660400391, -0.3068847656, 0.1887207031, -0.0127487183, -0.2154541016, -0.0665283203, -0.1238403320, -0.0158386230, -0.1427001953, 0.0652465820, -0.1685791016, -0.2563476562, -0.0773315430, -0.0608215332, -0.0643920898, 0.0512695312, 0.4096679688, -0.0605468750, -0.0455932617, 0.2362060547, -0.1810302734, -0.2648925781, 0.0112228394, 0.0032901764, -0.2209472656, 0.0643310547, 0.2060546875, -0.1612548828, -0.1922607422, 0.0893554688, 0.1843261719, 0.2421875000, -0.1591796875, -0.0527954102, 0.0970458984, 0.1014404297, 0.3862304688, -0.1531982422, -0.0930175781, 0.1760253906, 0.2509765625, 0.0468444824, -0.0290679932, 0.1242675781, -0.1224975586, -0.2325439453, -0.3522949219, 0.3205566406, 0.1105957031, -0.0825195312, 0.0156173706, -0.0339355469, -0.0635375977, -0.0478820801, 0.0935668945, -0.0538635254, 0.2287597656, -0.0840454102, -0.2086181641, -0.0947265625, -0.1336669922, -0.4533691406, 0.2988281250, -0.2480468750, -0.0846557617, -0.1218261719, 0.1950683594, 0.3527832031, -0.4697265625, -0.0758056641, -0.1090087891, 0.2836914062, -0.4150390625, -0.0718994141, -0.0471496582, -0.2166748047, 0.0070152283, -0.2154541016, -0.4992675781, -0.1629638672, 0.3588867188, 0.0031642914, -0.1842041016, -0.1624755859, -0.3425292969, -0.0274353027, -0.0022869110, -0.3393554688, -0.2629394531, 0.1732177734, 0.3466796875, -0.1503906250, -0.3525390625, -0.4477539062, 0.1309814453, 0.1483154297, -0.1397705078, -0.1004638672, 0.4201660156, 0.2099609375, 0.3286132812, -0.1546630859, -0.0276641846, 0.0148010254, 0.0408935547, 0.0389404297, -0.0523071289, 0.2011718750, -0.0759887695, -0.2478027344, 0.0233612061, 0.1132812500, -0.0508422852, 0.1107788086, -0.0324096680, 0.0710449219, 0.3142089844, -0.1530761719, 0.1455078125, 0.2021484375, 0.2078857422, 0.0299224854, -0.1921386719, 0.2017822266, -0.1198120117, 0.3640136719, 0.1895751953, -0.0363769531, 0.1046142578, 0.4440917969, 0.1348876953, 0.0243377686, -0.3076171875, -0.0122299194, -0.0444641113, -0.2497558594, -0.1231079102, 0.0103759766, -0.0397644043, -0.1928710938, -0.2303466797, -0.1140136719, -0.1950683594, -0.4812011719, -0.1302490234, -0.0553894043, -0.2080078125, 0.1253662109, 0.0775756836, 0.0982666016, 0.2357177734, 0.0003581047, -0.1412353516, 0.2005615234, 0.1072387695, -0.0335693359, -0.1551513672, 0.1249389648, -0.1240844727, 0.1781005859, -0.2259521484, -0.0951538086, -0.0094985962, -0.1424560547, -0.2209472656, -0.1972656250, -0.1737060547, 0.3735351562, 0.0201721191, -0.0739746094, 0.0387573242, 0.1798095703, -0.1183471680, -0.3381347656, 0.3366699219, 0.1374511719, 0.0798339844, 0.0678710938, -0.1661376953, 0.2546386719, -0.1380615234, -0.3337402344, -0.1737060547, 0.1918945312, 0.2551269531, 0.1368408203, -0.1850585938, -0.2854003906, -0.3913574219, 0.1773681641, 0.1068725586, -0.2257080078, 0.2351074219, -0.2458496094, -0.0081634521, 0.0416870117, -0.1973876953, 0.0296630859, -0.1101074219, -0.1722412109, -0.1831054688, -0.1704101562, 0.1167602539, -0.1770019531, -0.2561035156, -0.2384033203, 0.0682983398, -0.0936889648, 0.0763549805, -0.1486816406, -0.1135864258, 0.1143188477, 0.3750000000, 0.0315551758, 0.2683105469, -0.1776123047, -0.1987304688, 0.0608215332, 0.0964355469, -0.2149658203, 0.3381347656, -0.0470886230, -0.3859863281, 0.3125000000, -0.1672363281, -0.0207977295, -0.1702880859, 0.1369628906, -0.0258941650, -0.2766113281, -0.4028320312, 0.4016113281, 0.2712402344, 0.1428222656, 0.1514892578, 0.0327758789, -0.2863769531, -0.0642700195, -0.2479248047, 0.2900390625, 0.2124023438, -0.1424560547, 0.2020263672, 0.1942138672, 0.1799316406, -0.3273925781, 0.2585449219, 0.1328125000, 0.2529296875, -0.5336914062, -0.3618164062, -0.2250976562, -0.1053466797, -0.0178070068, 0.2241210938, -0.4936523438, 0.1555175781, -0.2325439453, 0.1314697266, 0.2167968750, -0.0425109863, -0.4877929688, -0.1216430664, 0.3391113281, -0.2097167969, -0.1971435547, 0.1557617188, -0.2619628906, -0.1657714844, -0.2280273438, -0.2749023438, -0.1672363281, 0.1141357422, -0.0335388184, -0.0664062500, -0.5751953125, 0.0426940918, -0.0968017578, 0.3181152344, -0.2155761719, -0.2069091797, -0.1602783203, 0.1586914062, -0.0861816406, 0.0298461914, -0.1296386719, -0.2357177734, 0.2895507812, -0.2856445312, -0.0538940430, -0.0728149414, 0.3122558594, -0.1669921875, -0.1799316406, -0.2521972656, 0.0864257812, -0.0099182129, 0.2243652344, 0.0553894043, 0.1658935547, -0.1948242188, -0.2232666016, 0.3908691406, 0.2017822266, 0.1275634766, 0.1075439453, 0.1748046875, 0.1810302734, 0.2348632812, -0.3112792969, 0.1673583984, 0.2315673828, 0.3906250000, -0.0744018555, -0.2709960938, 0.1207275391, -0.3034667969, 0.0467834473, 0.2446289062, -0.1099853516, 0.2106933594, 0.0082397461, 0.0184020996, -0.1689453125, -0.1107788086, 0.1479492188, -0.0932617188, -0.4335937500, -0.2026367188, -0.1868896484, 0.0926513672, -0.0954589844, -0.3127441406, -0.1623535156, 0.0086517334, -0.2160644531, -0.0755004883, -0.0749511719, -0.1051635742, -0.1446533203, 0.0072593689, 0.3652343750, 0.2236328125, 0.0864257812, -0.1856689453, 0.4428710938, 0.0375366211, -0.2993164062, -0.0037097931, -0.3044433594, -0.1386718750, 0.0382995605, -0.2072753906, 0.1381835938, 0.0762939453, -0.3691406250, -0.1909179688, -0.2318115234, -0.1431884766, 0.1911621094, -0.3691406250, -0.5429687500, 0.1912841797, 0.2565917969, -0.0837402344, 0.0628051758, 0.0210723877, 0.0342102051, 0.1138916016, 0.3942871094, 0.0944213867, 0.2810058594, 0.0070190430, -0.2113037109, 0.1027832031, 0.2142333984, 0.1279296875, -0.0272216797, 0.0952758789, -0.2607421875, -0.0245208740, -0.1975097656, 0.0756835938, -0.1084594727, 0.2800292969, -0.0580139160, 0.2673339844, -0.0197906494, -0.0220947266, 0.2011718750, -0.2775878906, -0.1669921875, -0.1567382812, -0.2069091797, 0.2653808594, -0.1799316406, -0.1972656250, -0.2177734375, 0.1701660156, 0.1630859375, 0.1204833984, 0.3979492188, -0.2846679688, 0.1798095703, 0.2283935547, 0.3999023438, 0.2448730469, -0.2358398438, -0.2321777344, -0.0520324707, 0.0756835938, -0.2067871094, 0.3962402344, -0.1002197266, -0.2299804688, 0.0540771484, -0.1851806641, 0.3706054688, 0.1119995117, 0.0497741699, -0.1153564453, -0.1119384766, -0.1578369141, -0.0447082520, -0.3027343750, -0.2078857422, 0.5625000000, 0.1430664062, -0.3110351562, 0.2410888672, -0.2095947266, 0.2194824219, 0.2312011719, 0.2817382812, 0.4226074219, 0.2543945312, -0.0422058105, -0.0847778320, 0.2084960938, 0.1628417969, 0.1213378906, 0.1087036133, 0.2700195312, -0.1400146484, -0.0759887695, 0.1081542969, 0.2005615234, 0.0144729614, 0.3696289062, -0.0596313477, 0.3840332031, -0.2790527344, -0.1361083984, 0.1713867188, -0.3049316406, 0.2817382812, 0.0336303711, -0.4616699219, 0.3266601562, -0.1868896484, -0.0646362305, -0.0380859375, 0.3063964844, 0.0946044922, -0.0339965820, 0.4816894531, -0.1616210938, -0.0403442383, 0.1018676758, 0.4384765625, 0.1300048828, -0.4201660156, -0.2441406250, -0.3806152344, -0.0082244873, -0.1679687500, 0.0453186035, 0.1473388672, -0.2626953125, 0.0763549805, -0.1022949219, 0.4311523438, -0.1523437500, 0.3447265625, -0.1481933594, -0.1354980469, -0.3049316406, 0.0873413086, -0.3344726562, -0.0667114258, 0.1370849609, 0.2895507812, -0.0691528320, 0.0470886230, -0.1292724609, 0.1506347656, 0.2675781250, 0.2731933594, 0.2905273438, 0.2568359375, -0.0009794235, -0.1706542969, 0.0684204102, 0.2546386719, 0.2053222656, 0.0820922852, 0.0966796875, 0.3400878906, -0.0573730469, -0.2761230469, 0.1194458008, 0.0651855469, 0.1356201172, -0.0575256348, 0.2341308594, -0.3127441406, 0.0360107422, 0.3010253906, -0.3095703125, -0.0701904297, -0.2812500000, -0.1661376953, 0.3513183594, -0.2600097656, -0.2678222656, -0.2469482422, 0.1159057617, 0.0091552734, -0.1292724609, 0.1650390625, -0.3122558594, -0.0236663818};
+# 36 "firmware/parameters.h" 2
+# 1 "firmware/weights/p10.h" 1
+# 12 "firmware/weights/p10.h"
+model_default_t p10[4096] = {0.1613769531, 0.0000000000, -0.1389160156, 0.1232299805, -0.3833007812, 0.0852050781, 0.0576782227, -0.0000000000, -0.0836181641, 0.2553710938, 0.0000000000, -0.1511230469, 0.3920898438, 0.0912475586, -0.0916748047, -0.1593017578, 0.4902343750, 0.0000000000, -0.1196289062, 0.0917968750, 0.0689697266, 0.0000000000, -0.1972656250, -0.0000000000, -0.4580078125, 0.0000000000, 0.0000000000, -0.0590820312, -0.0304565430, -0.0701293945, -0.0000000000, 0.1972656250, 0.0953979492, -0.0977172852, 0.0947265625, -0.0894775391, -0.3698730469, -0.1402587891, -0.4282226562, -0.3625488281, 0.5786132812, 0.3427734375, -0.1289062500, 0.0000000000, -0.1688232422, -0.0583496094, -0.1552734375, 0.2480468750, -0.3830566406, -0.2126464844, 0.0000000000, 0.0296020508, 0.0634155273, 0.3149414062, 0.0000000000, -0.2187500000, 0.2368164062, -0.0895996094, 0.0000000000, 0.0000000000, 0.1572265625, 0.8842773438, -0.1137695312, 0.5839843750, -0.0944824219, 0.1594238281, -0.0000000000, -0.4096679688, 0.4284667969, 0.0000000000, -0.1461181641, 0.6894531250, -0.3024902344, 0.0845336914, -0.0501098633, -0.0000000000, -0.1079101562, -0.0949096680, 0.1262207031, -0.4038085938, -0.2536621094, -0.2749023438, 0.1168212891, 0.0000000000, -0.1739501953, -0.6157226562, 0.0661621094, 0.0849609375, -0.0000000000, 0.0738525391, 0.0000000000, -0.0000000000, -0.0000000000, -0.1115112305, 0.0000000000, 0.3032226562, 0.2626953125, -0.1207275391, -0.0000000000, 0.0000000000, 0.0000000000, 0.3020019531, -0.0000000000, -0.0000000000, -0.2214355469, 0.6748046875, 0.1093139648, -0.0545654297, -0.0823364258, -0.2111816406, 0.0545959473, 0.0000000000, 0.0000000000, -0.0000000000, -0.0736694336, 0.2963867188, -0.1519775391, 0.0000000000, 0.0000000000, 0.0874633789, 0.0000000000, -0.0762939453, 0.0608520508, -0.1002197266, 0.0613098145, 0.3464355469, 0.0905151367, -0.0968017578, 0.0554504395, 0.3532714844, -0.3552246094, 0.1268310547, -0.0295257568, 0.0000000000, -0.1876220703, 0.2797851562, -0.2648925781, 0.1252441406, -0.0000000000, -0.0933837891, 0.0000000000, -0.0000000000, 0.3168945312, -0.0767211914, -0.1045532227, -0.3645019531, 0.3872070312, -0.6621093750, -0.0000000000, 0.1146240234, -0.1089477539, -0.1173706055, 0.0000000000, 0.0587158203, -0.0000000000, 0.0808105469, 0.0000000000, -0.2119140625, -0.7324218750, -0.1273193359, -0.1109619141, 0.0000000000, 0.1418457031, -0.0000000000, 0.0796508789, 0.1297607422, -0.1101074219, -0.5312500000, -0.1257324219, 0.1341552734, -0.0000000000, 0.2186279297, 0.3256835938, -0.0000000000, -0.0000000000, 0.0000000000, -0.3796386719, -0.1452636719, 0.1253662109, 0.0000000000, 0.1490478516, -0.1116333008, -0.2459716797, 0.1976318359, -0.1126708984, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.2878417969, 0.0586547852, -0.0000000000, 0.0000000000, -0.3549804688, -0.0000000000, 0.2783203125, 0.0299530029, 0.0527954102, 0.0689697266, -0.0000000000, -0.0802612305, -0.0908203125, -0.0000000000, -0.1878662109, 0.0919189453, -0.0879516602, 0.0653686523, 0.1270751953, 0.0000000000, -0.7001953125, 0.1198730469, -0.0000000000, 0.1938476562, 0.5678710938, 0.1289062500, -0.2395019531, 0.2448730469, -0.1667480469, -0.2005615234, 0.2285156250, 0.0000000000, -0.0000000000, -0.2644042969, -0.1650390625, -0.0000000000, 0.0000000000, 0.1174316406, 0.0000000000, 0.4970703125, -0.2363281250, 0.2763671875, -0.1049194336, -0.2763671875, -0.1801757812, -0.0519409180, 0.3752441406, 0.1109008789, -0.1441650391, 0.2121582031, -0.1630859375, 0.0000000000, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.4750976562, 0.4587402344, 0.1181030273, -0.3862304688, 0.0260925293, -0.0000000000, -0.0000000000, -0.2379150391, -0.3642578125, -0.0762939453, -0.2966308594, -0.0709228516, 0.0000000000, 0.1317138672, 0.0000000000, 0.2241210938, 0.2607421875, -0.0000000000, -0.0000000000, 0.3896484375, -0.0000000000, -0.0000000000, -0.1066894531, 0.0000000000, -0.1397705078, -0.1862792969, 0.0000000000, 0.0000000000, -0.1386718750, -0.3596191406, -0.1298828125, 0.0000000000, -0.2246093750, 0.0000000000, -0.0000000000, 0.1673583984, -0.1244506836, -0.1335449219, -0.0000000000, 0.0455932617, -0.0000000000, -0.1804199219, -0.1984863281, 0.1699218750, 0.0000000000, 0.3803710938, 0.3059082031, -0.0808105469, -0.0000000000, -0.3234863281, 0.2995605469, 0.3449707031, 0.2498779297, 0.4072265625, -0.0784912109, 0.1287841797, 0.2290039062, 0.5332031250, -0.1251220703, -0.0507202148, 0.0462036133, 0.0000000000, -0.0000000000, 0.6171875000, -0.2541503906, -0.0446166992, -0.3813476562, -0.0734863281, 0.0000000000, -0.1529541016, -0.3098144531, -0.0000000000, -0.1280517578, -0.0000000000, 0.4504394531, -0.1845703125, 0.3583984375, -0.1737060547, 0.0422973633, -0.1153564453, -0.0000000000, 0.2011718750, 0.0000000000, 0.1789550781, 0.7456054688, -0.0437316895, 0.0998535156, -0.4418945312, 0.1580810547, 0.2226562500, 0.0682373047, 0.0000000000, 0.1403808594, 0.1056518555, 0.1713867188, -0.0595092773, 0.4763183594, 0.0000000000, -0.2792968750, -0.0000000000, 0.3200683594, 0.3354492188, 0.3566894531, -0.2937011719, -0.0473327637, -0.3203125000, -0.1042480469, 0.0832519531, 0.2449951172, 0.0000000000, 0.1987304688, 0.1242065430, 0.5849609375, 0.0000000000, -0.2392578125, -0.0463867188, -0.1252441406, -0.0000000000, -0.3271484375, -0.0772094727, 0.1152954102, 0.1059570312, 0.2001953125, 0.1313476562, 0.0000000000, 0.1845703125, -0.0459289551, 0.1512451172, -0.4370117188, -0.3947753906, -0.1883544922, -0.0534973145, 0.0000000000, 0.0930175781, -0.2059326172, 0.0000000000, -0.0000000000, 0.0000000000, -0.0773925781, -0.3176269531, -0.0000000000, -0.0000000000, 0.3684082031, -0.0940551758, 0.0383605957, 0.0000000000, -0.0469055176, 0.0000000000, -0.0000000000, -0.1903076172, 0.0000000000, 0.0000000000, 0.0000000000, 0.0289154053, 0.1788330078, -0.0000000000, 0.3779296875, 0.0000000000, -0.2390136719, -0.1588134766, -0.0000000000, 0.0000000000, -0.0455932617, 0.0555419922, 0.0000000000, 0.0557556152, -0.0000000000, 0.2883300781, -0.1308593750, -0.0759277344, 0.4179687500, -0.2551269531, -0.0000000000, -0.2115478516, -0.3818359375, -0.2041015625, 0.4768066406, -0.2766113281, 0.0539245605, -0.3479003906, -0.3750000000, 0.0000000000, -0.0794677734, 0.1956787109, 0.2995605469, 0.3000488281, 0.0989379883, 0.3337402344, -0.3703613281, 0.0672607422, 0.3398437500, -0.0000000000, 0.0000000000, 0.0654296875, 0.4387207031, 0.2502441406, -0.2807617188, -0.5957031250, 0.1259765625, -0.0000000000, 0.1695556641, -0.1593017578, 0.0891113281, 0.0864868164, -0.0000000000, 0.0557250977, 0.0974731445, -0.3420410156, -0.0000000000, 0.0668945312, -0.0829467773, 0.2539062500, 0.0972290039, -0.1904296875, -0.0711669922, 0.0000000000, -0.0950317383, -0.0836181641, 0.2934570312, -0.0000000000, 0.3364257812, -0.3469238281, 0.1770019531, 0.6567382812, 0.1350097656, -0.4494628906, -0.0753173828, -0.0772094727, -0.1311035156, -0.2763671875, -0.1209106445, 0.0867309570, -0.1187744141, -0.0000000000, 0.1704101562, 0.1264648438, -0.3601074219, -0.3015136719, -0.0000000000, 0.1580810547, -0.0000000000, -0.1062011719, -0.0000000000, 0.0696411133, 0.0000000000, -0.0000000000, -0.0000000000, 0.4738769531, 0.2020263672, -0.0000000000, 0.0000000000, 0.0524902344, 0.0000000000, 0.0000000000, -0.1425781250, -0.0000000000, -0.3547363281, -0.2658691406, -0.0000000000, -0.0000000000, -0.2575683594, -0.1605224609, 0.1374511719, 0.2019042969, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, 0.3842773438, 0.0856323242, -0.1591796875, -0.1386718750, -0.2011718750, -0.1217041016, -0.2000732422, 0.0246734619, -0.0000000000, -0.3884277344, -0.0000000000, 0.0817871094, -0.1203613281, -0.1798095703, -0.4086914062, -0.4343261719, 0.1013183594, -0.1597900391, -0.3093261719, 0.0000000000, 0.0000000000, -0.4599609375, 0.0000000000, -0.0000000000, 0.0434265137, -0.3879394531, -0.0000000000, 0.2467041016, 0.0842285156, 0.0711059570, -0.0000000000, -0.0428466797, -0.5019531250, -0.0759277344, 0.2485351562, 0.0899658203, -0.0851440430, -0.0000000000, -0.2746582031, -0.2963867188, -0.0406188965, -0.0635375977, 0.0000000000, 0.5883789062, 0.1179199219, -0.5571289062, -0.2075195312, 0.3574218750, 0.1639404297, -0.0364379883, 0.6870117188, -0.0524291992, 0.0466613770, 0.0000000000, -0.0828857422, 0.0000000000, -0.1895751953, 0.1843261719, -0.0000000000, -0.1178588867, 0.1163330078, -0.0000000000, 0.4189453125, 0.1152343750, 0.0526428223, -0.0000000000, -0.0293579102, -0.0759277344, 0.0000000000, 0.0321044922, -0.1143798828, -0.2023925781, 0.5737304688, -0.0000000000, -0.0686035156, 0.0000000000, 0.1058959961, -0.2325439453, -0.1871337891, 0.1497802734, 0.1000366211, 0.3161621094, -0.2893066406, 0.4079589844, 0.1528320312, 0.1955566406, -0.2438964844, -0.0000000000, 0.1574707031, 0.0000000000, 0.5405273438, 0.1907958984, -0.4436035156, 0.3125000000, 0.3388671875, 0.1087646484, -0.4492187500, 0.3732910156, -0.1325683594, 0.0000000000, -0.0411987305, 0.0000000000, 0.1125488281, -0.0000000000, -0.2580566406, 0.1899414062, -0.2687988281, 0.0000000000, -0.3032226562, -0.1594238281, 0.2340087891, -0.0000000000, 0.0000000000, -0.0805664062, -0.1446533203, 0.0676879883, 0.1801757812, 0.0658569336, -0.1918945312, -0.0000000000, -0.3417968750, -0.0000000000, 0.0000000000, 0.0000000000, -0.3806152344, -0.0996704102, -0.0000000000, -0.0000000000, -0.0568542480, -0.1350097656, 0.1407470703, 0.5146484375, -0.2587890625, 0.0808715820, 0.4406738281, 0.2746582031, -0.5244140625, -0.0000000000, -0.2210693359, -0.0000000000, 0.0874023438, 0.2854003906, -0.0639648438, -0.2897949219, -0.1187744141, 0.1296386719, -0.0000000000, -0.4909667969, 0.2066650391, 0.1180419922, 0.4758300781, -0.5805664062, -0.0000000000, -0.0000000000, -0.0345153809, -0.4035644531, -0.3405761719, 0.1861572266, 0.3291015625, -0.3405761719, -0.4570312500, -0.1268310547, -0.0328063965, -0.2590332031, 0.1315917969, 0.0000000000, 0.1837158203, -0.1311035156, 0.0393066406, 0.0000000000, -0.1175537109, 0.2042236328, 0.0000000000, 0.0000000000, -0.3432617188, -0.2352294922, 0.2003173828, 0.3505859375, -0.0360717773, 0.0917968750, 0.3164062500, 0.1302490234, -0.0981445312, -0.0000000000, -0.1370849609, -0.1826171875, 0.0000000000, 0.0985107422, 0.0000000000, -0.0461730957, 0.0000000000, -0.2322998047, -0.0503845215, 0.1789550781, 0.0000000000, -0.1298828125, -0.1983642578, -0.0000000000, -0.0798950195, 0.0762329102, -0.3129882812, 0.0610656738, 0.0000000000, -0.3005371094, -0.0000000000, 0.1888427734, 0.3674316406, -0.0000000000, 0.1144409180, -0.0000000000, -0.0349426270, 0.1004028320, -0.3774414062, 0.0000000000, -0.0897216797, 0.0000000000, 0.2198486328, 0.1834716797, 0.0728149414, 0.1647949219, 0.0000000000, 0.1190795898, 0.1297607422, 0.5283203125, -0.0831909180, 0.0137100220, 0.4714355469, -0.3388671875, 0.1105957031, -0.0000000000, 0.1048583984, 0.4299316406, -0.0422668457, 0.0996093750, -0.2226562500, -0.1660156250, 0.0000000000, 0.0510253906, -0.2270507812, -0.2666015625, -0.1314697266, -0.0546569824, 0.4382324219, 0.1730957031, 0.0895996094, -0.0000000000, 0.0921630859, 0.2492675781, -0.1172485352, 0.2038574219, 0.1107788086, -0.5439453125, 0.0000000000, 0.1651611328, -0.0000000000, -0.1317138672, -0.0834350586, -0.0906982422, 0.7060546875, -0.0900878906, 0.1643066406, -0.1257324219, 0.0000000000, -0.2045898438, -0.4882812500, -0.1357421875, 0.3444824219, 0.1074829102, 0.1940917969, 0.2315673828, -0.0891723633, 0.1051635742, -0.2418212891, 0.5400390625, 0.1021728516, -0.2249755859, -0.0411071777, 0.1682128906, 0.0997924805, 0.0717163086, -0.0487060547, 0.2293701172, -0.1848144531, -0.0425720215, 0.0823974609, -0.2132568359, 0.0493469238, 0.3886718750, 0.2592773438, 0.0795288086, 0.2426757812, -0.1876220703, -0.2252197266, 0.1826171875, 0.0000000000, -0.1701660156, -0.1121215820, 0.1851806641, -0.1098022461, -0.0310363770, 0.1287841797, -0.1890869141, -0.3010253906, -0.2509765625, 0.0529174805, -0.0738525391, 0.0000000000, 0.2219238281, -0.0000000000, 0.1933593750, 0.2915039062, 0.0000000000, 0.1772460938, 0.1331787109, 0.0000000000, -0.0822143555, -0.1081542969, 0.0000000000, 0.0185089111, 0.3254394531, -0.0000000000, 0.0000000000, 0.1422119141, 0.1751708984, -0.4738769531, 0.0198211670, 0.0602416992, 0.1424560547, 0.0000000000, -0.0869750977, -0.1206665039, -0.2373046875, -0.1614990234, 0.2318115234, -0.1246948242, 0.1881103516, -0.1566162109, -0.2990722656, 0.1964111328, -0.0941772461, 0.0683593750, 0.1157226562, -0.0842285156, 0.2387695312, -0.2135009766, -0.3579101562, -0.3552246094, -0.0489807129, 0.0634155273, 0.2297363281, -0.2663574219, 0.2489013672, 0.4396972656, 0.1395263672, 0.0000000000, -0.2731933594, 0.3464355469, -0.0000000000, -0.0000000000, -0.2775878906, 0.1536865234, -0.3481445312, 0.3146972656, 0.2336425781, 0.1766357422, 0.0959472656, 0.0490722656, -0.0596008301, 0.0000000000, -0.0000000000, 0.2485351562, 0.3479003906, -0.0000000000, -0.0000000000, -0.1374511719, 0.3894042969, -0.1959228516, 0.0000000000, 0.1204223633, 0.0000000000, -0.0000000000, -0.3715820312, 0.0000000000, 0.0000000000, -0.4130859375, -0.0913085938, 0.2214355469, -0.0000000000, -0.1510009766, -0.0447998047, 0.4475097656, 0.1102294922, 0.0000000000, -0.0856323242, 0.0716552734, -0.3022460938, 0.0422973633, 0.6948242188, 0.0700683594, 0.0000000000, -0.0000000000, 0.1435546875, 0.3032226562, -0.2304687500, -0.0000000000, -0.0000000000, 0.0947265625, 0.0000000000, -0.0000000000, 0.0624084473, 0.2230224609, -0.0000000000, 0.0000000000, 0.0300445557, 0.1987304688, -0.5214843750, -0.0000000000, 0.0000000000, 0.2436523438, 0.0000000000, 0.4016113281, -0.0000000000, -0.0678100586, -0.2866210938, -0.1237792969, -0.0000000000, -0.0761108398, 0.0355529785, -0.0769042969, 0.0000000000, 0.0852661133, 0.0000000000, -0.2707519531, 0.2467041016, -0.2626953125, -0.0000000000, 0.0554809570, 0.0891723633, 0.0000000000, 0.0543518066, -0.0000000000, -0.0000000000, -0.0000000000, 0.0628662109, 0.3884277344, 0.0000000000, -0.4255371094, 0.1680908203, -0.0000000000, 0.0000000000, -0.1456298828, -0.1058349609, -0.1502685547, -0.2609863281, 0.0000000000, 0.1232299805, 0.2749023438, -0.0000000000, -0.0000000000, -0.1906738281, -0.0000000000, 0.0562744141, 0.1850585938, -0.7109375000, -0.0919799805, -0.2127685547, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.4033203125, 0.2153320312, 0.0518188477, -0.1650390625, 0.3891601562, 0.5649414062, 0.0000000000, 0.0000000000, -0.0000000000, -0.4350585938, -0.0000000000, 0.0642700195, -0.1250000000, -0.0477600098, -0.0000000000, -0.1984863281, -0.2358398438, -0.0764160156, -0.0000000000, -0.6591796875, 0.0000000000, -0.0540466309, -0.0435485840, 0.1200561523, -0.0000000000, -0.3046875000, 0.2770996094, 0.1124877930, -0.2155761719, -0.7426757812, 0.3471679688, 0.0000000000, -0.0963134766, 0.3115234375, 0.0845947266, 0.0000000000, 0.0000000000, -0.1278076172, 0.1029052734, -0.2731933594, 0.0000000000, 0.3005371094, -0.2727050781, 0.0000000000, -0.0966186523, 0.0000000000, -0.0000000000, -0.0643920898, 0.0745849609, 0.1905517578, 0.0000000000, -0.0482177734, 0.0000000000, 0.0706787109, 0.2744140625, -0.0000000000, -0.0520324707, 0.4155273438, 0.0000000000, -0.0000000000, 0.2279052734, -0.1248779297, -0.0000000000, -0.2778320312, 0.0468444824, 0.1190795898, -0.4785156250, -0.0383605957, 0.0000000000, -0.2968750000, 0.3061523438, -0.2038574219, -0.0000000000, -0.0816040039, 0.4558105469, 0.1462402344, -0.0000000000, -0.1350097656, 0.8027343750, -0.0901489258, 0.2286376953, 0.0000000000, -0.0790405273, 0.0000000000, 0.2873535156, -0.3073730469, -0.1469726562, -0.1833496094, 0.2357177734, -0.1715087891, 0.1607666016, -0.1649169922, 0.0000000000, -0.0830078125, 0.0000000000, 0.0777587891, 0.1899414062, -0.0000000000, -0.1048583984, 0.0542602539, 0.2983398438, 0.4282226562, 0.0904541016, 0.5361328125, 0.0902099609, 0.4868164062, -0.0000000000, -0.0484619141, 0.2247314453, -0.3171386719, 0.2529296875, -0.2193603516, 0.0000000000, 0.0000000000, 0.3815917969, 0.1784667969, 0.2880859375, -0.2846679688, -0.0700073242, 0.0528259277, 0.0563964844, -0.0000000000, 0.0000000000, 0.0751953125, -0.0680541992, 0.0296173096, 0.2712402344, -0.0894775391, 0.1029052734, 0.0000000000, -0.0290069580, -0.2309570312, 0.0566406250, 0.0759277344, -0.0874023438, 0.3977050781, 0.0000000000, 0.1999511719, -0.5849609375, 0.0609130859, -0.0000000000, 0.1585693359, 0.4892578125, 0.3132324219, -0.2524414062, -0.0355529785, 0.0000000000, -0.1241455078, 0.0549621582, 0.2210693359, -0.1846923828, 0.0000000000, 0.1610107422, 0.3579101562, 0.0866699219, 0.1030883789, 0.3242187500, -0.1194458008, -0.0000000000, 0.0881347656, 0.0000000000, 0.1683349609, -0.0000000000, -0.0471496582, 0.0000000000, 0.0000000000, 0.1813964844, 0.0858154297, -0.0846557617, -0.1572265625, 0.1440429688, -0.6616210938, -0.0000000000, -0.0068283081, -0.0916748047, 0.0718383789, 0.0000000000, 0.1322021484, 0.1072387695, -0.0376281738, -0.0557250977, -0.0675048828, -0.1085205078, 0.3527832031, 0.0000000000, -0.4523925781, -0.4067382812, -0.1082763672, 0.0000000000, -0.1138916016, -0.1516113281, -0.1240844727, 0.0000000000, 0.0554199219, -0.1688232422, -0.1223144531, 0.1191406250, -0.0000000000, 0.1579589844, -0.0331115723, -0.0643310547, -0.2138671875, 0.0000000000, 0.2128906250, -0.4204101562, 0.3684082031, -0.2324218750, 0.3186035156, -0.0425720215, -0.0000000000, -0.3420410156, -0.0605773926, 0.1341552734, -0.4357910156, -0.1566162109, 0.1257324219, -0.2712402344, -0.1058959961, 0.0000000000, 0.0000000000, -0.3701171875, -0.0000000000, 0.0848999023, -0.1564941406, 0.0812377930, 0.0000000000, 0.0000000000, 0.1744384766, -0.2171630859, 0.0891113281, -0.0903320312, -0.1159057617, -0.4011230469, -0.0834350586, 0.0000000000, -0.0968627930, -0.2897949219, 0.0000000000, 0.1148071289, 0.7041015625, -0.2714843750, 0.1928710938, 0.2766113281, 0.0736083984, -0.0758666992, 0.1503906250, 0.1188354492, -0.0000000000, 0.0000000000, 0.0718994141, 0.0000000000, 0.0000000000, -0.0659790039, -0.0000000000, -0.0987548828, -0.2946777344, 0.0784912109, 0.0000000000, 0.3283691406, -0.0000000000, -0.1949462891, 0.5122070312, 0.0000000000, 0.0761718750, -0.0877075195, -0.1143188477, 0.1126098633, 0.0000000000, -0.1052856445, 0.6289062500, 0.2457275391, 0.1805419922, -0.0000000000, 0.0938720703, 0.0000000000, -0.0629882812, 0.1320800781, 0.2036132812, 0.2180175781, -0.0000000000, -0.1080932617, -0.0883178711, -0.4392089844, 0.0849609375, 0.0000000000, 0.0604858398, 0.1623535156, -0.1198120117, 0.0000000000, -0.1093139648, 0.0847778320, -0.0505065918, -0.0942382812, 0.0996704102, -0.1801757812, -0.5253906250, -0.0484313965, 0.0000000000, 0.2717285156, 0.0215911865, -0.1693115234, -0.0000000000, -0.0000000000, 0.3928222656, -0.4423828125, -0.4038085938, 0.1064453125, 0.1339111328, 0.1429443359, 0.7475585938, -0.5195312500, -0.0000000000, 0.0000000000, 0.3586425781, 0.3808593750, -0.0000000000, 0.2487792969, 0.1331787109, 0.0000000000, 0.4123535156, -0.2641601562, -0.0711059570, 0.0448608398, -0.3134765625, 0.0000000000, 0.1340332031, 0.1380615234, 0.0000000000, -0.0822143555, 0.4436035156, -0.0635375977, -0.3947753906, -0.0000000000, 0.0806884766, 0.4057617188, -0.3391113281, 0.0000000000, -0.4179687500, -0.0740356445, 0.1634521484, 0.0000000000, 0.0000000000, -0.0875854492, 0.1284179688, -0.0000000000, 0.1334228516, 0.1118164062, 0.2431640625, -0.0963134766, 0.0000000000, -0.0542602539, -0.2756347656, -0.0000000000, -0.0000000000, 0.2420654297, 0.2265625000, -0.0524597168, -0.0903320312, 0.1242065430, -0.0000000000, -0.2365722656, 0.0000000000, -0.1289062500, 0.2071533203, -0.1488037109, -0.0419921875, -0.0623474121, -0.1656494141, 0.1177978516, 0.2006835938, 0.0725097656, 0.0781250000, 0.0977172852, 0.1368408203, -0.0577087402, -0.3671875000, -0.2634277344, -0.1462402344, -0.1452636719, -0.1536865234, 0.1915283203, -0.0736694336, 0.1032714844, -0.1267089844, 0.4077148438, 0.0737915039, -0.0000000000, 0.4064941406, 0.0902709961, 0.0635986328, -0.0480957031, -0.0000000000, -0.0234375000, 0.1702880859, -0.2081298828, -0.0000000000, -0.0340576172, 0.2397460938, -0.1462402344, 0.0000000000, -0.1831054688, 0.1308593750, 0.5629882812, -0.5346679688, -0.1881103516, -0.2261962891, -0.0571594238, -0.0753784180, 0.1313476562, 0.6503906250, 0.4333496094, -0.2602539062, -0.0000000000, 0.1002807617, -0.3100585938, 0.1322021484, -0.3442382812, 0.3459472656, -0.2949218750, -0.0878295898, -0.2648925781, -0.0000000000, -0.0752563477, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.1252441406, 0.0000000000, 0.4401855469, 0.1347656250, -0.1871337891, 0.2624511719, -0.6206054688, -0.0000000000, -0.0000000000, 0.2717285156, -0.0000000000, 0.0784912109, -0.0000000000, -0.2041015625, 0.3437500000, -0.0920410156, -0.1077880859, -0.0168304443, -0.0622863770, -0.0000000000, 0.1496582031, 0.0000000000, 0.0396728516, 0.1232299805, 0.0440979004, 0.3398437500, 0.1627197266, -0.1028442383, 0.4670410156, 0.0000000000, -0.0838623047, -0.0000000000, -0.0000000000, 0.1313476562, -0.1959228516, -0.1890869141, -0.1357421875, 0.0000000000, 0.0000000000, -0.0000000000, -0.1293945312, -0.1274414062, 0.0131378174, 0.1695556641, -0.0582580566, 0.1705322266, -0.0000000000, -0.1972656250, -0.1102294922, 0.1789550781, 0.1176757812, -0.4426269531, 0.0000000000, 0.2500000000, -0.5126953125, -0.0792236328, -0.6899414062, 0.1142578125, -0.2130126953, -0.3181152344, -0.0000000000, 0.2145996094, 0.0690917969, 0.3103027344, -0.0757446289, -0.1428222656, -0.2095947266, -0.3366699219, 0.0482177734, -0.0870361328, -0.3647460938, 0.0000000000, -0.0000000000, -0.1177978516, -0.2263183594, 0.0456542969, -0.0515136719, -0.1052246094, 0.0891723633, 0.0000000000, -0.2595214844, 0.0000000000, -0.2561035156, -0.2485351562, 0.3452148438, 0.1414794922, 0.1962890625, -0.6865234375, -0.0575256348, -0.0000000000, 0.0000000000, 0.0000000000, -0.4423828125, -0.1960449219, 0.0000000000, 0.2932128906, 0.5732421875, -0.0000000000, -0.1715087891, 0.1795654297, -0.1801757812, 0.0000000000, -0.0000000000, -0.1276855469, -0.0855102539, -0.2707519531, -0.0000000000, 0.2255859375, 0.0000000000, -0.1821289062, 0.0000000000, -0.0000000000, -0.0564270020, 0.3046875000, 0.0759277344, -0.0622863770, 0.2293701172, -0.1298828125, 0.1074829102, 0.0000000000, 0.0852661133, 0.1032714844, -0.1524658203, 0.1060791016, 0.0000000000, -0.0000000000, -0.0596618652, -0.0000000000, 0.0000000000, 0.4060058594, 0.4187011719, -0.0944824219, 0.0852661133, 0.1367187500, 0.0561218262, 0.1224365234, -0.1495361328, 0.0000000000, -0.1934814453, 0.2351074219, 0.0000000000, -0.0848999023, -0.2493896484, -0.1822509766, 0.3615722656, -0.4233398438, 0.1805419922, 0.0000000000, -0.1767578125, -0.0000000000, 0.3991699219, -0.0869750977, -0.1948242188, -0.1849365234, -0.3090820312, 0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.4028320312, -0.0000000000, -0.0092010498, 0.2337646484, 0.0323486328, 0.2678222656, -0.1124267578, -0.0000000000, -0.0983276367, 0.2171630859, -0.3164062500, 0.1148681641, -0.1668701172, -0.1092529297, -0.0000000000, 0.0903930664, 0.0000000000, -0.3339843750, 0.1448974609, -0.3076171875, 0.8168945312, -0.0000000000, -0.1002197266, 0.0923461914, 0.0525207520, 0.0000000000, 0.1080932617, 0.0000000000, -0.1007080078, 0.2259521484, -0.5009765625, 0.1324462891, 0.1735839844, -0.2958984375, 0.2763671875, -0.3979492188, -0.2423095703, 0.0000000000, -0.1765136719, 0.1378173828, 0.0672607422, 0.0000000000, -0.2558593750, 0.1359863281, 0.1981201172, 0.2773437500, 0.0000000000, -0.1765136719, -0.0408325195, 0.1661376953, 0.1422119141, -0.2993164062, -0.1131591797, -0.0906372070, 0.0374450684, -0.0000000000, 0.0000000000, -0.5922851562, 0.0000000000, 0.1284179688, -0.0255737305, 0.0000000000, 0.3710937500, 0.3322753906, -0.0000000000, 0.2426757812, 0.0000000000, -0.0000000000, 0.0484924316, 0.0419616699, 0.0509948730, 0.0000000000, -0.1124267578, -0.2824707031, -0.0711059570, 0.0688476562, -0.0669555664, -0.5468750000, -0.0000000000, -0.1442871094, -0.4045410156, -0.0881958008, 0.0312500000, -0.1008300781, -0.2790527344, 0.2233886719, 0.3933105469, 0.2644042969, -0.1478271484, 0.0922851562, 0.1165771484, 0.1354980469, 0.0000000000, 0.0000000000, 0.0000000000, 0.1243286133, 0.1520996094, 0.1561279297, 0.0000000000, -0.0000000000, -0.1162719727, 0.0595397949, 0.1373291016, -0.3083496094, -0.0520324707, -0.1756591797, 0.2109375000, -0.2055664062, 0.1248779297, 0.0000000000, -0.1029052734, 0.3889160156, 0.1854248047, -0.0000000000, 0.2631835938, 0.4008789062, -0.2203369141, 0.3715820312, -0.2573242188, -0.1745605469, 0.0637207031, 0.2324218750, -0.3537597656, -0.0000000000, -0.0928955078, 0.1905517578, -0.1270751953, -0.3364257812, -0.1223754883, -0.2277832031, -0.0000000000, 0.1134033203, 0.0791625977, -0.2578125000, -0.0185394287, 0.1424560547, 0.2944335938, 0.6186523438, -0.3669433594, -0.8071289062, 0.0318603516, 0.0000000000, 0.1614990234, 0.4030761719, 0.3681640625, 0.2287597656, 0.0651855469, 0.0000000000, 0.0816040039, 0.1740722656, 0.1402587891, 0.1246948242, -0.0000000000, -0.1694335938, -0.2514648438, -0.0000000000, -0.2500000000, 0.0000000000, -0.5473632812, 0.0000000000, 0.1290283203, -0.3510742188, 0.1290283203, 0.1944580078, -0.0937500000, -0.0795898438, -0.0000000000, 0.2316894531, 0.3271484375, 0.2092285156, 0.4331054688, 0.2459716797, 0.0765991211, -0.0723876953, 0.0494689941, -0.0000000000, -0.0000000000, -0.1273193359, 0.0959472656, -0.1608886719, 0.0705566406, 0.1067504883, -0.1145019531, 0.3156738281, 0.3605957031, -0.2722167969, 0.1258544922, -0.2756347656, 0.1831054688, 0.0000000000, 0.0830078125, 0.1447753906, 0.1362304688, 0.2795410156, 0.1187744141, 0.1105957031, 0.0000000000, 0.3312988281, 0.1577148438, -0.4045410156, 0.1503906250, 0.1133422852, 0.0000000000, 0.4887695312, 0.2824707031, -0.0483093262, -0.0489501953, -0.1173706055, -0.0000000000, -0.0000000000, -0.0379333496, 0.0000000000, 0.0628662109, -0.2409667969, -0.3369140625, 0.0966186523, 0.1334228516, 0.1329345703, -0.0000000000, -0.5678710938, -0.4826660156, -0.0000000000, 0.1375732422, 0.0000000000, 0.0000000000, 0.1436767578, -0.4553222656, -0.3552246094, 0.1666259766, -0.0552673340, 0.1484375000, -0.1718750000, 0.0312805176, -0.1133422852, 0.2573242188, -0.0000000000, 0.1099853516, -0.2993164062, 0.0000000000, -0.0721435547, 0.0000000000, -0.0000000000, -0.4106445312, 0.0508422852, -0.2919921875, 0.0942993164, -0.0000000000, 0.1635742188, -0.0632934570, -0.2239990234, 0.0623168945, -0.2631835938, 0.2156982422, -0.0524902344, 0.1788330078, -0.4555664062, -0.0020961761, -0.1842041016, 0.1840820312, 0.2322998047, 0.1134033203, -0.3264160156, -0.1887207031, -0.0000000000, -0.1336669922, 0.0803833008, 0.1291503906, -0.0000000000, 0.2012939453, 0.0000000000, -0.0000000000, 0.3771972656, -0.4318847656, -0.0928955078, 0.4567871094, 0.0000000000, 0.3635253906, -0.0000000000, -0.1151733398, -0.0880126953, -0.2622070312, 0.0898437500, 0.4409179688, -0.1810302734, 0.2395019531, 0.0000000000, -0.1697998047, -0.3430175781, 0.0455322266, -0.4357910156, -0.0000000000, 0.0460205078, -0.1108398438, -0.0000000000, 0.1088256836, 0.1993408203, 0.1322021484, -0.3532714844, -0.1656494141, -0.4604492188, -0.2132568359, 0.0246124268, -0.3457031250, -0.1284179688, -0.0000000000, 0.1801757812, 0.0000000000, 0.0426940918, -0.0665893555, -0.4721679688, -0.0000000000, 0.1672363281, 0.1961669922, 0.1253662109, 0.1591796875, -0.0634155273, -0.1695556641, 0.2141113281, 0.0814819336, -0.1484375000, -0.0000000000, 0.0496826172, -0.2971191406, 0.4421386719, 0.0577087402, -0.0000000000, 0.3286132812, -0.2883300781, -0.2988281250, -0.0000000000, -0.0000000000, 0.2005615234, 0.5029296875, -0.2460937500, -0.0408935547, -0.2418212891, -0.0487670898, 0.2086181641, -0.0414428711, 0.1187744141, 0.1162109375, 0.0000000000, 0.3002929688, -0.0000000000, -0.1144409180, -0.0000000000, -0.0000000000, -0.1413574219, 0.0000000000, 0.2318115234, -0.0000000000, -0.1982421875, 0.0491943359, -0.1041259766, 0.1932373047, -0.1895751953, -0.1092529297, 0.3867187500, -0.4370117188, 0.2568359375, -0.0919799805, 0.4858398438, -0.0122146606, 0.0000000000, -0.0803833008, 0.4504394531, 0.0000000000, 0.3876953125, 0.0000000000, 0.3208007812, 0.3027343750, -0.0000000000, -0.0551757812, -0.0000000000, -0.2932128906, 0.1143798828, -0.1279296875, 0.2998046875, 0.1762695312, 0.1394042969, 0.3149414062, -0.0000000000, -0.1859130859, -0.1585693359, 0.0000000000, 0.0585327148, 0.0000000000, 0.2546386719, 0.1939697266, 0.0000000000, -0.2724609375, -0.1444091797, -0.1788330078, 0.0997924805, 0.3830566406, 0.1661376953, 0.0000000000, -0.2868652344, -0.3244628906, 0.0000000000, 0.1027832031, 0.0000000000, -0.0000000000, 0.0000000000, 0.4028320312, -0.0000000000, 0.0000000000, 0.0000000000, 0.0502929688, -0.0761108398, -0.0980834961, 0.3171386719, -0.4270019531, 0.2167968750, -0.1057128906, -0.0000000000, -0.0000000000, -0.0704956055, -0.1982421875, -0.0524291992, -0.1179199219, 0.0729370117, 0.1474609375, 0.1512451172, -0.4118652344, -0.1093139648, 0.0000000000, 0.2130126953, -0.3366699219, -0.2248535156, -0.1564941406, 0.0000000000, 0.0000000000, -0.0000000000, 0.0968017578, 0.1849365234, -0.4914550781, 0.3259277344, 0.0492553711, 0.3657226562, -0.0000000000, -0.0859375000, -0.2746582031, 0.1751708984, -0.0000000000, 0.0618286133, 0.1661376953, -0.1082153320, 0.0000000000, -0.1982421875, 0.1828613281, -0.0000000000, -0.2177734375, -0.2382812500, 0.1672363281, -0.0000000000, 0.5073242188, -0.1624755859, 0.2592773438, 0.1155395508, -0.0000000000, 0.1702880859, -0.0507812500, 0.0000000000, 0.0000000000, -0.0261535645, -0.6162109375, 0.0917358398, -0.3688964844, -0.0000000000, -0.4560546875, 0.1495361328, 0.0000000000, 0.1623535156, 0.1189575195, -0.1505126953, -0.0000000000, -0.0000000000, -0.1188964844, 0.3798828125, -0.2436523438, -0.1560058594, 0.1621093750, -0.2070312500, -0.0000000000, 0.0622558594, -0.0643310547, 0.1767578125, -0.4760742188, -0.0000000000, -0.3125000000, 0.0451354980, -0.0921020508, 0.1027832031, -0.1402587891, 0.0000000000, 0.1873779297, -0.0701904297, 0.1982421875, -0.1414794922, -0.1101684570, -0.1947021484, -0.0000000000, -0.0000000000, 0.0000000000, 0.0545654297, 0.6801757812, 0.0000000000, 0.1678466797, -0.4738769531, 0.1253662109, -0.0000000000, 0.0000000000, -0.4204101562, -0.1757812500, -0.0502929688, 0.0549316406, -0.1171875000, 0.4208984375, -0.2089843750, 0.0000000000, -0.1621093750, 0.4245605469, -0.1018066406, -0.1204833984, 0.0000000000, -0.1624755859, 0.1099243164, 0.0927124023, 0.0699462891, -0.3283691406, 0.0982055664, 0.0528869629, -0.3752441406, 0.0000000000, 0.2176513672, -0.0838623047, 0.0787963867, 0.1392822266, -0.1727294922, -0.1655273438, -0.1456298828, -0.2912597656, -0.0961303711, 0.1014404297, -0.3525390625, 0.2106933594, -0.4658203125, 0.7836914062, 0.0363464355, -0.0733642578, 0.1193237305, -0.1849365234, 0.0857543945, 0.0000000000, 0.0000000000, 0.0981445312, 0.0000000000, -0.0517578125, -0.0000000000, 0.0449829102, 0.3806152344, -0.0653076172, -0.0947875977, -0.0000000000, -0.4160156250, 0.0301666260, -0.2775878906, -0.1044921875, 0.0000000000, 0.1618652344, 0.0000000000, -0.0928344727, -0.0963745117, -0.3210449219, 0.1136474609, -0.3122558594, 0.0551147461, -0.0596008301, -0.1462402344, 0.1607666016, 0.1458740234, -0.4169921875, -0.2561035156, 0.1818847656, -0.0000000000, -0.0000000000, 0.2335205078, 0.0827636719, 0.4392089844, 0.1986083984, 0.3010253906, -0.0331726074, -0.2973632812, -0.0000000000, -0.2128906250, 0.0000000000, -0.0000000000, -0.2083740234, -0.0000000000, 0.4519042969, -0.0000000000, -0.4597167969, 0.1541748047, -0.0167236328, 0.0000000000, 0.0000000000, -0.3112792969, -0.4155273438, 0.0000000000, -0.1729736328, 0.0000000000, -0.0725097656, -0.0000000000, -0.0581970215, -0.0000000000, -0.3388671875, 0.3281250000, 0.3229980469, 0.0549926758, 0.0000000000, -0.1157836914, 0.1394042969, 0.1563720703, -0.0599365234, -0.2108154297, -0.4055175781, -0.3471679688, -0.0517272949, -0.2220458984, 0.1618652344, -0.0787353516, -0.0940551758, -0.1977539062, -0.2207031250, 0.0278778076, -0.0000000000, -0.4020996094, 0.0000000000, -0.0000000000, -0.0000000000, 0.2800292969, -0.3139648438, 0.5737304688, 0.0829467773, -0.1685791016, -0.2489013672, -0.0978393555, 0.0559692383, 0.1413574219, 0.0957031250, 0.6933593750, -0.0000000000, 0.0652465820, -0.2780761719, 0.0000000000, -0.0233612061, 0.2379150391, -0.0000000000, 0.0000000000, 0.0000000000, -0.2098388672, 0.1431884766, 0.1226196289, -0.1479492188, 0.0713500977, -0.3686523438, -0.0000000000, 0.0000000000, 0.1424560547, 0.0000000000, 0.0000000000, -0.1188354492, 0.0637817383, 0.0804443359, -0.4465332031, -0.2259521484, 0.3029785156, -0.3637695312, 0.0968017578, -0.1928710938, -0.0000000000, -0.0000000000, -0.1286621094, -0.1178588867, 0.1201782227, -0.0000000000, 0.0549926758, 0.0295562744, -0.0000000000, 0.0616149902, -0.1702880859, -0.3122558594, -0.0819702148, 0.0357055664, -0.0530700684, 0.0000000000, 0.0000000000, -0.0611572266, 0.0000000000, -0.2543945312, -0.0323791504, -0.2464599609, 0.1267089844, -0.4892578125, -0.0000000000, 0.3586425781, 0.2329101562, 0.2770996094, -0.4584960938, 0.0000000000, 0.0000000000, -0.0000000000, 0.2198486328, -0.0000000000, -0.3273925781, -0.0000000000, -0.0000000000, 0.2575683594, -0.4440917969, 0.1378173828, -0.0778198242, 0.0931396484, -0.0000000000, -0.3542480469, -0.1016235352, 0.2661132812, -0.2025146484, -0.1762695312, -0.0639648438, 0.4675292969, 0.2609863281, 0.1799316406, -0.1839599609, -0.5996093750, 0.0894165039, -0.1477050781, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0682983398, 0.2761230469, 0.0000000000, 0.1840820312, 0.1102294922, -0.0000000000, -0.0772705078, -0.2780761719, 0.0873413086, 0.0000000000, 0.1489257812, -0.4121093750, 0.2617187500, -0.0000000000, 0.3654785156, -0.2792968750, -0.2071533203, -0.1436767578, 0.0000000000, 0.0000000000, -0.3334960938, 0.1503906250, 0.1551513672, -0.2308349609, 0.0388183594, -0.4042968750, 0.1055908203, 0.1178588867, -0.1582031250, -0.0620727539, 0.1085815430, 0.2031250000, -0.0968627930, 0.2971191406, -0.2427978516, -0.0000000000, -0.0709228516, 0.3554687500, 0.0000000000, -0.0802612305, -0.0000000000, 0.4262695312, -0.0000000000, 0.3259277344, -0.1958007812, 0.0000000000, 0.1506347656, -0.0941772461, -0.5473632812, -0.0932617188, 0.3764648438, -0.0923461914, 0.0000000000, 0.0000000000, -0.1489257812, -0.1063842773, 0.0423889160, -0.1685791016, 0.2136230469, -0.0790405273, 0.1801757812, -0.0000000000, 0.1981201172, 0.0000000000, -0.4252929688, -0.3134765625, -0.1227416992, -0.1612548828, -0.2115478516, 0.0000000000, -0.0000000000, 0.0332336426, -0.0417175293, -0.0579833984, 0.1040039062, -0.4938964844, -0.0478515625, -0.0000000000, -0.4680175781, -0.1733398438, -0.2443847656, -0.1785888672, -0.2539062500, -0.4958496094, 0.0907592773, -0.2329101562, 0.0000000000, -0.0000000000, -0.0000000000, -0.1818847656, 0.2519531250, -0.0000000000, 0.0000000000, 0.1104736328, 0.1444091797, 0.3510742188, -0.1975097656, 0.1178588867, 0.2526855469, -0.5307617188, -0.0000000000, -0.0000000000, 0.1193847656, 0.1572265625, 0.2457275391, 0.3149414062, -0.1541748047, -0.3815917969, -0.0000000000, 0.1308593750, -0.2770996094, 0.2624511719, 0.0994262695, -0.0000000000, 0.0924072266, 0.0000000000, 0.1100463867, -0.0000000000, -0.1428222656, 0.4128417969, 0.2954101562, -0.2719726562, 0.0568542480, -0.3857421875, -0.1931152344, 0.3405761719, 0.2548828125, -0.1827392578, 0.1987304688, 0.0515136719, -0.1652832031, 0.1291503906, -0.1805419922, 0.0589904785, 0.3837890625, -0.0000000000, 0.2685546875, -0.0000000000, 0.0783691406, 0.0372314453, -0.1082763672, -0.1335449219, 0.0000000000, -0.1793212891, 0.4724121094, -0.0000000000, 0.1401367188, 0.0000000000, -0.0807495117, -0.1538085938, -0.1962890625, 0.6704101562, 0.0933227539, -0.1694335938, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.1231079102, -0.2861328125, 0.0943603516, -0.1126098633, -0.0000000000, -0.0000000000, -0.1082153320, -0.0568542480, 0.1209716797, 0.1396484375, -0.0855712891, 0.0423889160, 0.2792968750, 0.0747070312, 0.1682128906, -0.1557617188, -0.0917968750, 0.1337890625, -0.3408203125, -0.0376892090, 0.0593872070, -0.0000000000, 0.0000000000, 1.0810546875, -0.2580566406, 0.0000000000, -0.1807861328, -0.1439208984, 0.0744628906, -0.5117187500, 0.0000000000, -0.0512084961, 0.0000000000, 0.3554687500, 0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.4597167969, 0.0688476562, 0.1724853516, -0.1067504883, 0.1508789062, 0.1133422852, 0.0842285156, -0.1198120117, -0.3454589844, 0.1907958984, 0.0000000000, -0.3244628906, -0.1212158203, -0.0000000000, -0.0357055664, -0.0722656250, -0.0381774902, -0.2188720703, -0.2841796875, 0.0129470825, -0.0414123535, 0.6752929688, -0.0843505859, -0.0578918457, 0.3647460938, 0.1560058594, 0.2457275391, 0.3276367188, -0.1804199219, 0.0000000000, 0.0700683594, -0.0251464844, -0.2546386719, 0.2780761719, 0.2189941406, -0.0829467773, -0.0438537598, -0.0932617188, 0.3779296875, -0.3286132812, 0.0000000000, -0.5244140625, -0.3361816406, -0.0848999023, -0.0312042236, -0.0657348633, 0.0000000000, -0.4448242188, -0.0000000000, -0.2521972656, -0.0919799805, 0.1767578125, 0.1798095703, -0.7485351562, -0.0000000000, 0.1809082031, 0.0000000000, 0.0641479492, 0.0237121582, -0.0000000000, 0.0000000000, 0.0000000000, -0.2917480469, 0.3483886719, 0.2668457031, 0.1163330078, -0.0835571289, -0.0000000000, 0.1750488281, -0.0000000000, 0.0000000000, 0.0000000000, 0.1723632812, -0.0000000000, 0.0686645508, 0.2229003906, 0.0000000000, -0.0000000000, 0.1466064453, 0.2042236328, -0.3825683594, -0.2602539062, 0.3493652344, -0.3012695312, -0.0900268555, 0.0000000000, 0.1153564453, 0.0000000000, -0.0000000000, -0.1940917969, -0.2283935547, 0.0806884766, 0.0744018555, 0.0311737061, -0.2805175781, 0.0000000000, -0.5498046875, -0.3139648438, -0.4123535156, -0.0000000000, 0.0000000000, 0.0840454102, -0.0000000000, 0.0000000000, -0.2142333984, 0.0000000000, -0.1644287109, -0.3339843750, -0.0000000000, -0.2944335938, -0.1054687500, 0.0000000000, -0.2761230469, -0.0482788086, 0.4697265625, -0.0000000000, 0.0000000000, -0.1455078125, -0.0000000000, 0.0752563477, 0.0000000000, 0.0000000000, 0.0000000000, -0.5063476562, -0.0000000000, -0.2413330078, -0.0000000000, 0.0715332031, 0.0000000000, -0.0000000000, -0.0409240723, 0.4848632812, 0.2381591797, -0.4951171875, 0.1646728516, 0.0703735352, 0.4916992188, 0.2529296875, -0.2956542969, 0.1507568359, -0.1334228516, -0.0765380859, 0.3281250000, 0.3210449219, 0.6166992188, -0.0000000000, 0.1448974609, 0.0000000000, 0.1968994141, -0.2001953125, -0.0000000000, -0.1678466797, 0.2763671875, -0.3364257812, 0.1390380859, -0.2465820312, 0.0817260742, -0.0000000000, -0.0000000000, -0.4855957031, 0.0000000000, 0.1499023438, -0.0000000000, 0.0000000000, 0.0982055664, 0.0599365234, 0.2259521484, 0.0917358398, 0.1817626953, 0.2061767578, 0.2492675781, -0.3801269531, 0.2666015625, 0.0952758789, 0.0645141602, 0.0919189453, 0.0616455078, 0.0000000000, -0.0734252930, -0.2736816406, -0.0876464844, 0.0000000000, -0.0000000000, -0.0944824219, 0.2629394531, -0.1662597656, -0.0584716797, -0.2027587891, 0.3969726562, -0.4323730469, -0.0374755859, 0.1212768555, 0.0939331055, -0.0000000000, -0.0000000000, -0.0000000000, -0.1340332031, -0.0000000000, 0.1334228516, 0.0000000000, -0.0549926758, 0.1035156250, -0.0000000000, 0.2249755859, 0.0000000000, 0.3395996094, 0.0958251953, -0.0793457031, 0.0000000000, -0.1752929688, -0.4160156250, 0.3027343750, 0.0000000000, -0.5302734375, -0.0337524414, -0.2045898438, -0.0891113281, -0.0000000000, -0.0815429688, -0.3088378906, -0.0000000000, 0.1156616211, -0.0000000000, 0.1743164062, 0.0000000000, 0.1291503906, 0.0809326172, -0.1749267578, -0.1964111328, -0.1144409180, -0.0000000000, 0.0852050781, 0.6513671875, 0.0000000000, 0.1182250977, 0.0000000000, 0.1986083984, 0.0000000000, -0.1849365234, 0.1687011719, 0.0000000000, 0.1345214844, -0.1098632812, -0.6479492188, -0.1047363281, 0.0000000000, -0.2966308594, 0.0000000000, -0.0742797852, 0.1248779297, 0.4545898438, 0.0000000000, -0.0534057617, -0.0000000000, 0.4379882812, -0.2154541016, 0.1774902344, -0.4440917969, 0.1431884766, 0.0000000000, -0.0549926758, 0.0427246094, -0.1755371094, 0.5908203125, 0.1397705078, 0.0000000000, 0.0000000000, -0.0000000000, 0.5385742188, -0.1049194336, -0.0592346191, 0.0000000000, -0.1336669922, -0.3474121094, 0.2169189453, 0.3154296875, -0.0000000000, -0.1817626953, -0.1375732422, -0.1451416016, -0.0463867188, 0.0488281250, 0.2415771484, 0.2731933594, -0.0000000000, 0.1437988281, -0.1878662109, -0.2739257812, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0000000000, 0.1439208984, 0.0000000000, -0.0000000000, -0.1807861328, -0.0000000000, 0.1293945312, 0.1365966797, -0.0421447754, 0.3120117188, 0.6889648438, -0.0000000000, -0.0000000000, 0.1168212891, 0.3437500000, -0.2160644531, 0.1848144531, 0.1594238281, -0.0000000000, -0.0405883789, 0.1931152344, 0.0000000000, -0.0616149902, -0.2548828125, -0.0676269531, 0.2084960938, 0.0000000000, 0.0455932617, -0.0900878906, -0.5332031250, -0.0833740234, -0.1628417969, 0.1486816406, 0.3032226562, -0.3876953125, 0.0000000000, -0.0000000000, 0.3896484375, -0.1281738281, 0.0964355469, -0.0858764648, 0.1983642578, -0.4709472656, -0.1351318359, 0.1662597656, 0.3745117188, 0.2105712891, -0.0631103516, -0.2978515625, 0.1030883789, -0.2092285156, -0.2287597656, 0.0466613770, -0.2761230469, 0.1838378906, 0.4289550781, 0.0000000000, -0.0335693359, -0.1012573242, 0.0966796875, 0.0525207520, -0.0764770508, 0.1245117188, 0.0735473633, -0.1871337891, 0.1143798828, -0.2006835938, 0.0000000000, 0.3537597656, -0.1263427734, -0.2023925781, 0.0870361328, -0.3518066406, 0.0000000000, -0.2714843750, 0.0000000000, 0.1228637695, 0.2153320312, 0.1328125000, 0.2763671875, -0.0895996094, -0.1347656250, -0.2437744141, 0.1676025391, -0.2033691406, 0.0497741699, -0.2636718750, -0.0533142090, 0.0000000000, 0.3442382812, 0.5312500000, 0.3420410156, 0.6362304688, 0.1434326172, 0.1772460938, -0.3337402344, -0.0627441406, -0.3430175781, -0.1144409180, -0.0729370117, -0.4348144531, 0.1209716797, 0.0000000000, 0.3530273438, 0.0601806641, 0.4440917969, -0.0000000000, -0.3354492188, -0.0000000000, 0.0841064453, -0.0838623047, -0.1748046875, 0.1556396484, -0.0275573730, -0.1104125977, 0.3105468750, 0.0000000000, 0.3588867188, -0.1563720703, -0.3085937500, -0.0000000000, 0.0000000000, -0.0671997070, 0.0476379395, -0.2231445312, 0.1903076172, -0.0000000000, 0.2183837891, -0.3801269531, 0.1943359375, -0.0848388672, 0.0592956543, 0.1885986328, 0.5703125000, -0.0000000000, -0.1304931641, -0.1253662109, -0.1333007812, 0.0000000000, -0.0212402344, -0.0000000000, -0.2420654297, 0.1117553711, 0.0000000000, 0.1309814453, -0.0000000000, -0.0000000000, 0.4848632812, 0.0670166016, 0.0845336914, 0.5029296875, -0.1320800781, 0.1016845703, -0.3068847656, -0.0000000000, 0.3088378906, 0.0161285400, 0.1784667969, 0.0856933594, 0.1018676758, -0.3986816406, 0.0367126465, -0.2198486328, 0.0000000000, -0.0000000000, -0.2629394531, 0.0866699219, -0.0559082031, 0.2690429688, -0.0880126953, 0.0883789062, -0.0000000000, -0.3024902344, -0.0971679688, 0.2661132812, -0.0321655273, 0.2668457031, -0.0805053711, 0.0000000000, -0.2442626953, 0.2539062500, -0.2971191406, 0.0000000000, -0.1815185547, 0.1431884766, 0.4318847656, 0.0592651367, -0.3107910156, -0.1876220703, -0.0998535156, -0.0000000000, -0.0000000000, 0.1011352539, -0.4653320312, -0.0000000000, 0.0153656006, 0.0000000000, -0.0742187500, -0.0000000000, -0.1271972656, -0.0000000000, -0.0000000000, 0.0000000000, -0.7031250000, 0.2861328125, 0.0000000000, -0.1728515625, 0.2041015625, 0.3242187500, -0.0722656250, 0.0781250000, 0.0000000000, -0.1502685547, -0.2045898438, -0.0000000000, 0.0000000000, -0.0000000000, -0.2241210938, -0.0000000000, 0.1209716797, -0.0000000000, 0.2973632812, -0.2744140625, 0.3911132812, -0.1822509766, -0.1612548828, -0.5249023438, 0.0000000000, 0.0469055176, -0.0000000000, 0.0000000000, 0.1348876953, 0.5268554688, -0.4519042969, 0.0870361328, -0.1959228516, 0.4306640625, 0.0000000000, -0.2910156250, -0.3366699219, 0.0515136719, -0.1016845703, -0.1097412109, 0.1856689453, -0.1715087891, -0.3728027344, 0.1301269531, -0.3974609375, 0.0801391602, 0.0000000000, 0.0000000000, -0.3544921875, -0.0659179688, -0.0000000000, -0.2766113281, -0.0000000000, 0.3666992188, 0.0932617188, 0.0000000000, -0.0000000000, 0.0000000000, -0.1590576172, -0.0000000000, -0.0399169922, 0.1666259766, -0.0000000000, 0.0314025879, -0.2226562500, -0.0000000000, 0.0000000000, -0.4357910156, -0.1296386719, 0.0852050781, -0.0628051758, 0.2408447266, 0.0000000000, -0.4274902344, 0.6850585938, 0.4558105469, 0.0000000000, 0.1041259766, -0.2343750000, 0.0000000000, 0.3757324219, -0.3210449219, 0.1981201172, 0.0000000000, -0.0000000000, 0.3166503906, 0.4074707031, 0.3242187500, 0.0000000000, -0.0000000000, 0.0539550781, -0.0892944336, -0.0992431641, 0.0589599609, -0.3266601562, -0.0000000000, -0.2563476562, 0.2712402344, -0.0000000000, -0.1037597656, 0.3415527344, -0.1243286133, 0.1433105469, 0.1881103516, -0.0382995605, -0.0000000000, -0.0000000000, 0.1383056641, -0.3757324219, -0.4394531250, -0.1495361328, -0.2941894531, 0.0000000000, -0.1824951172, -0.1728515625, -0.0865478516, 0.1573486328, -0.1624755859, -0.0567626953, -0.0906372070, 0.0000000000, 0.0000000000, -0.3310546875, 0.0000000000, 0.2036132812, -0.2154541016, 0.1262207031, 0.1843261719, -0.0817260742, -0.0000000000, -0.0000000000, -0.1625976562, 0.0444946289, 0.0000000000, -0.0693969727, -0.3535156250, 0.0950927734, 0.4484863281, 0.1712646484, 0.1517333984, -0.1105346680, -0.2349853516, -0.3845214844, 0.2531738281, 0.1524658203, 0.0000000000, -0.0000000000, -0.0000000000, 0.1290283203, -0.0000000000, -0.0000000000, 0.2333984375, 0.4272460938, 0.0605468750, 0.2731933594, 0.4838867188, 0.1298828125, -0.0929565430, -0.1553955078, -0.0940551758, 0.3315429688, 0.0707397461, 0.0981445312, 0.2143554688, 0.0715942383, 0.0000000000, 0.0682373047, -0.0000000000, -0.0000000000, -0.0780029297, 0.1296386719, 0.0572509766, -0.0458984375, 0.2116699219, 0.0000000000, 0.2431640625, 0.0000000000, 0.1676025391, -0.5405273438, 0.1518554688, 0.0000000000, 0.2122802734, 0.0714721680, -0.1292724609, 0.0349731445, 0.1370849609, 0.2810058594, -0.1586914062, 0.3083496094, -0.3334960938, 0.3146972656, 0.1639404297, 0.1595458984, -0.0373535156, 0.2259521484, 0.2227783203, 0.0000000000, -0.0497131348, -0.1849365234, 0.4663085938, -0.3325195312, -0.2856445312, -0.0000000000, 0.0000000000, 0.0834350586, 0.0878906250, -0.2303466797, 0.3571777344, -0.5170898438, 0.1457519531, 0.1584472656, -0.0975341797, -0.5483398438, 0.7285156250, 0.1394042969, 0.2512207031, 0.0000000000, 0.0600891113, -0.3745117188, -0.4079589844, -0.1022949219, 0.0779418945, 0.0000000000, 0.0899658203, -0.2578125000, -0.2025146484, -0.0946655273, -0.0797729492, -0.0917968750, 0.1363525391, -0.0000000000, 0.1170043945, -0.1135253906, -0.1439208984, -0.0582275391, -0.1311035156, 0.1311035156, -0.0929565430, -0.3259277344, -0.0570373535, -0.0217437744, 0.2927246094, 0.2132568359, 0.0000000000, 0.0000000000, -0.3430175781, 0.6796875000, -0.0000000000, 0.0000000000, -0.1998291016, -0.0404357910, 0.0484924316, 0.0000000000, 0.0392456055, -0.0000000000, 0.2310791016, 0.0000000000, -0.0904541016, 0.0000000000, -0.0000000000, 0.1577148438, -0.2030029297, -0.0456237793, 0.0404663086, 0.3129882812, 0.2917480469, -0.0142135620, 0.0783691406, -0.3300781250, -0.0471496582, 0.2076416016, -0.7724609375, 0.4357910156, -0.1467285156, 0.6005859375, 0.0404052734, 0.1140136719, 0.1999511719, -0.0000000000, -0.0000000000, -0.0693359375, -0.0366210938, -0.1448974609, -0.2673339844, 0.1553955078, 0.0319519043, -0.0752563477, -0.1429443359, -0.2194824219, -0.0000000000, 0.0353698730, 0.1833496094, -0.1569824219, -0.1651611328, -0.0000000000, 0.1400146484, 0.7299804688, 0.0577087402, 0.0000000000, 0.0000000000, -0.0466918945, -0.1065063477, -0.1296386719, -0.4003906250, -0.0000000000, 0.1301269531, 0.0000000000, -0.1206665039, -0.1262207031, 0.1612548828, 0.3715820312, 0.0459289551, -0.0000000000, -0.3007812500, -0.0000000000, 0.1238403320, -0.0000000000, -0.1662597656, -0.3239746094, 0.0000000000, 0.5449218750, 0.0000000000, 0.0000000000, -0.0000000000, -0.3142089844, 0.2171630859, -0.2174072266, -0.3281250000, -0.3388671875, -0.3015136719, 0.3315429688, 0.2658691406, 0.0605468750, 0.3894042969, 0.0000000000, 0.0973510742, -0.0664062500, 0.0451660156, -0.0000000000, -0.1531982422, 0.1750488281, -0.0904541016, 0.0000000000, -0.0000000000, -0.0000000000, -0.1785888672, -0.0490112305, -0.0662231445, -0.0000000000, -0.3144531250, 0.6577148438, 0.2578125000, 0.0000000000, -0.0119323730, -0.1799316406, -0.0000000000, 0.2183837891, -0.0933837891, 0.1264648438, 0.0000000000, -0.1008300781, -0.3190917969, -0.1390380859, -0.4143066406, 0.0400390625, -0.0000000000, -0.4467773438, 0.0919799805, -0.0687255859, 0.4492187500, 0.1379394531, -0.0891113281, 0.2180175781, -0.1223754883, -0.3581542969, -0.1462402344, -0.0000000000, -0.0683593750, 0.0000000000, 0.0496215820, -0.3925781250, 0.3369140625, 0.1719970703, -0.0000000000, -0.1594238281, -0.0000000000, 0.1756591797, -0.4436035156, 0.2922363281, -0.2227783203, 0.1823730469, 0.1287841797, -0.0752563477, 0.0000000000, -0.0551147461, -0.0000000000, -0.0000000000, 0.5986328125, -0.1367187500, 0.1473388672, -0.1015014648, -0.0563964844, 0.1971435547, 0.1938476562, -0.2259521484, 0.1411132812, 0.0000000000, 0.0761108398, -0.0937500000, -0.1405029297, -0.0774536133, -0.2509765625, 0.0245666504, 0.0758666992, 0.4133300781, 0.0290679932, -0.2929687500, -0.0000000000, 0.3120117188, 0.4279785156, 0.0000000000, 0.6333007812, 0.0523681641, 0.0000000000, -0.0000000000, 0.2388916016, -0.0588684082, 0.4633789062, -0.3142089844, 0.0000000000, 0.0923461914, -0.2983398438, 0.0781860352, -0.0241088867, -0.0864257812, 0.3300781250, -0.1396484375, 0.1506347656, 0.1511230469, 0.0000000000, -0.0937500000, 0.4819335938, 0.1485595703, -0.0000000000, 0.0347595215, -0.3549804688, 0.3146972656, 0.0000000000, 0.1163940430, -0.0546875000, -0.1486816406, 0.4929199219, 0.0000000000, -0.1760253906, -0.0000000000, -0.0000000000, -0.0000000000, 0.0427246094, 0.0000000000, 0.1372070312, -0.1336669922, 0.0000000000, -0.5122070312, 0.0455627441, -0.0977783203, -0.0000000000, 0.3825683594, 0.0000000000, -0.0000000000, -0.3847656250, -0.0881958008, 0.2780761719, -0.1810302734, 0.2301025391, -0.0938720703, -0.0717773438, -0.0000000000, 0.0000000000, 0.1589355469, 0.4233398438, 0.3293457031, -0.0456848145, -0.1535644531, 0.1392822266, -0.0000000000, 0.0765991211, 0.1230468750, 0.0000000000, 0.0773315430, 0.2248535156, 0.1313476562, -0.2949218750, -0.5327148438, 0.0466308594, 0.1567382812, 0.1779785156, -0.5053710938, 0.1417236328, -0.0582580566, -0.1368408203, 0.2529296875, 0.1436767578, -0.0000000000, 0.0611572266, 0.2519531250, 0.0000000000, -0.3139648438, 0.0000000000, -0.0000000000, -0.1022949219, 0.0000000000, -0.2071533203, -0.0425415039, 0.0000000000, -0.0000000000, -0.1430664062, -0.2783203125, 0.0000000000, -0.0340881348, 0.0255889893, 0.1149902344, -0.0000000000, -0.0000000000, -0.2069091797, 0.2539062500, -0.0787353516, -0.1455078125, 0.0820312500, -0.0000000000, 0.2939453125, -0.0000000000, -0.0556640625, 0.0000000000, -0.0000000000, 0.2968750000, 0.0000000000, -0.1109008789, 0.4230957031, -0.0000000000, 0.3559570312, 0.1953125000, 0.0000000000, -0.3930664062, 0.1107788086, 0.0000000000, 0.0534973145, 0.1107788086, -0.0423583984, 0.0582580566, -0.0000000000, -0.1368408203, -0.0000000000, -0.3195800781, 0.9614257812, 0.1118164062, 0.0000000000, -0.0000000000, -0.0000000000, -0.0538635254, 0.0000000000, 0.3557128906, 0.3415527344, -0.1728515625, -0.1981201172, 0.0429382324, 0.0569152832, -0.0000000000, 0.7680664062, 0.4365234375, -0.0752563477, 0.1623535156, 0.0000000000, 0.1143188477, -0.1068115234, -0.2402343750, -0.1280517578, 0.0702514648, 0.0745239258, 0.0970458984, 0.2316894531, -0.2136230469, 0.1154174805, 0.0000000000, -0.0595703125, 0.0405273438, 0.0000000000, -0.5756835938, -0.2683105469, 0.2722167969, 0.1466064453, 0.1611328125, 0.0000000000, -0.2644042969, 0.2401123047, -0.0000000000, -0.0381469727, 0.1514892578, -0.4848632812, -0.1122436523, -0.0000000000, 0.4702148438, 0.0668334961, 0.0000000000, 0.3107910156, -0.0000000000, 0.2254638672, 0.1529541016, -0.0577392578, 0.1519775391, -0.0792236328, 0.3791503906, -0.0000000000, 0.1263427734, -0.2006835938, 0.1827392578, -0.0000000000, 0.1507568359, 0.0778198242, 0.0396728516, -0.0000000000, -0.0855712891, 0.3417968750, 0.0651855469, 0.0000000000, -0.1846923828, 0.2575683594, 0.1341552734, -0.5654296875, -0.2529296875, 0.0839843750, 0.0000000000, 0.0000000000, -0.2612304688, 0.0114593506, -0.3376464844, -0.3027343750, 0.4150390625, 0.0253753662, 0.1269531250, -0.0000000000, -0.0778198242, -0.0000000000, 0.1778564453, 0.0375366211, -0.0000000000, -0.1115722656, 0.0000000000, 0.0895385742, -0.1997070312, 0.0000000000, 0.1271972656, -0.0000000000, 0.0664672852, 0.1029663086, 0.0362548828, 0.2036132812, -0.1108398438, -0.3474121094, 0.2144775391, 0.1291503906, 0.2707519531, 0.1108398438, 0.0917968750, -0.1495361328, -0.0000000000, 0.3540039062, 0.0590515137, -0.0988159180, -0.3225097656, 0.2237548828, -0.0823364258, 0.4580078125, -0.2185058594, 0.1233520508, 0.3889160156, 0.4951171875, 0.0000000000, 0.1340332031, 0.2956542969, 0.0000000000, 0.3393554688, -0.2431640625, -0.0000000000, -0.0000000000, -0.1346435547, -0.0000000000, -0.2244873047, -0.0694580078, 0.0000000000, -0.0000000000, -0.1706542969, 0.2739257812, 0.0000000000, -0.3305664062, 0.0000000000, 0.0708618164, 0.1204223633, -0.2756347656, -0.2005615234, 0.0567016602, -0.5297851562, -0.2770996094, 0.0620422363, 0.1132812500, 0.0974121094, -0.0000000000, -0.1397705078, -0.0000000000, -0.0827636719, 0.0198669434, 0.0000000000, 0.3264160156, -0.1179199219, -0.0000000000, 0.2130126953, -0.0000000000, -0.0960083008, -0.4177246094, 0.0000000000, 0.5117187500, -0.2604980469, -0.2541503906, -0.3295898438, -0.2873535156, 0.4919433594, -0.0978393555, 0.2105712891, -0.2281494141, 0.0000000000, 0.0000000000, 0.2028808594, 0.0000000000, 0.0000000000, 0.2822265625, -0.2609863281, -0.0927734375, 0.0000000000, 0.2351074219, -0.0000000000, -0.2103271484, -0.4580078125, 0.5649414062, 0.5922851562, 0.2485351562, -0.1347656250, 0.2363281250, -0.0700073242, 0.0852661133, -0.0690917969, -0.4909667969, 0.2138671875, -0.1170043945, 0.0274810791, -0.2834472656, -0.0560302734, -0.2177734375, 0.1235351562, 0.0875854492, -0.0794677734, -0.4218750000, 0.2614746094, 0.1947021484, 0.0000000000, 0.0729980469, -0.2066650391, -0.3239746094, 0.4492187500, 0.0466308594, -0.0689086914, -0.0481872559, 0.0730590820, -0.0000000000, 0.0696411133, -0.2498779297, 0.2900390625, -0.2958984375, -0.2159423828, -0.1586914062, 0.3808593750, 0.1198120117, -0.0476074219, 0.0000000000, -0.0791015625, 0.0000000000, 0.0000000000, 0.1645507812, -0.1405029297, -0.3425292969, 0.0000000000, -0.0796508789, 0.1016235352, 0.2338867188, -0.1451416016, 0.3413085938, 0.1683349609, 0.0000000000, -0.2211914062, -0.1662597656, 0.0990600586, 0.0986328125, -0.3117675781, -0.2338867188, 0.0472412109, -0.0751342773, -0.1425781250, -0.0000000000, -0.1004638672, -0.0000000000, 0.1783447266, -0.0000000000, 0.0000000000, 0.2941894531, 0.1351318359, -0.2697753906, -0.0939331055, -0.3569335938, -0.2758789062, -0.1280517578, 0.2783203125, 0.0000000000, 0.0000000000, 0.2326660156, -0.1066894531, -0.3308105469, 0.6079101562, -0.1485595703, -0.0000000000, -0.1862792969, -0.0000000000, -0.0903320312, -0.5161132812, -0.3205566406, 0.5703125000, -0.1606445312, 0.2753906250, -0.0645751953, -0.1745605469, -0.3120117188, 0.1688232422, 0.4270019531, -0.0000000000, -0.0000000000, -0.2966308594, -0.1820068359, -0.1707763672, 0.0680541992, 0.1102905273, 0.0000000000, 0.1992187500, 0.5786132812, -0.0000000000, -0.1293945312, -0.0000000000, -0.2125244141, -0.0000000000, -0.1993408203, -0.3059082031, -0.2866210938, -0.2050781250, 0.1227416992, 0.0000000000, 0.0475158691, -0.0000000000, -0.0000000000, -0.0654296875, 0.1864013672, -0.1215209961, 0.1416015625, 0.2807617188, 0.0390319824, 0.0809326172, -0.0924072266, 0.1694335938, -0.4855957031, -0.3608398438, 0.0811157227, -0.0000000000, 0.0000000000, 0.0000000000, 0.4479980469, 0.1375732422, 0.0000000000, 0.1186523438, 0.1367187500, -0.0000000000, -0.0604553223, 0.0639648438, -0.1138305664, -0.2626953125, -0.1911621094, 0.1011962891, -0.4404296875, 0.0829467773, -0.1505126953, -0.1661376953, -0.0000000000, -0.1699218750, 0.0998535156, -0.2919921875, 0.3383789062, -0.0000000000, 0.1279296875, -0.2692871094, -0.1666259766, -0.0736083984, -0.0000000000, -0.3403320312, 0.4816894531, 0.0574951172, 0.4001464844, -0.0000000000, 0.2369384766, -0.0000000000, 0.4604492188, 0.0000000000, 0.0000000000, -0.2631835938, -0.1328125000, -0.0000000000, 0.2255859375, 0.3444824219, 0.1478271484, -0.4001464844, -0.0845947266, -0.0501403809, 0.5361328125, 0.2139892578, 0.0045738220, -0.5122070312, -0.3046875000, -0.0000000000, 0.1896972656, -0.0000000000, -0.1184082031, -0.0748901367, 0.0758666992, -0.0000000000, -0.1199340820, -0.2071533203, 0.0941162109, 0.0000000000, 0.0770874023, 0.5698242188, 0.0783081055, 0.0459289551, 0.0000000000, 0.1843261719, 0.0000000000, 0.3647460938, 0.0900268555, -0.0621032715, -0.0554504395, 0.0000000000, 0.0722656250, -0.4067382812, 0.1376953125, 0.0353088379, -0.0000000000, 0.0000000000, -0.1859130859, 0.4423828125, 0.3083496094, 0.0000000000, -0.0000000000, 0.0000000000, 0.0671386719, -0.5883789062, -0.3984375000, 0.1073608398, 0.1988525391, 0.1773681641, -0.0000000000, 0.0798950195, 0.0000000000, 0.2235107422, 0.1723632812, -0.2459716797, 0.2844238281, 0.2119140625, -0.0435485840, 0.1575927734, -0.0000000000, 0.0000000000, 0.0546264648, 0.0000000000, 0.3911132812, -0.1017456055, -0.2454833984, 0.0000000000, -0.3977050781, -0.1569824219, 0.0000000000, -0.1271972656, 0.0000000000, -0.2237548828, 0.0823364258, -0.1674804688, 0.1154174805, -0.0349426270, -0.3349609375, 0.0753173828, 0.4760742188, -0.1074829102, 0.0000000000, 0.1254882812, 0.1463623047, -0.0000000000, 0.0000000000, -0.1020507812, 0.4260253906, -0.0463867188, 0.0000000000, 0.0000000000, -0.2478027344, 0.2727050781, 0.2409667969, 0.1163940430, 0.0885009766, 0.1011962891, -0.0000000000, -0.3093261719, -0.1611328125, -0.1425781250, 0.4560546875, 0.0000000000, 0.3408203125, -0.1189575195, -0.1757812500, -0.1347656250, 0.1222534180, -0.1312255859, -0.4399414062, -0.0900268555, -0.2663574219, -0.1682128906, 0.4370117188, -0.4504394531, -0.0000000000, -0.2978515625, -0.0000000000, 0.2932128906, 0.1499023438, 0.0232238770, 0.1285400391, -0.4375000000, 0.1701660156, 0.4272460938, -0.4270019531, 0.0610046387, 0.0511169434, 0.0455322266, 0.6386718750, 0.2595214844, -0.0926513672, -0.0995483398, -0.0000000000, 0.0000000000, 0.1656494141, -0.0000000000, -0.0000000000, -0.2089843750, -0.2285156250, 0.1824951172, 0.5117187500, 0.1386718750, -0.0000000000, 0.0000000000, 0.1263427734, 0.1916503906, -0.0000000000, -0.2175292969, -0.4084472656, 0.0000000000, -0.1248168945, 0.3981933594, 0.0675048828, 0.2829589844, -0.2302246094, -0.1324462891, 0.2314453125, 0.2462158203, 0.1317138672, -0.1712646484, 0.0000000000, 0.0000000000, -0.0753173828, 0.0000000000, 0.1444091797, 0.1024169922, -0.0000000000, -0.2340087891, 0.0000000000, -0.0844116211};
+# 37 "firmware/parameters.h" 2
+# 1 "firmware/weights/z10.h" 1
+# 12 "firmware/weights/z10.h"
+zero_bias10_t z10[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+# 38 "firmware/parameters.h" 2
+# 1 "firmware/weights/b10.h" 1
+# 12 "firmware/weights/b10.h"
+model_default_t b10[64] = {0.1339111328, 0.1594238281, -0.1267089844, -0.0733642578, 0.0980224609, -0.0736083984, -0.1488037109, -0.2041015625, -0.2094726562, -0.0061187744, -0.0944213867, 0.0101013184, 0.3754882812, -0.2031250000, 0.2448730469, 0.1571044922, -0.0114135742, -0.1925048828, 0.1099853516, -0.2636718750, -0.1577148438, -0.4689941406, -0.0621337891, -0.3247070312, 0.1663818359, -0.2158203125, 0.2144775391, 0.0333862305, 0.0993041992, 0.0095138550, -0.2770996094, -0.2080078125, -0.0079956055, -0.0639038086, 0.4621582031, 0.0557250977, -0.1568603516, -0.3515625000, 0.2866210938, -0.1486816406, -0.0179901123, -0.1832275391, 0.1977539062, -0.0997924805, 0.0526428223, -0.1420898438, -0.0877075195, 0.0304870605, -0.0105743408, 0.0792846680, -0.1254882812, -0.0364990234, 0.1159667969, -0.1533203125, -0.0995483398, -0.2271728516, -0.5351562500, 0.1213378906, 0.3085937500, -0.0479736328, 0.1740722656, 0.2023925781, 0.2006835938, -0.1082153320};
+# 39 "firmware/parameters.h" 2
+# 1 "firmware/weights/w13.h" 1
+# 12 "firmware/weights/w13.h"
+model_default_t w13[2048] = {0.1401367188, 0.1232299805, -0.2242431641, -0.0868530273, 0.1430664062, -0.2609863281, 0.3168945312, 0.4965820312, 0.2440185547, -0.1122436523, -0.2104492188, -0.0563659668, -0.0000000000, -0.0204315186, 0.0924072266, -0.4814453125, -0.0880737305, -0.0194091797, -0.3894042969, 0.0709838867, -0.2114257812, 0.1118774414, 0.1015625000, 0.0000000000, 0.1474609375, 0.1795654297, -0.0000000000, 0.0000000000, -0.0900268555, 0.5717773438, -0.0000000000, 0.2739257812, 0.2827148438, 0.0702514648, 0.2126464844, 0.0000000000, 0.0285034180, 0.4067382812, 0.2915039062, 0.2481689453, 0.0000000000, -0.0000000000, -0.1678466797, 0.0000000000, -0.1904296875, 0.0922241211, -0.1159057617, -0.0333557129, 0.5761718750, 0.0000000000, -0.0000000000, 0.0190429688, -0.0000000000, -0.0714721680, -0.1189575195, 0.0285949707, -0.0679931641, -0.7016601562, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, -0.6845703125, 0.0767822266, -0.4187011719, -0.0982055664, 0.0662841797, 0.0000000000, 0.0000000000, 0.4133300781, -0.0000000000, 0.0985717773, 0.2937011719, -0.0638427734, 0.0000000000, 0.0142822266, -0.0478210449, -0.0000000000, 0.2534179688, -0.1716308594, 0.1089477539, 0.0000000000, 0.2788085938, -0.2590332031, 0.0899658203, 0.1812744141, -0.2543945312, -0.0476379395, 0.4519042969, -0.1510009766, -0.0271453857, 0.2071533203, -0.2248535156, 0.0000000000, -0.2548828125, 0.0494079590, -0.0853881836, 0.4399414062, 0.2418212891, -0.0000000000, 0.3083496094, 0.0642089844, -0.0000000000, 0.0000000000, -0.0954589844, 0.3459472656, 0.2152099609, -0.0738525391, -0.0000000000, 0.0572814941, -0.1086425781, -0.0262908936, -0.0000000000, -0.2595214844, 0.0000000000, 0.0000000000, 0.2685546875, 0.3820800781, 0.0131759644, 0.0000000000, -0.0675659180, 0.3801269531, 0.0633544922, 0.0000000000, 0.0000000000, 0.0000000000, -0.2111816406, -0.0921020508, 0.1486816406, 0.1694335938, 0.3400878906, 0.5893554688, 0.0000000000, -0.1458740234, -0.4660644531, 0.1752929688, 0.0000000000, 0.3183593750, -0.1225585938, 0.0000000000, -0.1148681641, -0.0000000000, -0.2673339844, 0.1093139648, 0.0637207031, 0.0481262207, -0.0331420898, -0.0000000000, 0.1541748047, 0.4113769531, 0.3872070312, -0.0478515625, -0.0984497070, -0.0653686523, 0.0478515625, -0.4572753906, -0.0091323853, -0.1132202148, -0.0113372803, 0.0000000000, -0.1177978516, -0.0000000000, 0.5273437500, 0.0762329102, 0.3840332031, -0.0000000000, -0.1658935547, 0.0000000000, 0.3596191406, 0.0000000000, -0.2958984375, 0.4921875000, 0.2775878906, 0.0000000000, -0.0351257324, -0.3044433594, -0.1976318359, 0.3732910156, 0.0000000000, 0.3122558594, -0.0223693848, 0.0363769531, 0.4160156250, 0.3144531250, -0.1108398438, -0.0722656250, -0.3696289062, 0.2795410156, -0.1727294922, 0.0000000000, 0.1057128906, -0.0323791504, 0.0000000000, -0.1508789062, -0.2038574219, 0.0905761719, 0.0000000000, -0.0000000000, -0.0000000000, 0.3337402344, -0.0456237793, -0.5195312500, -0.1094360352, 0.0563659668, -0.0844116211, 0.3947753906, -0.0525207520, -0.3427734375, 0.3715820312, 0.0000000000, -0.1380615234, 0.5112304688, -0.0000000000, 0.0000000000, 0.1145019531, 0.0204315186, -0.0978393555, -0.0659790039, 0.2420654297, 0.2247314453, -0.0000000000, 0.1981201172, -0.7841796875, 0.2736816406, -0.2443847656, 0.1782226562, -0.0000000000, -0.2753906250, -0.0717773438, -0.0000000000, -0.1468505859, -0.0574645996, 0.0830078125, 0.5566406250, 0.0000000000, 0.0000000000, 0.4313964844, 0.2149658203, 0.1396484375, 0.0000000000, 0.0396423340, -0.3374023438, -0.1346435547, -0.1210937500, -0.0593566895, -0.0993041992, 0.0000000000, 0.5146484375, 0.0000000000, -0.1630859375, 0.0899047852, -0.4826660156, 0.1428222656, -0.2543945312, 0.5820312500, 0.0000000000, -0.0504150391, -0.0000000000, 0.1693115234, 0.0379028320, 0.1135864258, 0.3620605469, -0.2707519531, 0.1186523438, -0.1407470703, -0.1293945312, 0.1013183594, 0.0000000000, 0.2583007812, -0.4692382812, 0.0944213867, -0.1116943359, 0.1508789062, -0.0950927734, -0.0312194824, -0.0000000000, 0.3852539062, -0.4504394531, 0.1066284180, 0.0000000000, 0.3041992188, 0.0670776367, 0.4511718750, -0.2697753906, -0.1039428711, -0.1459960938, 0.0607604980, -0.1354980469, 0.0671997070, 0.3759765625, -0.2329101562, -0.3955078125, 0.1394042969, 0.1330566406, -0.0000000000, 0.0875854492, -0.0609741211, 0.0595397949, 0.0000000000, 0.0633544922, -0.4392089844, -0.4736328125, -0.2027587891, -0.0000000000, 0.0371704102, -0.1395263672, 0.0407409668, -0.2155761719, -0.4838867188, -0.3708496094, 0.0000000000, -0.5473632812, 0.1566162109, -0.0000000000, -0.0000000000, 0.0000000000, -0.2109375000, -0.0000000000, -0.0000000000, 0.0731811523, 0.1166992188, 0.1896972656, 0.0906372070, 0.0653686523, 0.3417968750, -0.2476806641, -0.0000000000, 0.0000000000, -0.2966308594, 0.0000000000, -0.2502441406, 0.3342285156, 0.0842285156, -0.0691528320, 0.4995117188, 0.3479003906, 0.2841796875, -0.0717163086, -0.0000000000, -0.4824218750, 0.0648803711, 0.0000000000, 0.0662231445, 0.2526855469, 0.0000000000, -0.1222534180, -0.5366210938, -0.0958862305, 0.3374023438, -0.0434265137, -0.1315917969, 0.0000000000, -0.1392822266, 0.0571594238, -0.1678466797, -0.0000000000, -0.7846679688, -0.0000000000, -0.0000000000, 0.0000000000, -0.4484863281, 0.2498779297, 0.0000000000, 0.0000000000, -0.0772705078, -0.0000000000, 0.0824584961, -0.4443359375, -0.1138305664, 0.0701904297, 0.1850585938, -0.1647949219, 0.3107910156, 0.0204010010, -0.6103515625, 0.1608886719, 0.0000000000, -0.0426940918, -0.0924682617, -0.1007690430, -0.0137557983, 0.0000000000, -0.0367126465, -0.1676025391, 0.0489807129, 0.3483886719, 0.2543945312, 0.0928344727, -0.0579833984, -0.1697998047, -0.2868652344, -0.1120605469, -0.0000000000, 0.0000000000, 0.0000000000, 0.0743408203, -0.0000000000, 0.0348815918, 0.3195800781, -0.0000000000, 0.0000000000, 0.0000000000, -0.2247314453, -0.5410156250, 0.0243682861, 0.0000000000, 0.5429687500, -0.1066284180, 0.0000000000, 0.6440429688, 0.0645141602, -0.0745239258, 0.2675781250, 0.0000000000, -0.0000000000, -0.0402526855, -0.1007690430, 0.1019287109, 0.3798828125, -0.1761474609, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.4335937500, -0.2958984375, -0.1048583984, -0.0397033691, 0.4169921875, -0.0000000000, -0.0000000000, 0.0861816406, -0.0415344238, 0.0000000000, 0.6230468750, 0.0000000000, 0.0295715332, 0.0966186523, -0.0000000000, 0.2626953125, 0.2142333984, 0.0430297852, 0.0000000000, 0.0000000000, 0.2480468750, -0.3483886719, -0.0000000000, -0.1673583984, 0.0805664062, -0.0000000000, 0.1795654297, 0.2181396484, -0.3796386719, 0.1282958984, -0.0000000000, -0.2724609375, -0.1981201172, 0.0258941650, -0.3913574219, -0.4323730469, -0.0000000000, 0.4133300781, -0.0000000000, -0.1076660156, -0.3286132812, 0.0922241211, -0.0910644531, 0.0000000000, 0.4360351562, 0.3676757812, 0.0000000000, 0.1118774414, -0.0400085449, -0.0039100647, 0.0953369141, 0.0499572754, 0.0567932129, 0.0000000000, -0.0000000000, 0.0000000000, -0.0503540039, 0.1944580078, -0.0000000000, 0.0761108398, 0.0698242188, -0.0569763184, 0.0000000000, 0.3049316406, 0.4548339844, -0.0000000000, 0.0714721680, 0.2329101562, -0.0711059570, -0.2250976562, 0.4228515625, 0.1169433594, 0.3964843750, 0.3398437500, 0.0447387695, 0.0401000977, -0.0822753906, 0.3752441406, -0.0000000000, 0.0576171875, -0.0495910645, -0.0000000000, -0.0000000000, -0.0242614746, 0.3615722656, 0.0000000000, -0.0000000000, 0.3281250000, -0.1925048828, -0.0000000000, -0.0000000000, 0.0521240234, 0.0784301758, 0.0646362305, -0.0000000000, 0.2127685547, 0.2271728516, -0.1678466797, 0.0000000000, -0.0496215820, 0.0922851562, 0.0000000000, 0.1198730469, -0.2016601562, 0.3291015625, 0.1289062500, -0.5488281250, -0.1032104492, -0.4077148438, 0.0758666992, 0.0000000000, 0.1361083984, -0.0000000000, 0.2700195312, 0.5307617188, 0.1798095703, -0.1165771484, 0.1599121094, -0.5351562500, -0.0405273438, -0.1723632812, 0.5195312500, -0.3085937500, 0.1324462891, -0.0563049316, 0.3229980469, 0.0737304688, 0.4538574219, 0.0000000000, -0.0000000000, -0.0450439453, -0.1207885742, 0.3747558594, 0.1757812500, -0.3781738281, -0.0667114258, -0.2391357422, 0.0000000000, 0.0426330566, -0.1801757812, 0.0000000000, 0.0000000000, -0.3261718750, -0.0000000000, 0.0000000000, -0.0000000000, 0.4279785156, -0.3635253906, 0.0272064209, -0.1198120117, 0.3024902344, -0.1309814453, 0.0000000000, -0.0434265137, 0.0351867676, -0.3872070312, -0.2834472656, -0.0000000000, -0.1215820312, 0.0620422363, 0.0000000000, -0.0337829590, -0.5107421875, -0.3498535156, -0.0000000000, -0.0000000000, -0.0582885742, -0.2294921875, -0.2446289062, -0.0561218262, -0.0000000000, 0.2624511719, 0.2233886719, -0.2839355469, 0.2239990234, -0.1711425781, 0.0445861816, 0.2761230469, 0.1287841797, 0.4711914062, -0.1169433594, 0.3115234375, 0.5810546875, 0.0947265625, -0.0760498047, 0.5708007812, -0.4462890625, 0.0000000000, -0.0401000977, 0.1734619141, 0.1435546875, 0.1486816406, 0.3498535156, -0.1669921875, 0.3225097656, 0.3940429688, -0.3093261719, 0.1457519531, -0.0000000000, -0.1657714844, 0.1516113281, 0.1329345703, -0.1557617188, -0.0000000000, -0.3476562500, 0.0853881836, 0.0000000000, 0.0000000000, -0.0000000000, -0.2883300781, -0.0892333984, -0.0000000000, 0.5219726562, 0.0242767334, -0.3398437500, 0.2822265625, -0.1512451172, 0.3063964844, -0.0248107910, 0.0000000000, 0.1436767578, 0.3481445312, 0.5239257812, 0.1091918945, 0.0000000000, 0.1379394531, -0.3598632812, 0.5161132812, 0.0561218262, -0.1252441406, 0.0692138672, -0.0000000000, -0.0000000000, -0.0000000000, 0.2346191406, 0.4672851562, -0.2023925781, 0.1365966797, -0.6347656250, -0.0000000000, 0.0000000000, 0.0000000000, -0.0000000000, -0.0339050293, 0.1335449219, 0.0000000000, 0.3554687500, 0.0000000000, 0.3273925781, -0.0000000000, -0.2232666016, 0.1481933594, -0.3498535156, -0.1754150391, 0.0848999023, -0.0794067383, -0.2077636719, 0.2985839844, 0.0584716797, -0.3786621094, -0.0000000000, 0.2587890625, 0.2824707031, -0.1368408203, -0.1817626953, 0.0717163086, -0.3178710938, 0.2893066406, -0.0000000000, 0.3833007812, -0.0447998047, -0.2919921875, -0.1464843750, -0.2052001953, -0.0000000000, 0.0765380859, 0.0877075195, 0.2934570312, -0.2186279297, 0.1834716797, -0.1002807617, 0.0335693359, 0.3654785156, -0.0375061035, -0.1900634766, 0.1209716797, -0.0000000000, -0.3918457031, -0.5317382812, 0.2880859375, -0.1060791016, -0.0000000000, 0.0650634766, 0.4912109375, -0.0000000000, -0.1243286133, 0.1809082031, -0.0000000000, 0.0537109375, -0.0761718750, -0.0951538086, 0.5058593750, -0.0664672852, -0.1291503906, -0.2719726562, -0.0000000000, -0.0000000000, -0.0942993164, 0.0000000000, -0.1815185547, -0.0000000000, 0.0000000000, 0.0451660156, 0.0609436035, -0.4121093750, -0.1093750000, 0.1285400391, -0.0782470703, 0.2531738281, -0.1784667969, 0.3217773438, -0.0932617188, 0.2086181641, 0.1286621094, -0.0718994141, -0.0000000000, -0.1287841797, 0.5263671875, 0.0236206055, 0.0819091797, 0.0834960938, 0.0000000000, -0.0000000000, 0.0564270020, 0.1177978516, 0.0000000000, 0.1816406250, -0.0000000000, -0.3718261719, 0.0000000000, 0.0722045898, 0.1820068359, -0.1971435547, 0.3208007812, 0.5273437500, -0.1066284180, -0.4626464844, 0.0000000000, 0.2054443359, 0.0621337891, -0.0885620117, -0.6728515625, 0.0462036133, 0.2766113281, 0.2536621094, -0.4226074219, -0.4162597656, 0.1514892578, 0.1302490234, -0.0455932617, 0.0000000000, 0.0179138184, 0.0000000000, -0.0000000000, -0.0000000000, 0.0000000000, -0.0674438477, -0.0903320312, -0.0773925781, 0.1602783203, 0.1782226562, 0.2624511719, 0.2856445312, 0.0788574219, 0.1514892578, 0.1516113281, 0.1485595703, -0.0000000000, -0.1235351562, 0.1662597656, -0.1838378906, 0.1623535156, -0.0568542480, 0.0000000000, -0.1453857422, -0.0000000000, -0.1363525391, 0.0000000000, -0.0776977539, -0.0000000000, -0.0777587891, -0.0000000000, 0.5834960938, -0.2340087891, -0.1885986328, 0.4833984375, -0.0267791748, 0.0678710938, -0.4201660156, 0.1716308594, -0.1347656250, -0.6875000000, 0.1519775391, -0.0559692383, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, -0.2751464844, -0.0657348633, 0.0739135742, 0.0425109863, -0.1591796875, 0.0619201660, -0.1433105469, -0.2489013672, -0.3676757812, -0.0681152344, -0.3576660156, 0.1296386719, 0.3198242188, -0.0511779785, -0.0000000000, -0.1669921875, 0.0750122070, -0.0689086914, 0.2832031250, -0.2766113281, -0.0969848633, -0.2442626953, 0.0611267090, -0.0222930908, 0.0000000000, 0.1466064453, 0.6616210938, -0.0562438965, -0.0453186035, 0.0000000000, 0.3378906250, -0.4992675781, 0.5126953125, 0.2333984375, -0.0000000000, -0.2573242188, -0.1918945312, 0.4321289062, 0.0321044922, 0.0577697754, -0.0000000000, 0.3146972656, -0.5063476562, 0.1436767578, 0.2302246094, -0.0000000000, -0.0000000000, -0.0000000000, 0.0458374023, -0.4677734375, -0.0000000000, -0.0530090332, -0.0000000000, 0.1262207031, -0.4382324219, 0.3383789062, -0.0000000000, -0.1249389648, -0.0000000000, -0.1910400391, -0.0286712646, 0.0000000000, -0.0660400391, -0.2993164062, -0.3156738281, -0.2119140625, 0.0432128906, 0.3095703125, 0.5253906250, 0.4377441406, 0.1411132812, 0.2763671875, 0.1740722656, 0.0000000000, 0.0640869141, 0.1181030273, 0.2357177734, -0.0000000000, 0.0251464844, 0.0000000000, -0.0928344727, -0.0309753418, 0.0696411133, 0.1171875000, -0.1468505859, 0.3679199219, -0.0000000000, -0.0000000000, 0.3757324219, -0.0000000000, -0.0000000000, 0.4147949219, 0.0000000000, 0.0000000000, -0.0000000000, -0.0163879395, 0.0412597656, -0.0000000000, -0.3957519531, 0.0689086914, -0.0424804688, -0.0000000000, -0.0857543945, 0.0000000000, 0.1949462891, 0.1114501953, -0.1708984375, 0.0950927734, 0.0875244141, 0.0740356445, 0.4187011719, 0.1204833984, 0.5668945312, 0.0684204102, -0.3041992188, -0.1826171875, 0.2156982422, -0.1920166016, 0.0000000000, -0.0646972656, 0.5522460938, -0.2062988281, 0.1221313477, 0.0000000000, -0.0372009277, -0.0773925781, -0.0000000000, -0.0510559082, 0.0676879883, -0.0878295898, 0.0000000000, -0.0000000000, -0.1350097656, -0.5073242188, -0.2034912109, 0.1486816406, -0.1072998047, 0.1979980469, -0.2985839844, -0.0000000000, -0.0000000000, -0.0346069336, 0.4370117188, 0.1473388672, -0.0000000000, 0.4865722656, -0.0562133789, 0.1643066406, 0.0883178711, -0.3679199219, 0.0203399658, 0.0402526855, 0.0000000000, -0.0499572754, 0.1030273438, 0.2032470703, 0.3620605469, 0.3586425781, -0.0872192383, 0.0000000000, 0.0000000000, 0.0456542969, -0.0941772461, 0.0886230469, -0.2338867188, -0.0000000000, -0.1960449219, -0.0656127930, 0.1722412109, -0.3369140625, 0.2763671875, -0.0858154297, 0.2993164062, 0.1276855469, -0.0000000000, 0.0000000000, 0.3776855469, -0.3356933594, -0.0000000000, -0.5913085938, -0.0000000000, 0.0000000000, -0.4104003906, -0.0949707031, 0.0718383789, -0.1267089844, -0.1015014648, 0.0000000000, -0.4704589844, 0.0000000000, 0.4135742188, -0.1632080078, 0.0000000000, 0.2038574219, -0.0000000000, -0.1933593750, -0.3098144531, 0.0489501953, 0.3261718750, -0.0950927734, -0.3034667969, 0.4184570312, 0.0000000000, -0.2440185547, 0.4079589844, -0.0000000000, 0.3291015625, 0.0487365723, -0.3188476562, 0.0000000000, 0.2423095703, 0.3134765625, 0.0397949219, -0.0561828613, -0.2968750000, -0.0000000000, 0.0000000000, 0.5209960938, -0.0695800781, 0.2199707031, 0.3215332031, 0.0331115723, 0.2153320312, 0.0000000000, -0.1971435547, -0.3842773438, -0.1231689453, 0.1138305664, 0.0738525391, -0.1037597656, -0.2164306641, -0.1546630859, -0.1108398438, -0.2421875000, -0.4919433594, -0.0309753418, -0.3608398438, -0.2619628906, 0.1141357422, -0.4477539062, -0.0856933594, 0.0000000000, -0.0392761230, -0.1757812500, 0.0409240723, 0.0000000000, 0.4155273438, -0.0000000000, 0.0404357910, 0.0980834961, 0.3303222656, 0.0751342773, -0.0314636230, 0.1665039062, 0.0611267090, -0.3127441406, -0.0000000000, 0.1573486328, 0.1386718750, 0.0000000000, -0.2406005859, 0.0828247070, 0.0196685791, 0.0539245605, 0.0000000000, -0.1485595703, -0.3012695312, 0.0000000000, 0.0617980957, 0.2425537109, 0.4597167969, -0.0000000000, 0.0813598633, 0.4421386719, 0.0000000000, 0.0658569336, 0.3691406250, -0.0579223633, -0.3955078125, 0.1876220703, -0.0000000000, 0.0000000000, -0.0665893555, -0.0675659180, 0.0000000000, 0.0000000000, -0.0000000000, -0.0434570312, 0.0000000000, 0.4140625000, -0.1411132812, 0.0000000000, -0.2170410156, 0.1711425781, 0.3547363281, -0.3901367188, 0.0000000000, -0.0213317871, 0.1329345703, 0.1690673828, -0.0000000000, 0.0154037476, 0.1231689453, 0.1811523438, 0.1809082031, -0.3408203125, 0.0000000000, -0.0000000000, 0.2052001953, 0.0000000000, -0.5527343750, -0.0000000000, 0.3972167969, -0.0000000000, 0.1072387695, 0.0000000000, 0.1061401367, 0.0714111328, -0.1702880859, -0.0047721863, 0.7153320312, -0.0000000000, -0.1187133789, 0.0000000000, 0.3679199219, -0.0268402100, -0.0000000000, -0.8100585938, -0.1860351562, 0.0581054688, -0.6455078125, 0.3723144531, 0.1992187500, 0.2509765625, -0.2861328125, 0.0000000000, 0.0000000000, 0.0809326172, 0.1143798828, 0.3339843750, 0.0339965820, -0.0000000000, 0.0638427734, 0.1008911133, 0.2810058594, -0.0000000000, -0.0893554688, -0.3808593750, 0.1619873047, 0.3789062500, 0.0000000000, -0.1239624023, -1.0009765625, 0.3850097656, -0.4133300781, -0.0460815430, 0.1243286133, 0.0000000000, 0.1140747070, -0.3171386719, 0.0911254883, -0.0657958984, 0.0000000000, -0.1033935547, 0.0409240723, 0.0444335938, -0.0000000000, 0.3522949219, -0.1560058594, -0.5590820312, 0.1365966797, 0.0000000000, 0.0000000000, -0.3254394531, -0.0253753662, -0.2580566406, 0.1925048828, -0.0619812012, -0.0398559570, 0.4758300781, -0.2585449219, 0.0368347168, -0.0744018555, 0.5805664062, -0.1855468750, -0.3320312500, -0.0948486328, 0.3151855469, -0.2883300781, 0.5595703125, 0.0624084473, 0.0000000000, 0.2575683594, -0.0000000000, -0.0449523926, 0.0000000000, -0.0718994141, -0.0000000000, 0.0000000000, -0.0338134766, 0.3649902344, 0.4404296875, -0.2629394531, -0.0000000000, 0.0000000000, 0.0000000000, 0.3342285156, 0.6284179688, 0.0000000000, 0.1111450195, 0.0843505859, 0.4299316406, -0.0000000000, 0.0690917969, -0.0456237793, 0.0000000000, 0.0000000000, -0.1904296875, -0.1956787109, -0.1497802734, 0.4914550781, 0.1297607422, -0.0000000000, 0.3413085938, 0.2893066406, -0.0411071777, 0.2276611328, 0.2263183594, -0.4401855469, 0.2854003906, 0.0000000000, -0.6215820312, 0.2626953125, -0.0981445312, 0.0397338867, 0.1645507812, -0.3317871094, -0.1750488281, 0.0000000000, -0.3090820312, 0.0811157227, -0.1812744141, 0.4863281250, 0.5844726562, 0.3405761719, 0.0228576660, -0.0596923828, 0.0880126953, 0.0000000000, -0.3374023438, -0.3762207031, -0.0644531250, 0.0537414551, -0.0000000000, 0.0756225586, 0.1123657227, -0.4538574219, 0.2634277344, -0.0814208984, -0.1056518555, -0.0000000000, -0.0767211914, 0.0256958008, 0.0998535156, -0.0000000000, 0.1643066406, 0.2807617188, -0.2741699219, 0.4685058594, -0.1276855469, -0.1022338867, -0.0000000000, 0.0000000000, 0.0294342041, 0.2004394531, 0.1846923828, -0.0000000000, -0.0711059570, 0.3549804688, 0.0622863770, -0.0534667969, -0.0000000000, -0.0000000000, 0.0950317383, 0.0260620117, -0.2164306641, 0.3544921875, -0.1358642578, 0.0000000000, 0.0584716797, -0.0501098633, 0.1030273438, -0.0000000000, -0.0612182617, -0.0326232910, 0.0000000000, -0.2225341797, 0.4255371094, -0.0000000000, 0.0000000000, 0.4799804688, 0.4694824219, 0.0000000000, -0.0773315430, 0.0517272949, 0.0160675049, -0.4914550781, 0.0000000000, 0.0000000000, 0.0000000000, -0.1405029297, 0.0753784180, 0.2347412109, 0.2321777344, 0.0737915039, 0.0584716797, 0.1179199219, -0.0000000000, 0.0676879883, -0.0653686523, 0.1781005859, -0.0000000000, 0.5283203125, 0.0400695801, -0.0000000000, -0.1370849609, 0.0875244141, 0.0000000000, 0.0500793457, -0.0781250000, 0.2517089844, -0.5844726562, 0.0925903320, -0.3686523438, -0.4008789062, 0.0000000000, 0.0419311523, -0.0000000000, -0.3481445312, 0.0000000000, 0.2467041016, 0.0000000000, 0.4201660156, 0.4836425781, 0.1927490234, -0.4616699219, -0.0000000000, -0.0482482910, -0.0403747559, 0.0950317383, -0.2631835938, 0.0000000000, 0.0000000000, -0.0408630371, -0.5356445312, 0.0752563477, -0.6718750000, -0.0000000000, -0.0765380859, -0.1854248047, 0.0616455078, -0.0487976074, -0.4543457031, 0.0000000000, 0.0594482422, -0.0330810547, 0.2622070312, 0.0581054688, 0.2746582031, 0.0000000000, 0.0000000000, 0.3559570312, -0.1894531250, 0.1936035156, -0.2109375000, 0.0000000000, 0.0000000000, 0.2590332031, 0.0786132812, 0.0285186768, 0.2727050781, -0.0918579102, 0.1519775391, -0.1171875000, -0.1346435547, -0.5454101562, 0.2172851562, 0.1434326172, 0.0248718262, -0.0000000000, -0.4299316406, 0.0000000000, -0.2390136719, -0.0272369385, 0.4785156250, 0.1674804688, -0.0000000000, 0.0000000000, 0.1826171875, 0.2327880859, -0.1846923828, -0.0563964844, 0.0960693359, 0.0000000000, -0.0992431641, 0.1956787109, -0.0674438477, 0.0000000000, 0.0980224609, -0.0000000000, 0.6020507812, 0.0715332031, 0.0000000000, 0.0940551758, -0.0507202148, -0.3747558594, 0.6083984375, -0.0000000000, 0.3298339844, 0.3061523438, -0.0690307617, 0.0311431885, 0.0000000000, 0.2802734375, 0.0679321289, -0.1341552734, 0.2080078125, -0.2122802734, 0.5166015625, 0.4680175781, 0.1553955078, -0.0944824219, 0.4846191406, -0.0000000000, -0.0000000000, 0.0642700195, -0.3369140625, -0.0990600586, -0.1976318359, 0.1918945312, -0.1956787109, 0.1791992188, -0.0684814453, 0.0000000000, 0.0523681641, -0.0000000000, 0.3413085938, 0.0565490723, 0.0624389648, 0.2413330078, 0.0168457031, 0.4809570312, -0.0000000000, 0.3791503906, 0.1666259766, 0.2622070312, 0.4753417969, 0.0546875000, 0.0386962891, -0.0000000000, -0.3439941406, -0.0000000000, -0.0462036133, 0.2666015625, 0.3627929688, -0.3981933594, 0.2114257812, 0.0530090332, -0.0000000000, 0.1531982422, -0.0265045166, 0.0460815430, 0.0954589844, -0.0000000000, -0.0000000000, 0.5405273438, 0.1838378906, -0.1178588867, -0.0000000000, 0.1216430664, -0.4670410156, 0.2895507812, -0.0624389648, 0.0000000000, 0.0730590820, -0.0000000000, 0.0000000000, 0.1177368164, -0.0910034180, -0.0414733887, 0.0000000000, 0.0000000000, -0.0000000000, 0.0000000000, 0.0865478516, -0.0503845215, 0.2336425781, -0.0000000000, 0.1713867188, -0.3327636719, 0.0000000000, 0.3303222656, 0.1385498047, 0.2888183594, 0.0748291016, -0.0000000000, -0.4731445312, 0.0640258789, 0.0000000000, -0.1273193359, -0.0266876221, 0.0858764648, 0.0799560547, 0.0701293945, -0.2230224609, -0.3464355469, -0.0000000000, -0.2675781250, -0.0685424805, 0.1289062500, -0.1568603516, 0.3447265625, -0.0676879883, -0.0067024231, -0.0475769043, 0.1708984375, 0.1842041016, 0.3073730469, 0.2200927734, -0.0762939453, -0.0000000000, 0.0641479492, 0.4045410156, 0.5610351562, -0.0397033691, 0.1892089844, 0.4125976562, -0.0000000000, 0.2340087891, 0.1126708984, 0.0000000000, -0.0572204590, 0.5629882812, 0.0000000000, -0.0952148438, -0.4445800781, 0.1194458008, 0.3647460938, -0.0188446045, 0.0380249023, 0.0000000000, 0.1671142578, 0.1111450195, 0.3156738281, 0.1397705078, 0.0000000000, -0.0000000000, 0.0916137695, 0.0000000000, 0.0000000000, -0.0347290039, -0.3110351562, -0.2364501953, 0.2668457031, 0.0000000000, 0.0264434814, -0.1823730469, -0.0296173096, -0.1177368164, 0.5488281250, -0.0564880371, -0.2014160156, 0.3483886719, 0.3203125000, 0.0843505859, -0.2189941406, 0.1605224609, -0.0318908691, -0.3317871094, -0.0000000000, -0.0592346191, -0.0812988281, -0.1328125000, -0.0957641602, -0.2365722656, -0.3212890625, 0.3046875000, 0.2286376953, 0.0000000000, -0.1188354492, 0.0000000000, 0.2824707031, -0.0678710938, 0.1989746094, -0.1354980469, 0.0000000000, -0.0000000000, 0.0000000000, 0.3562011719, -0.3327636719, 0.0000000000, -0.0786132812, 0.1112060547, 0.0450439453, -0.1398925781, -0.0000000000, -0.0902709961, 0.0000000000, -0.1929931641, -0.0000000000, -0.1230468750, 0.0000000000, 0.0204467773, 0.2310791016, 0.0000000000, 0.4406738281, 0.1552734375, -0.0487670898, -0.1041259766, 0.3725585938, -0.0000000000, -0.0000000000, 0.1057739258, 0.3588867188, 0.0000000000, 0.1700439453, 0.0746459961, -0.0957031250, -0.7231445312, 0.1494140625, -0.1577148438, 0.0000000000, 0.0240325928, -0.4174804688, 0.4191894531, 0.0436401367, -0.1910400391, 0.0333557129, -0.4248046875, 0.0722656250, -0.3146972656, -0.0686645508, 0.1713867188, 0.1114501953, 0.1625976562, -0.0605163574, -0.0309753418, -0.0000000000, 0.4357910156, 0.0501708984, -0.2207031250, 0.0000000000, 0.4499511719, 0.0955200195, 0.0000000000, 0.0587463379, 0.4929199219, 0.0697021484, 0.1484375000, 0.0000000000, -0.2500000000, -0.0307464600, -0.3823242188, 0.4477539062, 0.0000000000, 0.0796508789, 0.2844238281, -0.7153320312, -0.0837402344, -0.0000000000, 0.1574707031, -0.0548400879, 0.2863769531, -0.0000000000, -0.1051635742, -0.0000000000, -0.0000000000, -0.0904541016, 0.1208496094, -0.0546264648, -0.4006347656, 0.0000000000, 0.1479492188, -0.1719970703, 0.0312042236, 0.1702880859, 0.0000000000, -0.0410461426, 0.0000000000, 0.2656250000, -0.1462402344, 0.1101074219, 0.0834350586, 0.4606933594, -0.1545410156, 0.5131835938, -0.0000000000, -0.3181152344, 0.2006835938, 0.5263671875, 0.1806640625, -0.0000000000, -0.0000000000, 0.4411621094, 0.1278076172, -0.0000000000, 0.1707763672, 0.0000000000, 0.2075195312, 0.3708496094, 0.0000000000, 0.0562438965, 0.0503540039, -0.3625488281, -0.1386718750, 0.1141357422, -0.0000000000, 0.0000000000, 0.3405761719, -0.0921020508, 0.1727294922, 0.0000000000, 0.3618164062, 0.0000000000, -0.3708496094, 0.0000000000, -0.0968017578, 0.0000000000, 0.0000000000, 0.1060180664, -0.0000000000, -0.3920898438, 0.5947265625, 0.0222167969, -0.0000000000, -0.4645996094, 0.0962524414, 0.2568359375, 0.0000000000, 0.0649414062, 0.0424804688, -0.0347290039, -0.1329345703, 0.0679931641, -0.3486328125, 0.0000000000, 0.0000000000, -0.0000000000, -0.1251220703, 0.3942871094, 0.0785522461, 0.0000000000, 0.3713378906, 0.1516113281, -0.0000000000, 0.0000000000, -0.1341552734, 0.6352539062, -0.0951538086, 0.2612304688, 0.0000000000, 0.3813476562, 0.1494140625, 0.0659179688, 0.0000000000, 0.0954589844, -0.2229003906, 0.1876220703, 0.1533203125, -0.0693969727, -0.1124267578, 0.4284667969, -0.0661010742, -0.1334228516, -0.3059082031, 0.0000000000, 0.5498046875, 0.3933105469, 0.1634521484, 0.2543945312, 0.0000000000, -0.0000000000, -0.1914062500, -0.0000000000, 0.0280151367, -0.0573425293, -0.0559997559, -0.0000000000, 0.2539062500, -0.0000000000, -0.2785644531, -0.3828125000, -0.0557861328, 0.0428771973, 0.2749023438, 0.0212402344, 0.1716308594, -0.0000000000, -0.0000000000, 0.3906250000, 0.0785522461, -0.2131347656, 0.0000000000, 0.4372558594, -0.0000000000, 0.6054687500, 0.1779785156, -0.0329895020, -0.0000000000, 0.2247314453, 0.1756591797, -0.1201171875, -0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, -0.0000000000, -0.1640625000, -0.1106567383, 0.0000000000, 0.0646362305, 0.0000000000, -0.0596008301, -0.0547485352, -0.3049316406, 0.0232238770, -0.0000000000, 0.0000000000, -0.1280517578, 0.0701293945, 0.0305023193, 0.0000000000, -0.3234863281, 0.4208984375, 0.0000000000, 0.0000000000, -0.0000000000, 0.3696289062, 0.3701171875, 0.3408203125, 0.2176513672, 0.3688964844, 0.1380615234, -0.3632812500, -0.0000000000, 0.0000000000, -0.0456237793, 0.1472167969, -0.2773437500, -0.1833496094, -0.0000000000, -0.2531738281, 0.0000000000, 0.0000000000, 0.0300140381, -0.3583984375, -0.3847656250, -0.0000000000, 0.0000000000, 0.0000000000, 0.0000000000, 0.4514160156, 0.0661621094, -0.1715087891, 0.2164306641, -0.1816406250, 0.1770019531, 0.4475097656, -0.0000000000, 0.1649169922, -0.2722167969, 0.0000000000, -0.0641479492, -0.1328125000, 0.1580810547, 0.3151855469, -0.0000000000, 0.0876464844, -0.2619628906, -0.0505981445, -0.0910034180, -0.1663818359, 0.1965332031, 0.0000000000, 0.0218048096, 0.0000000000, -0.0889282227, -0.1865234375, 0.0691528320, -0.0812377930, 0.0914916992, 0.0000000000, 0.3471679688, -0.0000000000, 0.0000000000, -0.3073730469, 0.0000000000, -0.0000000000, 0.0000000000, -0.0645141602, -0.1638183594, -0.5185546875, -0.0000000000, 0.6000976562, -0.3342285156, 0.1238403320, 0.0554199219, -0.1139526367, 0.0349426270, -0.1201782227, -0.0722045898, 0.5620117188, 0.0595703125, 0.0423278809, 0.0000000000, 0.1025390625, 0.0000000000, 0.3430175781, -0.2492675781, 0.0000000000, 0.0260162354, 0.0508422852, 0.2556152344, 0.0000000000, -0.0596923828, 0.1604003906, -0.5229492188, -0.6445312500, 0.0000000000, 0.2946777344, 0.0000000000, -0.0484924316, 0.2231445312, -0.0000000000, -0.2651367188, 0.0861206055, -0.4318847656, 0.2425537109, 0.4870605469, 0.3378906250, -0.0000000000, -0.0932617188, -0.0602111816, 0.0391235352, -0.1381835938, 0.2447509766, -0.0176239014, 0.0000000000, 0.0000000000, 0.0642700195, -0.0000000000, -0.2136230469, 0.1022338867, 0.0305480957, 0.2004394531, -0.3417968750, -0.0972290039, 0.3447265625, -0.1738281250, -0.0936279297, -0.4848632812, 0.0854492188, -0.2186279297, -0.0618286133, -0.4057617188, 0.0440673828, 0.0000000000, 0.1982421875, 0.0000000000, 0.0000000000, -0.3605957031, -0.1892089844, 0.3896484375, 0.0748291016, 0.2246093750, -0.1348876953, 0.4311523438, 0.2325439453, 0.1715087891, 0.0000000000, 0.3386230469, -0.0000000000, -0.2653808594, 0.0000000000, 0.0000000000, 0.4311523438, 0.0000000000, 0.0000000000, -0.0350952148, -0.1529541016, 0.2624511719, 0.0000000000, 0.0483093262, -0.4819335938, -0.0690307617, 0.0988769531, 0.1245117188, 0.0692138672, 0.2115478516, -0.4040527344, -0.0000000000, 0.2447509766, 0.3315429688, 0.0000000000, -0.0513000488, -0.3942871094, 0.0369262695, -0.0000000000, -0.4082031250, 0.0479736328, -0.0000000000, 0.1278076172, 0.0000000000, 0.1107788086, -0.5249023438, 0.3942871094};
+# 40 "firmware/parameters.h" 2
+# 1 "firmware/weights/b13.h" 1
+# 12 "firmware/weights/b13.h"
+model_default_t b13[32] = {-0.1452636719, 0.0081176758, 0.2462158203, 0.1582031250, -0.0850830078, 0.1719970703, -0.0067787170, 0.0377807617, -0.0185394287, 0.0943603516, 0.1304931641, 0.1064453125, -0.0302734375, 0.2363281250, 0.3039550781, -0.0136795044, 0.2222900391, 0.2304687500, 0.0580139160, 0.0531921387, 0.1235351562, 0.1180419922, 0.1658935547, 0.1105346680, 0.0837402344, 0.1079711914, 0.0434265137, 0.0266723633, -0.0867919922, -0.0129241943, -0.0267486572, -0.0665893555};
+# 41 "firmware/parameters.h" 2
+# 1 "firmware/weights/w15.h" 1
+# 12 "firmware/weights/w15.h"
+model_default_t w15[320] = {0.5214843750, 0.3981933594, -0.6679687500, 0.0000000000, -0.1225585938, 0.0570373535, -0.1606445312, -0.0307159424, -0.0000000000, 0.1279296875, 0.2668457031, -0.4182128906, 0.0577697754, -0.5097656250, -0.0000000000, -0.5498046875, -0.1273193359, 0.1542968750, -0.4152832031, -0.0000000000, -0.3093261719, -0.3247070312, -0.0263061523, -0.1920166016, 0.3830566406, 0.1899414062, 0.0598449707, -0.1245117188, -0.1547851562, 0.2089843750, -0.4877929688, 0.0000000000, -0.3559570312, -0.0000000000, -0.4040527344, 0.0884399414, 0.4841308594, -0.0000000000, -0.1550292969, 0.0000000000, 0.2868652344, 0.3288574219, 0.1842041016, -0.4916992188, -0.3857421875, -0.3259277344, 0.0000000000, -0.4411621094, 0.1496582031, -0.0983276367, 0.0000000000, -0.4797363281, -0.0552368164, 0.1274414062, -0.0000000000, 0.0842285156, -0.6586914062, -0.0000000000, -0.0953979492, -0.0709838867, -0.0000000000, -0.3071289062, 0.5776367188, 0.2712402344, -0.0000000000, -0.2061767578, -0.0811157227, -0.0620727539, -0.0000000000, -0.0000000000, 0.5415039062, 0.1434326172, 0.0000000000, -0.2880859375, 0.0000000000, 0.0000000000, 0.0000000000, -0.6445312500, 0.2600097656, 0.1172485352, 0.0536193848, -0.3928222656, 0.5698242188, -0.0409545898, -0.0887451172, 0.0000000000, 0.0000000000, -0.0000000000, -0.0000000000, 0.0908203125, 0.1297607422, 0.4306640625, -0.5454101562, 0.0804443359, -0.0000000000, 0.0000000000, -0.0667724609, 0.1265869141, -0.1439208984, 0.4804687500, -0.6699218750, -0.3640136719, 0.0637817383, -0.2203369141, -0.6235351562, 0.1612548828, 0.5742187500, -0.5146484375, -0.1871337891, -0.8857421875, 0.0000000000, -0.5639648438, 0.1051025391, -0.0000000000, -0.0000000000, 0.0537719727, 0.3889160156, -0.1239013672, -0.1015625000, -0.6567382812, -0.1004028320, -0.8574218750, -0.1425781250, -0.0000000000, 0.0792236328, 0.0300445557, -0.4877929688, 0.0678710938, -0.1688232422, -0.5351562500, -0.3784179688, -0.6679687500, 0.0000000000, 0.1458740234, -0.0000000000, -0.1745605469, 0.0000000000, 0.0581665039, 0.0000000000, 0.0000000000, -0.6606445312, 0.0000000000, 0.0000000000, -0.0474548340, -0.0000000000, 0.0000000000, 0.0354614258, 0.0354309082, -0.6206054688, -0.0924682617, -0.2966308594, 0.0610961914, 0.1628417969, -0.1063232422, 0.2578125000, -0.1161499023, -0.4165039062, -0.0000000000, -0.3012695312, -0.6464843750, 0.0000000000, -0.6181640625, -0.0438842773, 0.0549011230, -0.0661010742, 0.0475463867, 0.0000000000, -0.0852050781, -0.7612304688, -0.7539062500, -0.1635742188, 0.4213867188, 0.0000000000, 0.0617980957, 0.4230957031, -0.0275115967, 0.0554199219, -0.2480468750, -0.4118652344, 0.0370483398, -0.2452392578, 0.0000000000, 0.4909667969, -0.0881958008, 0.4604492188, 0.1146240234, -0.0360412598, 0.0685424805, -0.5971679688, -0.2563476562, 0.4902343750, -0.1348876953, -0.0787353516, 0.0725708008, 0.3728027344, -0.1517333984, 0.1264648438, -0.0000000000, 0.4599609375, -0.0000000000, -0.4687500000, 0.3937988281, -0.1107788086, -0.1051635742, -0.3515625000, 0.1042480469, -0.4169921875, -0.0000000000, 0.0000000000, 0.3718261719, 0.1737060547, -0.0769042969, 0.0000000000, -0.0000000000, -0.3720703125, -0.0807495117, 0.0310058594, -0.4147949219, -0.0933837891, 0.5947265625, -0.1947021484, 0.2170410156, -0.0762939453, 0.0268859863, -0.0712890625, 0.1011962891, 0.5161132812, -0.3459472656, 0.6718750000, -0.0000000000, 0.3715820312, 0.0500793457, -0.4750976562, -0.0000000000, 0.1038208008, 0.0000000000, 0.0000000000, 0.0482788086, -0.4819335938, -0.3986816406, 0.0000000000, 0.0000000000, 0.0000000000, -0.0867309570, -0.6733398438, 0.1298828125, -0.3562011719, -0.0000000000, -0.0000000000, -0.0665283203, 0.0000000000, 0.0534362793, -0.0937500000, -0.1871337891, 0.1394042969, -0.3364257812, -0.3393554688, 0.0363464355, 0.4802246094, 0.0297698975, -0.2277832031, -0.3864746094, -0.2883300781, 0.1000366211, 0.0000000000, 0.0000000000, -0.1674804688, -0.0000000000, 0.5322265625, -0.4355468750, -0.0000000000, 0.1669921875, 0.0590209961, 0.1176147461, -0.0000000000, -0.0000000000, -0.0778198242, -0.5668945312, 0.3764648438, -0.1128540039, -0.0571289062, 0.1037597656, -0.1111450195, 0.0000000000, -0.6298828125, -0.5297851562, 0.0000000000, -0.0000000000, -0.0000000000, -0.4167480469, -0.0000000000, 0.0659790039, 0.0000000000, -0.1979980469, -0.0000000000, -0.5351562500, 0.0000000000, -0.3183593750, 0.3701171875, -0.0000000000, -0.0330810547, 0.0485534668, -0.0000000000, -0.1778564453, 0.0000000000, 0.0000000000, -0.2322998047, 0.8959960938, 0.1488037109, -0.0760498047, 0.0395202637, 0.3676757812, 0.0437927246, -0.0850219727, -0.7109375000, -0.0000000000, 0.1589355469, -0.1898193359, 0.0000000000, 0.0417785645};
+# 42 "firmware/parameters.h" 2
+# 1 "firmware/weights/b15.h" 1
+# 12 "firmware/weights/b15.h"
+model_default_t b15[10] = {-0.1839599609, -0.0519409180, -0.1088867188, 0.1074218750, 0.1069335938, 0.0813598633, -0.0397949219, 0.0676269531, -0.1035156250, 0.1303710938};
+# 43 "firmware/parameters.h" 2
 
-struct config2 : nnet::dense_config {
-    static const unsigned n_in = 4;
-    static const unsigned n_out = 128;
-    static const unsigned io_type = nnet::io_parallel;
+
+
+struct config2_depthwise_mult : nnet::dense_config {
+    static const unsigned n_in = 27;
+    static const unsigned n_out = 3;
+    static const unsigned reuse_factor = 16;
     static const unsigned strategy = nnet::latency;
-    static const unsigned reuse_factor = 1;
-    static const unsigned n_zeros = 384;
-    static const unsigned n_nonzeros = 128;
+    static const unsigned n_zeros = 0;
     static const unsigned multiplier_limit = ((n_in * n_out + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
-    static const bool store_weights_in_bram = false;
     typedef model_default_t accum_t;
     typedef model_default_t bias_t;
     typedef model_default_t weight_t;
-    typedef layer2_index index_t;
     template<class x_T, class y_T>
     using product = nnet::product::mult<x_T, y_T>;
+};
+
+struct config2_depthwise : nnet::conv2d_config {
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const unsigned in_height = 32;
+    static const unsigned in_width = 32;
+    static const unsigned n_chan = 3;
+    static const unsigned filt_height = 3;
+    static const unsigned filt_width = 3;
+    static const unsigned kernel_size = filt_height * filt_width;
+    static const unsigned n_filt = 3;
+    static const unsigned stride_height = 1;
+    static const unsigned stride_width = 1;
+    static const unsigned out_height = 30;
+    static const unsigned out_width = 30;
+    static const unsigned reuse_factor = 16;
+    static const unsigned n_zeros = 0;
+    static const unsigned multiplier_limit =
+        ((kernel_size * n_chan * n_filt + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
+    static const bool store_weights_in_bram = false;
+    static const unsigned strategy = nnet::latency;
+    static const nnet::conv_implementation implementation = nnet::conv_implementation::linebuffer;
+    static const unsigned min_height = 5;
+    static const unsigned min_width = 5;
+    static const ap_uint<filt_height * filt_width> pixels[min_height * min_width];
+    static const unsigned n_partitions = 1;
+    static const unsigned n_pixels = out_height * out_width / n_partitions;
+    template<class data_T, class CONFIG_T>
+    using fill_buffer = nnet::FillConv2DBuffer<data_T, CONFIG_T>;
+    typedef model_default_t accum_t;
+    typedef zero_bias2_t bias_t;
+    typedef model_default_t weight_t;
+    typedef config2_depthwise_mult mult_config;
+    template<unsigned K, unsigned S, unsigned W>
+    using scale_index_height = nnet::scale_index_regular<K, S, W>;
+    template<unsigned K, unsigned S, unsigned W>
+    using scale_index_width = nnet::scale_index_regular<K, S, W>;
+};
+const ap_uint<config2_depthwise::filt_height * config2_depthwise::filt_width> config2_depthwise::pixels[] = {1,3,7,6,4,9,27,63,54,36,73,219,511,438,292,72,216,504,432,288,64,192,448,384,256};
+
+struct config2_pointwise_mult : nnet::dense_config {
+    static const unsigned n_in = 3;
+    static const unsigned n_out = 32;
+    static const unsigned reuse_factor = 16;
+    static const unsigned strategy = nnet::latency;
+    static const unsigned n_zeros = 24;
+    static const unsigned multiplier_limit = ((n_in * n_out + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
+    typedef model_default_t accum_t;
+    typedef model_default_t bias_t;
+    typedef model_default_t weight_t;
+    template<class x_T, class y_T>
+    using product = nnet::product::mult<x_T, y_T>;
+};
+
+struct config2_pointwise : nnet::conv2d_config {
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const unsigned in_height = 30;
+    static const unsigned in_width = 30;
+    static const unsigned n_chan = 3;
+    static const unsigned filt_height = 1;
+    static const unsigned filt_width = 1;
+    static const unsigned kernel_size = filt_height * filt_width;
+    static const unsigned n_filt = 32;
+    static const unsigned stride_height = 1;
+    static const unsigned stride_width = 1;
+    static const unsigned out_height = 30;
+    static const unsigned out_width = 30;
+    static const unsigned reuse_factor = 16;
+    static const unsigned n_zeros = 24;
+    static const unsigned multiplier_limit =
+        ((kernel_size * n_chan * n_filt + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
+    static const bool store_weights_in_bram = false;
+    static const unsigned strategy = nnet::latency;
+    static const nnet::conv_implementation implementation = nnet::conv_implementation::linebuffer;
+    static const unsigned min_height = 30;
+    static const unsigned min_width = 30;
+    static const ap_uint<filt_height * filt_width> pixels[min_height * min_width];
+    static const unsigned n_partitions = 1;
+    static const unsigned n_pixels = out_height * out_width / n_partitions;
+    template<class data_T, class CONFIG_T>
+    using fill_buffer = nnet::FillConv2DBuffer<data_T, CONFIG_T>;
+    typedef model_default_t accum_t;
+    typedef model_default_t bias_t;
+    typedef model_default_t weight_t;
+    typedef config2_pointwise_mult mult_config;
+    template<unsigned K, unsigned S, unsigned W>
+    using scale_index_height = nnet::scale_index_regular<K, S, W>;
+    template<unsigned K, unsigned S, unsigned W>
+    using scale_index_width = nnet::scale_index_regular<K, S, W>;
+};
+const ap_uint<config2_pointwise::filt_height * config2_pointwise::filt_width> config2_pointwise::pixels[] = {0};
+
+struct config2 {
+    typedef config2_depthwise depthwise_config;
+    typedef config2_pointwise pointwise_config;
 };
 
 
 struct relu_config3 : nnet::activ_config {
-    static const unsigned n_in = 128;
+    static const unsigned n_in = 28800;
     static const unsigned table_size = 1024;
-    static const unsigned io_type = nnet::io_parallel;
-    static const unsigned reuse_factor = 1;
-    typedef dense_relu_table_t table_t;
+    static const unsigned io_type = nnet::io_stream;
+    static const unsigned reuse_factor = 16;
+    typedef separable_conv2d_relu_table_t table_t;
 };
 
 
-struct config4 : nnet::dense_config {
-    static const unsigned n_in = 128;
-    static const unsigned n_out = 3;
-    static const unsigned io_type = nnet::io_parallel;
-    static const unsigned strategy = nnet::latency;
-    static const unsigned reuse_factor = 1;
-    static const unsigned n_zeros = 288;
-    static const unsigned n_nonzeros = 96;
-    static const unsigned multiplier_limit = ((n_in * n_out + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
-    static const bool store_weights_in_bram = false;
+struct config4 : nnet::pooling2d_config {
+    static const unsigned in_height = 30;
+    static const unsigned in_width = 30;
+    static const unsigned n_filt = 32;
+    static const unsigned stride_height = 2;
+    static const unsigned stride_width = 2;
+    static const unsigned pool_height = 2;
+    static const unsigned pool_width = 2;
+
+    static const unsigned filt_height = pool_height;
+    static const unsigned filt_width = pool_width;
+    static const unsigned n_chan = n_filt;
+
+    static const unsigned out_height = 15;
+    static const unsigned out_width = 15;
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const bool count_pad = false;
+    static const nnet::Pool_Op pool_op = nnet::Max;
+    static const nnet::conv_implementation implementation = nnet::conv_implementation::linebuffer;
+    static const unsigned reuse_factor = 16;
     typedef model_default_t accum_t;
+};
+
+
+struct config5 : nnet::batchnorm_config {
+    static const unsigned n_in = 15*15*32;
+    static const unsigned n_filt = 32;
+    static const unsigned n_scale_bias = (n_filt == -1) ? n_in : n_filt;
+    static const unsigned io_type = nnet::io_stream;
+    static const unsigned reuse_factor = 16;
+    static const unsigned multiplier_limit = ((n_in + reuse_factor - 1) / reuse_factor);
+    static const bool store_weights_in_bram = false;
     typedef model_default_t bias_t;
-    typedef model_default_t weight_t;
-    typedef layer4_index index_t;
+    typedef model_default_t scale_t;
     template<class x_T, class y_T>
     using product = nnet::product::mult<x_T, y_T>;
 };
 
 
-struct softmax_config5 : nnet::activ_config {
-    static const unsigned n_in = 3;
+struct config6_depthwise_mult : nnet::dense_config {
+    static const unsigned n_in = 288;
+    static const unsigned n_out = 32;
+    static const unsigned reuse_factor = 16;
+    static const unsigned strategy = nnet::latency;
+    static const unsigned n_zeros = 0;
+    static const unsigned multiplier_limit = ((n_in * n_out + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
+    typedef model_default_t accum_t;
+    typedef model_default_t bias_t;
+    typedef model_default_t weight_t;
+    template<class x_T, class y_T>
+    using product = nnet::product::mult<x_T, y_T>;
+};
+
+struct config6_depthwise : nnet::conv2d_config {
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const unsigned in_height = 15;
+    static const unsigned in_width = 15;
+    static const unsigned n_chan = 32;
+    static const unsigned filt_height = 3;
+    static const unsigned filt_width = 3;
+    static const unsigned kernel_size = filt_height * filt_width;
+    static const unsigned n_filt = 32;
+    static const unsigned stride_height = 1;
+    static const unsigned stride_width = 1;
+    static const unsigned out_height = 13;
+    static const unsigned out_width = 13;
+    static const unsigned reuse_factor = 16;
+    static const unsigned n_zeros = 0;
+    static const unsigned multiplier_limit =
+        ((kernel_size * n_chan * n_filt + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
+    static const bool store_weights_in_bram = false;
+    static const unsigned strategy = nnet::latency;
+    static const nnet::conv_implementation implementation = nnet::conv_implementation::linebuffer;
+    static const unsigned min_height = 5;
+    static const unsigned min_width = 5;
+    static const ap_uint<filt_height * filt_width> pixels[min_height * min_width];
+    static const unsigned n_partitions = 1;
+    static const unsigned n_pixels = out_height * out_width / n_partitions;
+    template<class data_T, class CONFIG_T>
+    using fill_buffer = nnet::FillConv2DBuffer<data_T, CONFIG_T>;
+    typedef model_default_t accum_t;
+    typedef zero_bias6_t bias_t;
+    typedef model_default_t weight_t;
+    typedef config6_depthwise_mult mult_config;
+    template<unsigned K, unsigned S, unsigned W>
+    using scale_index_height = nnet::scale_index_regular<K, S, W>;
+    template<unsigned K, unsigned S, unsigned W>
+    using scale_index_width = nnet::scale_index_regular<K, S, W>;
+};
+const ap_uint<config6_depthwise::filt_height * config6_depthwise::filt_width> config6_depthwise::pixels[] = {1,3,7,6,4,9,27,63,54,36,73,219,511,438,292,72,216,504,432,288,64,192,448,384,256};
+
+struct config6_pointwise_mult : nnet::dense_config {
+    static const unsigned n_in = 32;
+    static const unsigned n_out = 64;
+    static const unsigned reuse_factor = 16;
+    static const unsigned strategy = nnet::latency;
+    static const unsigned n_zeros = 512;
+    static const unsigned multiplier_limit = ((n_in * n_out + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
+    typedef model_default_t accum_t;
+    typedef model_default_t bias_t;
+    typedef model_default_t weight_t;
+    template<class x_T, class y_T>
+    using product = nnet::product::mult<x_T, y_T>;
+};
+
+struct config6_pointwise : nnet::conv2d_config {
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const unsigned in_height = 13;
+    static const unsigned in_width = 13;
+    static const unsigned n_chan = 32;
+    static const unsigned filt_height = 1;
+    static const unsigned filt_width = 1;
+    static const unsigned kernel_size = filt_height * filt_width;
+    static const unsigned n_filt = 64;
+    static const unsigned stride_height = 1;
+    static const unsigned stride_width = 1;
+    static const unsigned out_height = 13;
+    static const unsigned out_width = 13;
+    static const unsigned reuse_factor = 16;
+    static const unsigned n_zeros = 512;
+    static const unsigned multiplier_limit =
+        ((kernel_size * n_chan * n_filt + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
+    static const bool store_weights_in_bram = false;
+    static const unsigned strategy = nnet::latency;
+    static const nnet::conv_implementation implementation = nnet::conv_implementation::linebuffer;
+    static const unsigned min_height = 13;
+    static const unsigned min_width = 13;
+    static const ap_uint<filt_height * filt_width> pixels[min_height * min_width];
+    static const unsigned n_partitions = 1;
+    static const unsigned n_pixels = out_height * out_width / n_partitions;
+    template<class data_T, class CONFIG_T>
+    using fill_buffer = nnet::FillConv2DBuffer<data_T, CONFIG_T>;
+    typedef model_default_t accum_t;
+    typedef model_default_t bias_t;
+    typedef model_default_t weight_t;
+    typedef config6_pointwise_mult mult_config;
+    template<unsigned K, unsigned S, unsigned W>
+    using scale_index_height = nnet::scale_index_regular<K, S, W>;
+    template<unsigned K, unsigned S, unsigned W>
+    using scale_index_width = nnet::scale_index_regular<K, S, W>;
+};
+const ap_uint<config6_pointwise::filt_height * config6_pointwise::filt_width> config6_pointwise::pixels[] = {0};
+
+struct config6 {
+    typedef config6_depthwise depthwise_config;
+    typedef config6_pointwise pointwise_config;
+};
+
+
+struct relu_config7 : nnet::activ_config {
+    static const unsigned n_in = 10816;
     static const unsigned table_size = 1024;
-    static const unsigned io_type = nnet::io_parallel;
-    static const unsigned reuse_factor = 1;
+    static const unsigned io_type = nnet::io_stream;
+    static const unsigned reuse_factor = 16;
+    typedef separable_conv2d_1_relu_table_t table_t;
+};
+
+
+struct config8 : nnet::pooling2d_config {
+    static const unsigned in_height = 13;
+    static const unsigned in_width = 13;
+    static const unsigned n_filt = 64;
+    static const unsigned stride_height = 4;
+    static const unsigned stride_width = 4;
+    static const unsigned pool_height = 4;
+    static const unsigned pool_width = 4;
+
+    static const unsigned filt_height = pool_height;
+    static const unsigned filt_width = pool_width;
+    static const unsigned n_chan = n_filt;
+
+    static const unsigned out_height = 3;
+    static const unsigned out_width = 3;
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const bool count_pad = false;
+    static const nnet::Pool_Op pool_op = nnet::Max;
+    static const nnet::conv_implementation implementation = nnet::conv_implementation::linebuffer;
+    static const unsigned reuse_factor = 16;
+    typedef model_default_t accum_t;
+};
+
+
+struct config9 : nnet::batchnorm_config {
+    static const unsigned n_in = 3*3*64;
+    static const unsigned n_filt = 64;
+    static const unsigned n_scale_bias = (n_filt == -1) ? n_in : n_filt;
+    static const unsigned io_type = nnet::io_stream;
+    static const unsigned reuse_factor = 16;
+    static const unsigned multiplier_limit = ((n_in + reuse_factor - 1) / reuse_factor);
+    static const bool store_weights_in_bram = false;
+    typedef model_default_t bias_t;
+    typedef model_default_t scale_t;
+    template<class x_T, class y_T>
+    using product = nnet::product::mult<x_T, y_T>;
+};
+
+
+struct config10_depthwise_mult : nnet::dense_config {
+    static const unsigned n_in = 576;
+    static const unsigned n_out = 64;
+    static const unsigned reuse_factor = 16;
+    static const unsigned strategy = nnet::latency;
+    static const unsigned n_zeros = 0;
+    static const unsigned multiplier_limit = ((n_in * n_out + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
+    typedef model_default_t accum_t;
+    typedef model_default_t bias_t;
+    typedef model_default_t weight_t;
+    template<class x_T, class y_T>
+    using product = nnet::product::mult<x_T, y_T>;
+};
+
+struct config10_depthwise : nnet::conv2d_config {
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const unsigned in_height = 3;
+    static const unsigned in_width = 3;
+    static const unsigned n_chan = 64;
+    static const unsigned filt_height = 3;
+    static const unsigned filt_width = 3;
+    static const unsigned kernel_size = filt_height * filt_width;
+    static const unsigned n_filt = 64;
+    static const unsigned stride_height = 1;
+    static const unsigned stride_width = 1;
+    static const unsigned out_height = 1;
+    static const unsigned out_width = 1;
+    static const unsigned reuse_factor = 16;
+    static const unsigned n_zeros = 0;
+    static const unsigned multiplier_limit =
+        ((kernel_size * n_chan * n_filt + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
+    static const bool store_weights_in_bram = false;
+    static const unsigned strategy = nnet::latency;
+    static const nnet::conv_implementation implementation = nnet::conv_implementation::linebuffer;
+    static const unsigned min_height = 3;
+    static const unsigned min_width = 3;
+    static const ap_uint<filt_height * filt_width> pixels[min_height * min_width];
+    static const unsigned n_partitions = 1;
+    static const unsigned n_pixels = out_height * out_width / n_partitions;
+    template<class data_T, class CONFIG_T>
+    using fill_buffer = nnet::FillConv2DBuffer<data_T, CONFIG_T>;
+    typedef model_default_t accum_t;
+    typedef zero_bias10_t bias_t;
+    typedef model_default_t weight_t;
+    typedef config10_depthwise_mult mult_config;
+    template<unsigned K, unsigned S, unsigned W>
+    using scale_index_height = nnet::scale_index_regular<K, S, W>;
+    template<unsigned K, unsigned S, unsigned W>
+    using scale_index_width = nnet::scale_index_regular<K, S, W>;
+};
+const ap_uint<config10_depthwise::filt_height * config10_depthwise::filt_width> config10_depthwise::pixels[] = {1,2,4,8,16,32,64,128,256};
+
+struct config10_pointwise_mult : nnet::dense_config {
+    static const unsigned n_in = 64;
+    static const unsigned n_out = 64;
+    static const unsigned reuse_factor = 16;
+    static const unsigned strategy = nnet::latency;
+    static const unsigned n_zeros = 1024;
+    static const unsigned multiplier_limit = ((n_in * n_out + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
+    typedef model_default_t accum_t;
+    typedef model_default_t bias_t;
+    typedef model_default_t weight_t;
+    template<class x_T, class y_T>
+    using product = nnet::product::mult<x_T, y_T>;
+};
+
+struct config10_pointwise : nnet::conv2d_config {
+    static const unsigned pad_top = 0;
+    static const unsigned pad_bottom = 0;
+    static const unsigned pad_left = 0;
+    static const unsigned pad_right = 0;
+    static const unsigned in_height = 1;
+    static const unsigned in_width = 1;
+    static const unsigned n_chan = 64;
+    static const unsigned filt_height = 1;
+    static const unsigned filt_width = 1;
+    static const unsigned kernel_size = filt_height * filt_width;
+    static const unsigned n_filt = 64;
+    static const unsigned stride_height = 1;
+    static const unsigned stride_width = 1;
+    static const unsigned out_height = 1;
+    static const unsigned out_width = 1;
+    static const unsigned reuse_factor = 16;
+    static const unsigned n_zeros = 1024;
+    static const unsigned multiplier_limit =
+        ((kernel_size * n_chan * n_filt + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
+    static const bool store_weights_in_bram = false;
+    static const unsigned strategy = nnet::latency;
+    static const nnet::conv_implementation implementation = nnet::conv_implementation::linebuffer;
+    static const unsigned min_height = 1;
+    static const unsigned min_width = 1;
+    static const ap_uint<filt_height * filt_width> pixels[min_height * min_width];
+    static const unsigned n_partitions = 1;
+    static const unsigned n_pixels = out_height * out_width / n_partitions;
+    template<class data_T, class CONFIG_T>
+    using fill_buffer = nnet::FillConv2DBuffer<data_T, CONFIG_T>;
+    typedef model_default_t accum_t;
+    typedef model_default_t bias_t;
+    typedef model_default_t weight_t;
+    typedef config10_pointwise_mult mult_config;
+    template<unsigned K, unsigned S, unsigned W>
+    using scale_index_height = nnet::scale_index_regular<K, S, W>;
+    template<unsigned K, unsigned S, unsigned W>
+    using scale_index_width = nnet::scale_index_regular<K, S, W>;
+};
+const ap_uint<config10_pointwise::filt_height * config10_pointwise::filt_width> config10_pointwise::pixels[] = {0};
+
+struct config10 {
+    typedef config10_depthwise depthwise_config;
+    typedef config10_pointwise pointwise_config;
+};
+
+
+struct relu_config11 : nnet::activ_config {
+    static const unsigned n_in = 64;
+    static const unsigned table_size = 1024;
+    static const unsigned io_type = nnet::io_stream;
+    static const unsigned reuse_factor = 16;
+    typedef separable_conv2d_2_relu_table_t table_t;
+};
+
+
+struct config13 : nnet::dense_config {
+    static const unsigned n_in = 64;
+    static const unsigned n_out = 32;
+    static const unsigned io_type = nnet::io_stream;
+    static const unsigned strategy = nnet::latency;
+    static const unsigned reuse_factor = 16;
+    static const unsigned n_zeros = 512;
+    static const unsigned n_nonzeros = 1536;
+    static const unsigned multiplier_limit = ((n_in * n_out + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
+    static const bool store_weights_in_bram = false;
+    typedef model_default_t accum_t;
+    typedef model_default_t bias_t;
+    typedef model_default_t weight_t;
+    typedef layer13_index index_t;
+    template<class x_T, class y_T>
+    using product = nnet::product::mult<x_T, y_T>;
+};
+
+
+struct relu_config14 : nnet::activ_config {
+    static const unsigned n_in = 32;
+    static const unsigned table_size = 1024;
+    static const unsigned io_type = nnet::io_stream;
+    static const unsigned reuse_factor = 16;
+    typedef dense_relu_table_t table_t;
+};
+
+
+struct config15 : nnet::dense_config {
+    static const unsigned n_in = 32;
+    static const unsigned n_out = 10;
+    static const unsigned io_type = nnet::io_stream;
+    static const unsigned strategy = nnet::latency;
+    static const unsigned reuse_factor = 16;
+    static const unsigned n_zeros = 80;
+    static const unsigned n_nonzeros = 240;
+    static const unsigned multiplier_limit = ((n_in * n_out + reuse_factor - 1) / reuse_factor) - n_zeros / reuse_factor;
+    static const bool store_weights_in_bram = false;
+    typedef model_default_t accum_t;
+    typedef model_default_t bias_t;
+    typedef model_default_t weight_t;
+    typedef layer15_index index_t;
+    template<class x_T, class y_T>
+    using product = nnet::product::mult<x_T, y_T>;
+};
+
+
+struct softmax_config16 : nnet::activ_config {
+    static const unsigned n_in = 10;
+    static const unsigned table_size = 1024;
+    static const unsigned io_type = nnet::io_stream;
+    static const unsigned reuse_factor = 16;
     static const unsigned axis = -1;
     static const nnet::softmax_implementation implementation = nnet::softmax_implementation::stable;
     typedef dense_1_softmax_exp_table_t exp_table_t;
@@ -62937,28 +66885,67 @@ struct softmax_config5 : nnet::activ_config {
 # 5 "firmware/myproject.cpp" 2
 
 void myproject(
-    input_t dense_input[4],
-    result_t layer5_out[3]
-) {_ssdm_SpecArrayDimSize(dense_input, 4);_ssdm_SpecArrayDimSize(layer5_out, 3);
+    hls::stream<input_t> &input_1,
+    hls::stream<result_t> &layer16_out
+) {
 
 
-#pragma HLS ARRAY_RESHAPE variable=&dense_input complete dim=0
-#pragma HLS ARRAY_PARTITION variable=&layer5_out complete dim=0
-#pragma HLS INTERFACE ap_vld port=&dense_input,&layer5_out
-#pragma HLS PIPELINE
-# 35 "firmware/myproject.cpp"
- layer2_t layer2_out[128];
-#pragma HLS ARRAY_PARTITION variable=&layer2_out complete dim=0
- nnet::dense<input_t, layer2_t, config2>(dense_input, layer2_out, w2, b2);
+#pragma HLS INTERFACE axis port=&input_1,&layer16_out
+#pragma HLS DATAFLOW
+# 49 "firmware/myproject.cpp"
+ hls::stream<layer2_t> layer2_out("layer2_out");
+#pragma HLS STREAM variable=&layer2_out depth=900
+ nnet::separable_conv_2d_cl<input_t, separable_conv2d_dw_out_t, layer2_t, config2>(input_1, layer2_out, d2, p2, z2, b2);
 
-    layer3_t layer3_out[128];
-#pragma HLS ARRAY_PARTITION variable=&layer3_out complete dim=0
+    hls::stream<layer3_t> layer3_out("layer3_out");
+#pragma HLS STREAM variable=&layer3_out depth=900
  nnet::relu<layer2_t, layer3_t, relu_config3>(layer2_out, layer3_out);
 
-    layer4_t layer4_out[3];
-#pragma HLS ARRAY_PARTITION variable=&layer4_out complete dim=0
- nnet::dense<layer3_t, layer4_t, config4>(layer3_out, layer4_out, w4, b4);
+    hls::stream<layer4_t> layer4_out("layer4_out");
+#pragma HLS STREAM variable=&layer4_out depth=225
+ nnet::pooling2d_cl<layer3_t, layer4_t, config4>(layer3_out, layer4_out);
 
-    nnet::softmax<layer4_t, result_t, softmax_config5>(layer4_out, layer5_out);
+    hls::stream<layer5_t> layer5_out("layer5_out");
+#pragma HLS STREAM variable=&layer5_out depth=225
+ nnet::normalize<layer4_t, layer5_t, config5>(layer4_out, layer5_out, s5, b5);
+
+    hls::stream<layer6_t> layer6_out("layer6_out");
+#pragma HLS STREAM variable=&layer6_out depth=169
+ nnet::separable_conv_2d_cl<layer5_t, separable_conv2d_1_dw_out_t, layer6_t, config6>(layer5_out, layer6_out, d6, p6, z6, b6);
+
+    hls::stream<layer7_t> layer7_out("layer7_out");
+#pragma HLS STREAM variable=&layer7_out depth=169
+ nnet::relu<layer6_t, layer7_t, relu_config7>(layer6_out, layer7_out);
+
+    hls::stream<layer8_t> layer8_out("layer8_out");
+#pragma HLS STREAM variable=&layer8_out depth=9
+ nnet::pooling2d_cl<layer7_t, layer8_t, config8>(layer7_out, layer8_out);
+
+    hls::stream<layer9_t> layer9_out("layer9_out");
+#pragma HLS STREAM variable=&layer9_out depth=9
+ nnet::normalize<layer8_t, layer9_t, config9>(layer8_out, layer9_out, s9, b9);
+
+    hls::stream<layer10_t> layer10_out("layer10_out");
+#pragma HLS STREAM variable=&layer10_out depth=1
+ nnet::separable_conv_2d_cl<layer9_t, separable_conv2d_2_dw_out_t, layer10_t, config10>(layer9_out, layer10_out, d10, p10, z10, b10);
+
+    hls::stream<layer11_t> layer11_out("layer11_out");
+#pragma HLS STREAM variable=&layer11_out depth=1
+ nnet::relu<layer10_t, layer11_t, relu_config11>(layer10_out, layer11_out);
+
+    auto& layer12_out = layer11_out;
+    hls::stream<layer13_t> layer13_out("layer13_out");
+#pragma HLS STREAM variable=&layer13_out depth=1
+ nnet::dense<layer11_t, layer13_t, config13>(layer12_out, layer13_out, w13, b13);
+
+    hls::stream<layer14_t> layer14_out("layer14_out");
+#pragma HLS STREAM variable=&layer14_out depth=1
+ nnet::relu<layer13_t, layer14_t, relu_config14>(layer13_out, layer14_out);
+
+    hls::stream<layer15_t> layer15_out("layer15_out");
+#pragma HLS STREAM variable=&layer15_out depth=1
+ nnet::dense<layer14_t, layer15_t, config15>(layer14_out, layer15_out, w15, b15);
+
+    nnet::softmax<layer15_t, result_t, softmax_config16>(layer15_out, layer16_out);
 
 }

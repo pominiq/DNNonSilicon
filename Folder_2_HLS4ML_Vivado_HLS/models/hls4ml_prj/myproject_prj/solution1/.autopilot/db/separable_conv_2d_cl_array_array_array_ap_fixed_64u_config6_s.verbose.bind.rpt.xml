@@ -1,0 +1,47 @@
+<profile>
+
+<section name = "Vivado HLS Report for 'separable_conv_2d_cl_array_array_array_ap_fixed_64u_config6_s'" level="0">
+<item name = "Date">Fri Mar  1 15:24:11 2024
+</item>
+<item name = "Version">2020.1 (Build 2897737 on Wed May 27 20:21:37 MDT 2020)</item>
+<item name = "Project">myproject_prj</item>
+<item name = "Solution">solution1</item>
+<item name = "Product family">zynq</item>
+<item name = "Target device">xc7z020-clg400-1</item>
+</section>
+
+<section name = "Performance Estimates" level="0">
+<item name = "Timing">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="4">Clock, Target, Estimated, Uncertainty</keys>
+<column name="ap_clk">2.50 ns, 12.256 ns, 3.12 ns</column>
+</table>
+</item>
+</section>
+</item>
+<item name = "Latency">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="8">, min, max, min, max, min, max, Type</keys>
+<column name="">2712, 2712, 33.238 us, 33.238 us, 2708, 2708, dataflow</column>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="0">
+<keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
+<column name="grp_pointwise_conv_2d_cl_array_array_ap_fixed_64u_config6_pointwise_s_fu_2532">pointwise_conv_2d_cl_array_array_ap_fixed_64u_config6_pointwise_s, 2707, 2707, 33.177 us, 33.177 us, 2707, 2707, none</column>
+<column name="grp_depthwise_conv_2d_cl_array_array_ap_fixed_32u_config6_depthwise_s_fu_2696">depthwise_conv_2d_cl_array_array_ap_fixed_32u_config6_depthwise_s, 1352, 1352, 16.570 us, 16.570 us, 1352, 1352, none</column>
+</table>
+</item>
+<item name = "Loop"><table name="" hasTotal="0">
+<keys size="8">Loop Name, min, max, Latency, achieved, target, Count, Pipelined</keys>
+</table>
+</item>
+</section>
+</item>
+</section>
+</item>
+</section>
+</profile>
