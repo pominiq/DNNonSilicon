@@ -69,54 +69,97 @@ set sdaccel_dir [file join [pwd] .. kernel]
 set solution_dir "/home/pominiq/projectfolder/Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj/myproject_prj/solution1"
 set debug_dir [file join $solution_dir .debug]
 set xo_hls_files_dir ""
-set hdl_module_list {shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s_line_buffer_Array_V_bkb
+set hdl_module_list {myproject_mul_16s_11s_26_4_1
+myproject_mul_16s_10ns_26_4_1
+myproject_mul_16s_10s_26_4_1
+myproject_mul_16s_10s_25_4_1
+myproject_sub_21s_21s_21_2_1
+myproject_add_32ns_32ns_32_2_1
+depthwise_conv_2d_cl_array_array_ap_fixed_3u_config2_depthwise_s_line_buffer_bkb
 regslice_core
-myproject_mux_164_16_1_1
-myproject_mux_164_16_1_1
-pooling2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_config4_s_line_budEe
-shift_line_buffer_array_ap_fixed_16_6_5_3_0_4u_config5_s_line_buffer_Array_V_pcA
-myproject_mux_42_16_1_1
-pooling2d_cl_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_8u_config7_s_line_buxdS
-myproject_mux_104_18_1_1
-softmax_stable_array_array_ap_fixed_16_6_5_3_0_10u_softmax_config10_s_exp_tabFfa
-softmax_stable_array_array_ap_fixed_16_6_5_3_0_10u_softmax_config10_s_invert_Gfk
+myproject_mul_16s_12s_26_4_1
+myproject_sub_23ns_23s_23_2_1
+myproject_sub_24s_24s_24_2_1
+myproject_sub_23s_23s_23_2_1
+myproject_add_26s_26s_26_2_1
+myproject_add_24s_24s_24_2_1
+myproject_sub_24ns_24s_24_2_1
+fifo_w16_d900_A
+fifo_w16_d900_A
+fifo_w16_d900_A
+start_for_pointwise_conv_2d_cl_array_array_ap_fixed_32u_config2_pointwise_U0
 regslice_core
-fifo_w16_d676_A
-fifo_w16_d676_A
-fifo_w16_d676_A
-fifo_w16_d676_A
-fifo_w16_d676_A
-fifo_w16_d676_A
-fifo_w16_d676_A
-fifo_w16_d676_A
-fifo_w16_d36_A
-fifo_w16_d36_A
-fifo_w16_d36_A
-fifo_w16_d36_A
-fifo_w16_d16_A
-fifo_w16_d16_A
-fifo_w16_d16_A
-fifo_w16_d16_A
-fifo_w16_d16_A
-fifo_w16_d16_A
-fifo_w16_d16_A
-fifo_w16_d16_A
-fifo_w16_d16_A
-fifo_w16_d16_A
-fifo_w16_d16_A
-fifo_w16_d16_A
-fifo_w16_d16_A
-fifo_w16_d16_A
-fifo_w16_d16_A
-fifo_w16_d16_A
-fifo_w16_d4_A
-fifo_w16_d4_A
-fifo_w16_d4_A
-fifo_w16_d4_A
-fifo_w16_d4_A
-fifo_w16_d4_A
-fifo_w16_d4_A
-fifo_w16_d4_A
+myproject_mux_42_16_3_1
+pooling2d_cl_array_array_ap_fixed_16_6_5_3_0_32u_config4_s_line_buffer_Array_hbi
+myproject_mul_16s_16ns_26_4_1
+myproject_mul_16s_15ns_26_4_1
+myproject_mul_16s_16s_26_4_1
+myproject_mul_16s_14ns_26_4_1
+myproject_add_26ns_26s_26_2_1
+myproject_add_26ns_26ns_26_2_1
+myproject_mul_16s_9s_25_4_1
+myproject_mul_16s_8s_24_4_1
+myproject_mul_16s_9ns_25_4_1
+myproject_mul_16s_6ns_22_4_1
+myproject_mul_16s_8ns_24_4_1
+myproject_mul_16s_7s_23_4_1
+myproject_mul_16s_6s_22_4_1
+myproject_mul_16s_5ns_21_4_1
+myproject_mul_16s_11ns_26_4_1
+myproject_mul_16s_5s_21_4_1
+myproject_mul_16s_7ns_23_4_1
+myproject_add_22s_22s_22_2_1
+myproject_sub_22s_22s_22_2_1
+myproject_add_23s_23s_23_2_1
+myproject_sub_25s_25s_25_2_1
+myproject_sub_25ns_25s_25_2_1
+myproject_sub_22ns_22s_22_2_1
+myproject_add_25s_25s_25_2_1
+myproject_sub_26s_26s_26_2_1
+myproject_add_21s_21s_21_2_1
+myproject_sub_21ns_21s_21_2_1
+depthwise_conv_2d_cl_array_array_ap_fixed_32u_config6_depthwise_s_line_bufferNgs
+myproject_sub_26ns_26s_26_2_1
+myproject_sub_20ns_20s_20_2_1
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+fifo_w16_d169_A
+start_for_pointwise_conv_2d_cl_array_array_ap_fixed_64u_config6_pointwise_U0
+myproject_mux_164_16_4_1
+myproject_mux_164_16_4_1
+pooling2d_cl_array_array_ap_fixed_16_6_5_3_0_64u_config8_s_line_buffer_Array_bPq
+myproject_mul_16s_13ns_26_4_1
+depthwise_conv_2d_cl_array_array_ap_fixed_64u_config10_depthwise_s_line_buffeeVV
+myproject_mul_16s_13s_26_4_1
 fifo_w16_d1_A
 fifo_w16_d1_A
 fifo_w16_d1_A
@@ -127,31 +170,691 @@ fifo_w16_d1_A
 fifo_w16_d1_A
 fifo_w16_d1_A
 fifo_w16_d1_A
-start_for_relu_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_relu_config3_U0
-start_for_pooling2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_config4Hfu
-start_for_conv_2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_8u_config5_U0
-start_for_relu_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_8u_relu_config6_U0
-start_for_pooling2d_cl_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_8u_config7IfE
-start_for_dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_U0
-start_for_softmax_array_array_ap_fixed_16_6_5_3_0_10u_softmax_config10_U0
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+fifo_w16_d1_A
+start_for_pointwise_conv_2d_cl_array_array_ap_fixed_64u_config10_pointwise_U0
+myproject_sub_26ns_26ns_26_2_1
+myproject_mux_104_18_3_1
+myproject_mul_17ns_18s_26_4_1
+softmax_stable_array_array_ap_fixed_16_6_5_3_0_10u_softmax_config16_s_exp_tabgZb
+softmax_stable_array_array_ap_fixed_16_6_5_3_0_10u_softmax_config16_s_invert_g0b
 regslice_core
-shift_line_buffer_array_ap_fixed_16_6_5_3_0_1u_config2_s
-dense_latency_ap_fixed_ap_fixed_16_6_5_3_0_config2_mult_0_0_0_0_0
-compute_output_buffer_2d_array_array_ap_fixed_16_6_5_3_0_4u_config2_s
-conv_2d_cl_array_ap_fixed_1u_array_ap_fixed_16_6_5_3_0_4u_config2_s
-relu_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_relu_config3_s
-pooling2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_4u_config4_s
-shift_line_buffer_array_ap_fixed_16_6_5_3_0_4u_config5_s
-dense_latency_ap_fixed_ap_fixed_config5_mult_0_0_0_0_0_0_0_0_0
-compute_output_buffer_2d_array_array_ap_fixed_16_6_5_3_0_8u_config5_s
-conv_2d_cl_array_ap_fixed_4u_array_ap_fixed_16_6_5_3_0_8u_config5_s
-relu_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_8u_relu_config6_s
-pooling2d_cl_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_8u_config7_s
-dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config9_s
-dense_array_ap_fixed_8u_array_ap_fixed_16_6_5_3_0_10u_config9_s
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d900_A_x
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d225_A
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d169_A_x
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d9_A
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+fifo_w16_d1_A_x
+start_for_relu_array_ap_fixed_32u_array_ap_fixed_16_6_5_3_0_32u_relu_config3_U0
+start_for_pooling2d_cl_array_array_ap_fixed_16_6_5_3_0_32u_config4_U0
+start_for_normalize_array_ap_fixed_32u_array_ap_fixed_16_6_5_3_0_32u_config5_U0
+start_for_separable_conv_2d_cl_array_array_array_ap_fixed_64u_config6_U0
+start_for_relu_array_ap_fixed_64u_array_ap_fixed_16_6_5_3_0_64u_relu_config7_U0
+start_for_pooling2d_cl_array_array_ap_fixed_16_6_5_3_0_64u_config8_U0
+start_for_normalize_array_ap_fixed_64u_array_ap_fixed_16_6_5_3_0_64u_config9_U0
+start_for_separable_conv_2d_cl_array_array_array_ap_fixed_64u_config10_U0
+start_for_relu_array_ap_fixed_64u_array_ap_fixed_16_6_5_3_0_64u_relu_config11g1b
+start_for_dense_array_ap_fixed_64u_array_ap_fixed_16_6_5_3_0_32u_config13_U0
+start_for_relu_array_ap_fixed_32u_array_ap_fixed_16_6_5_3_0_32u_relu_config14g2b
+start_for_dense_array_ap_fixed_32u_array_ap_fixed_16_6_5_3_0_10u_config15_U0
+start_for_softmax_array_array_ap_fixed_16_6_5_3_0_10u_softmax_config16_U0
+regslice_core
+depthwise_conv_2d_cl_array_array_ap_fixed_3u_config2_depthwise_s
+pointwise_conv_2d_cl_array_array_ap_fixed_32u_config2_pointwise_s
+separable_conv_2d_cl_array_array_array_ap_fixed_32u_config2_s
+relu_array_ap_fixed_32u_array_ap_fixed_16_6_5_3_0_32u_relu_config3_s
+pooling2d_cl_array_array_ap_fixed_16_6_5_3_0_32u_config4_s
+normalize_array_ap_fixed_32u_array_ap_fixed_16_6_5_3_0_32u_config5_s
+depthwise_conv_2d_cl_array_array_ap_fixed_32u_config6_depthwise_s
+pointwise_conv_2d_cl_array_array_ap_fixed_64u_config6_pointwise_s
+separable_conv_2d_cl_array_array_array_ap_fixed_64u_config6_s
+relu_array_ap_fixed_64u_array_ap_fixed_16_6_5_3_0_64u_relu_config7_s
+pooling2d_cl_array_array_ap_fixed_16_6_5_3_0_64u_config8_s
+normalize_array_ap_fixed_64u_array_ap_fixed_16_6_5_3_0_64u_config9_s
+depthwise_conv_2d_cl_array_array_ap_fixed_64u_config10_depthwise_s
+pointwise_conv_2d_cl_array_array_ap_fixed_64u_config10_pointwise_s
+separable_conv_2d_cl_array_array_array_ap_fixed_64u_config10_s
+relu_array_ap_fixed_64u_array_ap_fixed_16_6_5_3_0_64u_relu_config11_s
+dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config13_s
+dense_array_ap_fixed_64u_array_ap_fixed_16_6_5_3_0_32u_config13_s
+relu_array_ap_fixed_32u_array_ap_fixed_16_6_5_3_0_32u_relu_config14_s
+dense_wrapper_ap_fixed_16_6_5_3_0_ap_fixed_16_6_5_3_0_config15_s
+dense_array_ap_fixed_32u_array_ap_fixed_16_6_5_3_0_10u_config15_s
 reduce_ap_fixed_18_8_0_0_0_4_Op_add_ap_fixed_18_8_0_0_0_s
-softmax_stable_array_array_ap_fixed_16_6_5_3_0_10u_softmax_config10_s
-softmax_array_array_ap_fixed_16_6_5_3_0_10u_softmax_config10_s
+softmax_stable_array_array_ap_fixed_16_6_5_3_0_10u_softmax_config16_s
+softmax_array_array_ap_fixed_16_6_5_3_0_10u_softmax_config16_s
 myproject
 }
 set kernel_xo ""
@@ -168,17 +871,17 @@ set BDFiles [sort_file_names [glob -nocomplain bd/*]]
 set ConstraintFiles [sort_file_names [glob -nocomplain constraints/*]]
 set MiscFiles [sort_file_names [glob -nocomplain misc/*]]
 set Interfaces {
-    conv2d_input_V_data_0_V {
+    input_1_V_data_0_V {
         type "axi4stream"
         mode "slave"
-        port_prefix "conv2d_input_V_data_0_V"
+        port_prefix "input_1_V_data_0_V"
         has_tready "1"
         ports {
             TDATA 16
         }
         ctype {
             TDATA {
-                Type "real fixed signed 10"
+                Type "null"
                 Width "16"
                 Bits "16"
             }
@@ -194,17 +897,17 @@ set Interfaces {
             }
         }
     }
-    layer10_out_V_data_0_V {
+    input_1_V_data_1_V {
         type "axi4stream"
-        mode "master"
-        port_prefix "layer10_out_V_data_0_V"
+        mode "slave"
+        port_prefix "input_1_V_data_1_V"
         has_tready "1"
         ports {
             TDATA 16
         }
         ctype {
             TDATA {
-                Type "real fixed signed 10"
+                Type "null"
                 Width "16"
                 Bits "16"
             }
@@ -220,17 +923,17 @@ set Interfaces {
             }
         }
     }
-    layer10_out_V_data_1_V {
+    input_1_V_data_2_V {
         type "axi4stream"
-        mode "master"
-        port_prefix "layer10_out_V_data_1_V"
+        mode "slave"
+        port_prefix "input_1_V_data_2_V"
         has_tready "1"
         ports {
             TDATA 16
         }
         ctype {
             TDATA {
-                Type "real fixed signed 10"
+                Type "null"
                 Width "16"
                 Bits "16"
             }
@@ -246,17 +949,17 @@ set Interfaces {
             }
         }
     }
-    layer10_out_V_data_2_V {
+    layer16_out_V_data_0_V {
         type "axi4stream"
         mode "master"
-        port_prefix "layer10_out_V_data_2_V"
+        port_prefix "layer16_out_V_data_0_V"
         has_tready "1"
         ports {
             TDATA 16
         }
         ctype {
             TDATA {
-                Type "real fixed signed 10"
+                Type "null"
                 Width "16"
                 Bits "16"
             }
@@ -272,17 +975,17 @@ set Interfaces {
             }
         }
     }
-    layer10_out_V_data_3_V {
+    layer16_out_V_data_1_V {
         type "axi4stream"
         mode "master"
-        port_prefix "layer10_out_V_data_3_V"
+        port_prefix "layer16_out_V_data_1_V"
         has_tready "1"
         ports {
             TDATA 16
         }
         ctype {
             TDATA {
-                Type "real fixed signed 10"
+                Type "null"
                 Width "16"
                 Bits "16"
             }
@@ -298,17 +1001,17 @@ set Interfaces {
             }
         }
     }
-    layer10_out_V_data_4_V {
+    layer16_out_V_data_2_V {
         type "axi4stream"
         mode "master"
-        port_prefix "layer10_out_V_data_4_V"
+        port_prefix "layer16_out_V_data_2_V"
         has_tready "1"
         ports {
             TDATA 16
         }
         ctype {
             TDATA {
-                Type "real fixed signed 10"
+                Type "null"
                 Width "16"
                 Bits "16"
             }
@@ -324,17 +1027,17 @@ set Interfaces {
             }
         }
     }
-    layer10_out_V_data_5_V {
+    layer16_out_V_data_3_V {
         type "axi4stream"
         mode "master"
-        port_prefix "layer10_out_V_data_5_V"
+        port_prefix "layer16_out_V_data_3_V"
         has_tready "1"
         ports {
             TDATA 16
         }
         ctype {
             TDATA {
-                Type "real fixed signed 10"
+                Type "null"
                 Width "16"
                 Bits "16"
             }
@@ -350,17 +1053,17 @@ set Interfaces {
             }
         }
     }
-    layer10_out_V_data_6_V {
+    layer16_out_V_data_4_V {
         type "axi4stream"
         mode "master"
-        port_prefix "layer10_out_V_data_6_V"
+        port_prefix "layer16_out_V_data_4_V"
         has_tready "1"
         ports {
             TDATA 16
         }
         ctype {
             TDATA {
-                Type "real fixed signed 10"
+                Type "null"
                 Width "16"
                 Bits "16"
             }
@@ -376,17 +1079,17 @@ set Interfaces {
             }
         }
     }
-    layer10_out_V_data_7_V {
+    layer16_out_V_data_5_V {
         type "axi4stream"
         mode "master"
-        port_prefix "layer10_out_V_data_7_V"
+        port_prefix "layer16_out_V_data_5_V"
         has_tready "1"
         ports {
             TDATA 16
         }
         ctype {
             TDATA {
-                Type "real fixed signed 10"
+                Type "null"
                 Width "16"
                 Bits "16"
             }
@@ -402,17 +1105,17 @@ set Interfaces {
             }
         }
     }
-    layer10_out_V_data_8_V {
+    layer16_out_V_data_6_V {
         type "axi4stream"
         mode "master"
-        port_prefix "layer10_out_V_data_8_V"
+        port_prefix "layer16_out_V_data_6_V"
         has_tready "1"
         ports {
             TDATA 16
         }
         ctype {
             TDATA {
-                Type "real fixed signed 10"
+                Type "null"
                 Width "16"
                 Bits "16"
             }
@@ -428,17 +1131,69 @@ set Interfaces {
             }
         }
     }
-    layer10_out_V_data_9_V {
+    layer16_out_V_data_7_V {
         type "axi4stream"
         mode "master"
-        port_prefix "layer10_out_V_data_9_V"
+        port_prefix "layer16_out_V_data_7_V"
         has_tready "1"
         ports {
             TDATA 16
         }
         ctype {
             TDATA {
-                Type "real fixed signed 10"
+                Type "null"
+                Width "16"
+                Bits "16"
+            }
+            TVALID {
+                Type "bool"
+                Width "1"
+                Bits "1"
+            }
+            TREADY {
+                Type "bool"
+                Width "1"
+                Bits "1"
+            }
+        }
+    }
+    layer16_out_V_data_8_V {
+        type "axi4stream"
+        mode "master"
+        port_prefix "layer16_out_V_data_8_V"
+        has_tready "1"
+        ports {
+            TDATA 16
+        }
+        ctype {
+            TDATA {
+                Type "null"
+                Width "16"
+                Bits "16"
+            }
+            TVALID {
+                Type "bool"
+                Width "1"
+                Bits "1"
+            }
+            TREADY {
+                Type "bool"
+                Width "1"
+                Bits "1"
+            }
+        }
+    }
+    layer16_out_V_data_9_V {
+        type "axi4stream"
+        mode "master"
+        port_prefix "layer16_out_V_data_9_V"
+        has_tready "1"
+        ports {
+            TDATA 16
+        }
+        ctype {
+            TDATA {
+                Type "null"
                 Width "16"
                 Bits "16"
             }
@@ -463,7 +1218,7 @@ set Interfaces {
                 Bits "1"
             }
         }
-        buses "conv2d_input_V_data_0_V layer10_out_V_data_0_V layer10_out_V_data_1_V layer10_out_V_data_2_V layer10_out_V_data_3_V layer10_out_V_data_4_V layer10_out_V_data_5_V layer10_out_V_data_6_V layer10_out_V_data_7_V layer10_out_V_data_8_V layer10_out_V_data_9_V"
+        buses "input_1_V_data_0_V input_1_V_data_1_V input_1_V_data_2_V layer16_out_V_data_0_V layer16_out_V_data_1_V layer16_out_V_data_2_V layer16_out_V_data_3_V layer16_out_V_data_4_V layer16_out_V_data_5_V layer16_out_V_data_6_V layer16_out_V_data_7_V layer16_out_V_data_8_V layer16_out_V_data_9_V"
         reset "ap_rst_n"
     }
     ap_rst_n {
@@ -1967,7 +2722,7 @@ if {![regexp -nocase {2014\.3.*} $vivado_ver match]} {
 ipx::create_xgui_files -logo_file misc/logo.png $core
 
 ## System Info
-set user_parameters_list {clk_period 25 machine 64 combinational 0 latency 10250 II x}
+set user_parameters_list {clk_period 2.5 machine 64 combinational 0 latency 14409 II x}
 foreach {user_para value} $user_parameters_list {
     incr user_parameter_order
     set user_para_value [ipx::add_user_parameter $user_para $core]

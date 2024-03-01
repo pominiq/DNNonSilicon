@@ -9,7 +9,7 @@
 <ProductFamily>zynq</ProductFamily>
 <Part>xc7z020-clg400-1</Part>
 <TopModelName>myproject</TopModelName>
-<TargetClockPeriod>25.00</TargetClockPeriod>
+<TargetClockPeriod>2.50</TargetClockPeriod>
 <ClockUncertainty>3.12</ClockUncertainty>
 </UserAssignments>
 
@@ -17,28 +17,28 @@
 <PipelineType>dataflow</PipelineType>
 <SummaryOfTimingAnalysis>
 <unit>ns</unit>
-<EstimatedClockPeriod>21.192</EstimatedClockPeriod>
+<EstimatedClockPeriod>18.982</EstimatedClockPeriod>
 </SummaryOfTimingAnalysis>
 <SummaryOfOverallLatency>
 <unit>clock cycles</unit>
-<Best-caseLatency>10250</Best-caseLatency>
-<Average-caseLatency>10250</Average-caseLatency>
-<Worst-caseLatency>10250</Worst-caseLatency>
-<Best-caseRealTimeLatency>0.256 ms</Best-caseRealTimeLatency>
-<Average-caseRealTimeLatency>0.256 ms</Average-caseRealTimeLatency>
-<Worst-caseRealTimeLatency>0.256 ms</Worst-caseRealTimeLatency>
-<DataflowPipelineThroughput>10195</DataflowPipelineThroughput>
-<Interval-min>10195</Interval-min>
-<Interval-max>10195</Interval-max>
+<Best-caseLatency>14409</Best-caseLatency>
+<Average-caseLatency>14409</Average-caseLatency>
+<Worst-caseLatency>14409</Worst-caseLatency>
+<Best-caseRealTimeLatency>0.274 ms</Best-caseRealTimeLatency>
+<Average-caseRealTimeLatency>0.274 ms</Average-caseRealTimeLatency>
+<Worst-caseRealTimeLatency>0.274 ms</Worst-caseRealTimeLatency>
+<DataflowPipelineThroughput>14403</DataflowPipelineThroughput>
+<Interval-min>14403</Interval-min>
+<Interval-max>14403</Interval-max>
 </SummaryOfOverallLatency>
 </PerformanceEstimates>
 
 <AreaEstimates>
 <Resources>
-<BRAM_18K>14</BRAM_18K>
-<DSP48E>42</DSP48E>
-<FF>17532</FF>
-<LUT>32975</LUT>
+<BRAM_18K>293</BRAM_18K>
+<DSP48E>1170</DSP48E>
+<FF>682850</FF>
+<LUT>415081</LUT>
 <URAM>0</URAM>
 </Resources>
 <AvailableResources>
@@ -52,8 +52,8 @@
 
 <InterfaceSummary>
 <RtlPorts>
-<name>conv2d_input_V_data_0_V_TDATA</name>
-<Object>conv2d_input_V_data_0_V</Object>
+<name>input_1_V_data_0_V_TDATA</name>
+<Object>input_1_V_data_0_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -64,8 +64,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>conv2d_input_V_data_0_V_TVALID</name>
-<Object>conv2d_input_V_data_0_V</Object>
+<name>input_1_V_data_0_V_TVALID</name>
+<Object>input_1_V_data_0_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -76,8 +76,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>conv2d_input_V_data_0_V_TREADY</name>
-<Object>conv2d_input_V_data_0_V</Object>
+<name>input_1_V_data_0_V_TREADY</name>
+<Object>input_1_V_data_0_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -88,32 +88,20 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_0_V_TDATA</name>
-<Object>layer10_out_V_data_0_V</Object>
+<name>input_1_V_data_1_V_TDATA</name>
+<Object>input_1_V_data_1_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
 <IOConfig>register, both mode</IOConfig>
-<Dir>out</Dir>
+<Dir>in</Dir>
 <Bits>16</Bits>
 <Attribute>data</Attribute>
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_0_V_TVALID</name>
-<Object>layer10_out_V_data_0_V</Object>
-<Type>pointer</Type>
-<Scope></Scope>
-<IOProtocol>axis</IOProtocol>
-<IOConfig>register, both mode</IOConfig>
-<Dir>out</Dir>
-<Bits>1</Bits>
-<Attribute>control</Attribute>
-<CType>int</CType>
-</RtlPorts>
-<RtlPorts>
-<name>layer10_out_V_data_0_V_TREADY</name>
-<Object>layer10_out_V_data_0_V</Object>
+<name>input_1_V_data_1_V_TVALID</name>
+<Object>input_1_V_data_1_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -124,20 +112,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_1_V_TDATA</name>
-<Object>layer10_out_V_data_1_V</Object>
-<Type>pointer</Type>
-<Scope></Scope>
-<IOProtocol>axis</IOProtocol>
-<IOConfig>register, both mode</IOConfig>
-<Dir>out</Dir>
-<Bits>16</Bits>
-<Attribute>data</Attribute>
-<CType>int</CType>
-</RtlPorts>
-<RtlPorts>
-<name>layer10_out_V_data_1_V_TVALID</name>
-<Object>layer10_out_V_data_1_V</Object>
+<name>input_1_V_data_1_V_TREADY</name>
+<Object>input_1_V_data_1_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -148,8 +124,20 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_1_V_TREADY</name>
-<Object>layer10_out_V_data_1_V</Object>
+<name>input_1_V_data_2_V_TDATA</name>
+<Object>input_1_V_data_2_V</Object>
+<Type>pointer</Type>
+<Scope></Scope>
+<IOProtocol>axis</IOProtocol>
+<IOConfig>register, both mode</IOConfig>
+<Dir>in</Dir>
+<Bits>16</Bits>
+<Attribute>data</Attribute>
+<CType>int</CType>
+</RtlPorts>
+<RtlPorts>
+<name>input_1_V_data_2_V_TVALID</name>
+<Object>input_1_V_data_2_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -160,20 +148,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_2_V_TDATA</name>
-<Object>layer10_out_V_data_2_V</Object>
-<Type>pointer</Type>
-<Scope></Scope>
-<IOProtocol>axis</IOProtocol>
-<IOConfig>register, both mode</IOConfig>
-<Dir>out</Dir>
-<Bits>16</Bits>
-<Attribute>data</Attribute>
-<CType>int</CType>
-</RtlPorts>
-<RtlPorts>
-<name>layer10_out_V_data_2_V_TVALID</name>
-<Object>layer10_out_V_data_2_V</Object>
+<name>input_1_V_data_2_V_TREADY</name>
+<Object>input_1_V_data_2_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -184,8 +160,32 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_2_V_TREADY</name>
-<Object>layer10_out_V_data_2_V</Object>
+<name>layer16_out_V_data_0_V_TDATA</name>
+<Object>layer16_out_V_data_0_V</Object>
+<Type>pointer</Type>
+<Scope></Scope>
+<IOProtocol>axis</IOProtocol>
+<IOConfig>register, both mode</IOConfig>
+<Dir>out</Dir>
+<Bits>16</Bits>
+<Attribute>data</Attribute>
+<CType>int</CType>
+</RtlPorts>
+<RtlPorts>
+<name>layer16_out_V_data_0_V_TVALID</name>
+<Object>layer16_out_V_data_0_V</Object>
+<Type>pointer</Type>
+<Scope></Scope>
+<IOProtocol>axis</IOProtocol>
+<IOConfig>register, both mode</IOConfig>
+<Dir>out</Dir>
+<Bits>1</Bits>
+<Attribute>control</Attribute>
+<CType>int</CType>
+</RtlPorts>
+<RtlPorts>
+<name>layer16_out_V_data_0_V_TREADY</name>
+<Object>layer16_out_V_data_0_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -196,8 +196,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_3_V_TDATA</name>
-<Object>layer10_out_V_data_3_V</Object>
+<name>layer16_out_V_data_1_V_TDATA</name>
+<Object>layer16_out_V_data_1_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -208,8 +208,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_3_V_TVALID</name>
-<Object>layer10_out_V_data_3_V</Object>
+<name>layer16_out_V_data_1_V_TVALID</name>
+<Object>layer16_out_V_data_1_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -220,8 +220,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_3_V_TREADY</name>
-<Object>layer10_out_V_data_3_V</Object>
+<name>layer16_out_V_data_1_V_TREADY</name>
+<Object>layer16_out_V_data_1_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -232,8 +232,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_4_V_TDATA</name>
-<Object>layer10_out_V_data_4_V</Object>
+<name>layer16_out_V_data_2_V_TDATA</name>
+<Object>layer16_out_V_data_2_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -244,8 +244,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_4_V_TVALID</name>
-<Object>layer10_out_V_data_4_V</Object>
+<name>layer16_out_V_data_2_V_TVALID</name>
+<Object>layer16_out_V_data_2_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -256,8 +256,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_4_V_TREADY</name>
-<Object>layer10_out_V_data_4_V</Object>
+<name>layer16_out_V_data_2_V_TREADY</name>
+<Object>layer16_out_V_data_2_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -268,8 +268,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_5_V_TDATA</name>
-<Object>layer10_out_V_data_5_V</Object>
+<name>layer16_out_V_data_3_V_TDATA</name>
+<Object>layer16_out_V_data_3_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -280,8 +280,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_5_V_TVALID</name>
-<Object>layer10_out_V_data_5_V</Object>
+<name>layer16_out_V_data_3_V_TVALID</name>
+<Object>layer16_out_V_data_3_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -292,8 +292,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_5_V_TREADY</name>
-<Object>layer10_out_V_data_5_V</Object>
+<name>layer16_out_V_data_3_V_TREADY</name>
+<Object>layer16_out_V_data_3_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -304,8 +304,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_6_V_TDATA</name>
-<Object>layer10_out_V_data_6_V</Object>
+<name>layer16_out_V_data_4_V_TDATA</name>
+<Object>layer16_out_V_data_4_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -316,8 +316,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_6_V_TVALID</name>
-<Object>layer10_out_V_data_6_V</Object>
+<name>layer16_out_V_data_4_V_TVALID</name>
+<Object>layer16_out_V_data_4_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -328,8 +328,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_6_V_TREADY</name>
-<Object>layer10_out_V_data_6_V</Object>
+<name>layer16_out_V_data_4_V_TREADY</name>
+<Object>layer16_out_V_data_4_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -340,8 +340,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_7_V_TDATA</name>
-<Object>layer10_out_V_data_7_V</Object>
+<name>layer16_out_V_data_5_V_TDATA</name>
+<Object>layer16_out_V_data_5_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -352,8 +352,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_7_V_TVALID</name>
-<Object>layer10_out_V_data_7_V</Object>
+<name>layer16_out_V_data_5_V_TVALID</name>
+<Object>layer16_out_V_data_5_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -364,8 +364,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_7_V_TREADY</name>
-<Object>layer10_out_V_data_7_V</Object>
+<name>layer16_out_V_data_5_V_TREADY</name>
+<Object>layer16_out_V_data_5_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -376,8 +376,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_8_V_TDATA</name>
-<Object>layer10_out_V_data_8_V</Object>
+<name>layer16_out_V_data_6_V_TDATA</name>
+<Object>layer16_out_V_data_6_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -388,8 +388,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_8_V_TVALID</name>
-<Object>layer10_out_V_data_8_V</Object>
+<name>layer16_out_V_data_6_V_TVALID</name>
+<Object>layer16_out_V_data_6_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -400,8 +400,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_8_V_TREADY</name>
-<Object>layer10_out_V_data_8_V</Object>
+<name>layer16_out_V_data_6_V_TREADY</name>
+<Object>layer16_out_V_data_6_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -412,8 +412,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_9_V_TDATA</name>
-<Object>layer10_out_V_data_9_V</Object>
+<name>layer16_out_V_data_7_V_TDATA</name>
+<Object>layer16_out_V_data_7_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -424,8 +424,8 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_9_V_TVALID</name>
-<Object>layer10_out_V_data_9_V</Object>
+<name>layer16_out_V_data_7_V_TVALID</name>
+<Object>layer16_out_V_data_7_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>
@@ -436,8 +436,80 @@
 <CType>int</CType>
 </RtlPorts>
 <RtlPorts>
-<name>layer10_out_V_data_9_V_TREADY</name>
-<Object>layer10_out_V_data_9_V</Object>
+<name>layer16_out_V_data_7_V_TREADY</name>
+<Object>layer16_out_V_data_7_V</Object>
+<Type>pointer</Type>
+<Scope></Scope>
+<IOProtocol>axis</IOProtocol>
+<IOConfig>register, both mode</IOConfig>
+<Dir>in</Dir>
+<Bits>1</Bits>
+<Attribute>control</Attribute>
+<CType>int</CType>
+</RtlPorts>
+<RtlPorts>
+<name>layer16_out_V_data_8_V_TDATA</name>
+<Object>layer16_out_V_data_8_V</Object>
+<Type>pointer</Type>
+<Scope></Scope>
+<IOProtocol>axis</IOProtocol>
+<IOConfig>register, both mode</IOConfig>
+<Dir>out</Dir>
+<Bits>16</Bits>
+<Attribute>data</Attribute>
+<CType>int</CType>
+</RtlPorts>
+<RtlPorts>
+<name>layer16_out_V_data_8_V_TVALID</name>
+<Object>layer16_out_V_data_8_V</Object>
+<Type>pointer</Type>
+<Scope></Scope>
+<IOProtocol>axis</IOProtocol>
+<IOConfig>register, both mode</IOConfig>
+<Dir>out</Dir>
+<Bits>1</Bits>
+<Attribute>control</Attribute>
+<CType>int</CType>
+</RtlPorts>
+<RtlPorts>
+<name>layer16_out_V_data_8_V_TREADY</name>
+<Object>layer16_out_V_data_8_V</Object>
+<Type>pointer</Type>
+<Scope></Scope>
+<IOProtocol>axis</IOProtocol>
+<IOConfig>register, both mode</IOConfig>
+<Dir>in</Dir>
+<Bits>1</Bits>
+<Attribute>control</Attribute>
+<CType>int</CType>
+</RtlPorts>
+<RtlPorts>
+<name>layer16_out_V_data_9_V_TDATA</name>
+<Object>layer16_out_V_data_9_V</Object>
+<Type>pointer</Type>
+<Scope></Scope>
+<IOProtocol>axis</IOProtocol>
+<IOConfig>register, both mode</IOConfig>
+<Dir>out</Dir>
+<Bits>16</Bits>
+<Attribute>data</Attribute>
+<CType>int</CType>
+</RtlPorts>
+<RtlPorts>
+<name>layer16_out_V_data_9_V_TVALID</name>
+<Object>layer16_out_V_data_9_V</Object>
+<Type>pointer</Type>
+<Scope></Scope>
+<IOProtocol>axis</IOProtocol>
+<IOConfig>register, both mode</IOConfig>
+<Dir>out</Dir>
+<Bits>1</Bits>
+<Attribute>control</Attribute>
+<CType>int</CType>
+</RtlPorts>
+<RtlPorts>
+<name>layer16_out_V_data_9_V_TREADY</name>
+<Object>layer16_out_V_data_9_V</Object>
 <Type>pointer</Type>
 <Scope></Scope>
 <IOProtocol>axis</IOProtocol>

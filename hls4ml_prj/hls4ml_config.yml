@@ -1,5 +1,5 @@
 Backend: Vivado
-ClockPeriod: 25
+ClockPeriod: 2.5
 HLSConfig:
   Model:
     BramFactor: 1000000000
@@ -14,5 +14,5 @@ OutputDir: Folder_2_HLS4ML_Vivado_HLS/models/hls4ml_prj
 OutputPredictions: null
 Part: xc7z020clg400-1
 ProjectName: myproject
-Stamp: 77aBFCaC
+Stamp: d0e32e2e
 Version: 1.0.0
